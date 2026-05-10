@@ -43,7 +43,7 @@ func TestDownloadActivity_URLFormats(t *testing.T) {
 
 func TestDownloadActivity_ReturnsBody(t *testing.T) {
 	body := []byte("FIT binary content")
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Write(body)
 	}))
 	c := newServerClient(t, srv)
@@ -54,7 +54,7 @@ func TestDownloadActivity_ReturnsBody(t *testing.T) {
 }
 
 func TestDownloadActivity_Unauthorized(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 	}))
 	c := newServerClient(t, srv)

@@ -69,7 +69,7 @@ func newServerClient(t *testing.T, srv *httptest.Server) *gc.Client {
 }
 
 func normaliseURL(u *url.URL) string {
-	copy := *u
-	copy.RawQuery = copy.Query().Encode()
-	return copy.String()
+	cp := *u
+	cp.RawQuery = cp.Query().Encode()
+	return cp.String()
 }

@@ -35,7 +35,7 @@ type Activity struct {
 	AverageRunningCadenceInStepsPerMinute float64 `json:"averageRunningCadenceInStepsPerMinute"`
 	VO2MaxValue                           float64 `json:"vO2MaxValue"`
 	LocationName                          string  `json:"locationName"`
-	OwnerId                               int64   `json:"ownerId"`
+	OwnerID                               int64   `json:"ownerId"`
 	HasPolyline                           bool    `json:"hasPolyline"`
 }
 
