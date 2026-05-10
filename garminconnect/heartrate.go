@@ -8,17 +8,17 @@ import (
 
 // HeartRates holds daily heart rate data.
 type HeartRates struct {
-	UserProfilePK            int       `json:"userProfilePK"`
-	CalendarDate             string    `json:"calendarDate"`
-	StartTimestampGMT        string    `json:"startTimestampGMT"`
-	EndTimestampGMT          string    `json:"endTimestampGMT"`
-	StartTimestampLocal      string    `json:"startTimestampLocal"`
-	EndTimestampLocal        string    `json:"endTimestampLocal"`
-	RestingHeartRate         int       `json:"restingHeartRate"`
-	MinHeartRate             int       `json:"minHeartRate"`
-	MaxHeartRate             int       `json:"maxHeartRate"`
-	LastSevenDaysAvgRestingHeartRate int `json:"lastSevenDaysAvgRestingHeartRate"`
-	HeartRateValueDescriptors []struct {
+	UserProfilePK                    int    `json:"userProfilePK"`
+	CalendarDate                     string `json:"calendarDate"`
+	StartTimestampGMT                string `json:"startTimestampGMT"`
+	EndTimestampGMT                  string `json:"endTimestampGMT"`
+	StartTimestampLocal              string `json:"startTimestampLocal"`
+	EndTimestampLocal                string `json:"endTimestampLocal"`
+	RestingHeartRate                 int    `json:"restingHeartRate"`
+	MinHeartRate                     int    `json:"minHeartRate"`
+	MaxHeartRate                     int    `json:"maxHeartRate"`
+	LastSevenDaysAvgRestingHeartRate int    `json:"lastSevenDaysAvgRestingHeartRate"`
+	HeartRateValueDescriptors        []struct {
 		Key   string `json:"key"`
 		Index int    `json:"index"`
 	} `json:"heartRateValueDescriptors"`
@@ -27,11 +27,11 @@ type HeartRates struct {
 
 // RestingHeartRateEntry is a single resting heart rate data point.
 type RestingHeartRateEntry struct {
-	UserProfilePK    int    `json:"userProfilePK"`
+	UserProfilePK       int    `json:"userProfilePK"`
 	StatisticsStartDate string `json:"statisticsStartDate"`
-	CalendarDate     string `json:"calendarDate"`
-	Value            int    `json:"value"`
-	WeeklyAvg        int    `json:"weeklyAvg"`
+	CalendarDate        string `json:"calendarDate"`
+	Value               int    `json:"value"`
+	WeeklyAvg           int    `json:"weeklyAvg"`
 }
 
 // RestingHeartRateResponse wraps the resting heart rate API response.

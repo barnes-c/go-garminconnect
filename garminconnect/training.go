@@ -9,41 +9,41 @@ import (
 
 // TrainingReadiness holds the training readiness score for a day.
 type TrainingReadiness struct {
-	UserProfilePK          int     `json:"userProfilePK"`
-	CalendarDate           string  `json:"calendarDate"`
-	Score                  int     `json:"score"`
-	ScoreQualifier         string  `json:"scoreQualifier"`
-	SleepScore             int     `json:"sleepScore"`
-	RecoveryTime           int     `json:"recoveryTime"` // hours
-	HRVFactorPercent       float64 `json:"acuteLoad"`
-	AcuteLoad              float64 `json:"trainingLoad"`
-	SleepHistoryScore      int     `json:"sleepHistoryScore"`
-	HrvWeeklyAverage       int     `json:"hrvWeeklyAverage"`
-	FeedbackPhrase         string  `json:"feedbackPhrase"`
+	UserProfilePK     int     `json:"userProfilePK"`
+	CalendarDate      string  `json:"calendarDate"`
+	Score             int     `json:"score"`
+	ScoreQualifier    string  `json:"scoreQualifier"`
+	SleepScore        int     `json:"sleepScore"`
+	RecoveryTime      int     `json:"recoveryTime"` // hours
+	HRVFactorPercent  float64 `json:"acuteLoad"`
+	AcuteLoad         float64 `json:"trainingLoad"`
+	SleepHistoryScore int     `json:"sleepHistoryScore"`
+	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
+	FeedbackPhrase    string  `json:"feedbackPhrase"`
 }
 
 // TrainingStatusEntry is a single day of training status data.
 type TrainingStatusEntry struct {
-	CalendarDate        string  `json:"calendarDate"`
-	TrainingStatusType  string  `json:"trainingStatusType"`
-	TrainingLoadType    string  `json:"trainingLoadType"`
-	WorkoutGoal         float64 `json:"workoutGoal"`
-	AtpPlanLowLoad      float64 `json:"atpPlanLowLoad"`
-	AtpPlanHighLoad     float64 `json:"atpPlanHighLoad"`
+	CalendarDate       string  `json:"calendarDate"`
+	TrainingStatusType string  `json:"trainingStatusType"`
+	TrainingLoadType   string  `json:"trainingLoadType"`
+	WorkoutGoal        float64 `json:"workoutGoal"`
+	AtpPlanLowLoad     float64 `json:"atpPlanLowLoad"`
+	AtpPlanHighLoad    float64 `json:"atpPlanHighLoad"`
 }
 
 // MaxMetricsEntry holds a VO2 Max data point.
 type MaxMetricsEntry struct {
 	Generic *struct {
-		CalendarDate    string  `json:"calendarDate"`
-		VO2MaxValue     float64 `json:"vo2MaxValue"`
-		FitnessAge      int     `json:"fitnessAge"`
-		FitnessAgeDesc  string  `json:"fitnessAgeDescription"`
+		CalendarDate   string  `json:"calendarDate"`
+		VO2MaxValue    float64 `json:"vo2MaxValue"`
+		FitnessAge     int     `json:"fitnessAge"`
+		FitnessAgeDesc string  `json:"fitnessAgeDescription"`
 	} `json:"generic"`
 	Cycling *struct {
-		CalendarDate    string  `json:"calendarDate"`
-		VO2MaxValue     float64 `json:"vo2MaxValue"`
-		FitnessAge      int     `json:"fitnessAge"`
+		CalendarDate string  `json:"calendarDate"`
+		VO2MaxValue  float64 `json:"vo2MaxValue"`
+		FitnessAge   int     `json:"fitnessAge"`
 	} `json:"cycling"`
 }
 
@@ -60,9 +60,9 @@ type EnduranceScoreEntry struct {
 
 // RacePrediction holds an estimated finish time for a race distance.
 type RacePrediction struct {
-	RaceDistance       string  `json:"raceDistance"` // e.g. "RACE_5K"
-	TimePredicted      int     `json:"timePredicted"` // seconds
-	TimeUncertainty    int     `json:"timeUncertainty"`
+	RaceDistance        string `json:"raceDistance"`  // e.g. "RACE_5K"
+	TimePredicted       int    `json:"timePredicted"` // seconds
+	TimeUncertainty     int    `json:"timeUncertainty"`
 	PredictionAvailable bool   `json:"predictionAvailable"`
 }
 
