@@ -8,8 +8,8 @@ import (
 
 // Goal represents a user-defined fitness goal.
 type Goal struct {
-	GoalID    int64  `json:"goalId"`
-	GoalType  struct {
+	GoalID   int64 `json:"goalId"`
+	GoalType struct {
 		TypeKey string `json:"typeKey"`
 	} `json:"goalType"`
 	GoalValueInMetric float64 `json:"goalValueInMetric"`

@@ -64,7 +64,7 @@ func TestUploadActivity_GPX(t *testing.T) {
 }
 
 func TestUploadActivity_NoExtension(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, _ *http.Request) {
 		t.Error("server should not be called for invalid input")
 	}))
 	c := newServerClient(t, srv)
@@ -94,7 +94,7 @@ func TestUploadWorkout(t *testing.T) {
 }
 
 func TestUploadActivity_ServerError(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 	}))
 	c := newServerClient(t, srv)

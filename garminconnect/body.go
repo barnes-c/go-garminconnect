@@ -12,54 +12,54 @@ type BodyComposition struct {
 	StartDate    string `json:"startDate"`
 	EndDate      string `json:"endDate"`
 	TotalAverage struct {
-		From                  string  `json:"from"`
-		Until                 string  `json:"until"`
-		WeightTimestamp       string  `json:"weightTimestamp"`
-		Weight                float64 `json:"weight"`
-		Bmi                   float64 `json:"bmi"`
-		BodyFat               float64 `json:"bodyFat"`
-		BodyWater             float64 `json:"bodyWater"`
-		BoneMass              float64 `json:"boneMass"`
-		MuscleMass            float64 `json:"muscleMass"`
-		VisceralFat           float64 `json:"visceralFat"`
-		MetabolicAge          float64 `json:"metabolicAge"`
-		PhysiqueRating        float64 `json:"physiqueRating"`
+		From            string  `json:"from"`
+		Until           string  `json:"until"`
+		WeightTimestamp string  `json:"weightTimestamp"`
+		Weight          float64 `json:"weight"`
+		Bmi             float64 `json:"bmi"`
+		BodyFat         float64 `json:"bodyFat"`
+		BodyWater       float64 `json:"bodyWater"`
+		BoneMass        float64 `json:"boneMass"`
+		MuscleMass      float64 `json:"muscleMass"`
+		VisceralFat     float64 `json:"visceralFat"`
+		MetabolicAge    float64 `json:"metabolicAge"`
+		PhysiqueRating  float64 `json:"physiqueRating"`
 	} `json:"totalAverage"`
 	DateWeightList []struct {
-		CalendarDate          string  `json:"calendarDate"`
-		Weight                float64 `json:"weight"`
-		Bmi                   float64 `json:"bmi"`
-		BodyFat               float64 `json:"bodyFat"`
-		BodyWater             float64 `json:"bodyWater"`
-		BoneMass              float64 `json:"boneMass"`
-		MuscleMass            float64 `json:"muscleMass"`
-		VisceralFat           float64 `json:"visceralFat"`
-		MetabolicAge          float64 `json:"metabolicAge"`
+		CalendarDate string  `json:"calendarDate"`
+		Weight       float64 `json:"weight"`
+		Bmi          float64 `json:"bmi"`
+		BodyFat      float64 `json:"bodyFat"`
+		BodyWater    float64 `json:"bodyWater"`
+		BoneMass     float64 `json:"boneMass"`
+		MuscleMass   float64 `json:"muscleMass"`
+		VisceralFat  float64 `json:"visceralFat"`
+		MetabolicAge float64 `json:"metabolicAge"`
 	} `json:"dateWeightList"`
 }
 
 // WeighIn represents a single weigh-in measurement.
 type WeighIn struct {
-	SamplePK            int64   `json:"samplePk"`
-	Date                string  `json:"date"`
-	CalendarDate        string  `json:"calendarDate"`
-	Weight              float64 `json:"weight"` // grams
-	Bmi                 float64 `json:"bmi"`
-	BodyFat             float64 `json:"bodyFat"`
-	BodyWater           float64 `json:"bodyWater"`
-	BoneMass            float64 `json:"boneMass"`
-	MuscleMass          float64 `json:"muscleMass"`
-	VisceralFat         float64 `json:"visceralFat"`
-	MetabolicAge        float64 `json:"metabolicAge"`
-	SourceType          string  `json:"sourceType"`
+	SamplePK     int64   `json:"samplePk"`
+	Date         string  `json:"date"`
+	CalendarDate string  `json:"calendarDate"`
+	Weight       float64 `json:"weight"` // grams
+	Bmi          float64 `json:"bmi"`
+	BodyFat      float64 `json:"bodyFat"`
+	BodyWater    float64 `json:"bodyWater"`
+	BoneMass     float64 `json:"boneMass"`
+	MuscleMass   float64 `json:"muscleMass"`
+	VisceralFat  float64 `json:"visceralFat"`
+	MetabolicAge float64 `json:"metabolicAge"`
+	SourceType   string  `json:"sourceType"`
 }
 
 // WeighInsResponse wraps the weigh-ins API response.
 type WeighInsResponse struct {
-	StartDate           string    `json:"startDate"`
-	EndDate             string    `json:"endDate"`
-	DateWeightList      []WeighIn `json:"dateWeightList"`
-	TotalCount          int       `json:"totalCount"`
+	StartDate      string    `json:"startDate"`
+	EndDate        string    `json:"endDate"`
+	DateWeightList []WeighIn `json:"dateWeightList"`
+	TotalCount     int       `json:"totalCount"`
 }
 
 // BodyComposition returns body composition data between start and end dates.

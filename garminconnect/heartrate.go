@@ -38,7 +38,7 @@ type RestingHeartRateEntry struct {
 type RestingHeartRateResponse struct {
 	AllMetrics struct {
 		MetricsMap struct {
-			WELLNESS_RESTING_HEART_RATE []RestingHeartRateEntry `json:"WELLNESS_RESTING_HEART_RATE"`
+			WellnessRestingHeartRate []RestingHeartRateEntry `json:"WELLNESS_RESTING_HEART_RATE"`
 		} `json:"metricsMap"`
 	} `json:"allMetrics"`
 }

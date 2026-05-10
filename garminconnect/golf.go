@@ -9,11 +9,11 @@ import (
 
 // GolfScorecard summarises a round of golf.
 type GolfScorecard struct {
-	ScorecardID  string `json:"scorecardPk"`
-	CourseName   string `json:"courseName"`
-	EventDate    string `json:"eventDate"`
-	TotalScore   int    `json:"totalScore"`
-	ToPar        int    `json:"differentialToPar"`
+	ScorecardID string `json:"scorecardPk"`
+	CourseName  string `json:"courseName"`
+	EventDate   string `json:"eventDate"`
+	TotalScore  int    `json:"totalScore"`
+	ToPar       int    `json:"differentialToPar"`
 }
 
 // GolfSummary returns a paginated list of scorecard summaries.
