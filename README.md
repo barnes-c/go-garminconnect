@@ -247,7 +247,7 @@ We welcome contributions! Here's how you can help:
 
 ### Jupyter Notebook
 
-Explore the API interactively with our [reference notebook](https://github.com/cyberjunky/python-garminconnect/blob/master/docs/reference.ipynb).
+Explore the API interactively with our [reference notebook](https://github.com/barnes-c/python-garminconnect/blob/master/docs/reference.ipynb).
 
 ### Python Code Examples
 
@@ -315,16 +315,9 @@ client.unschedule_workout(scheduled_workout_id)
 
 **Helper functions:** `create_warmup_step`, `create_interval_step`, `create_recovery_step`, `create_cooldown_step`, `create_repeat_group`
 
-### Additional Resources
-
-- **Simple Example**: [example.py](https://raw.githubusercontent.com/cyberjunky/python-garminconnect/master/example.py) - Getting started guide
-- **Comprehensive Demo**: [demo.py](https://raw.githubusercontent.com/cyberjunky/python-garminconnect/master/demo.py) - All 130+ API methods
-- **API Documentation**: Comprehensive method documentation in source code
-- **Test Cases**: Real-world usage examples in `tests/` directory
-
 ## 🙏 Acknowledgments
 
-Special thanks to all contributors who have helped improve this project:
+Special thanks to python connect
 
 - **Community Contributors**: Bug reports, feature requests, and code improvements
 - **Issue Reporters**: Helping identify and resolve compatibility issues
@@ -340,27 +333,12 @@ If you find this library useful for your projects, please consider supporting it
 ### 🌟 Ways to Support
 
 - **⭐ Star this repository** - Help others discover the project
-- **💰 Financial Support** - Contribute to development and hosting costs
 - **🐛 Report Issues** - Help improve stability and compatibility
 - **📖 Spread the Word** - Share with other developers
 
-### 💳 Financial Support Options
+[releases-shield]: https://img.shields.io/github/release/barnes-c/python-garminconnect.svg?style=for-the-badge
+[releases]: https://github.com/barnes-c/python-garminconnect/releases
 
-[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg?style=for-the-badge&logo=paypal)](https://www.paypal.me/cyberjunkynl/)
-[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-GitHub-red.svg?style=for-the-badge&logo=github)](https://github.com/sponsors/cyberjunky)
-
-**Why Support?**
-
-- Keeps the project actively maintained
-- Enables faster bug fixes and new features
-- Supports infrastructure costs (testing, AI, CI/CD)
-- Shows appreciation for hundreds of hours of development
-
-Every contribution, no matter the size, makes a difference and is greatly appreciated! 🙏
-
-[releases-shield]: https://img.shields.io/github/release/cyberjunky/python-garminconnect.svg?style=for-the-badge
-[releases]: https://github.com/cyberjunky/python-garminconnect/releases
-[commits-shield]: https://img.shields.io/github/commit-activity/y/cyberjunky/python-garminconnect.svg?style=for-the-badge
-[commits]: https://github.com/cyberjunky/python-garminconnect/commits/main
-[license-shield]: https://img.shields.io/github/license/cyberjunky/python-garminconnect.svg?style=for-the-badge
-[maintenance-shield]: https://img.shields.io/badge/maintainer-cyberjunky-blue.svg?style=for-the-badge
+[commits-shield]: https://img.shields.io/github/commit-activity/y/barnes-c/python-garminconnect.svg?style=for-the-badge
+[commits]: https://github.com/barnes-c/python-garminconnect/commits/main
+[maintenance-shield]: https://img.shields.io/badge/maintainer-barnes-c-blue.svg?style=for-the-badge
