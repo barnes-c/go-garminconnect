@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=1&start=0
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

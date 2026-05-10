@@ -14,6 +14,7 @@
 package garminconnect
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -108,4 +109,25 @@ func (c *Client) DailyWeighIns(d time.Time) (*WeighInsResponse, error) {
 		return nil, err
 	}
 	return &out, nil
+}
+
+// AddWeighIn records a new weigh-in. weightKg is in kilograms; timestamp is RFC3339.
+// The server stores weight in grams, so weightKg is converted automatically.
+func (c *Client) AddWeighIn(weightKg float64, unitKey, timestamp string) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	body := map[string]any{
+		"unitKey":       unitKey, // e.g. "kg"
+		"value":         weightKg,
+		"dateTimestamp": timestamp,
+		"gmtTimestamp":  timestamp,
+	}
+	if err := c.post("/weight-service/user-weight", body, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DeleteWeighIn removes a weigh-in by its primary key and calendar date.
+func (c *Client) DeleteWeighIn(cdate string, weightPK int64) error {
+	return c.del(fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))
 }

@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/dailySleepData/testuser?date=2026-05-10
+        method: GET
+      response:
+        body: '{"dailySleepDTO":{"id":5678901234,"userProfilePK":987654321,"calendarDate":"2026-05-10","sleepTimeSeconds":25200,"deepSleepSeconds":5400,"lightSleepSeconds":12600,"remSleepSeconds":6300,"awakeSleepSeconds":900,"averageRespirationValue":14.5,"avgSleepStress":22.0,"spO2AvgReadingPercent":96.0,"sleepScoreFeedback":"GOOD"},"restlessMomentsCount":5,"sleepMovement":[],"sleepLevels":[]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/dailyStress/2026-05-10
+        method: GET
+      response:
+        body: '{"userProfilePK":987654321,"calendarDate":"2026-05-10","startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","avgStressLevel":28,"maxStressLevel":72,"stressChartValueOffset":0,"stressChartYAxisOrigin":0,"stressValuesArray":[[1746835200000,25],[1746836100000,28],[1746837000000,72],[1746837900000,30]],"bodyBatteryValuesArray":[[1746835200000,85],[1746836100000,82],[1746837000000,75],[1746837900000,72]]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

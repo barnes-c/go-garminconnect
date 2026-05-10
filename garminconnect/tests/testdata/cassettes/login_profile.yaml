@@ -1,0 +1,69 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/socialProfile
+        method: GET
+      response:
+        body: '{"displayName":"testuser","fullName":"Test User"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s
+    - request:
+        body: '{"captchaToken":"","password":"","rememberMe":true,"username":""}'
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Content-Type:
+                - application/json
+            User-Agent:
+                - GCM-iOS-5.7.2.1 (com.garmin.connect.mobile.sso)
+        url: https://sso.garmin.com/mobile/api/login?clientId=GCM_IOS_DARK&locale=en-US&service=https%3A%2F%2Fmobile.integration.garmin.com%2Fgcm%2Fios
+        method: POST
+      response:
+        body: '{"serviceURL":null,"serviceTicketId":null,"responseStatus":{"type":"INVALID_REQUEST","message":"","httpStatus":"BAD_REQUEST"},"responseReason":null,"customerMfaInfo":null,"consentTypeList":null,"captchaAlreadyPassed":false,"samlResponse":null,"authType":null}'
+        headers:
+            Access-Control-Allow-Credentials:
+                - "true"
+            Access-Control-Allow-Headers:
+                - Origin, Accept, X-Requested-With, Content-Type
+            Access-Control-Allow-Methods:
+                - GET,POST,OPTIONS
+            Access-Control-Allow-Origin:
+                - https://www.garmin.com
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9f9b14320b4d3d5d-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Sun, 10 May 2026 18:41:35 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=gWVinSYze7TB1aRO54uqyWB0KYI1ytPd1%2B63PW%2BaxUSWEruRKH4Jm9MH0z3G%2BWA6fSZNwydNTWzAJnC%2B8Puzdwnyjxjtooxs6oo45NwCswTVpuyIpXvfBpodRQjI7CWl"}]}'
+            Server:
+                - cloudflare
+            Set-Cookie:
+                - __cf_bm=IgubWYq8eP_WGcNZyY_rRVuGpar92RAbhEPWIZ2xw1g-1778438495.0468066-1.0.1.1-NjJOzI0Tetei7EPmbviNrROc.KdFWWKjQiBpTibyyj3JiXs_6L0XWIc.lgxTf6arDSteSal6O8g8t5n7yvOmYR5UEGts_D2ElAUYVz6zEKe.YzOEpDVd7FEjK0Kie2iP; HttpOnly; Secure; Path=/; Domain=sso.garmin.com; Expires=Sun, 10 May 2026 19:11:35 GMT
+                - __cflb=0H28vs7Vz72UEwwaS82Es7ANY9zzRXKdb1CMXThpCz1; HttpOnly; SameSite=None; Secure; Path=/; Expires=Sun, 10 May 2026 19:11:35 GMT
+                - _cfuvid=tgxAzwo67hnJUYShng34SZ6GgsDEtU2Juc.dRLkwqoU-1778438495.0468066-1.0.1.1-Qx6z5oIKRQem2aO3HMES.XDG3dVa0VzbgxGwJRrtQck; HttpOnly; SameSite=None; Secure; Path=/; Domain=sso.garmin.com
+            X-Frame-Options:
+                - DENY
+            X-Vcap-Request-Id:
+                - d035465f-8845-4cc6-572c-9ab5f72fb682
+        status: 400 Bad Request
+        code: 400
+        duration: 292.991792ms
