@@ -1,6 +1,6 @@
 module github.com/barnes-c/go-garminconnect
 
-go 1.26.3
+go 1.25
 
 require (
 	github.com/refraction-networking/utls v1.8.2
