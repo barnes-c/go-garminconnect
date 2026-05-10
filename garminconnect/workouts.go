@@ -92,3 +92,17 @@ func (c *Client) ScheduleWorkout(workoutID int64, date string) (map[string]json.
 func (c *Client) UnscheduleWorkout(scheduledWorkoutID int64) error {
 	return c.del(fmt.Sprintf("/calendar-service/schedule/workout/%d", scheduledWorkoutID))
 }
+
+// DownloadWorkout returns the FIT file for a saved workout.
+func (c *Client) DownloadWorkout(id int64) ([]byte, error) {
+	return c.getBytes(fmt.Sprintf("/download-service/files/workout/%d", id), nil)
+}
+
+// UploadWorkout uploads a workout FIT file and returns the server response.
+func (c *Client) UploadWorkout(data []byte, filename string) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.upload("/upload-service/upload", data, filename, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}

@@ -19,9 +19,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"time"
 
 	utls "github.com/refraction-networking/utls"
@@ -192,6 +194,79 @@ func (c *Client) put(path string, body any, out any) error {
 
 func (c *Client) del(path string) error {
 	return c.doRequest(http.MethodDelete, c.baseURL+path, nil, nil)
+}
+
+// getBytes performs an authenticated GET and returns the raw response body.
+// Used for binary downloads (FIT, GPX, TCX, etc.).
+func (c *Client) getBytes(path string, params url.Values) ([]byte, error) {
+	rawURL := c.baseURL + path
+	if len(params) > 0 {
+		rawURL += "?" + params.Encode()
+	}
+	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+	case http.StatusUnauthorized:
+		return nil, ErrUnauthorized
+	case http.StatusTooManyRequests:
+		return nil, ErrRateLimit
+	default:
+		return nil, &APIError{StatusCode: resp.StatusCode, Path: rawURL}
+	}
+	return io.ReadAll(resp.Body)
+}
+
+// upload sends a file as multipart/form-data to the given path and
+// JSON-decodes the response into out (may be nil).
+func (c *Client) upload(path string, data []byte, filename string, out any) error {
+	var buf bytes.Buffer
+	w := multipart.NewWriter(&buf)
+	fw, err := w.CreateFormFile("file", filepath.Base(filename))
+	if err != nil {
+		return err
+	}
+	if _, err := fw.Write(data); err != nil {
+		return err
+	}
+	w.Close()
+
+	req, err := http.NewRequest(http.MethodPost, c.baseURL+path, &buf)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	switch resp.StatusCode {
+	case http.StatusOK, http.StatusCreated, http.StatusAccepted:
+	case http.StatusUnauthorized:
+		return ErrUnauthorized
+	case http.StatusTooManyRequests:
+		return ErrRateLimit
+	default:
+		return &APIError{StatusCode: resp.StatusCode, Path: c.baseURL + path}
+	}
+	if out == nil {
+		return nil
+	}
+	return json.NewDecoder(resp.Body).Decode(out)
 }
 
 func date(t time.Time) string { return t.Format("2006-01-02") }

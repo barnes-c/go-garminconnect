@@ -17,6 +17,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"path/filepath"
 	"time"
 )
 
@@ -260,4 +261,41 @@ func (c *Client) SetActivityType(id, typeID, parentTypeID int64, typeKey string)
 // DeleteActivity permanently deletes the given activity.
 func (c *Client) DeleteActivity(id int64) error {
 	return c.del(fmt.Sprintf("/activity-service/activity/%d", id))
+}
+
+// DownloadFormat selects the file format for activity downloads.
+type DownloadFormat string
+
+const (
+	FormatOriginal DownloadFormat = "original" // FIT (device native)
+	FormatTCX      DownloadFormat = "tcx"
+	FormatGPX      DownloadFormat = "gpx"
+	FormatKML      DownloadFormat = "kml"
+	FormatCSV      DownloadFormat = "csv"
+)
+
+// DownloadActivity returns the raw bytes of an activity file. FormatOriginal
+// returns the device-native FIT file; other formats are server-converted.
+func (c *Client) DownloadActivity(id int64, format DownloadFormat) ([]byte, error) {
+	var path string
+	if format == FormatOriginal {
+		path = fmt.Sprintf("/download-service/files/activity/%d", id)
+	} else {
+		path = fmt.Sprintf("/download-service/export/%s/activity/%d", format, id)
+	}
+	return c.getBytes(path, nil)
+}
+
+// UploadActivity uploads a FIT, GPX, or TCX file and returns the server response.
+// The filename extension determines the format (.fit, .gpx, .tcx).
+func (c *Client) UploadActivity(data []byte, filename string) (map[string]json.RawMessage, error) {
+	ext := filepath.Ext(filename)
+	if ext == "" {
+		return nil, fmt.Errorf("filename must include an extension (.fit, .gpx, or .tcx)")
+	}
+	var out map[string]json.RawMessage
+	if err := c.upload("/upload-service/upload"+ext, data, filename, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
 }
