@@ -1,344 +1,262 @@
+# go-garminconnect
+
+Go client library for the Garmin Connect API.
+
 [![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
-[![License][license-shield]](LICENSE)
 ![Project Maintenance][maintenance-shield]
 
-# Go: Garmin Connect
-
-The Garmin Connect API library comes with two examples:
-
-- **`example.py`** - Simple getting-started example showing authentication, token storage, and basic API calls
-- **`demo.py`** - Comprehensive demo providing access to **130+ API methods** organized into **13 categories** for easy navigation
+## Installation
 
 ```bash
-$ ./demo.py
-🏃‍♂️ Full-blown Garmin Connect API Demo - Main Menu
-==================================================
-Select a category:
-
-  [1] 👤 User & Profile
-  [2] 📊 Daily Health & Activity
-  [3] 🔬 Advanced Health Metrics
-  [4] 📈 Historical Data & Trends
-  [5] 🏃 Activities & Workouts
-  [6] ⚖️ Body Composition & Weight
-  [7] 🏆 Goals & Achievements
-  [8] ⌚ Device & Technical
-  [9] 🎽 Gear & Equipment
-  [0] 💧 Hydration & Wellness
-  [a] 🔧 System & Export
-  [b] 📅 Training plans
-  [c] ⛳ Golf
-
-  [q] Exit program
-
-Make your selection:
+go get github.com/barnes-c/go-garminconnect
 ```
 
-## API Coverage Statistics
+Requires Go 1.21+.
 
-- **Total API Methods**: 131+ unique endpoints (snapshot)
-- **Categories**: 13 organized sections
-- **User & Profile**: 4 methods (basic user info, settings)
-- **Daily Health & Activity**: 9 methods (today's health data)
-- **Advanced Health Metrics**: 12 methods (fitness metrics, HRV, VO2, training readiness, running tolerance)
-- **Historical Data & Trends**: 9 methods (date range queries, weekly aggregates)
-- **Activities & Workouts**: 36 methods (comprehensive activity, workout management, typed workout uploads, scheduling, import)
-- **Body Composition & Weight**: 8 methods (weight tracking, body composition)
-- **Goals & Achievements**: 15 methods (challenges, badges, goals)
-- **Device & Technical**: 7 methods (device info, settings)
-- **Gear & Equipment**: 7 methods (gear management, tracking)
-- **Hydration & Wellness**: 12 methods (hydration, nutrition, blood pressure, menstrual)
-- **System & Export**: 4 methods (reporting, logout, GraphQL)
-- **Training Plans**: 2 methods
-- **Golf**: 3 methods (scorecard summary, scorecard detail, shot data)
+## Quick start
 
-### Interactive Features
+```go
+package main
 
-- **Enhanced User Experience**: Categorized navigation with emoji indicators
-- **Smart Data Management**: Interactive weigh-in deletion with search capabilities
-- **Comprehensive Coverage**: All major Garmin Connect features are accessible
-- **Error Handling**: Robust error handling with user-friendly prompts
-- **Data Export**: JSON export functionality for all data types
+import (
+    "fmt"
+    "log"
+    "time"
 
-[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg?style=for-the-badge&logo=paypal)](https://www.paypal.me/cyberjunkynl/)
-[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-GitHub-red.svg?style=for-the-badge&logo=github)](https://github.com/sponsors/cyberjunky)
-
-A comprehensive Python3 API wrapper for Garmin Connect, providing access to health, fitness, and device data.
-
-## 📖 About
-
-This library enables developers to programmatically access Garmin Connect data including:
-
-- **Health Metrics**: Heart rate, sleep, stress, body composition, SpO2, HRV
-- **Activity Data**: Workouts, typed workout uploads (running, cycling, swimming, walking, hiking), workout scheduling, exercises, training status, performance metrics, import-style uploads (no Strava re-export)
-- **Nutrition**: Daily food logs, meals, and nutrition settings
-- **Golf**: Scorecard summaries, scorecard details, shot-by-shot data
-- **Device Information**: Connected devices, settings, alarms, solar data
-- **Goals & Achievements**: Personal records, badges, challenges, race predictions
-- **Historical Data**: Trends, progress tracking, date range queries
-
-Compatible with all Garmin Connect accounts. See <https://connect.garmin.com/>
-
-## 📦 Installation
-
-Install from PyPI:
-
-```bash
-pip install --upgrade garminconnect curl_cffi
-```
-
-## Run demo software (recommended)
-
-Clone the repo, then:
-
-```bash
-python3 -m venv .venv --copies
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -e ".[example]"
-
-python3 ./example.py   # simple getting-started example
-python3 ./demo.py      # comprehensive demo (130+ API methods)
-```
-
-## 🛠️ Development
-
-This project uses [PDM](https://pdm.fming.dev/) for dependency management and task automation.
-
-> **⚠️ Important**: Create a virtual environment first on externally-managed Python installs (Debian/Ubuntu) to avoid system package conflicts.
-
-```bash
-python3 -m venv .venv --copies
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install pdm
-python -m pdm install --group :all
-pre-commit install --install-hooks  # optional but recommended
-```
-
-> **Note**: Using `python -m pdm` instead of `pdm` avoids PATH issues on some
-> Windows setups where `pip install pdm` places the `pdm` executable outside
-> the directories on `PATH`. Once `pdm install` has run, subsequent `pdm run ...`
-> commands work normally because the venv's `Scripts/` directory is on `PATH`
-> while the venv is active.
-
-**Development commands:**
-
-```bash
-pdm run format      # Auto-format code (isort, black, ruff --fix)
-pdm run lint        # Check code quality (isort, ruff, black, mypy)
-pdm run codespell   # Check spelling
-pdm run test        # Run test suite
-pdm run testcov     # Run tests with coverage report
-pdm run all         # Run all checks (lint + codespell + pre-commit + test)
-pdm run clean       # Clean build artifacts and cache files
-pdm run build       # Build package for distribution
-pdm run publish     # Build and publish to PyPI
-pdm run --list      # Show all available commands
-```
-
-Run `pdm run format && pdm run lint && pdm run test` before submitting PRs.
-
-## 🔐 Authentication
-
-Authentication uses the same mobile SSO flow as the official Garmin Connect Android app.
-No browser is needed.
-
-**How it works:**
-
-1. **First login**: Authenticates via `sso.garmin.com/mobile/api/login` using the Android
-   app's client ID. If MFA is required, a callback (`prompt_mfa`) prompts for the one-time code.
-2. **Token exchange**: The service ticket is exchanged for DI OAuth Bearer tokens
-   (`access_token` + `refresh_token`) via `diauth.garmin.com`. Tokens are stored at
-   `~/.garminconnect/garmin_tokens.json`.
-3. **Auto-refresh**: Before each API request the library checks whether the DI token is about
-   to expire and refreshes it automatically — no user interaction required.
-
-**Session lifetime:**
-
-- DI tokens auto-refresh indefinitely as long as the refresh token remains valid.
-- A full re-login with credentials (and possibly MFA) is only needed if the refresh token
-  itself expires or is revoked.
-
-**Token storage:**
-
-```bash
-~/.garminconnect/garmin_tokens.json   # saved automatically, mode 0600
-```
-
-## 🧪 Testing
-
-Run `example.py` once first to create saved tokens in `~/.garminconnect`, then:
-
-```bash
-pdm run test        # Run all tests
-pdm run testcov     # Run tests with coverage report
-```
-
-Optional: keep test tokens isolated
-
-```bash
-export GARMINTOKENS="$(mktemp -d)"
-python3 ./example.py   # create a fresh token file for tests
-pdm run test
-```
-
-**Note:** Tests use VCR cassettes to record/replay API responses. If tests fail with
-authentication errors, ensure valid tokens exist in `~/.garminconnect` (run
-`example.py` first).
-
-## 📦 Publishing
-
-For package maintainers:
-
-**Setup PyPI credentials:**
-
-```bash
-pip install twine
-# Edit with your preferred editor, or create via here-doc:
-# cat > ~/.pypirc <<'EOF'
-# [pypi]
-# username = __token__
-# password = <PyPI_API_TOKEN>
-# EOF
-```
-
-```ini
-[pypi]
-username = __token__
-password = <PyPI_API_TOKEN>
-```
-
-Recommended: use environment variables and restrict file perms
-
-```bash
-chmod 600 ~/.pypirc
-export TWINE_USERNAME="__token__"
-export TWINE_PASSWORD="<PyPI_API_TOKEN>"
-```
-
-**Publish new version:**
-
-```bash
-pdm run publish    # Build and publish to PyPI
-```
-
-**Alternative publishing steps:**
-
-```bash
-pdm run build      # Build package only
-pdm publish        # Publish pre-built package
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-- **Report Issues**: Bug reports and feature requests via GitHub issues
-- **Submit PRs**: Code improvements, new features, documentation updates
-- **Testing**: Help test new features and report compatibility issues
-- **Documentation**: Improve examples, add use cases, fix typos
-
-**Before contributing:**
-
-1. Set up your dev environment (see [Development](#️-development) above)
-2. Format and lint: `pdm run format && pdm run lint`
-3. Run tests: `pdm run test`
-4. Follow existing code style and patterns
-
-### Jupyter Notebook
-
-Explore the API interactively with our [reference notebook](https://github.com/barnes-c/python-garminconnect/blob/master/docs/reference.ipynb).
-
-### Python Code Examples
-
-```python
-import os
-from datetime import date
-from garminconnect import Garmin
-
-# First run: logs in and saves tokens to ~/.garminconnect
-# Subsequent runs: loads saved tokens and auto-refreshes
-client = Garmin(
-    os.getenv("EMAIL"),
-    os.getenv("PASSWORD"),
-    prompt_mfa=lambda: input("MFA code: "),
-)
-client.login("~/.garminconnect")
-
-# Get today's stats
-today = date.today().isoformat()
-stats = client.get_stats(today)
-
-# Get heart rate data
-hr_data = client.get_heart_rates(today)
-print(f"Resting HR: {hr_data.get('restingHeartRate', 'n/a')}")
-```
-
-### Typed Workouts (Pydantic Models)
-
-The library includes optional typed workout models for creating type-safe workout definitions:
-
-```bash
-pip install garminconnect[workout]
-```
-
-```python
-from garminconnect.workout import (
-    RunningWorkout, WorkoutSegment,
-    create_warmup_step, create_interval_step, create_cooldown_step,
-    create_repeat_group,
+    "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
-# Create a structured running workout
-workout = RunningWorkout(
-    workoutName="Easy Run",
-    estimatedDurationInSecs=1800,
-    workoutSegments=[
-        WorkoutSegment(
-            segmentOrder=1,
-            sportType={"sportTypeId": 1, "sportTypeKey": "running"},
-            workoutSteps=[create_warmup_step(300.0)]
-        )
-    ]
-)
+func main() {
+    client := garminconnect.NewClient("~/.garminconnect/tokens.json")
+    if err := client.Login("user@example.com", "password"); err != nil {
+        log.Fatal(err)
+    }
 
-# Upload and optionally schedule it
-result = client.upload_running_workout(workout)
-client.schedule_workout(result["workoutId"], "2026-03-20")
-
-# Delete a workout or remove it from the calendar
-client.delete_workout(workout_id)
-client.unschedule_workout(scheduled_workout_id)
+    summary, err := client.UserSummary(time.Now())
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf("Steps today: %d\n", summary.TotalSteps)
+}
 ```
 
-**Available workout classes:** `RunningWorkout`, `CyclingWorkout`, `SwimmingWorkout`, `WalkingWorkout`, `HikingWorkout`, `MultiSportWorkout`, `FitnessEquipmentWorkout`
+## Authentication
 
-**Helper functions:** `create_warmup_step`, `create_interval_step`, `create_recovery_step`, `create_cooldown_step`, `create_repeat_group`
+`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login as a last resort. The token is stored at the path passed to `NewClient` (mode 0600).
 
-## 🙏 Acknowledgments
+The SSO flow uses the same mobile endpoint as the Garmin Connect Android app — no browser required. MFA is not currently supported.
 
-Special thanks to python connect
+Token lifetime:
+- Access tokens auto-refresh from the stored refresh token.
+- A full re-login is only needed if the refresh token itself expires or is revoked.
 
-- **Community Contributors**: Bug reports, feature requests, and code improvements
-- **Issue Reporters**: Helping identify and resolve compatibility issues
-- **Feature Developers**: Adding new API endpoints and functionality
-- **Documentation Authors**: Improving examples and user guides
+### Options
 
-This project thrives thanks to community involvement and feedback.
+```go
+// Inject a custom HTTP client (proxy, test recorder, etc.)
+garminconnect.WithHTTPClient(hc)
 
-## 💖 Support This Project
+// Pre-load an access token, skipping the SSO flow
+garminconnect.WithToken(accessToken)
 
-If you find this library useful for your projects, please consider supporting its continued development and maintenance:
+// Set display name, skipping the profile fetch on login
+garminconnect.WithDisplayName("username")
+```
 
-### 🌟 Ways to Support
+## API
 
-- **⭐ Star this repository** - Help others discover the project
-- **🐛 Report Issues** - Help improve stability and compatibility
-- **📖 Spread the Word** - Share with other developers
+### Wellness & daily health
 
-[releases-shield]: https://img.shields.io/github/release/barnes-c/python-garminconnect.svg?style=for-the-badge
-[releases]: https://github.com/barnes-c/python-garminconnect/releases
+| Method | Description |
+|---|---|
+| `UserSummary(date)` | Steps, calories, active minutes, stress |
+| `Steps(date)` | Intraday step entries |
+| `DailySteps(start, end)` | Daily step totals over a date range |
+| `WeeklySteps(end, weeks)` | Weekly step aggregates |
+| `BodyBattery(start, end)` | Body Battery readings |
+| `BodyBatteryEvents(date)` | Body Battery charge/drain events |
+| `AllDayStress(date)` | Stress measurements throughout the day |
+| `WeeklyStress(end, weeks)` | Weekly stress aggregates |
+| `Floors(date)` | Floors climbed |
+| `Hydration(date)` | Hydration log |
+| `AddHydration(ml, timestamp, date)` | Log a hydration entry |
+| `Respiration(date)` | Respiration rate |
+| `SpO2(date)` | Blood oxygen saturation |
+| `IntensityMinutes(date)` | Moderate and vigorous intensity minutes |
+| `WeeklyIntensityMinutes(start, end)` | Weekly intensity minute aggregates |
+| `BloodPressure(start, end)` | Blood pressure readings |
+| `SetBloodPressure(sys, dia, pulse, ts, notes)` | Log a blood pressure reading |
+| `DeleteBloodPressure(date, version)` | Delete a blood pressure entry |
+| `AllDayEvents(date)` | All wellness events for a day |
+| `LifestyleData(date)` | Lifestyle summary |
 
-[commits-shield]: https://img.shields.io/github/commit-activity/y/barnes-c/python-garminconnect.svg?style=for-the-badge
-[commits]: https://github.com/barnes-c/python-garminconnect/commits/main
-[maintenance-shield]: https://img.shields.io/badge/maintainer-barnes-c-blue.svg?style=for-the-badge
+### Heart rate
+
+| Method | Description |
+|---|---|
+| `HeartRates(date)` | Intraday heart rate readings |
+| `RestingHeartRate(start, end)` | Resting HR over a date range |
+
+### Sleep
+
+| Method | Description |
+|---|---|
+| `SleepData(date)` | Sleep stages and quality for a night |
+| `HRVData(date)` | HRV measurements during sleep |
+
+### Activities
+
+| Method | Description |
+|---|---|
+| `Activities(limit)` | Most recent N activities |
+| `ActivitiesByDate(start, end, type)` | Activities in a date range, optional type filter |
+| `LastActivity()` | Single most recent activity |
+| `ActivityCount()` | Total activity count |
+| `ActivityDetail(id)` | Full activity detail |
+| `ActivitySplits(id)` | Lap/split summaries |
+| `ActivityTypedSplits(id)` | Sport-specific split data |
+| `ActivitySplitSummaries(id)` | Split summary statistics |
+| `ActivityHRZones(id)` | Time in heart rate zones |
+| `ActivityPowerZones(id)` | Time in power zones |
+| `ActivityExerciseSets(id)` | Strength training exercise sets |
+| `ActivityWeather(id)` | Weather recorded during the activity |
+| `PersonalRecords()` | Personal bests |
+| `SetActivityName(id, name)` | Rename an activity |
+| `SetActivityType(id, typeID, parentID, key)` | Change activity sport type |
+| `DeleteActivity(id)` | Delete an activity |
+| `DownloadActivity(id, format)` | Download FIT, GPX, TCX, KML, or CSV |
+| `UploadActivity(data, filename)` | Upload a FIT, GPX, or TCX file |
+
+Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKML`, `FormatCSV`.
+
+### Workouts
+
+| Method | Description |
+|---|---|
+| `Workouts(start, limit)` | Saved workouts |
+| `Workout(id)` | Single workout detail |
+| `DeleteWorkout(id)` | Delete a workout |
+| `ScheduledWorkouts(start, limit)` | Scheduled workout calendar entries |
+| `ScheduleWorkout(workoutID, date)` | Add a workout to the calendar |
+| `UnscheduleWorkout(scheduledID)` | Remove a workout from the calendar |
+| `DownloadWorkout(id)` | Download workout as FIT |
+| `UploadWorkout(data, filename)` | Upload a workout file |
+
+### Training metrics
+
+| Method | Description |
+|---|---|
+| `TrainingReadiness(date)` | Training readiness score |
+| `TrainingStatus(date)` | Training status and load |
+| `MaxMetrics(start, end)` | VO2 Max and other max metrics |
+| `EnduranceScore(start, end)` | Endurance score trend |
+| `HillScore(start, end)` | Hill score trend |
+| `RacePredictions()` | Predicted race finish times |
+| `LactateThreshold()` | Lactate threshold data |
+| `FitnessAge(date)` | Fitness age estimate |
+| `RunningTolerance(start, end)` | Running load tolerance |
+| `CyclingFTP(start, end)` | Functional threshold power |
+
+### Body composition
+
+| Method | Description |
+|---|---|
+| `BodyComposition(start, end)` | Weight and body composition over a range |
+| `WeighIns(start, end)` | All weigh-in entries in a range |
+| `DailyWeighIns(date)` | Weigh-ins for a single day |
+| `AddWeighIn(kg, unitKey, timestamp)` | Log a weigh-in |
+| `DeleteWeighIn(date, weightPK)` | Delete a weigh-in entry |
+
+### Goals & achievements
+
+| Method | Description |
+|---|---|
+| `Goals(status, start, limit)` | Goals filtered by status |
+| `EarnedBadges()` | Earned badges |
+| `AvailableBadges()` | Available badges |
+| `AdHocChallenges(start, limit)` | Ad-hoc challenges |
+| `BadgeChallenges(start, limit)` | Badge challenges |
+| `AvailableBadgeChallenges(start, limit)` | Joinable badge challenges |
+| `InProgressVirtualChallenges(start, limit)` | Active virtual challenges |
+
+### Devices & gear
+
+| Method | Description |
+|---|---|
+| `Devices()` | Registered devices |
+| `DeviceSettings(deviceID)` | Settings for a specific device |
+| `LastUsedDevice()` | Most recently synced device |
+| `PrimaryTrainingDevice()` | Primary training device |
+| `DeviceSolarData(deviceID, start, end)` | Solar charging data |
+| `Gear(userProfileNumber)` | Gear items |
+| `GearStats(gearUUID)` | Usage stats for a gear item |
+| `GearActivities(gearUUID, start, limit)` | Activities using a gear item |
+| `GearDefaults(userProfileNumber)` | Default gear assignments |
+
+### Profile
+
+| Method | Description |
+|---|---|
+| `UserProfile()` | Display name, location, join date |
+| `UserProfileSettings()` | Account settings |
+| `DisplayName()` | Cached display name (set on login) |
+
+### Women's health
+
+| Method | Description |
+|---|---|
+| `MenstrualData(date)` | Menstrual cycle data for a day |
+| `MenstrualCalendar(start, end)` | Cycle data over a date range |
+| `PregnancySummary()` | Pregnancy snapshot |
+
+### Nutrition
+
+| Method | Description |
+|---|---|
+| `NutritionFoodLog(date)` | Food log for a day |
+| `NutritionMeals(date)` | Meal breakdown |
+| `NutritionSettings(date)` | Nutrition goal settings |
+
+### Golf
+
+| Method | Description |
+|---|---|
+| `GolfSummary(start, limit)` | Scorecard summaries |
+| `GolfScorecard(scorecardID)` | Full scorecard detail |
+| `GolfShotData(scorecardID, holes)` | Shot-by-shot data for selected holes |
+
+## Error handling
+
+```go
+import "errors"
+
+acts, err := client.Activities(10)
+switch {
+case errors.Is(err, garminconnect.ErrUnauthorized):
+    // token expired or invalid — call Login again
+case errors.Is(err, garminconnect.ErrRateLimit):
+    // back off and retry
+case errors.Is(err, garminconnect.ErrNoData):
+    // no records available for the query
+}
+
+var apiErr *garminconnect.APIError
+if errors.As(err, &apiErr) {
+    fmt.Println(apiErr.StatusCode, apiErr.Path)
+}
+```
+
+## Testing
+
+Tests use [go-vcr](https://github.com/dnaeon/go-vcr) cassettes to replay recorded HTTP interactions — no live credentials needed.
+
+```bash
+go test ./garminconnect/...
+```
+
+[releases-shield]: https://img.shields.io/github/release/barnes-c/go-garminconnect.svg?style=for-the-badge
+[releases]: https://github.com/barnes-c/go-garminconnect/releases
+[commits-shield]: https://img.shields.io/github/commit-activity/y/barnes-c/go-garminconnect.svg?style=for-the-badge
+[commits]: https://github.com/barnes-c/go-garminconnect/commits/main
+[maintenance-shield]: https://img.shields.io/badge/maintainer-barnes--c-blue.svg?style=for-the-badge
