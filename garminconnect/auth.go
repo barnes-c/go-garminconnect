@@ -62,6 +62,9 @@ func (c *Client) Login(username, password string) error {
 }
 
 func (c *Client) ensureToken(username, password string) error {
+	if c.token.valid() {
+		return nil
+	}
 	if tok, err := c.loadToken(); err == nil {
 		if tok.valid() {
 			c.token = tok

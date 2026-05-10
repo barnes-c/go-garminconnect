@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/daily/respiration/2026-05-10
+        method: GET
+      response:
+        body: '{"startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","startTimestampLocal":"2026-05-10T02:00:00.0","endTimestampLocal":"2026-05-11T01:59:00.0","todayAvgWakingRespirationValue":14.8,"highestRespirationValue":20.0,"lowestRespirationValue":11.0,"respirationValueDescriptorsDTOList":[],"respirationValuesArray":[[1746835200000,14.5],[1746836100000,15.2],[1746837000000,13.8]]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

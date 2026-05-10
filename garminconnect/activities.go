@@ -27,38 +27,76 @@ type Activity struct {
 	ActivityType struct {
 		TypeKey string `json:"typeKey"`
 	} `json:"activityType"`
-	StartTimeGMT   string  `json:"startTimeGMT"`
-	StartTimeLocal string  `json:"startTimeLocal"`
-	Duration       float64 `json:"duration"`        // seconds
-	ElapsedDuration float64 `json:"elapsedDuration"` // seconds
-	MovingDuration float64 `json:"movingDuration"`  // seconds
-	Distance       float64 `json:"distance"`        // meters
-	Calories       float64 `json:"calories"`
-	AverageHR      float64 `json:"averageHR"`
-	MaxHR          float64 `json:"maxHR"`
-	AverageSpeed   float64 `json:"averageSpeed"` // meters/second
-	MaxSpeed       float64 `json:"maxSpeed"`     // meters/second
-	ElevationGain  float64 `json:"elevationGain"`
-	ElevationLoss  float64 `json:"elevationLoss"`
-	Steps          int64   `json:"steps"`
-	TrainingEffect float64 `json:"trainingEffect"`
-	AnaerobicTrainingEffect float64 `json:"anaerobicTrainingEffect"`
-	AerobicTrainingEffectMessage  string `json:"aerobicTrainingEffectMessage"`
+	StartTimeGMT                          string  `json:"startTimeGMT"`
+	StartTimeLocal                        string  `json:"startTimeLocal"`
+	Duration                              float64 `json:"duration"`        // seconds
+	ElapsedDuration                       float64 `json:"elapsedDuration"` // seconds
+	MovingDuration                        float64 `json:"movingDuration"`  // seconds
+	Distance                              float64 `json:"distance"`        // meters
+	Calories                              float64 `json:"calories"`
+	AverageHR                             float64 `json:"averageHR"`
+	MaxHR                                 float64 `json:"maxHR"`
+	AverageSpeed                          float64 `json:"averageSpeed"` // meters/second
+	MaxSpeed                              float64 `json:"maxSpeed"`     // meters/second
+	ElevationGain                         float64 `json:"elevationGain"`
+	ElevationLoss                         float64 `json:"elevationLoss"`
+	Steps                                 int64   `json:"steps"`
+	TrainingEffect                        float64 `json:"trainingEffect"`
+	AnaerobicTrainingEffect               float64 `json:"anaerobicTrainingEffect"`
+	AerobicTrainingEffectMessage          string  `json:"aerobicTrainingEffectMessage"`
 	AverageRunningCadenceInStepsPerMinute float64 `json:"averageRunningCadenceInStepsPerMinute"`
-	VO2MaxValue    float64 `json:"vO2MaxValue"`
-	LocationName   string  `json:"locationName"`
-	OwnerId        int64   `json:"ownerId"`
-	HasPolyline    bool    `json:"hasPolyline"`
+	VO2MaxValue                           float64 `json:"vO2MaxValue"`
+	LocationName                          string  `json:"locationName"`
+	OwnerId                               int64   `json:"ownerId"`
+	HasPolyline                           bool    `json:"hasPolyline"`
 }
 
 // PersonalRecord represents a personal best for a given activity type.
 type PersonalRecord struct {
-	ID           int64   `json:"id"`
-	TypeID       int64   `json:"typeId"`
-	ActivityID   int64   `json:"activityId"`
-	StartTimeGMT string  `json:"startTimeGMT"`
-	Value        float64 `json:"value"`
-	PrTypeLabelKey string `json:"prTypeLabelKey"`
+	ID             int64   `json:"id"`
+	TypeID         int64   `json:"typeId"`
+	ActivityID     int64   `json:"activityId"`
+	StartTimeGMT   string  `json:"startTimeGMT"`
+	Value          float64 `json:"value"`
+	PrTypeLabelKey string  `json:"prTypeLabelKey"`
+}
+
+// Split is a single lap or segment summary within an activity.
+type Split struct {
+	StartTimeGMT   string  `json:"startTimeGMT"`
+	Distance       float64 `json:"distance"`
+	Duration       float64 `json:"duration"`
+	MovingDuration float64 `json:"movingDuration"`
+	ElevationGain  float64 `json:"elevationGain"`
+	ElevationLoss  float64 `json:"elevationLoss"`
+	AverageSpeed   float64 `json:"averageSpeed"`
+	AverageHR      float64 `json:"averageHR"`
+	MaxHR          float64 `json:"maxHR"`
+	AveragePower   float64 `json:"averagePower"`
+	MaxPower       float64 `json:"maxPower"`
+	Calories       float64 `json:"calories"`
+}
+
+// SplitsResponse wraps the activity splits endpoint response.
+type SplitsResponse struct {
+	ActivityID     int64   `json:"activityId"`
+	SplitSummaries []Split `json:"splitSummaries"`
+}
+
+// HRZone holds heart rate time-in-zone data for an activity.
+type HRZone struct {
+	ZoneNumber  int     `json:"zoneNumber"`
+	SecsInZone  float64 `json:"secsInZone"`
+	ZoneLowBPM  int     `json:"zoneLowBoundary"`
+	ZoneHighBPM int     `json:"zoneHighBoundary"`
+}
+
+// PowerZone holds power time-in-zone data for an activity.
+type PowerZone struct {
+	ZoneNumber    int     `json:"zoneNumber"`
+	SecsInZone    float64 `json:"secsInZone"`
+	ZoneLowWatts  int     `json:"zoneLowBoundary"`
+	ZoneHighWatts int     `json:"zoneHighBoundary"`
 }
 
 // Activities returns the most recent limit activities.
@@ -141,4 +179,85 @@ func (c *Client) PersonalRecords() ([]PersonalRecord, error) {
 		return nil, err
 	}
 	return out, nil
+}
+
+// ActivityCount returns the total number of activities for the authenticated user.
+func (c *Client) ActivityCount() (int, error) {
+	var out struct {
+		Count int `json:"count"`
+	}
+	if err := c.get("/activitylist-service/activities/count", nil, &out); err != nil {
+		return 0, err
+	}
+	return out.Count, nil
+}
+
+// ActivitySplits returns lap/split summaries for the given activity.
+func (c *Client) ActivitySplits(id int64) (*SplitsResponse, error) {
+	var out SplitsResponse
+	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/splits", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ActivityTypedSplits returns typed split data (varies by sport type).
+func (c *Client) ActivityTypedSplits(id int64) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/typedsplits", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivitySplitSummaries returns split summary statistics for the given activity.
+func (c *Client) ActivitySplitSummaries(id int64) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/split_summaries", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivityHRZones returns time spent in each heart rate zone for the given activity.
+func (c *Client) ActivityHRZones(id int64) ([]HRZone, error) {
+	var out []HRZone
+	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/hrTimeInZones", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivityPowerZones returns time spent in each power zone for the given activity.
+func (c *Client) ActivityPowerZones(id int64) ([]PowerZone, error) {
+	var out []PowerZone
+	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/powerTimeInZones", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SetActivityName renames the given activity.
+func (c *Client) SetActivityName(id int64, name string) error {
+	return c.put(fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+		"activityId":   id,
+		"activityName": name,
+	}, nil)
+}
+
+// SetActivityType changes the sport type of the given activity.
+func (c *Client) SetActivityType(id, typeID, parentTypeID int64, typeKey string) error {
+	return c.put(fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+		"activityId": id,
+		"activityType": map[string]any{
+			"typeId":       typeID,
+			"typeKey":      typeKey,
+			"parentTypeId": parentTypeID,
+		},
+	}, nil)
+}
+
+// DeleteActivity permanently deletes the given activity.
+func (c *Client) DeleteActivity(id int64) error {
+	return c.del(fmt.Sprintf("/activity-service/activity/%d", id))
 }

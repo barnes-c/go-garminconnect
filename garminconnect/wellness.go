@@ -14,6 +14,7 @@
 package garminconnect
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -277,4 +278,159 @@ func (c *Client) BloodPressure(start, end time.Time) (*BloodPressureSummary, err
 		return nil, err
 	}
 	return &out, nil
+}
+
+// DailyStepStat holds aggregated step statistics for a single calendar date.
+type DailyStepStat struct {
+	CalendarDate  string `json:"calendarDate"`
+	TotalSteps    int    `json:"totalSteps"`
+	TotalDistance int    `json:"totalDistance"`
+	StepGoal      int    `json:"stepGoal"`
+}
+
+// WeeklyStepStat holds weekly aggregated step statistics.
+type WeeklyStepStat struct {
+	CalendarDate  string `json:"calendarDate"`
+	TotalSteps    int    `json:"totalSteps"`
+	TotalDistance int    `json:"totalDistance"`
+}
+
+// WeeklyStressStat holds weekly aggregated stress statistics.
+type WeeklyStressStat struct {
+	CalendarDate     string `json:"calendarDate"`
+	AvgStressLevel   int    `json:"avgStressLevel"`
+	MaxStressLevel   int    `json:"maxStressLevel"`
+	StressDuration   int    `json:"stressDuration"`
+	RestDuration     int    `json:"restDuration"`
+	ActivityDuration int    `json:"activityDuration"`
+}
+
+// BodyBatteryEvent is a single body battery charge or drain event.
+type BodyBatteryEvent struct {
+	EventTimestamp string `json:"eventTimestamp"`
+	Event          string `json:"event"` // "CHARGE" or "DRAIN"
+	DurationInMS   int64  `json:"durationInMS"`
+	BodyBatteryImpact int `json:"bodyBatteryImpact"`
+	FeedbackType   string `json:"feedbackType"`
+	FeedbackShortType string `json:"feedbackShortType"`
+}
+
+// WeeklyIMStat holds weekly intensity minutes statistics.
+type WeeklyIMStat struct {
+	CalendarDate             string `json:"calendarDate"`
+	WeeklyGoal               int    `json:"weeklyGoal"`
+	ModerateIntensityMinutes int    `json:"moderateIntensityMinutes"`
+	VigorousIntensityMinutes int    `json:"vigorousIntensityMinutes"`
+}
+
+// StepsData returns intraday step data in 15-minute intervals via the summary chart endpoint.
+func (c *Client) StepsData(d time.Time) ([]StepEntry, error) {
+	params := url.Values{"calendarDate": {date(d)}}
+	var out []StepEntry
+	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailySummaryChart/%s", c.displayName), params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DailySteps returns daily step totals between start and end dates.
+func (c *Client) DailySteps(start, end time.Time) ([]DailyStepStat, error) {
+	var out []DailyStepStat
+	if err := c.get(fmt.Sprintf("/usersummary-service/stats/steps/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WeeklySteps returns weekly step totals ending on end for the given number of weeks.
+func (c *Client) WeeklySteps(end time.Time, weeks int) ([]WeeklyStepStat, error) {
+	var out []WeeklyStepStat
+	if err := c.get(fmt.Sprintf("/usersummary-service/stats/steps/weekly/%s/%d", date(end), weeks), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WeeklyStress returns weekly stress aggregates ending on end for the given number of weeks.
+func (c *Client) WeeklyStress(end time.Time, weeks int) ([]WeeklyStressStat, error) {
+	var out []WeeklyStressStat
+	if err := c.get(fmt.Sprintf("/usersummary-service/stats/stress/weekly/%s/%d", date(end), weeks), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BodyBatteryEvents returns body battery charge/drain events for the given date.
+func (c *Client) BodyBatteryEvents(d time.Time) ([]BodyBatteryEvent, error) {
+	var out []BodyBatteryEvent
+	if err := c.get(fmt.Sprintf("/wellness-service/wellness/bodyBattery/events/%s", date(d)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WeeklyIntensityMinutes returns weekly intensity minutes between start and end dates.
+func (c *Client) WeeklyIntensityMinutes(start, end time.Time) ([]WeeklyIMStat, error) {
+	var out []WeeklyIMStat
+	if err := c.get(fmt.Sprintf("/usersummary-service/stats/im/weekly/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AllDayEvents returns wellness events (meals, stress, etc.) for the given date.
+func (c *Client) AllDayEvents(d time.Time) (map[string]json.RawMessage, error) {
+	params := url.Values{"calendarDate": {date(d)}}
+	var out map[string]json.RawMessage
+	if err := c.get("/wellness-service/wellness/dailyEvents", params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LifestyleData returns lifestyle logging data for the given date.
+func (c *Client) LifestyleData(d time.Time) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(fmt.Sprintf("/lifestylelogging-service/dailyLog/%s", date(d)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AddHydration logs a hydration intake entry.
+// valueML is the amount in millilitres; timestamp should be an RFC3339 timestamp.
+func (c *Client) AddHydration(valueML float64, timestamp, cdate string) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	body := map[string]any{
+		"calendarDate":       cdate,
+		"valueInML":          valueML,
+		"userProfilePK":      0, // filled server-side
+		"timestampGMT":       timestamp,
+		"timestampLocal":     timestamp,
+	}
+	if err := c.put("/usersummary-service/usersummary/hydration/log", body, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SetBloodPressure records a blood pressure measurement.
+func (c *Client) SetBloodPressure(systolic, diastolic, pulse int, timestamp, notes string) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	body := map[string]any{
+		"systolic":                systolic,
+		"diastolic":               diastolic,
+		"pulse":                   pulse,
+		"measurementTimestampGMT": timestamp,
+		"notes":                   notes,
+	}
+	if err := c.post("/bloodpressure-service/bloodpressure", body, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DeleteBloodPressure removes a blood pressure reading by its version and date.
+func (c *Client) DeleteBloodPressure(cdate string, version int) error {
+	return c.del(fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", cdate, version))
 }

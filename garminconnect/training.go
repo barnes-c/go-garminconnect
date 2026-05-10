@@ -14,6 +14,7 @@
 package garminconnect
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -147,6 +148,50 @@ func (c *Client) HillScore(start, end time.Time) ([]HillScoreEntry, error) {
 	}
 	var out []HillScoreEntry
 	if err := c.get("/hillscore-service/hillscore", params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LactateThreshold returns the latest lactate threshold measurement.
+func (c *Client) LactateThreshold() (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get("/biometric-service/biometric/latestLactateThreshold", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FitnessAge returns fitness age data for the given date.
+func (c *Client) FitnessAge(d time.Time) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(fmt.Sprintf("/fitnessage-service/fitnessage/%s", date(d)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// RunningTolerance returns running tolerance statistics between start and end dates.
+func (c *Client) RunningTolerance(start, end time.Time) (map[string]json.RawMessage, error) {
+	params := url.Values{
+		"startDate": {date(start)},
+		"endDate":   {date(end)},
+	}
+	var out map[string]json.RawMessage
+	if err := c.get("/metrics-service/metrics/runningtolerance/stats", params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CyclingFTP returns the latest cycling FTP (functional threshold power) estimate.
+func (c *Client) CyclingFTP(start, end time.Time) (map[string]json.RawMessage, error) {
+	params := url.Values{
+		"startDate": {date(start)},
+		"endDate":   {date(end)},
+	}
+	var out map[string]json.RawMessage
+	if err := c.get("/metrics-service/metrics/cyclingftp/latest", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil

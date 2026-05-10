@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/dailyFloor/2026-05-10
+        method: GET
+      response:
+        body: '{"userProfilePK":987654321,"calendarDate":"2026-05-10","startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","floorValuesDescriptor":[],"floorValuesArray":[[1746835200000,2,1],[1746836100000,4,2],[1746837000000,8,7]]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/hydration/dailyReport/2026-05-10
+        method: GET
+      response:
+        body: '{"userProfilePK":987654321,"calendarDate":"2026-05-10","valueInML":2100.0,"goalInML":2500.0,"dailyAverageinML":1950.0,"sweatLossInML":800.0,"activityIntakeInML":500.0}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

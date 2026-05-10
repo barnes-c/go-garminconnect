@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/dailySteps/2026-05-10
+        method: GET
+      response:
+        body: '[{"startGMT":"2026-05-10 06:00:00","endGMT":"2026-05-10 06:15:00","steps":350,"pushes":0,"primaryActivityLevel":"active"},{"startGMT":"2026-05-10 06:15:00","endGMT":"2026-05-10 06:30:00","steps":420,"pushes":0,"primaryActivityLevel":"active"},{"startGMT":"2026-05-10 07:00:00","endGMT":"2026-05-10 07:15:00","steps":80,"pushes":0,"primaryActivityLevel":"sedentary"}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

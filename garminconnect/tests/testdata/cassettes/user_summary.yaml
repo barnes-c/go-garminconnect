@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-05-10
+        method: GET
+      response:
+        body: '{"userProfileId":987654321,"totalKilocalories":2850.0,"activeKilocalories":650.0,"bmrKilocalories":2200.0,"totalSteps":12543,"dailyStepGoal":10000,"totalDistanceMeters":9800.5,"wellnessStartTimeLocal":"2026-05-10 00:00:00","wellnessEndTimeLocal":"2026-05-10 23:59:59","highlyActiveSeconds":3600,"activeSeconds":7200,"sedentarySeconds":28800,"sleepingSeconds":25200,"moderateIntensityMinutes":35,"vigorousIntensityMinutes":20,"floorsAscended":8.0,"floorsDescended":7.0,"minHeartRate":48,"maxHeartRate":178,"restingHeartRate":52,"lastSevenDaysAvgRestingHeartRate":54,"bodyBatteryMostRecentValue":72}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

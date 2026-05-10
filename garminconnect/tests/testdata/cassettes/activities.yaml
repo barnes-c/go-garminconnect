@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=2&start=0
+        method: GET
+      response:
+        body: '[{"activityId":1234567890,"activityName":"Morning Run","activityType":{"typeKey":"running"},"startTimeGMT":"2026-05-10 06:30:00","startTimeLocal":"2026-05-10 08:30:00","duration":3600.0,"elapsedDuration":3620.0,"movingDuration":3580.0,"distance":10000.0,"calories":650.0,"averageHR":155.0,"maxHR":178.0,"averageSpeed":2.78,"maxSpeed":4.17,"elevationGain":45.0,"elevationLoss":43.0,"steps":8520,"trainingEffect":3.5,"anaerobicTrainingEffect":1.2,"averageRunningCadenceInStepsPerMinute":170.0,"vO2MaxValue":52.0,"locationName":"Berlin","ownerId":987654321,"hasPolyline":true},{"activityId":1234567891,"activityName":"Easy Ride","activityType":{"typeKey":"cycling"},"startTimeGMT":"2026-05-09 15:00:00","duration":5400.0,"distance":30000.0,"calories":800.0,"averageHR":140.0,"maxHR":165.0}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

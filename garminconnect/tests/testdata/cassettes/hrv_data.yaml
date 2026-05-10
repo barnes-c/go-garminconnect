@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/hrv-service/hrv/2026-05-10
+        method: GET
+      response:
+        body: '{"hrvSummary":{"userProfilePK":987654321,"weeklyAvg":45,"lastNight":48,"lastNight5MinHigh":62,"baseline":{"lowUpper":35,"balancedLow":40,"balancedUpper":55,"markerValue":"BALANCED"},"status":"BALANCED","feedbackPhrase":"HRV_BALANCED_3","calendarDate":"2026-05-10"},"hrvReadings":[{"hrvValue":48,"startGMT":"2026-05-10 02:00:00"},{"hrvValue":52,"startGMT":"2026-05-10 02:05:00"},{"hrvValue":45,"startGMT":"2026-05-10 02:10:00"}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s

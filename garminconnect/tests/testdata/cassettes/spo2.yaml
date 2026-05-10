@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/daily/spo2/2026-05-10
+        method: GET
+      response:
+        body: '{"userProfilePK":987654321,"calendarDate":"2026-05-10","startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","averageSpO2":96.5,"lowestSpO2":93.0,"lastSevenDaysAvgSpO2":95.8,"spO2HourlyAverages":[{"startTimestampGMT":"2026-05-10T01:00:00.0","value":96.0},{"startTimestampGMT":"2026-05-10T02:00:00.0","value":97.0},{"startTimestampGMT":"2026-05-10T03:00:00.0","value":95.5}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 0s
