@@ -50,6 +50,12 @@ func WithDisplayName(name string) Option {
 	return func(c *Client) { c.displayName = name }
 }
 
+// WithBaseURL overrides the default API base URL. Primarily useful in tests
+// to point the client at an httptest.Server.
+func WithBaseURL(u string) Option {
+	return func(c *Client) { c.baseURL = u }
+}
+
 // NewClient returns a Client that caches tokens at tokenFile.
 func NewClient(tokenFile string, opts ...Option) *Client {
 	c := &Client{
