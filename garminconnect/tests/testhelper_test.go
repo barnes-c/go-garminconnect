@@ -56,6 +56,18 @@ type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
+// newServerClient returns a Client pointed at srv with a pre-loaded token.
+// The server is closed automatically via t.Cleanup.
+func newServerClient(t *testing.T, srv *httptest.Server) *gc.Client {
+	t.Helper()
+	t.Cleanup(srv.Close)
+	return gc.NewClient("",
+		gc.WithBaseURL(srv.URL),
+		gc.WithToken("test"),
+		gc.WithDisplayName("testuser"),
+	)
+}
+
 func normaliseURL(u *url.URL) string {
 	copy := *u
 	copy.RawQuery = copy.Query().Encode()
