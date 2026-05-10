@@ -1,0 +1,25 @@
+version: "2"
+linters:
+  enable:
+    - misspell
+    - revive
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - errcheck
+        path: _test.go
+formatters:
+  enable:
+    - goimports
+  exclusions:
+    generated: lax
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/barnes-c/go-garminconnect
