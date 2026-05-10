@@ -7,9 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
 func TestDownloadActivity_URLFormats(t *testing.T) {

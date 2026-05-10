@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
 func clientWith(t *testing.T, code int) *gc.Client {
