@@ -4,9 +4,10 @@ import (
 	"testing"
 	"time"
 
-	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
 var testDate = time.Date(2026, 5, 10, 0, 0, 0, 0, time.UTC)

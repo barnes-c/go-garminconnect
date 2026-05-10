@@ -8,9 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 	"gopkg.in/dnaeon/go-vcr.v2/cassette"
 	"gopkg.in/dnaeon/go-vcr.v2/recorder"
+
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
 // newVCRClient returns a Client wired to the named cassette. The returned stop
