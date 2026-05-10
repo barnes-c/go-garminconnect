@@ -9,43 +9,43 @@ import (
 
 // UserSummary holds the daily wellness summary for a user.
 type UserSummary struct {
-	UserProfileID              int     `json:"userProfileId"`
-	TotalKilocalories          float64 `json:"totalKilocalories"`
-	ActiveKilocalories         float64 `json:"activeKilocalories"`
-	BmrKilocalories            float64 `json:"bmrKilocalories"`
-	TotalSteps                 int     `json:"totalSteps"`
-	DailyStepGoal              int     `json:"dailyStepGoal"`
-	TotalDistanceMeters        float64 `json:"totalDistanceMeters"`
-	WellnessStartTimeLocal     string  `json:"wellnessStartTimeLocal"`
-	WellnessEndTimeLocal       string  `json:"wellnessEndTimeLocal"`
-	DurationInMilliseconds     int64   `json:"durationInMilliseconds"`
-	HighlyActiveSeconds        int     `json:"highlyActiveSeconds"`
-	ActiveSeconds              int     `json:"activeSeconds"`
-	SedentarySeconds           int     `json:"sedentarySeconds"`
-	SleepingSeconds            int     `json:"sleepingSeconds"`
-	ModerateDurationMinutes    int     `json:"moderateIntensityMinutes"`
-	VigorousDurationMinutes    int     `json:"vigorousIntensityMinutes"`
-	FloorsAscended             float64 `json:"floorsAscended"`
-	FloorsDescended            float64 `json:"floorsDescended"`
-	FloorsAscendedGoal         float64 `json:"floorsAscendedGoal"`
-	MinHeartRate               int     `json:"minHeartRate"`
-	MaxHeartRate               int     `json:"maxHeartRate"`
-	RestingHeartRate           int     `json:"restingHeartRate"`
-	LastSevenDaysAvgRestingHeartRate int `json:"lastSevenDaysAvgRestingHeartRate"`
-	AbnormalHeartRateAlertsCount int   `json:"abnormalHeartRateAlertsCount"`
-	AvgWakingRespirationValue  float64 `json:"avgWakingRespirationValue"`
-	HighestRespirationValue    float64 `json:"highestRespirationValue"`
-	LowestRespirationValue     float64 `json:"lowestRespirationValue"`
-	LatestRespirationValue     float64 `json:"latestRespirationValue"`
-	AvgStressDuration          int     `json:"avgStressDuration"`
-	HighStressDuration         int     `json:"highStressDuration"`
-	LowStressDuration          int     `json:"lowStressDuration"`
-	RestStressDuration         int     `json:"restStressDuration"`
-	BodyBatteryChargedValue    int     `json:"bodyBatteryChargedValue"`
-	BodyBatteryDrainedValue    int     `json:"bodyBatteryDrainedValue"`
-	BodyBatteryHighestValue    int     `json:"bodyBatteryHighestValue"`
-	BodyBatteryLowestValue     int     `json:"bodyBatteryLowestValue"`
-	BodyBatteryMostRecentValue int     `json:"bodyBatteryMostRecentValue"`
+	UserProfileID                    int     `json:"userProfileId"`
+	TotalKilocalories                float64 `json:"totalKilocalories"`
+	ActiveKilocalories               float64 `json:"activeKilocalories"`
+	BmrKilocalories                  float64 `json:"bmrKilocalories"`
+	TotalSteps                       int     `json:"totalSteps"`
+	DailyStepGoal                    int     `json:"dailyStepGoal"`
+	TotalDistanceMeters              float64 `json:"totalDistanceMeters"`
+	WellnessStartTimeLocal           string  `json:"wellnessStartTimeLocal"`
+	WellnessEndTimeLocal             string  `json:"wellnessEndTimeLocal"`
+	DurationInMilliseconds           int64   `json:"durationInMilliseconds"`
+	HighlyActiveSeconds              int     `json:"highlyActiveSeconds"`
+	ActiveSeconds                    int     `json:"activeSeconds"`
+	SedentarySeconds                 int     `json:"sedentarySeconds"`
+	SleepingSeconds                  int     `json:"sleepingSeconds"`
+	ModerateDurationMinutes          int     `json:"moderateIntensityMinutes"`
+	VigorousDurationMinutes          int     `json:"vigorousIntensityMinutes"`
+	FloorsAscended                   float64 `json:"floorsAscended"`
+	FloorsDescended                  float64 `json:"floorsDescended"`
+	FloorsAscendedGoal               float64 `json:"floorsAscendedGoal"`
+	MinHeartRate                     int     `json:"minHeartRate"`
+	MaxHeartRate                     int     `json:"maxHeartRate"`
+	RestingHeartRate                 int     `json:"restingHeartRate"`
+	LastSevenDaysAvgRestingHeartRate int     `json:"lastSevenDaysAvgRestingHeartRate"`
+	AbnormalHeartRateAlertsCount     int     `json:"abnormalHeartRateAlertsCount"`
+	AvgWakingRespirationValue        float64 `json:"avgWakingRespirationValue"`
+	HighestRespirationValue          float64 `json:"highestRespirationValue"`
+	LowestRespirationValue           float64 `json:"lowestRespirationValue"`
+	LatestRespirationValue           float64 `json:"latestRespirationValue"`
+	AvgStressDuration                int     `json:"avgStressDuration"`
+	HighStressDuration               int     `json:"highStressDuration"`
+	LowStressDuration                int     `json:"lowStressDuration"`
+	RestStressDuration               int     `json:"restStressDuration"`
+	BodyBatteryChargedValue          int     `json:"bodyBatteryChargedValue"`
+	BodyBatteryDrainedValue          int     `json:"bodyBatteryDrainedValue"`
+	BodyBatteryHighestValue          int     `json:"bodyBatteryHighestValue"`
+	BodyBatteryLowestValue           int     `json:"bodyBatteryLowestValue"`
+	BodyBatteryMostRecentValue       int     `json:"bodyBatteryMostRecentValue"`
 }
 
 // BodyBatteryEntry is a single body battery reading.
@@ -63,24 +63,24 @@ type BodyBatteryEntry struct {
 
 // StressData holds the all-day stress data for a single day.
 type StressData struct {
-	UserProfilePK int    `json:"userProfilePK"`
-	CalendarDate  string `json:"calendarDate"`
-	StartTimestampGMT   string `json:"startTimestampGMT"`
-	EndTimestampGMT     string `json:"endTimestampGMT"`
-	AvgStressLevel       int    `json:"avgStressLevel"`
-	MaxStressLevel       int    `json:"maxStressLevel"`
-	StressChartValueOffset int  `json:"stressChartValueOffset"`
-	StressChartYAxisOrigin int  `json:"stressChartYAxisOrigin"`
-	StressValuesArray     [][]int64 `json:"stressValuesArray"` // [timestamp_ms, stress_level]
+	UserProfilePK          int       `json:"userProfilePK"`
+	CalendarDate           string    `json:"calendarDate"`
+	StartTimestampGMT      string    `json:"startTimestampGMT"`
+	EndTimestampGMT        string    `json:"endTimestampGMT"`
+	AvgStressLevel         int       `json:"avgStressLevel"`
+	MaxStressLevel         int       `json:"maxStressLevel"`
+	StressChartValueOffset int       `json:"stressChartValueOffset"`
+	StressChartYAxisOrigin int       `json:"stressChartYAxisOrigin"`
+	StressValuesArray      [][]int64 `json:"stressValuesArray"` // [timestamp_ms, stress_level]
 	BodyBatteryValuesArray [][]int64 `json:"bodyBatteryValuesArray"`
 }
 
 // FloorsData holds floors ascended/descended for a day.
 type FloorsData struct {
-	UserProfilePK    int    `json:"userProfilePK"`
-	CalendarDate     string `json:"calendarDate"`
-	StartTimestampGMT string `json:"startTimestampGMT"`
-	EndTimestampGMT  string `json:"endTimestampGMT"`
+	UserProfilePK                int    `json:"userProfilePK"`
+	CalendarDate                 string `json:"calendarDate"`
+	StartTimestampGMT            string `json:"startTimestampGMT"`
+	EndTimestampGMT              string `json:"endTimestampGMT"`
 	FloorsValueDescriptorDTOList []struct {
 		Key   string `json:"key"`
 		Index int    `json:"index"`
@@ -90,24 +90,24 @@ type FloorsData struct {
 
 // HydrationData holds hydration intake for a day.
 type HydrationData struct {
-	UserProfilePK        int     `json:"userProfilePK"`
-	CalendarDate         string  `json:"calendarDate"`
-	ValueInML            float64 `json:"valueInML"`
-	GoalInML             float64 `json:"goalInML"`
-	DailyAverageinML     float64 `json:"dailyAverageinML"`
-	SweatLossInML        float64 `json:"sweatLossInML"`
-	ActivityIntakeInML   float64 `json:"activityIntakeInML"`
+	UserProfilePK      int     `json:"userProfilePK"`
+	CalendarDate       string  `json:"calendarDate"`
+	ValueInML          float64 `json:"valueInML"`
+	GoalInML           float64 `json:"goalInML"`
+	DailyAverageinML   float64 `json:"dailyAverageinML"`
+	SweatLossInML      float64 `json:"sweatLossInML"`
+	ActivityIntakeInML float64 `json:"activityIntakeInML"`
 }
 
 // RespirationData holds breathing rate data for a day.
 type RespirationData struct {
-	StartTimestampGMT        string  `json:"startTimestampGMT"`
-	EndTimestampGMT          string  `json:"endTimestampGMT"`
-	StartTimestampLocal      string  `json:"startTimestampLocal"`
-	EndTimestampLocal        string  `json:"endTimestampLocal"`
-	TodayAvgWakingRespirationValue float64 `json:"todayAvgWakingRespirationValue"`
-	HighestRespirationValue  float64 `json:"highestRespirationValue"`
-	LowestRespirationValue   float64 `json:"lowestRespirationValue"`
+	StartTimestampGMT                  string  `json:"startTimestampGMT"`
+	EndTimestampGMT                    string  `json:"endTimestampGMT"`
+	StartTimestampLocal                string  `json:"startTimestampLocal"`
+	EndTimestampLocal                  string  `json:"endTimestampLocal"`
+	TodayAvgWakingRespirationValue     float64 `json:"todayAvgWakingRespirationValue"`
+	HighestRespirationValue            float64 `json:"highestRespirationValue"`
+	LowestRespirationValue             float64 `json:"lowestRespirationValue"`
 	RespirationValueDescriptorsDTOList []struct {
 		Key   string `json:"key"`
 		Index int    `json:"index"`
@@ -117,14 +117,14 @@ type RespirationData struct {
 
 // SpO2Data holds blood oxygen saturation data for a day.
 type SpO2Data struct {
-	UserProfilePK   int    `json:"userProfilePK"`
-	CalendarDate    string `json:"calendarDate"`
-	StartTimestampGMT string `json:"startTimestampGMT"`
-	EndTimestampGMT   string `json:"endTimestampGMT"`
-	AverageSpO2     float64 `json:"averageSpO2"`
-	LowestSpO2      float64 `json:"lowestSpO2"`
+	UserProfilePK        int     `json:"userProfilePK"`
+	CalendarDate         string  `json:"calendarDate"`
+	StartTimestampGMT    string  `json:"startTimestampGMT"`
+	EndTimestampGMT      string  `json:"endTimestampGMT"`
+	AverageSpO2          float64 `json:"averageSpO2"`
+	LowestSpO2           float64 `json:"lowestSpO2"`
 	LastSevenDaysAvgSpO2 float64 `json:"lastSevenDaysAvgSpO2"`
-	SpO2HourlyAverages []struct {
+	SpO2HourlyAverages   []struct {
 		StartTimestampGMT string  `json:"startTimestampGMT"`
 		Value             float64 `json:"value"`
 	} `json:"spO2HourlyAverages"`
@@ -132,36 +132,36 @@ type SpO2Data struct {
 
 // IntensityMinutesData holds weekly intensity minutes.
 type IntensityMinutesData struct {
-	UserProfilePK          int    `json:"userProfilePK"`
-	CalendarDate           string `json:"calendarDate"`
-	WeeklyGoal             int    `json:"weeklyGoal"`
-	ModerateIntensityMinutes int  `json:"moderateIntensityMinutes"`
-	VigorousIntensityMinutes int  `json:"vigorousIntensityMinutes"`
+	UserProfilePK            int    `json:"userProfilePK"`
+	CalendarDate             string `json:"calendarDate"`
+	WeeklyGoal               int    `json:"weeklyGoal"`
+	ModerateIntensityMinutes int    `json:"moderateIntensityMinutes"`
+	VigorousIntensityMinutes int    `json:"vigorousIntensityMinutes"`
 }
 
 // StepEntry is a single steps reading for a time interval.
 type StepEntry struct {
-	StartTimestampGMT string `json:"startGMT"`
-	EndTimestampGMT   string `json:"endGMT"`
-	Steps             int    `json:"steps"`
-	Pushes            int    `json:"pushes"`
+	StartTimestampGMT    string `json:"startGMT"`
+	EndTimestampGMT      string `json:"endGMT"`
+	Steps                int    `json:"steps"`
+	Pushes               int    `json:"pushes"`
 	PrimaryActivityLevel string `json:"primaryActivityLevel"`
 }
 
 // BloodPressureSnapshot is a single blood pressure reading.
 type BloodPressureSnapshot struct {
-	TimestampGMT    string  `json:"measurementTimestampGMT"`
-	TimestampLocal  string  `json:"measurementTimestampLocal"`
-	Systolic        int     `json:"systolic"`
-	Diastolic       int     `json:"diastolic"`
-	Pulse           int     `json:"pulse"`
-	Notes           string  `json:"notes"`
+	TimestampGMT   string `json:"measurementTimestampGMT"`
+	TimestampLocal string `json:"measurementTimestampLocal"`
+	Systolic       int    `json:"systolic"`
+	Diastolic      int    `json:"diastolic"`
+	Pulse          int    `json:"pulse"`
+	Notes          string `json:"notes"`
 }
 
 // BloodPressureSummary wraps blood pressure readings and aggregate stats.
 type BloodPressureSummary struct {
-	UserProfilePK int                      `json:"userProfilePK"`
-	Measurements  []BloodPressureSnapshot  `json:"measurementSummaries"`
+	UserProfilePK int                     `json:"userProfilePK"`
+	Measurements  []BloodPressureSnapshot `json:"measurementSummaries"`
 }
 
 // UserSummary returns the daily wellness summary for the given date.
@@ -294,11 +294,11 @@ type WeeklyStressStat struct {
 
 // BodyBatteryEvent is a single body battery charge or drain event.
 type BodyBatteryEvent struct {
-	EventTimestamp string `json:"eventTimestamp"`
-	Event          string `json:"event"` // "CHARGE" or "DRAIN"
-	DurationInMS   int64  `json:"durationInMS"`
-	BodyBatteryImpact int `json:"bodyBatteryImpact"`
-	FeedbackType   string `json:"feedbackType"`
+	EventTimestamp    string `json:"eventTimestamp"`
+	Event             string `json:"event"` // "CHARGE" or "DRAIN"
+	DurationInMS      int64  `json:"durationInMS"`
+	BodyBatteryImpact int    `json:"bodyBatteryImpact"`
+	FeedbackType      string `json:"feedbackType"`
 	FeedbackShortType string `json:"feedbackShortType"`
 }
 
@@ -389,11 +389,11 @@ func (c *Client) LifestyleData(d time.Time) (map[string]json.RawMessage, error) 
 func (c *Client) AddHydration(valueML float64, timestamp, cdate string) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
 	body := map[string]any{
-		"calendarDate":       cdate,
-		"valueInML":          valueML,
-		"userProfilePK":      0, // filled server-side
-		"timestampGMT":       timestamp,
-		"timestampLocal":     timestamp,
+		"calendarDate":   cdate,
+		"valueInML":      valueML,
+		"userProfilePK":  0, // filled server-side
+		"timestampGMT":   timestamp,
+		"timestampLocal": timestamp,
 	}
 	if err := c.put("/usersummary-service/usersummary/hydration/log", body, &out); err != nil {
 		return nil, err
