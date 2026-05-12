@@ -36,7 +36,7 @@ type DailySleepDTO struct {
 	LowestRespirationValue   float64 `json:"lowestRespirationValue"`
 	HighestRespirationValue  float64 `json:"highestRespirationValue"`
 	AvgSleepStress           float64 `json:"avgSleepStress"`
-	SpO2AvgReadingPercent    float64 `json:"spO2AvgReadingPercent"`
+	SpO2AvgReadingPercent    float64 `json:"averageSpO2Value"`
 	SpO2LowReadingPercent    float64 `json:"spO2LowReadingPercent"`
 	SleepScoreFeedback       string  `json:"sleepScoreFeedback"`
 	SleepScoreInsight        string  `json:"sleepScoreInsight"`
@@ -60,13 +60,13 @@ type HRVReading struct {
 type HRVSummary struct {
 	UserProfilePK     int `json:"userProfilePK"`
 	WeeklyAvg         int `json:"weeklyAvg"`
-	LastNight         int `json:"lastNight"`
+	LastNight         int `json:"lastNightAvg"`
 	LastNight5MinHigh int `json:"lastNight5MinHigh"`
 	Baseline          struct {
 		LowUpper      int    `json:"lowUpper"`
 		BalancedLow   int    `json:"balancedLow"`
 		BalancedUpper int    `json:"balancedUpper"`
-		MarkerValue   string `json:"markerValue"`
+		MarkerValue   float64 `json:"markerValue"`
 	} `json:"baseline"`
 	Status            string `json:"status"`
 	FeedbackPhrase    string `json:"feedbackPhrase"`

@@ -1,0 +1,43 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessstats-service/fitness/statistics/training-status?calendarDate=2026-05-10
+        method: GET
+      response:
+        body: '{"timestamp":"2026-05-12T20:47:34.605+00:00","status":404,"error":"Not Found","path":"/fitnessstats-service/fitness/statistics/training-status"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac47802ef09d54-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:47:34 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=DUJZsWI%2FRYP0MaLuSYKGk32UUjbEw4qv8sjT2z7WL%2BRMiCzxkWJFvNPqvKpcPwtRxyf0U6Jdlfp18tRAk%2F67sfAA2Z1OzAXNZBbZVVCl6FZOXTXSDp8R%2FlnWxclQvEbDWMh5NNV3EsHOzYdtjsxINGy4AQ%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 304.335291ms

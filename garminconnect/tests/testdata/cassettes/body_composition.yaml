@@ -12,10 +12,32 @@ interactions:
         url: https://connectapi.garmin.com/weight-service/user-summary/period/testuser?endDate=2026-05-10&startDate=2026-05-01
         method: GET
       response:
-        body: '{"startDate":"2026-05-01","endDate":"2026-05-10","totalAverage":{"from":"2026-05-01","until":"2026-05-10","weightTimestamp":"2026-05-10T07:00:00.0","weight":78500.0,"bmi":24.1,"bodyFat":18.5,"bodyWater":62.0,"boneMass":3200.0,"muscleMass":63800.0,"visceralFat":8.0,"metabolicAge":32.0,"physiqueRating":4.0},"dateWeightList":[{"calendarDate":"2026-05-10","weight":78500.0,"bmi":24.1,"bodyFat":18.5,"bodyWater":62.0,"boneMass":3200.0,"muscleMass":63800.0,"visceralFat":8.0,"metabolicAge":32.0}]}'
+        body: '{"timestamp":1778618773958,"status":404,"error":"Not Found","path":"/weight-service/user-summary/period/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
         headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac4587bc76216f-CDG
             Content-Type:
                 - application/json
-        status: 200 OK
-        code: 200
-        duration: 0s
+            Date:
+                - Tue, 12 May 2026 20:46:14 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=MCXa6chi%2Bbq1aLvlz4FTI8zPFaDrZHO1cF00GzmKDdLQyZlFxY9OcjuPDb3dCanfOI80p6TzsEVejcbn2Th6ZbAb%2Bs7FwrEN2U1hZAF9tasGX9iuCYy9e846so3Pih7mpIowhSpLMQIz3%2FE9CA%2BFQVsaqg%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 417.940375ms

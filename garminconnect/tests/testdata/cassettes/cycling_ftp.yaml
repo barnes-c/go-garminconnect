@@ -1,0 +1,43 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/cyclingftp/latest?endDate=2026-05-10&startDate=2026-04-10
+        method: GET
+      response:
+        body: '{"timestamp":"2026-05-12T20:48:22.968+00:00","status":404,"error":"Not Found","path":"/metrics-service/metrics/cyclingftp/latest"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac48af18f22b02-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:48:23 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ZaDIe1Q5tCFLovBjyrW3jtfq3K4pQFqt3PoEkTR1NffyaaUMF0XPdQpzkRsyngqq%2FUjCaSG74AYKDYbmce6hz4Lzvp2VA7alk%2FxuXRb7QbW3FsSziVxHgL5ebqSVpTx9fzgT43KxIhk9NGnor9cStdXOcA%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 183.324375ms

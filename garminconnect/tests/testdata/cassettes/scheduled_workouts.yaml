@@ -1,0 +1,43 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/calendar-service/schedule/workouts?limit=5&start=0
+        method: GET
+      response:
+        body: '{"timestamp":"2026-05-12T20:48:53.252+00:00","status":404,"error":"Not Found","path":"/calendar-service/schedule/workouts"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac496c4fe823e6-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:48:53 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=EDZx6a0GvGdyZxVDaqKU16cSewQW0RUiv0zhRkumUrw1nUMsi7LorAs228%2FMhGFnZAy4Q%2BnJIteDbugyH6kmGiZ6RggNDGHHG%2Ff%2BqxcwRfom2a%2F0MkaJMGwKBXxh9jF8xrdX2PI0t7O0RxwIGj46rMI3cA%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 204.697583ms

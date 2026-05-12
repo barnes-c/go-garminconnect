@@ -1,0 +1,46 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/trainingreadiness-service/trainingreadiness/2026-05-10
+        method: GET
+      response:
+        body: |-
+            <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Not Found</title></head>
+            <body>
+                <div class="headerContainer">
+                    <h2 class="page-title">Page Not Found</h2>
+
+                    <p>We're sorry. The page you're looking for does not exist.</p>
+                </div>
+            </body>
+            </html>
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac475a590a7b1d-CDG
+            Content-Type:
+                - text/html
+            Date:
+                - Tue, 12 May 2026 20:47:28 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=to887BH2wU%2BHf%2FQck%2BjUaXBS%2FcqmRqXI5jx%2BK7FJW6w2bQTyb5AvpJ1aaqqpbxz1iK8HC0v72cB%2BryJJ%2FLo7Db1ksCtuWouZsZU%2FMjwrqib7H4fM2RZjI6lyUoUzFTWmIadO3DbaM7vPay2m9erhRoIssw%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 404 Not Found
+        code: 404
+        duration: 197.150208ms

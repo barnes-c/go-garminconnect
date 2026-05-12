@@ -15,11 +15,11 @@ func TestHeartRates(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "2026-05-10", hr.CalendarDate)
-	assert.Equal(t, 52, hr.RestingHeartRate)
-	assert.Equal(t, 48, hr.MinHeartRate)
-	assert.Equal(t, 178, hr.MaxHeartRate)
-	assert.Equal(t, 54, hr.LastSevenDaysAvgRestingHeartRate)
-	assert.Len(t, hr.HeartRateValues, 3)
-	assert.Equal(t, int64(1746835200000), hr.HeartRateValues[0][0])
-	assert.Equal(t, int64(52), hr.HeartRateValues[0][1])
+	assert.Equal(t, 46, hr.RestingHeartRate)
+	assert.Equal(t, 42, hr.MinHeartRate)
+	assert.Equal(t, 93, hr.MaxHeartRate)
+	assert.Equal(t, 48, hr.LastSevenDaysAvgRestingHeartRate)
+	assert.NotEmpty(t, hr.HeartRateValues)
+	assert.Equal(t, int64(1778364000000), hr.HeartRateValues[0][0])
+	assert.Equal(t, int64(56), hr.HeartRateValues[0][1])
 }

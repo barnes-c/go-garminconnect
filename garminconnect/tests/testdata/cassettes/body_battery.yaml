@@ -12,10 +12,32 @@ interactions:
         url: https://connectapi.garmin.com/wellness-service/wellness/dailyBodyBattery/testuser?endDate=2026-05-10&startDate=2026-05-01
         method: GET
       response:
-        body: '[{"startTimestampGMT":"2026-05-01T00:00:00.0","endTimestampGMT":"2026-05-01T23:59:00.0","startTimestampLocal":"2026-05-01T02:00:00.0","endTimestampLocal":"2026-05-02T01:59:00.0","bodyBatteryValuesArray":[{"timestamp":1746057600000,"value":85,"status":"CHARGED"},{"timestamp":1746061200000,"value":72,"status":"DRAINING"},{"timestamp":1746064800000,"value":60,"status":"DRAINING"}]},{"startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","startTimestampLocal":"2026-05-10T02:00:00.0","endTimestampLocal":"2026-05-11T01:59:00.0","bodyBatteryValuesArray":[{"timestamp":1746835200000,"value":90,"status":"CHARGED"},{"timestamp":1746838800000,"value":75,"status":"DRAINING"}]}]'
+        body: '{"timestamp":"2026-05-12T20:44:54.473+00:00","status":404,"error":"Not Found","path":"/wellness-service/wellness/dailyBodyBattery/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
         headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac43980b3d027e-CDG
             Content-Type:
                 - application/json
-        status: 200 OK
-        code: 200
-        duration: 0s
+            Date:
+                - Tue, 12 May 2026 20:44:54 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7GAz7vtKskczp0PoOnBrA6dZLxP8zBFaP3T9oml2RcqGVosBXnDx4Ix6v11lB6W6JBwHyF%2Bsu4Mh74FSfF3F1T9xUY9b5%2BYZsAY%2FRuwYh09lAjTg0KU0qwfLE1n1vN3lstYk3f3EIzTK6oXRKCxoVdinTA%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 190.867792ms

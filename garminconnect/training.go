@@ -141,8 +141,8 @@ func (c *Client) HillScore(start, end time.Time) ([]HillScoreEntry, error) {
 }
 
 // LactateThreshold returns the latest lactate threshold measurement.
-func (c *Client) LactateThreshold() (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+func (c *Client) LactateThreshold() (json.RawMessage, error) {
+	var out json.RawMessage
 	if err := c.get("/biometric-service/biometric/latestLactateThreshold", nil, &out); err != nil {
 		return nil, err
 	}

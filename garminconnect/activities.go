@@ -172,7 +172,7 @@ func (c *Client) PersonalRecords() ([]PersonalRecord, error) {
 // ActivityCount returns the total number of activities for the authenticated user.
 func (c *Client) ActivityCount() (int, error) {
 	var out struct {
-		Count int `json:"count"`
+		Count int `json:"totalCount"`
 	}
 	if err := c.get("/activitylist-service/activities/count", nil, &out); err != nil {
 		return 0, err

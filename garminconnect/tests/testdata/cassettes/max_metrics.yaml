@@ -1,0 +1,43 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/maxmet/daily/testuser?endDate=2026-05-10&startDate=2026-04-10
+        method: GET
+      response:
+        body: '{"timestamp":"2026-05-12T20:47:40.781+00:00","status":404,"error":"Not Found","path":"/metrics-service/metrics/maxmet/daily/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac47a778400417-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:47:40 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=FSVy5pARpK9O7DEU68ojiJCsI3SilEMQinUD%2FzJEjWfPPVNhod67u0Z%2BnAtvYzQPWEL9piGhWN%2BPdRYLVeS1qEAMXYj5%2BLwnIQylGmKwF7wSvwuwyEas%2F66nMurI9L1gg45J%2B7st389OhkkjOgmnwuYlJA%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 186.2055ms

@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/count
+        method: GET
+      response:
+        body: '{"totalCount":303,"multisportParentCount":0,"multisportChildCount":0,"nonMultisportCount":303}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac42fecbb67ae7-CDG
+            Content-Type:
+                - application/json;charset=UTF-8
+            Date:
+                - Tue, 12 May 2026 20:44:30 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=HWiDEoT8YFHhGskrDnlZ5%2BL29K7I8Nuzs%2FjNVOZ8bQqjoBPmqUnrqGdkU9G6fFoq2kjRsU9Ix6p5wPG1%2FbvBuR0UIrRC9Bb5%2BIDA3b4LHvZi8OD3orxgUA6LoPqMNVkeB%2Brj8VqnrfDmoUT%2B3NbhnpdP%2FQ%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 182.537125ms

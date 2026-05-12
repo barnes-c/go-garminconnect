@@ -1,0 +1,41 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workouts?limit=5&start=0
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac49205d6c2a65-CDG
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:48:41 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=CGUJ3iujlg41r6lzn3bEUnGVj%2F7RIWCfRfDy3gzpNAR%2Biwtw6OxY%2Fjz2P9k%2FSJxm6L95xZh0IsgNthFTEJghrq7FmcyQwGVqdIOMAjWnvxlQtCGJJqegKcAWpP%2B7lKLZdyIc2O8ghw6riDCDYPXebgN4Sg%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 210.111334ms

@@ -1,0 +1,77 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-05-10
+        method: GET
+      response:
+        body: '{"userProfileId":127516254,"totalKilocalories":2159.0,"activeKilocalories":22.0,"bmrKilocalories":2137.0,"wellnessKilocalories":2159.0,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":3279,"netCalorieGoal":null,"totalDistanceMeters":2647,"wellnessDistanceMeters":2647,"wellnessActiveKilocalories":22.0,"netRemainingKilocalories":22.0,"userDailySummaryId":127516254,"calendarDate":"2026-05-10","rule":{"typeId":2,"typeKey":"private"},"uuid":"92b74fe4117847b089e6294f7cf6abe3","dailyStepGoal":6730,"wellnessStartTimeGmt":"2026-05-09T22:00:00.0","wellnessStartTimeLocal":"2026-05-10T00:00:00.0","wellnessEndTimeGmt":"2026-05-10T22:00:00.0","wellnessEndTimeLocal":"2026-05-11T00:00:00.0","durationInMilliseconds":86400000,"wellnessDescription":null,"highlyActiveSeconds":485,"activeSeconds":751,"sedentarySeconds":68405,"sleepingSeconds":16759,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":0,"vigorousIntensityMinutes":0,"floorsAscendedInMeters":0.0,"floorsDescendedInMeters":6.703,"floorsAscended":0.0,"floorsDescended":2.19915,"intensityMinutesGoal":150,"userFloorsAscendedGoal":10,"minHeartRate":42,"maxHeartRate":99,"restingHeartRate":46,"lastSevenDaysAvgRestingHeartRate":48,"source":"GARMIN","averageStressLevel":20,"maxStressLevel":91,"stressDuration":15660,"restStressDuration":53460,"activityStressDuration":9900,"uncategorizedStressDuration":5520,"totalStressDuration":84540,"lowStressDuration":13080,"mediumStressDuration":2220,"highStressDuration":360,"stressPercentage":18.52,"restStressPercentage":63.24,"activityStressPercentage":11.71,"uncategorizedStressPercentage":6.53,"lowStressPercentage":15.47,"mediumStressPercentage":2.63,"highStressPercentage":0.43,"stressQualifier":"CALM","measurableAwakeDuration":62280,"measurableAsleepDuration":16740,"lastSyncTimestampGMT":null,"minAvgHeartRate":42,"maxAvgHeartRate":93,"bodyBatteryChargedValue":63,"bodyBatteryDrainedValue":57,"bodyBatteryHighestValue":96,"bodyBatteryLowestValue":33,"bodyBatteryMostRecentValue":39,"bodyBatteryDuringSleep":35,"bodyBatteryAtWakeTime":95,"bodyBatteryVersion":3.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":94.0,"lowestSpo2":85,"latestSpo2":94,"latestSpo2ReadingTimeGmt":"2026-05-10T21:48:00.0","latestSpo2ReadingTimeLocal":"2026-05-10T23:48:00.0","averageMonitoringEnvironmentAltitude":494.0,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-05-10T18:05:00","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE"},"endOfDayBodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-05-10T21:30:12","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE"},"bodyBatteryActivityEventList":[{"eventType":"SLEEP","eventStartTimeGmt":"2026-05-10T02:49:10","timezoneOffset":7200000,"durationInMilliseconds":16740000,"bodyBatteryImpact":35,"feedbackType":"NONE","shortFeedback":"NONE","deviceId":3493638919,"activityName":null,"activityType":null,"activityId":null,"eventUpdateTimeGmt":"2026-05-10T07:28:29"}],"avgWakingRespirationValue":14.0,"highestRespirationValue":21.0,"lowestRespirationValue":7.0,"latestRespirationValue":16.0,"latestRespirationTimeGMT":"2026-05-10T21:49:00.0","respirationAlgorithmVersion":200}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac45d8d81aebb0-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:46:26 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=PNmRtIjh8u3T87V1sD1GvgbbT70yfNOo%2FypW6ndOtEE2jxolmzParEJAjCMMJf4H8eYGYA%2BPOhDY5z3MPTlFr4aMjT%2Fh7cL65HXPp4ILzZNoV9V1GjCZPK%2B%2FVuFPtpmJOv%2B97%2F2sGaT6Lx1oY7Xq7u9cqg%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 300.224709ms
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/filterGear?userProfilePk=127516254
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac45dc59ceebb0-CDG
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json;charset=UTF-8
+            Date:
+                - Tue, 12 May 2026 20:46:27 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=W4Cy7a5ZLiB8LamyNBKqoZqz1CJbah4LIXIAlsOKbWQM4Zc5ms4G81owXgPGvjAMhyh%2B%2F8Vo3D4SaXbWnHoqqNk7%2BELdMhCUrexJ7XqEzA25Q%2FLkrPCwvUKlQVpub5KcKzdNUg1QoncRkRJsBxhsjOzr1A%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 135.752625ms

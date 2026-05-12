@@ -1,0 +1,41 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/range/testuser?endDate=2026-05-10&startDate=2026-04-10
+        method: GET
+      response:
+        body: '{"clientMessage":"Reference Error ID in error logs for further information","errorId":"9d67a150-a6c1-4fdb-a6a9-59e55ea0c3e6","error":"NotAllowedException"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac45145ea8c2cf-CDG
+            Content-Length:
+                - "155"
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:45:55 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7GmqUNQ1udY1xTlgq5YXsQjNxnPcvJcXOy5qPZTYvvi9gPeZjtlDBIm0VlHe3U7szkxUgop9%2BiQwC%2FSUdEJaLWZs2ObA9hCtSQm2o64yZQMNAJvEce13zxbyVp0dvl8RWISALDbiYHkZwwJSotk%2FCAPbbA%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 405 Method Not Allowed
+        code: 405
+        duration: 205.798791ms

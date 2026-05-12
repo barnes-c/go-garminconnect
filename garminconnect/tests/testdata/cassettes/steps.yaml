@@ -12,10 +12,32 @@ interactions:
         url: https://connectapi.garmin.com/wellness-service/wellness/dailySteps/2026-05-10
         method: GET
       response:
-        body: '[{"startGMT":"2026-05-10 06:00:00","endGMT":"2026-05-10 06:15:00","steps":350,"pushes":0,"primaryActivityLevel":"active"},{"startGMT":"2026-05-10 06:15:00","endGMT":"2026-05-10 06:30:00","steps":420,"pushes":0,"primaryActivityLevel":"active"},{"startGMT":"2026-05-10 07:00:00","endGMT":"2026-05-10 07:15:00","steps":80,"pushes":0,"primaryActivityLevel":"sedentary"}]'
+        body: '{"timestamp":"2026-05-12T20:45:25.015+00:00","status":404,"error":"Not Found","path":"/wellness-service/wellness/dailySteps/2026-05-10"}'
         headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac4456e9802292-CDG
             Content-Type:
                 - application/json
-        status: 200 OK
-        code: 200
-        duration: 0s
+            Date:
+                - Tue, 12 May 2026 20:45:25 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=j7V%2FUXfVL4nAT6qRDgRwEls9zPvYTzk4CR25FYSJXfgZ60WUSByW%2BaSjI0KKdgYXxP3Vh72DsmhmReQhwxohev9OHMfhunnoZ%2F%2BjxPQuLs0PsrcWju78hgB4Bj7E%2B9qxlmNGFnD4EgFXAauh%2Fmc0agudWA%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 183.148333ms

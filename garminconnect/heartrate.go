@@ -30,7 +30,7 @@ type RestingHeartRateEntry struct {
 	UserProfilePK       int    `json:"userProfilePK"`
 	StatisticsStartDate string `json:"statisticsStartDate"`
 	CalendarDate        string `json:"calendarDate"`
-	Value               int    `json:"value"`
+	Value               float64 `json:"value"`
 	WeeklyAvg           int    `json:"weeklyAvg"`
 }
 

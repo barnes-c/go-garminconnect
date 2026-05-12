@@ -15,12 +15,12 @@ func TestSleepData(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "2026-05-10", s.DailySleepDTO.CalendarDate)
-	assert.Equal(t, 25200, s.DailySleepDTO.SleepTimeSeconds)
-	assert.Equal(t, 5400, s.DailySleepDTO.DeepSleepSeconds)
-	assert.Equal(t, 6300, s.DailySleepDTO.REMSleepSeconds)
+	assert.Equal(t, 16759, s.DailySleepDTO.SleepTimeSeconds)
+	assert.Equal(t, 3000, s.DailySleepDTO.DeepSleepSeconds)
+	assert.Equal(t, 4380, s.DailySleepDTO.REMSleepSeconds)
 	assert.Equal(t, 96.0, s.DailySleepDTO.SpO2AvgReadingPercent)
-	assert.Equal(t, "GOOD", s.DailySleepDTO.SleepScoreFeedback)
-	assert.Equal(t, 5, s.RestlessMomentsCount)
+	assert.Equal(t, "POSITIVE_SHORT_BUT_REFRESHING", s.DailySleepDTO.SleepScoreFeedback)
+	assert.Equal(t, 14, s.RestlessMomentsCount)
 }
 
 func TestHRVData(t *testing.T) {
@@ -30,9 +30,9 @@ func TestHRVData(t *testing.T) {
 	h, err := c.HRVData(testDate)
 	require.NoError(t, err)
 
-	assert.Equal(t, 45, h.HRVSummary.WeeklyAvg)
-	assert.Equal(t, 48, h.HRVSummary.LastNight)
+	assert.Equal(t, 71, h.HRVSummary.WeeklyAvg)
+	assert.Equal(t, 75, h.HRVSummary.LastNight)
 	assert.Equal(t, "BALANCED", h.HRVSummary.Status)
-	assert.Len(t, h.HRVReadings, 3)
-	assert.Equal(t, 48, h.HRVReadings[0].HRVValue)
+	assert.NotEmpty(t, h.HRVReadings)
+	assert.Equal(t, 81, h.HRVReadings[0].HRVValue)
 }

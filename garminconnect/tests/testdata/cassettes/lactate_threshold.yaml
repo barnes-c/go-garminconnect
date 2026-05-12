@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/biometric-service/biometric/latestLactateThreshold
+        method: GET
+      response:
+        body: '[{"userProfilePK":127516254,"version":1774119500111,"calendarDate":"2026-03-21T19:58:19.991","sequence":1774119500111,"speed":0.35277679,"hearRate":null,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null},{"userProfilePK":127516254,"version":1774119500111,"calendarDate":"2026-03-21T19:58:19.991","sequence":1774119500111,"speed":null,"hearRate":177,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null}]'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac483dead6d476-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:48:04 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Nzr%2FK018arLpa8YZm53I0wY8AffHp9tcxTplHW2MXYCEWjbAt6ijztm%2BKA6WfSycvp%2Bux693tnq784cMtWC1hTMc2qktokpuc7%2B2I8ntl6gD60JyET5jc9Mhqo%2BJH2qF27aHB6%2FnowPWKdeV9pCkHsC6fQ%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 234.006958ms

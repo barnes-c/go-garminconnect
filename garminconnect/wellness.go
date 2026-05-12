@@ -71,8 +71,8 @@ type StressData struct {
 	MaxStressLevel         int       `json:"maxStressLevel"`
 	StressChartValueOffset int       `json:"stressChartValueOffset"`
 	StressChartYAxisOrigin int       `json:"stressChartYAxisOrigin"`
-	StressValuesArray      [][]int64 `json:"stressValuesArray"` // [timestamp_ms, stress_level]
-	BodyBatteryValuesArray [][]int64 `json:"bodyBatteryValuesArray"`
+	StressValuesArray      [][]int64        `json:"stressValuesArray"` // [timestamp_ms, stress_level]
+	BodyBatteryValuesArray json.RawMessage  `json:"bodyBatteryValuesArray"` // mixed-type rows: [ts, status, level, version]
 }
 
 // FloorsData holds floors ascended/descended for a day.
@@ -105,7 +105,7 @@ type RespirationData struct {
 	EndTimestampGMT                    string  `json:"endTimestampGMT"`
 	StartTimestampLocal                string  `json:"startTimestampLocal"`
 	EndTimestampLocal                  string  `json:"endTimestampLocal"`
-	TodayAvgWakingRespirationValue     float64 `json:"todayAvgWakingRespirationValue"`
+	TodayAvgWakingRespirationValue     float64 `json:"avgWakingRespirationValue"`
 	HighestRespirationValue            float64 `json:"highestRespirationValue"`
 	LowestRespirationValue             float64 `json:"lowestRespirationValue"`
 	RespirationValueDescriptorsDTOList []struct {
@@ -124,10 +124,7 @@ type SpO2Data struct {
 	AverageSpO2          float64 `json:"averageSpO2"`
 	LowestSpO2           float64 `json:"lowestSpO2"`
 	LastSevenDaysAvgSpO2 float64 `json:"lastSevenDaysAvgSpO2"`
-	SpO2HourlyAverages   []struct {
-		StartTimestampGMT string  `json:"startTimestampGMT"`
-		Value             float64 `json:"value"`
-	} `json:"spO2HourlyAverages"`
+	SpO2HourlyAverages [][]float64 `json:"spO2HourlyAverages"` // [timestamp_ms, value]
 }
 
 // IntensityMinutesData holds weekly intensity minutes.

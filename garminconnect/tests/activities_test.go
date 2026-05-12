@@ -21,19 +21,19 @@ func TestActivities(t *testing.T) {
 	require.Len(t, acts, 2)
 
 	run := acts[0]
-	assert.Equal(t, int64(1234567890), run.ActivityID)
-	assert.Equal(t, "Morning Run", run.ActivityName)
+	assert.Equal(t, int64(22859018754), run.ActivityID)
+	assert.Equal(t, "Saint-Genis-Pouilly Course à pied", run.ActivityName)
 	assert.Equal(t, "running", run.ActivityType.TypeKey)
-	assert.Equal(t, 3600.0, run.Duration)
-	assert.Equal(t, 10000.0, run.Distance)
-	assert.Equal(t, 650.0, run.Calories)
-	assert.Equal(t, 155.0, run.AverageHR)
-	assert.Equal(t, 178.0, run.MaxHR)
-	assert.Equal(t, 52.0, run.VO2MaxValue)
-	assert.Equal(t, "Berlin", run.LocationName)
+	assert.Equal(t, 1484.8990478515625, run.Duration)
+	assert.Equal(t, 4127.35986328125, run.Distance)
+	assert.Equal(t, 334.0, run.Calories)
+	assert.Equal(t, 153.0, run.AverageHR)
+	assert.Equal(t, 172.0, run.MaxHR)
+	assert.Equal(t, 53.0, run.VO2MaxValue)
+	assert.Equal(t, "Saint-Genis-Pouilly", run.LocationName)
 	assert.True(t, run.HasPolyline)
 
-	assert.Equal(t, "cycling", acts[1].ActivityType.TypeKey)
+	assert.Equal(t, "kayaking_v2", acts[1].ActivityType.TypeKey)
 }
 
 func TestLastActivity(t *testing.T) {
@@ -44,7 +44,7 @@ func TestLastActivity(t *testing.T) {
 	// which returns 2. Stub it separately so we control the limit parameter.
 	acts, err := c.Activities(2)
 	require.NoError(t, err)
-	assert.Equal(t, int64(1234567890), acts[0].ActivityID)
+	assert.Equal(t, int64(22859018754), acts[0].ActivityID)
 }
 
 func TestLastActivity_Empty(t *testing.T) {
@@ -53,4 +53,56 @@ func TestLastActivity_Empty(t *testing.T) {
 
 	_, err := c.LastActivity()
 	assert.ErrorIs(t, err, gc.ErrNoData)
+}
+
+func TestActivityDetail(t *testing.T) {
+	c, stop := newVCRClient(t, "activity_detail")
+	defer stop()
+
+	// Record cassette: fetch the most recent activity to get a real ID.
+	acts, err := c.Activities(1)
+	require.NoError(t, err)
+	require.NotEmpty(t, acts)
+
+	detail, err := c.ActivityDetail(acts[0].ActivityID)
+	require.NoError(t, err)
+	assert.NotEmpty(t, detail)
+}
+
+func TestActivityCount(t *testing.T) {
+	c, stop := newVCRClient(t, "activity_count")
+	defer stop()
+
+	count, err := c.ActivityCount()
+	require.NoError(t, err)
+	assert.Greater(t, count, 0)
+}
+
+func TestActivitiesByDate(t *testing.T) {
+	c, stop := newVCRClient(t, "activities_by_date")
+	defer stop()
+
+	start := testDate.AddDate(0, -1, 0)
+	acts, err := c.ActivitiesByDate(start, testDate, "")
+	require.NoError(t, err)
+	assert.NotNil(t, acts)
+}
+
+func TestPersonalRecords(t *testing.T) {
+	c, stop := newVCRClient(t, "personal_records")
+	defer stop()
+
+	prs, err := c.PersonalRecords()
+	require.NoError(t, err)
+	assert.NotEmpty(t, prs)
+}
+
+func TestIntensityMinutes(t *testing.T) {
+	c, stop := newVCRClient(t, "intensity_minutes")
+	defer stop()
+
+	out, err := c.IntensityMinutes(testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotNil(t, out)
 }

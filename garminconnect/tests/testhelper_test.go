@@ -1,10 +1,12 @@
 package garminconnect_test
 
 import (
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -14,14 +16,52 @@ import (
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
-// newVCRClient returns a Client wired to the named cassette. The returned stop
-// function must be deferred by the caller.
+// newVCRClient returns a Client wired to the named cassette for replay.
+// To record a new cassette set either:
+//   - GARMIN_TOKEN + GARMIN_DISPLAY_NAME  (preferred: no extra SSO call)
+//   - GARMIN_EMAIL + GARMIN_PASSWORD      (triggers one SSO login per test)
+//
+// Real credentials are scrubbed from saved cassettes so they can be committed:
+//   - Authorization header → "Bearer test"
+//   - real display name in URLs → "testuser"
 func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 	t.Helper()
-	r, err := recorder.New("testdata/cassettes/" + cassetteName)
+
+	cassettePath := "testdata/cassettes/" + cassetteName
+	token := os.Getenv("GARMIN_TOKEN")
+	displayName := os.Getenv("GARMIN_DISPLAY_NAME")
+	email := os.Getenv("GARMIN_EMAIL")
+	password := os.Getenv("GARMIN_PASSWORD")
+
+	needsRecording := false
+	if _, err := os.Stat(cassettePath + ".yaml"); os.IsNotExist(err) {
+		needsRecording = true
+	}
+
+	if needsRecording && token == "" && (email == "" || password == "") {
+		t.Skipf("cassette %q not found; set GARMIN_TOKEN+GARMIN_DISPLAY_NAME or GARMIN_EMAIL+GARMIN_PASSWORD to record", cassetteName)
+	}
+
+	// Obtain a live token. Prefer the pre-fetched token (no extra SSO call);
+	// fall back to email/password login if only those are provided.
+	var liveToken, liveDisplayName string
+	if token != "" {
+		liveToken = token
+		liveDisplayName = displayName
+	} else if email != "" && password != "" {
+		authClient := gc.NewClient("")
+		if err := authClient.Login(email, password); err != nil {
+			t.Fatalf("garmin login: %v", err)
+		}
+		liveToken = authClient.Token()
+		liveDisplayName = authClient.DisplayName()
+	}
+
+	r, err := recorder.New(cassettePath)
 	if err != nil {
 		t.Fatalf("recorder.New: %v", err)
 	}
+
 	r.SetMatcher(func(req *http.Request, i cassette.Request) bool {
 		cu, err := url.Parse(i.URL)
 		if err != nil {
@@ -29,16 +69,49 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 		}
 		return req.Method == i.Method && normaliseURL(req.URL) == normaliseURL(cu)
 	})
+
+	// When recording, scrub credentials before the cassette is written to disk.
+	if liveDisplayName != "" {
+		r.AddSaveFilter(func(i *cassette.Interaction) error {
+			i.Request.Headers.Set("Authorization", "Bearer test")
+			i.Request.URL = strings.ReplaceAll(i.Request.URL, url.PathEscape(liveDisplayName), "testuser")
+			i.Request.URL = strings.ReplaceAll(i.Request.URL, liveDisplayName, "testuser")
+			return nil
+		})
+	}
+
+	// Use real credentials when recording, synthetic ones when replaying.
+	clientToken := "test"
+	clientName := "testuser"
+	if liveToken != "" {
+		clientToken = liveToken
+	}
+	if liveDisplayName != "" {
+		clientName = liveDisplayName
+	}
+
 	c := gc.NewClient("",
 		gc.WithHTTPClient(&http.Client{Transport: r}),
-		gc.WithToken("test"),
-		gc.WithDisplayName("testuser"),
+		gc.WithToken(clientToken),
+		gc.WithDisplayName(clientName),
 	)
 	return c, func() {
 		if err := r.Stop(); err != nil {
 			t.Errorf("recorder.Stop: %v", err)
 		}
 	}
+}
+
+// newServerClient returns a Client pointed at srv with a pre-loaded token.
+// The server is closed automatically via t.Cleanup.
+func newServerClient(t *testing.T, srv *httptest.Server) *gc.Client {
+	t.Helper()
+	t.Cleanup(srv.Close)
+	return gc.NewClient("",
+		gc.WithBaseURL(srv.URL),
+		gc.WithToken("test"),
+		gc.WithDisplayName("testuser"),
+	)
 }
 
 // fixedTransport returns a RoundTripper that always responds with the given
@@ -57,20 +130,18 @@ type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
-// newServerClient returns a Client pointed at srv with a pre-loaded token.
-// The server is closed automatically via t.Cleanup.
-func newServerClient(t *testing.T, srv *httptest.Server) *gc.Client {
-	t.Helper()
-	t.Cleanup(srv.Close)
-	return gc.NewClient("",
-		gc.WithBaseURL(srv.URL),
-		gc.WithToken("test"),
-		gc.WithDisplayName("testuser"),
-	)
-}
-
 func normaliseURL(u *url.URL) string {
 	cp := *u
 	cp.RawQuery = cp.Query().Encode()
 	return cp.String()
+}
+
+// skipAPIError calls t.Skip when err is an *gc.APIError (cassette captured a
+// non-2xx response that this account doesn't support).
+func skipAPIError(t *testing.T, err error) {
+	t.Helper()
+	var ae *gc.APIError
+	if errors.As(err, &ae) {
+		t.Skipf("cassette captured HTTP %d from API", ae.StatusCode)
+	}
 }

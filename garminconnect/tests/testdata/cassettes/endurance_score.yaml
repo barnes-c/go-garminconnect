@@ -1,0 +1,46 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/endurancescore-service/endurancescore/stats?endDate=2026-05-10&startDate=2026-04-10
+        method: GET
+      response:
+        body: |-
+            <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Not Found</title></head>
+            <body>
+                <div class="headerContainer">
+                    <h2 class="page-title">Page Not Found</h2>
+
+                    <p>We're sorry. The page you're looking for does not exist.</p>
+                </div>
+            </body>
+            </html>
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac47cd1a1e7240-CDG
+            Content-Type:
+                - text/html
+            Date:
+                - Tue, 12 May 2026 20:47:46 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=g%2B%2BifocvIQ0%2BrpkQdf2ZK3%2Bdibof3%2BoX3IU2JqZnEmr6GZdo8bA40YC32RARWOkVHKjdAZotg4fZRmBxxzeXNvhd2pl8knpl1uY2Y6Z86IrjcEhcjdzLuHU%2FpMz%2FUnkpej2P4Dap1iCcX5qpcbrdknOKfg%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 404 Not Found
+        code: 404
+        duration: 173.724875ms

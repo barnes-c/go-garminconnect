@@ -88,6 +88,14 @@ func newUTLSClient() *http.Client {
 // DisplayName returns the authenticated user's Garmin Connect display name.
 func (c *Client) DisplayName() string { return c.displayName }
 
+// Token returns the current access token, or empty string if not authenticated.
+func (c *Client) Token() string {
+	if c.token == nil {
+		return ""
+	}
+	return c.token.AccessToken
+}
+
 func (c *Client) fetchProfile() error {
 	var profile struct {
 		DisplayName string `json:"displayName"`

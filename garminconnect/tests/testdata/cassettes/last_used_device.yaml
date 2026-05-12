@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/device-service/deviceservice/mylastused
+        method: GET
+      response:
+        body: '{"userDeviceId":3493638919,"userProfileNumber":127516254,"applicationNumber":37086,"lastUsedDeviceApplicationKey":"forerunner965","lastUsedDeviceName":"Forerunner 965","lastUsedDeviceUploadTime":1778612959000,"imageUrl":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","released":true}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac470d8fcc2a11-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:47:16 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=AyWGVHYOz8mGWpKLCQzsQNscMyTbi3hjaUVEFsv9ManfOuIOyBNkGrp32o0EvE0KdfqZRLdJRJ0RazyMJZUKG9LWGC%2BCgouo6pshkCKgmleN5WoWV9lp%2Bi5QFUq718LgqwSVyW68hCsteMozGmO%2BmdLQMw%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 204.31025ms

@@ -12,10 +12,32 @@ interactions:
         url: https://connectapi.garmin.com/wellness-service/wellness/dailyFloor/2026-05-10
         method: GET
       response:
-        body: '{"userProfilePK":987654321,"calendarDate":"2026-05-10","startTimestampGMT":"2026-05-10T00:00:00.0","endTimestampGMT":"2026-05-10T23:59:00.0","floorValuesDescriptor":[],"floorValuesArray":[[1746835200000,2,1],[1746836100000,4,2],[1746837000000,8,7]]}'
+        body: '{"timestamp":"2026-05-12T20:45:00.521+00:00","status":404,"error":"Not Found","path":"/wellness-service/wellness/dailyFloor/2026-05-10"}'
         headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac43bddd40d590-CDG
             Content-Type:
                 - application/json
-        status: 200 OK
-        code: 200
-        duration: 0s
+            Date:
+                - Tue, 12 May 2026 20:45:00 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=InyVO821VLZwGhCKhRL8eNv2s7l%2F%2BFkKsuQEGQLXFc5FxzhCOh5QysvdJIz%2F4yIb9URKZb03IouKmr%2FAnSO3Lmj3%2BU7FGdEo46ehHlzX2vcv1hu30ZCjxgXRrUD%2BXgYoi%2Bu373V%2FPmgKoW6gczkeEod%2Beg%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 183.739708ms

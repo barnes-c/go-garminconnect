@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/dayview/testuser?calendarDate=2026-05-10
+        method: GET
+      response:
+        body: '{"message":"HTTP 404 Not Found","error":"NotFoundException"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac45619d0b52be-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:46:07 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=9nMSrzCY%2Bo8aQ4xXPVEW%2FRQFYbUJ%2BBQ27th2lBVxUnkctqy0gM2h2qHN%2BmevEXJToa6zYPZKQ%2BCRvH28NXe5DIEpQCJxcHg2WzoJ7%2FI2iTM0%2FrLPrcpZRsXUDDhoQ9chLuU2Hr6R9MdQG9rks65tFkzKSg%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 404 Not Found
+        code: 404
+        duration: 223.232417ms

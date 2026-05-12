@@ -67,6 +67,9 @@ func (c *Client) ensureToken(username, password string) error {
 }
 
 func (c *Client) loadToken() (*diToken, error) {
+	if c.tokenFile == "" {
+		return nil, fmt.Errorf("no token file configured")
+	}
 	data, err := os.ReadFile(c.tokenFile)
 	if err != nil {
 		return nil, err
@@ -79,6 +82,9 @@ func (c *Client) loadToken() (*diToken, error) {
 }
 
 func (c *Client) saveToken(tok *diToken) error {
+	if c.tokenFile == "" {
+		return nil
+	}
 	data, err := json.Marshal(tok)
 	if err != nil {
 		return err

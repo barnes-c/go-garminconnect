@@ -1,0 +1,43 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/range/testuser?endDate=2026-05-10&startDate=2026-04-10
+        method: GET
+      response:
+        body: '{"timestamp":1778618761504,"status":404,"error":"Not Found","path":"/weight-service/weight/range/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac453a8c17bb30-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:46:01 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Qp0QhAkRFhD7HXRTZpm24xY%2BxihznERAfP0lv2DCWdUcWaPndkAdAt5doBeIxNUtoTN3lRdnQEWZcvlALQsAukNjlG6wJ%2BVpPTQ%2BPgr3bWkeAF1WH52jctI%2BOZH%2Ffp6PO1LE37mm6eTbmsGjJzjWBojM2A%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Vary:
+                - Origin
+                - Access-Control-Request-Method
+                - Access-Control-Request-Headers
+        status: 404 Not Found
+        code: 404
+        duration: 285.039292ms

@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/stats/im/weekly/2026-05-03/2026-05-10
+        method: GET
+      response:
+        body: '[{"calendarDate":"2026-04-27","weeklyGoal":150,"moderateValue":119,"vigorousValue":43},{"calendarDate":"2026-05-04","weeklyGoal":150,"moderateValue":83,"vigorousValue":16}]'
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, private
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - 9fac44ee8bfcfaee-CDG
+            Content-Type:
+                - application/json
+            Date:
+                - Tue, 12 May 2026 20:45:49 GMT
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=J8p5HOnY%2FNLMIYn5CpxC7kqOypiBUubk9LxLnpAH8N0yILt5yAzYqD0Q1IlPF%2BI8z7dBbeEwS5Jl4o9Vj4Iut4bt1DTZ0ip6dlwsgygUcFFq6gk403CvrdzGKNDNbHyTcNj4myqjvSk1%2Fr4qFykEhmB4IA%3D%3D"}]}'
+            Server:
+                - cloudflare
+        status: 200 OK
+        code: 200
+        duration: 183.201ms
