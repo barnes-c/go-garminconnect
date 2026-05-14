@@ -63,9 +63,9 @@ type HRVSummary struct {
 	LastNight         int `json:"lastNightAvg"`
 	LastNight5MinHigh int `json:"lastNight5MinHigh"`
 	Baseline          struct {
-		LowUpper      int    `json:"lowUpper"`
-		BalancedLow   int    `json:"balancedLow"`
-		BalancedUpper int    `json:"balancedUpper"`
+		LowUpper      int     `json:"lowUpper"`
+		BalancedLow   int     `json:"balancedLow"`
+		BalancedUpper int     `json:"balancedUpper"`
 		MarkerValue   float64 `json:"markerValue"`
 	} `json:"baseline"`
 	Status            string `json:"status"`

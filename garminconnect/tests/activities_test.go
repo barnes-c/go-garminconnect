@@ -43,7 +43,6 @@ func TestLastActivity(t *testing.T) {
 	assert.NotZero(t, acts[0].ActivityID)
 }
 
-
 func TestActivityDetail(t *testing.T) {
 	c, stop := newVCRClient(t, "activity_detail")
 	defer stop()

@@ -80,8 +80,8 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 	if liveDisplayName != "" {
 		r.AddSaveFilter(func(i *cassette.Interaction) error {
 			i.Request.Headers.Set("Authorization", "Bearer test")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, url.PathEscape(liveDisplayName), "testuser")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, liveDisplayName, "testuser")
+			i.URL = strings.ReplaceAll(i.URL, url.PathEscape(liveDisplayName), "testuser")
+			i.URL = strings.ReplaceAll(i.URL, liveDisplayName, "testuser")
 			return nil
 		})
 	}

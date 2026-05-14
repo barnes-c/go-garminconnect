@@ -59,16 +59,16 @@ type BodyBatteryEntry struct {
 
 // StressData holds the all-day stress data for a single day.
 type StressData struct {
-	UserProfilePK          int       `json:"userProfilePK"`
-	CalendarDate           string    `json:"calendarDate"`
-	StartTimestampGMT      string    `json:"startTimestampGMT"`
-	EndTimestampGMT        string    `json:"endTimestampGMT"`
-	AvgStressLevel         int       `json:"avgStressLevel"`
-	MaxStressLevel         int       `json:"maxStressLevel"`
-	StressChartValueOffset int       `json:"stressChartValueOffset"`
-	StressChartYAxisOrigin int       `json:"stressChartYAxisOrigin"`
-	StressValuesArray      [][]int64        `json:"stressValuesArray"` // [timestamp_ms, stress_level]
-	BodyBatteryValuesArray json.RawMessage  `json:"bodyBatteryValuesArray"` // mixed-type rows: [ts, status, level, version]
+	UserProfilePK          int             `json:"userProfilePK"`
+	CalendarDate           string          `json:"calendarDate"`
+	StartTimestampGMT      string          `json:"startTimestampGMT"`
+	EndTimestampGMT        string          `json:"endTimestampGMT"`
+	AvgStressLevel         int             `json:"avgStressLevel"`
+	MaxStressLevel         int             `json:"maxStressLevel"`
+	StressChartValueOffset int             `json:"stressChartValueOffset"`
+	StressChartYAxisOrigin int             `json:"stressChartYAxisOrigin"`
+	StressValuesArray      [][]int64       `json:"stressValuesArray"`      // [timestamp_ms, stress_level]
+	BodyBatteryValuesArray json.RawMessage `json:"bodyBatteryValuesArray"` // mixed-type rows: [ts, status, level, version]
 }
 
 // FloorsData holds floors ascended/descended for a day.
@@ -113,14 +113,14 @@ type RespirationData struct {
 
 // SpO2Data holds blood oxygen saturation data for a day.
 type SpO2Data struct {
-	UserProfilePK        int     `json:"userProfilePK"`
-	CalendarDate         string  `json:"calendarDate"`
-	StartTimestampGMT    string  `json:"startTimestampGMT"`
-	EndTimestampGMT      string  `json:"endTimestampGMT"`
-	AverageSpO2          float64 `json:"averageSpO2"`
-	LowestSpO2           float64 `json:"lowestSpO2"`
-	LastSevenDaysAvgSpO2 float64 `json:"lastSevenDaysAvgSpO2"`
-	SpO2HourlyAverages [][]float64 `json:"spO2HourlyAverages"` // [timestamp_ms, value]
+	UserProfilePK        int         `json:"userProfilePK"`
+	CalendarDate         string      `json:"calendarDate"`
+	StartTimestampGMT    string      `json:"startTimestampGMT"`
+	EndTimestampGMT      string      `json:"endTimestampGMT"`
+	AverageSpO2          float64     `json:"averageSpO2"`
+	LowestSpO2           float64     `json:"lowestSpO2"`
+	LastSevenDaysAvgSpO2 float64     `json:"lastSevenDaysAvgSpO2"`
+	SpO2HourlyAverages   [][]float64 `json:"spO2HourlyAverages"` // [timestamp_ms, value]
 }
 
 // IntensityMinutesData holds weekly intensity minutes.
