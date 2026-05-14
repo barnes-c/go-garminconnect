@@ -14,9 +14,9 @@ type TrainingReadiness struct {
 	Score             int     `json:"score"`
 	ScoreQualifier    string  `json:"scoreQualifier"`
 	SleepScore        int     `json:"sleepScore"`
-	RecoveryTime      int     `json:"recoveryTime"` // hours
-	HRVFactorPercent  float64 `json:"acuteLoad"`
-	AcuteLoad         float64 `json:"trainingLoad"`
+	RecoveryTime      int     `json:"recoveryTime"` // minutes
+	AcuteLoad         float64 `json:"acuteLoad"`
+	TrainingLoad      float64 `json:"trainingLoad"`
 	SleepHistoryScore int     `json:"sleepHistoryScore"`
 	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
 	FeedbackPhrase    string  `json:"feedbackPhrase"`
