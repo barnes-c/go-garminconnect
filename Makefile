@@ -1,7 +1,7 @@
-.PHONY: lint test build check
+.PHONY: lint test build vuln check
 
 lint:
-	golangci-lint run
+	golangci-lint run --config .github/.golangci.yml
 
 build:
 	go build ./...
@@ -9,5 +9,7 @@ build:
 test:
 	go test ./...
 
-check: lint build test
+vuln:
 	govulncheck ./...
+
+check: lint build test vuln

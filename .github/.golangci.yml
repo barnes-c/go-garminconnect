@@ -1,8 +1,11 @@
 version: "2"
 linters:
   enable:
+    - bodyclose
+    - gosec
     - misspell
     - revive
+    - testifylint
   exclusions:
     generated: lax
     presets:

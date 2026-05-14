@@ -63,7 +63,7 @@ func TestActivityCount(t *testing.T) {
 
 	count, err := c.ActivityCount()
 	require.NoError(t, err)
-	assert.Greater(t, count, 0)
+	assert.Positive(t, count)
 }
 
 func TestActivitiesByDate(t *testing.T) {

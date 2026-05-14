@@ -15,7 +15,7 @@ import (
 
 const (
 	ssoLoginURL   = "https://sso.garmin.com/mobile/api/login"
-	diTokenURL    = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
+	diAuthURL     = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
 	ssoClientID   = "GCM_IOS_DARK"
 	ssoServiceURL = "https://mobile.integration.garmin.com/gcm/ios"
 	ssoUserAgent  = "GCM-iOS-5.7.2.1 (com.garmin.connect.mobile.sso)"
@@ -85,7 +85,7 @@ func (c *Client) saveToken(tok *diToken) error {
 	if c.tokenFile == "" {
 		return nil
 	}
-	data, err := json.Marshal(tok)
+	data, err := json.Marshal(tok) //nolint:gosec // intentionally marshaling OAuth token to disk cache
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (c *Client) refreshToken(old *diToken) error {
 
 func (c *Client) doTokenRequest(params url.Values, clientID string) (*diToken, error) {
 	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":"))
-	req, err := http.NewRequest(http.MethodPost, diTokenURL, strings.NewReader(params.Encode()))
+	req, err := http.NewRequest(http.MethodPost, diAuthURL, strings.NewReader(params.Encode()))
 	if err != nil {
 		return nil, err
 	}

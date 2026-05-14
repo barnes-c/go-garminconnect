@@ -17,7 +17,7 @@ func TestSetActivityName(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method)
 		assert.Equal(t, "/activity-service/activity/7", r.URL.Path)
 		var body map[string]any
-		require.NoError(t, json.NewDecoder(r.Body).Decode(&body))
+		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
 		assert.Equal(t, "Morning Run", body["activityName"])
 		w.WriteHeader(http.StatusNoContent)
 	}))
@@ -44,7 +44,7 @@ func TestAddWeighIn(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 		assert.Equal(t, "/weight-service/user-weight", r.URL.Path)
 		var body map[string]any
-		require.NoError(t, json.NewDecoder(r.Body).Decode(&body))
+		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
 		assert.InDelta(t, 75.5, body["value"], 0.001)
 		assert.Equal(t, "kg", body["unitKey"])
 		assert.Equal(t, "2026-05-10T08:00:00Z", body["dateTimestamp"])
@@ -75,7 +75,7 @@ func TestScheduleWorkout(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 		assert.Equal(t, fmt.Sprintf("/calendar-service/schedule/workout/%d", 55), r.URL.Path)
 		var body map[string]any
-		require.NoError(t, json.NewDecoder(r.Body).Decode(&body))
+		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
 		assert.Equal(t, "2026-05-15", body["date"])
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]any{"scheduledWorkoutId": 999})
@@ -104,7 +104,7 @@ func TestSetActivityType(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method)
 		assert.Equal(t, "/activity-service/activity/10", r.URL.Path)
 		var body map[string]any
-		require.NoError(t, json.NewDecoder(r.Body).Decode(&body))
+		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
 		at := body["activityType"].(map[string]any)
 		assert.Equal(t, "running", at["typeKey"])
 		w.WriteHeader(http.StatusNoContent)
