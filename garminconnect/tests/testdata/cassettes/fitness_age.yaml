@@ -9,31 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/fitnessage-service/fitnessage/2026-05-10
+        url: https://connectapi.garmin.com/fitnessage-service/fitnessage/2026-01-01
         method: GET
       response:
-        body: '{"chronologicalAge":26,"fitnessAge":20.686659574308276,"achievableFitnessAge":18.0,"previousFitnessAge":20.686659574308276,"components":{"vigorousDaysAvg":{"value":1.1,"targetValue":3,"potentialAge":21.395321684421255,"priority":3,"stale":false,"numOfWeeksForIm":6},"rhr":{"value":49,"stale":false},"vigorousMinutesAvg":{"value":57.0,"targetValue":75,"potentialAge":21.395321684421255,"priority":2,"stale":false,"numOfWeeksForIm":6},"bmi":{"value":24.7,"targetValue":20.7,"improvementValue":4.0,"potentialAge":18.365128696434226,"priority":1,"stale":false,"lastMeasurementDate":"2026-05-07"}},"lastUpdated":"2026-05-10T00:00:00.0"}'
+        body: '{"chronologicalAge":26,"fitnessAge":21,"achievableFitnessAge":18.0,"previousFitnessAge":21,"components":{"vigorousDaysAvg":{"value":1.1,"targetValue":3,"potentialAge":21,"priority":3,"stale":false,"numOfWeeksForIm":6},"rhr":{"value":49,"stale":false},"vigorousMinutesAvg":{"value":57.0,"targetValue":75,"potentialAge":21,"priority":2,"stale":false,"numOfWeeksForIm":6},"bmi":{"value":24.7,"targetValue":20.7,"improvementValue":4.0,"potentialAge":18,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-07"}},"lastUpdated":"2026-01-01T00:00:00.0"}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac486409856ed2-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:48:11 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Nscf%2F4LuwRwI9e4O97O59EOztCfeFPdpNjMBTAI0vuYijDaz8i3H3BB6PZSlgSyTrUwgfd%2F2gR2qIB1oWWcUrzXpBKubzrnNIYmrUqcE2s0BEQcJrRmD%2BSQCfQ%2B48JbCkTO1N1W01zvNM%2FwIYEj6IkjKFg%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 184.430708ms
+        duration: 100ms

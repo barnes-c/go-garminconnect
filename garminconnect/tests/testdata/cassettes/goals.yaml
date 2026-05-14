@@ -14,28 +14,10 @@ interactions:
       response:
         body: '[]'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac4601bfef6ef1-CDG
             Content-Length:
                 - "2"
             Content-Type:
                 - application/json;charset=UTF-8
-            Date:
-                - Tue, 12 May 2026 20:46:33 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=yWHaJRtAKFwrfzl6ioH%2Bf2kWfxuQ97aMBVySOCETRshL5eD2L3P2e2ibo0AMZaHVTcUSt1dh17UsBHUNCd0Xq3apx6scbpB3bRcvC4gYOoGmGKRslEMYXEhnmiXbbZ%2FVT7IkAlFGw1oybtAg9Ok0zc6vDA%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 184.597208ms
+        duration: 100ms

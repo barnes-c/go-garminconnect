@@ -9,35 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/userprofile-service/userprofileservice/userprofile/v2/settings
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/settings
         method: GET
       response:
-        body: '{"timestamp":"2026-05-12T20:48:34.993+00:00","status":404,"error":"Not Found","path":"/userprofile-service/userprofileservice/userprofile/v2/settings"}'
+        body: '{"displayName":"aaaaaaaa-0000-0000-0000-000000000001","preferredLocale":"fr","measurementSystem":"metric","firstDayOfWeek":{"dayId":2,"dayName":"sunday","sortOrder":2,"isPossibleFirstDay":true},"numberFormat":"decimal_period","timeFormat":{"formatId":32,"formatKey":"time_twelve_hr","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":"h:mm a"},"dateFormat":{"formatId":23,"formatKey":"mmddyyyy","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":"EEE, MMM d, yyyy"},"powerFormat":{"formatId":30,"formatKey":"watt","minFraction":0,"maxFraction":0,"groupingUsed":true,"displayFormat":null},"heartRateFormat":{"formatId":21,"formatKey":"bpm","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":null},"timeZone":"Europe/Paris","hydrationMeasurementUnit":"milliliter","hydrationContainers":[],"golfDistanceUnit":"statute_us","golfElevationUnit":null,"golfSpeedUnit":null,"availableTrainingDays":null,"preferredLongTrainingDays":null}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac48fa3d17f015-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:48:35 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=1ht37A45dvUvWoBDypJrpLHQix50N548%2Fxgf4cdwf5VP2lwd80MyYlNpLOdtO1i6lobXF0QLPzUWYRCkuSKyxKt%2BKYWxJfgLQZiLr8HuHcBxTYdbfg1tJi0ceMw%2FuyJjpb0S2AZSADNSASxJ7Uf0xtSkQQ%3D%3D"}]}'
-            Server:
-                - cloudflare
-            Vary:
-                - Origin
-                - Access-Control-Request-Method
-                - Access-Control-Request-Headers
-        status: 404 Not Found
-        code: 404
-        duration: 199.253375ms
+        status: 200 OK
+        code: 200
+        duration: 100ms

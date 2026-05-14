@@ -9,38 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/endurancescore-service/endurancescore/stats?endDate=2026-05-10&startDate=2026-04-10
+        url: https://connectapi.garmin.com/metrics-service/metrics/endurancescore/stats?aggregation=weekly&endDate=2026-01-01&startDate=2025-12-01
         method: GET
       response:
-        body: |-
-            <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Not Found</title></head>
-            <body>
-                <div class="headerContainer">
-                    <h2 class="page-title">Page Not Found</h2>
-
-                    <p>We're sorry. The page you're looking for does not exist.</p>
-                </div>
-            </body>
-            </html>
+        body: '{"userProfilePK":12345678,"startDate":"2025-12-01","endDate":"2026-01-01","avg":5467,"max":5518,"groupMap":{"2025-12-06":{"groupAverage":5506,"groupMax":5507,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":69.39},{"activityTypeId":null,"group":0,"contribution":27.62},{"activityTypeId":null,"group":8,"contribution":2.99}]},"2025-12-13":{"groupAverage":5507,"groupMax":5518,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":64.63},{"activityTypeId":null,"group":0,"contribution":32},{"activityTypeId":null,"group":8,"contribution":3.1}]},"2025-12-20":{"groupAverage":5463,"groupMax":5472,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":55},{"activityTypeId":null,"group":0,"contribution":42},{"activityTypeId":null,"group":8,"contribution":3.6}]},"2025-12-27":{"groupAverage":5436,"groupMax":5442,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":51.43},{"activityTypeId":3,"group":null,"contribution":0.8},{"activityTypeId":231,"group":null,"contribution":1.7},{"activityTypeId":null,"group":0,"contribution":40.91},{"activityTypeId":null,"group":8,"contribution":5.2}]},"2026-01-04":{"groupAverage":5424,"groupMax":5430,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":41},{"activityTypeId":231,"group":null,"contribution":13},{"activityTypeId":null,"group":0,"contribution":37},{"activityTypeId":null,"group":8,"contribution":9.1}]}},"enduranceScoreDTO":{"userProfilePK":12345678,"deviceId":9876543210,"calendarDate":"2026-01-01","overallScore":5419,"classification":2,"feedbackPhrase":30,"primaryTrainingDevice":true,"gaugeLowerLimit":3570,"classificationLowerLimitIntermediate":5100,"classificationLowerLimitTrained":5800,"classificationLowerLimitWellTrained":6600,"classificationLowerLimitExpert":7300,"classificationLowerLimitSuperior":8100,"classificationLowerLimitElite":8800,"gaugeUpperLimit":10560,"contributors":[{"activityTypeId":null,"group":0,"contribution":41.66},{"activityTypeId":null,"group":3,"contribution":30.93},{"activityTypeId":231,"group":null,"contribution":16.06},{"activityTypeId":null,"group":8,"contribution":11.35}]}}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac47cd1a1e7240-CDG
             Content-Type:
-                - text/html
-            Date:
-                - Tue, 12 May 2026 20:47:46 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=g%2B%2BifocvIQ0%2BrpkQdf2ZK3%2Bdibof3%2BoX3IU2JqZnEmr6GZdo8bA40YC32RARWOkVHKjdAZotg4fZRmBxxzeXNvhd2pl8knpl1uY2Y6Z86IrjcEhcjdzLuHU%2FpMz%2FUnkpej2P4Dap1iCcX5qpcbrdknOKfg%3D%3D"}]}'
-            Server:
-                - cloudflare
-        status: 404 Not Found
-        code: 404
-        duration: 173.724875ms
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

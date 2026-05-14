@@ -10,7 +10,7 @@ import (
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
-var testDate = time.Date(2026, 5, 10, 0, 0, 0, 0, time.UTC)
+var testDate = time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 
 func TestActivities(t *testing.T) {
 	c, stop := newVCRClient(t, "activities")
@@ -21,16 +21,16 @@ func TestActivities(t *testing.T) {
 	require.Len(t, acts, 2)
 
 	run := acts[0]
-	assert.Equal(t, int64(22859018754), run.ActivityID)
-	assert.Equal(t, "Saint-Genis-Pouilly Course à pied", run.ActivityName)
+	assert.Equal(t, int64(10000001), run.ActivityID)
+	assert.Equal(t, "Morning Run", run.ActivityName)
 	assert.Equal(t, "running", run.ActivityType.TypeKey)
-	assert.Equal(t, 1484.8990478515625, run.Duration)
-	assert.Equal(t, 4127.35986328125, run.Distance)
+	assert.Equal(t, 1500.0, run.Duration)
+	assert.Equal(t, 4100.0, run.Distance)
 	assert.Equal(t, 334.0, run.Calories)
 	assert.Equal(t, 153.0, run.AverageHR)
 	assert.Equal(t, 172.0, run.MaxHR)
 	assert.Equal(t, 53.0, run.VO2MaxValue)
-	assert.Equal(t, "Saint-Genis-Pouilly", run.LocationName)
+	assert.Equal(t, "Anytown", run.LocationName)
 	assert.True(t, run.HasPolyline)
 
 	assert.Equal(t, "kayaking_v2", acts[1].ActivityType.TypeKey)
@@ -44,7 +44,7 @@ func TestLastActivity(t *testing.T) {
 	// which returns 2. Stub it separately so we control the limit parameter.
 	acts, err := c.Activities(2)
 	require.NoError(t, err)
-	assert.Equal(t, int64(22859018754), acts[0].ActivityID)
+	assert.Equal(t, int64(10000001), acts[0].ActivityID)
 }
 
 func TestLastActivity_Empty(t *testing.T) {

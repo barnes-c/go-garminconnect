@@ -9,35 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/weight-service/user-summary/period/testuser?endDate=2026-05-10&startDate=2026-05-01
+        url: https://connectapi.garmin.com/weight-service/weight/dateRange?endDate=2026-01-01&startDate=2026-01-01
         method: GET
       response:
-        body: '{"timestamp":1778618773958,"status":404,"error":"Not Found","path":"/weight-service/user-summary/period/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[{"samplePk":1000000000001,"date":1000000000003,"calendarDate":"2026-01-07","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1000000000004,"weightDelta":null}],"totalAverage":{"from":1000000000005,"until":1000000000006,"weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac4587bc76216f-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:46:14 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=MCXa6chi%2Bbq1aLvlz4FTI8zPFaDrZHO1cF00GzmKDdLQyZlFxY9OcjuPDb3dCanfOI80p6TzsEVejcbn2Th6ZbAb%2Bs7FwrEN2U1hZAF9tasGX9iuCYy9e846so3Pih7mpIowhSpLMQIz3%2FE9CA%2BFQVsaqg%3D%3D"}]}'
-            Server:
-                - cloudflare
-            Vary:
-                - Origin
-                - Access-Control-Request-Method
-                - Access-Control-Request-Headers
-        status: 404 Not Found
-        code: 404
-        duration: 417.940375ms
+        status: 200 OK
+        code: 200
+        duration: 100ms

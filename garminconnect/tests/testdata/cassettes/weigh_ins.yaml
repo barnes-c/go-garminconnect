@@ -9,35 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/weight-service/weight/range/testuser?endDate=2026-05-10&startDate=2026-04-10
+        url: https://connectapi.garmin.com/weight-service/weight/range/2025-12-01/2026-01-01?includeAll=true
         method: GET
       response:
-        body: '{"timestamp":1778618761504,"status":404,"error":"Not Found","path":"/weight-service/weight/range/e15d1c9d-827d-4db9-b030-48792c1d1fa6"}'
+        body: '{"dailyWeightSummaries":[{"summaryDate":"2026-01-07","numOfWeightEntries":1,"minWeight":70000.0,"maxWeight":70000.0,"latestWeight":{"samplePk":1000000000001,"date":1000000000003,"calendarDate":"2026-01-07","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1000000000004,"weightDelta":1700},"allWeightMetrics":[{"samplePk":1000000000001,"date":1000000000003,"calendarDate":"2026-01-07","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1000000000004,"weightDelta":1700}]},{"summaryDate":"2025-12-25","numOfWeightEntries":1,"minWeight":70000.0,"maxWeight":70000.0,"latestWeight":{"samplePk":1000000000002,"date":1777110675006,"calendarDate":"2025-12-25","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1777103475006,"weightDelta":-100},"allWeightMetrics":[{"samplePk":1000000000002,"date":1777110675006,"calendarDate":"2025-12-25","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1777103475006,"weightDelta":-100}]},{"summaryDate":"2025-12-15","numOfWeightEntries":1,"minWeight":75500.0,"maxWeight":75500.0,"latestWeight":{"samplePk":1000000000002,"date":1776288924008,"calendarDate":"2025-12-15","weight":75500.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1776281724008,"weightDelta":-500.0},"allWeightMetrics":[{"samplePk":1000000000002,"date":1776288924008,"calendarDate":"2025-12-15","weight":75500.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1776281724008,"weightDelta":-500.0}]}],"totalAverage":{"from":1775779200000,"until":1000000000006,"weight":76000,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null},"previousDateWeight":{"samplePk":1000000000001,"date":1775726969001,"calendarDate":"2025-12-09","weight":76000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1775719769001,"weightDelta":null},"nextDateWeight":{"samplePk":null,"date":null,"calendarDate":null,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":null,"timestampGMT":null,"weightDelta":null}}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac453a8c17bb30-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:46:01 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Qp0QhAkRFhD7HXRTZpm24xY%2BxihznERAfP0lv2DCWdUcWaPndkAdAt5doBeIxNUtoTN3lRdnQEWZcvlALQsAukNjlG6wJ%2BVpPTQ%2BPgr3bWkeAF1WH52jctI%2BOZH%2Ffp6PO1LE37mm6eTbmsGjJzjWBojM2A%3D%3D"}]}'
-            Server:
-                - cloudflare
-            Vary:
-                - Origin
-                - Access-Control-Request-Method
-                - Access-Control-Request-Headers
-        status: 404 Not Found
-        code: 404
-        duration: 285.039292ms
+        status: 200 OK
+        code: 200
+        duration: 100ms

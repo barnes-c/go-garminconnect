@@ -9,31 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/usersummary-service/stats/steps/daily/2026-05-03/2026-05-10
+        url: https://connectapi.garmin.com/usersummary-service/stats/steps/daily/2025-12-25/2026-01-01
         method: GET
       response:
-        body: '[{"calendarDate":"2026-05-03","totalSteps":13811,"totalDistance":11210,"stepGoal":8260},{"calendarDate":"2026-05-04","totalSteps":10521,"totalDistance":8473,"stepGoal":9370},{"calendarDate":"2026-05-05","totalSteps":5084,"totalDistance":4094,"stepGoal":9600},{"calendarDate":"2026-05-06","totalSteps":18236,"totalDistance":15231,"stepGoal":9150},{"calendarDate":"2026-05-07","totalSteps":4878,"totalDistance":3928,"stepGoal":6950},{"calendarDate":"2026-05-08","totalSteps":2088,"totalDistance":1682,"stepGoal":6750},{"calendarDate":"2026-05-09","totalSteps":14843,"totalDistance":11972,"stepGoal":5820},{"calendarDate":"2026-05-10","totalSteps":3279,"totalDistance":2647,"stepGoal":6730}]'
+        body: '[{"calendarDate":"2026-01-03","totalSteps":13811,"totalDistance":11210,"stepGoal":8260},{"calendarDate":"2026-01-04","totalSteps":10521,"totalDistance":8473,"stepGoal":9370},{"calendarDate":"2026-01-05","totalSteps":5084,"totalDistance":4094,"stepGoal":9600},{"calendarDate":"2026-01-06","totalSteps":18236,"totalDistance":15231,"stepGoal":9150},{"calendarDate":"2026-01-07","totalSteps":4878,"totalDistance":3928,"stepGoal":6950},{"calendarDate":"2026-01-08","totalSteps":2088,"totalDistance":1682,"stepGoal":6750},{"calendarDate":"2026-01-09","totalSteps":14843,"totalDistance":11972,"stepGoal":5820},{"calendarDate":"2026-01-01","totalSteps":3279,"totalDistance":2647,"stepGoal":6730}]'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac44a30a8cd142-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:45:37 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=8RF56Nhp5qptId%2FnG3DjAssvRUlR%2BxA2hPZoK%2BLflHD8Vpuqre0ddNFKFlHYBF9ER9PW%2FzTlcbovChG4nh0qghu7fqDuSthz9DDWXB05hPwc9x%2Bp7hQ8ZMzKWiX5gCz%2FG%2BQvd9%2F59%2BW2%2FC1eLxTIGeFRdw%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 181.457709ms
+        duration: 100ms

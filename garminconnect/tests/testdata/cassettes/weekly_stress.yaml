@@ -9,31 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/usersummary-service/stats/stress/weekly/2026-05-10/4
+        url: https://connectapi.garmin.com/usersummary-service/stats/stress/weekly/2026-01-01/4
         method: GET
       response:
-        body: '[{"calendarDate":"2026-04-13","value":34},{"calendarDate":"2026-04-20","value":27},{"calendarDate":"2026-04-27","value":31},{"calendarDate":"2026-05-04","value":26}]'
+        body: '[{"calendarDate":"2025-12-13","value":34},{"calendarDate":"2025-12-20","value":27},{"calendarDate":"2025-12-27","value":31},{"calendarDate":"2026-01-04","value":26}]'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac44c8bb72657d-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:45:43 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=DGR%2Fn39D34QgQFZwqSP4IRcleyw8Jwhr8copH8ias4f0UX7oW6gFZP1u3RZJ4DWVMDrnypnf0pKPBKdFfLy1zFsRKp5ow7vikcjVTKm3sZi9cyulElwq96AT2wl%2FTSeQafq3PoWRZWXQYeSmIQXzwRnWvA%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 182.379583ms
+        duration: 100ms

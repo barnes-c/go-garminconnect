@@ -14,7 +14,7 @@ func TestSleepData(t *testing.T) {
 	s, err := c.SleepData(testDate)
 	require.NoError(t, err)
 
-	assert.Equal(t, "2026-05-10", s.DailySleepDTO.CalendarDate)
+	assert.Equal(t, "2026-01-01", s.DailySleepDTO.CalendarDate)
 	assert.Equal(t, 16759, s.DailySleepDTO.SleepTimeSeconds)
 	assert.Equal(t, 3000, s.DailySleepDTO.DeepSleepSeconds)
 	assert.Equal(t, 4380, s.DailySleepDTO.REMSleepSeconds)

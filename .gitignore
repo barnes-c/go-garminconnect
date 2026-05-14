@@ -9,8 +9,14 @@ go.work
 go.work.sum
 
 # Token cache contains credentials
-garmin_token.json
+.garmin_token.json
 *.token.json
+
+# Compiled dev tooling binaries
+/gettoken
+
+# Python cache
+__pycache__/
 
 # Dependency vendoring (use modules instead)
 /vendor/

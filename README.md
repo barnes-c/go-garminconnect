@@ -252,8 +252,32 @@ if errors.As(err, &apiErr) {
 Tests use [go-vcr](https://github.com/dnaeon/go-vcr) cassettes to replay recorded HTTP interactions — no live credentials needed.
 
 ```bash
-go test ./garminconnect/...
+go test ./garminconnect/tests/...
 ```
+
+### Recording cassettes
+
+To re-record cassettes against a real Garmin Connect account:
+
+```bash
+GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret bash tools/record_cassettes.sh
+```
+
+This logs in once, records one cassette per test, then automatically runs `tools/sanitize_cassettes.py` to strip PII (IDs, UUIDs, emails, precise GPS coordinates and measurements) from every cassette before they are committed.
+
+To record only cassettes that don't exist yet (preserving existing ones):
+
+```bash
+bash tools/record_cassettes.sh --missing
+```
+
+### Tools
+
+| File | Purpose |
+|---|---|
+| `tools/gettoken/` | CLI that logs in and prints the OAuth token — used by `record_cassettes.sh` |
+| `tools/record_cassettes.sh` | Records cassettes for all tests against a live account |
+| `tools/sanitize_cassettes.py` | Strips PII from cassettes; run standalone or called automatically by the recording script |
 
 [releases-shield]: https://img.shields.io/github/release/barnes-c/go-garminconnect.svg?style=for-the-badge
 [releases]: https://github.com/barnes-c/go-garminconnect/releases

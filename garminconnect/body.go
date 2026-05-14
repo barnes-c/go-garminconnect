@@ -12,8 +12,8 @@ type BodyComposition struct {
 	StartDate    string `json:"startDate"`
 	EndDate      string `json:"endDate"`
 	TotalAverage struct {
-		From            string  `json:"from"`
-		Until           string  `json:"until"`
+		From            int64   `json:"from"`  // unix ms
+		Until           int64   `json:"until"` // unix ms
 		WeightTimestamp string  `json:"weightTimestamp"`
 		Weight          float64 `json:"weight"`
 		Bmi             float64 `json:"bmi"`
@@ -69,7 +69,7 @@ func (c *Client) BodyComposition(start, end time.Time) (*BodyComposition, error)
 		"endDate":   {date(end)},
 	}
 	var out BodyComposition
-	if err := c.get(fmt.Sprintf("/weight-service/user-summary/period/%s", c.displayName), params, &out); err != nil {
+	if err := c.get("/weight-service/weight/dateRange", params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -77,12 +77,9 @@ func (c *Client) BodyComposition(start, end time.Time) (*BodyComposition, error)
 
 // WeighIns returns all weigh-in measurements between start and end dates.
 func (c *Client) WeighIns(start, end time.Time) (*WeighInsResponse, error) {
-	params := url.Values{
-		"startDate": {date(start)},
-		"endDate":   {date(end)},
-	}
+	params := url.Values{"includeAll": {"true"}}
 	var out WeighInsResponse
-	if err := c.get(fmt.Sprintf("/weight-service/weight/range/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/weight-service/weight/range/%s/%s", date(start), date(end)), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -92,7 +89,7 @@ func (c *Client) WeighIns(start, end time.Time) (*WeighInsResponse, error) {
 func (c *Client) DailyWeighIns(d time.Time) (*WeighInsResponse, error) {
 	params := url.Values{"calendarDate": {date(d)}}
 	var out WeighInsResponse
-	if err := c.get(fmt.Sprintf("/weight-service/weight/dayview/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/weight-service/weight/dayview/%s", date(d)), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

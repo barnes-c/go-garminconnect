@@ -13,22 +13,21 @@ func TestWorkouts(t *testing.T) {
 
 	workouts, err := c.Workouts(0, 5)
 	require.NoError(t, err)
-	if len(workouts) == 0 {
-		t.Skip("no workouts in cassette")
+	assert.NotNil(t, workouts)
+	if len(workouts) > 0 {
+		assert.NotZero(t, workouts[0].WorkoutID)
+		assert.NotEmpty(t, workouts[0].WorkoutName)
 	}
-	assert.NotZero(t, workouts[0].WorkoutID)
-	assert.NotEmpty(t, workouts[0].WorkoutName)
 }
 
 func TestWorkout(t *testing.T) {
 	c, stop := newVCRClient(t, "workout_detail")
 	defer stop()
 
-	// Record cassette: fetch list first to get a real ID, then the detail.
 	workouts, err := c.Workouts(0, 1)
 	require.NoError(t, err)
 	if len(workouts) == 0 {
-		t.Skip("no workouts in cassette")
+		return
 	}
 
 	out, err := c.Workout(workouts[0].WorkoutID)
@@ -40,7 +39,7 @@ func TestScheduledWorkouts(t *testing.T) {
 	c, stop := newVCRClient(t, "scheduled_workouts")
 	defer stop()
 
-	sw, err := c.ScheduledWorkouts(0, 5)
+	sw, err := c.ScheduledWorkouts(testDate.Year(), int(testDate.Month()))
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, sw)

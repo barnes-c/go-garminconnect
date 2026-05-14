@@ -136,10 +136,13 @@ func normaliseURL(u *url.URL) string {
 	return cp.String()
 }
 
-// skipAPIError calls t.Skip when err is an *gc.APIError (cassette captured a
-// non-2xx response that this account doesn't support).
+// skipAPIError calls t.Skip when err signals a non-2xx response captured in the
+// cassette (account doesn't have access to this endpoint).
 func skipAPIError(t *testing.T, err error) {
 	t.Helper()
+	if errors.Is(err, gc.ErrUnauthorized) {
+		t.Skipf("cassette captured 401 from API")
+	}
 	var ae *gc.APIError
 	if errors.As(err, &ae) {
 		t.Skipf("cassette captured HTTP %d from API", ae.StatusCode)

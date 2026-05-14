@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/userprofile-service/socialProfile
         method: GET
       response:
-        body: '{"displayName":"testuser"}'
+        body: '{"displayName":"testuser","fullName":"Test User"}'
         headers:
             Content-Type:
                 - application/json

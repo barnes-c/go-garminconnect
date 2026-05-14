@@ -9,38 +9,31 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/race-predictor-service/race-predictor/races/testuser
+        url: https://connectapi.garmin.com/metrics-service/metrics/racepredictions/latest/testuser
         method: GET
       response:
-        body: |-
-            <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Not Found</title></head>
-            <body>
-                <div class="headerContainer">
-                    <h2 class="page-title">Page Not Found</h2>
-
-                    <p>We're sorry. The page you're looking for does not exist.</p>
-                </div>
-            </body>
-            </html>
+        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-13","time5K":1490,"time10K":3319,"timeHalfMarathon":7676,"timeMarathon":17123}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac47f2c8416f5e-CDG
             Content-Type:
-                - text/html
-            Date:
-                - Tue, 12 May 2026 20:47:52 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=rWQ8mjkqEEIICHpjAlqEmiO6Vz0CVHxt2TmdnW3JRMXExXK0IUNqvVArYXM84VO8mSxk4XkZ2IvFUrDl0kJY4R3U%2BrW34e9%2FvYNqZVOuuj%2B8EHsrbnOqZolnQIcbctreZWr85N5Se%2Fnu7Jh0%2F0io7cgY7Q%3D%3D"}]}'
-            Server:
-                - cloudflare
-        status: 404 Not Found
-        code: 404
-        duration: 191.159917ms
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/racepredictions/latest/testuser
+        method: GET
+      response:
+        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-14","time5K":1492,"time10K":3324,"timeHalfMarathon":7687,"timeMarathon":17144}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

@@ -11,11 +11,11 @@ func TestTrainingReadiness(t *testing.T) {
 	c, stop := newVCRClient(t, "training_readiness")
 	defer stop()
 
-	r, err := c.TrainingReadiness(testDate)
+	entries, err := c.TrainingReadiness(testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	require.NotNil(t, r)
-	assert.NotEmpty(t, r.CalendarDate)
+	require.NotEmpty(t, entries)
+	assert.NotEmpty(t, entries[0].CalendarDate)
 }
 
 func TestTrainingStatus(t *testing.T) {
@@ -105,8 +105,7 @@ func TestCyclingFTP(t *testing.T) {
 	c, stop := newVCRClient(t, "cycling_ftp")
 	defer stop()
 
-	start := testDate.AddDate(0, -1, 0)
-	out, err := c.CyclingFTP(start, testDate)
+	out, err := c.CyclingFTP()
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotEmpty(t, out)

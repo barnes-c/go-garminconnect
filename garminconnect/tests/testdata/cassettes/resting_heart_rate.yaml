@@ -9,31 +9,31 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/userstats-service/wellness/daily/testuser?fromDate=2026-04-10&metricId=60&untilDate=2026-05-10
+        url: https://connectapi.garmin.com/userstats-service/wellness/daily/testuser?fromDate=2025-12-01&metricId=60&untilDate=2026-01-01
         method: GET
       response:
-        body: '{"userProfileId":127516254,"statisticsStartDate":"2026-04-10","statisticsEndDate":"2026-05-10","allMetrics":{"metricsMap":{"WELLNESS_RESTING_HEART_RATE":[{"value":49.0,"calendarDate":"2026-04-10"},{"value":53.0,"calendarDate":"2026-04-11"},{"value":47.0,"calendarDate":"2026-04-12"},{"value":45.0,"calendarDate":"2026-04-13"},{"value":53.0,"calendarDate":"2026-04-14"},{"value":49.0,"calendarDate":"2026-04-15"},{"value":53.0,"calendarDate":"2026-04-16"},{"value":53.0,"calendarDate":"2026-04-17"},{"value":50.0,"calendarDate":"2026-04-18"},{"value":48.0,"calendarDate":"2026-04-19"},{"value":50.0,"calendarDate":"2026-04-20"},{"value":54.0,"calendarDate":"2026-04-21"},{"value":49.0,"calendarDate":"2026-04-22"},{"value":49.0,"calendarDate":"2026-04-23"},{"value":47.0,"calendarDate":"2026-04-24"},{"value":47.0,"calendarDate":"2026-04-25"},{"value":45.0,"calendarDate":"2026-04-26"},{"value":53.0,"calendarDate":"2026-04-27"},{"value":47.0,"calendarDate":"2026-04-28"},{"value":48.0,"calendarDate":"2026-04-29"},{"value":49.0,"calendarDate":"2026-04-30"},{"value":52.0,"calendarDate":"2026-05-01"},{"value":46.0,"calendarDate":"2026-05-02"},{"value":49.0,"calendarDate":"2026-05-03"},{"value":47.0,"calendarDate":"2026-05-04"},{"value":49.0,"calendarDate":"2026-05-05"},{"value":52.0,"calendarDate":"2026-05-06"},{"value":46.0,"calendarDate":"2026-05-07"},{"value":48.0,"calendarDate":"2026-05-08"},{"value":48.0,"calendarDate":"2026-05-09"},{"value":46.0,"calendarDate":"2026-05-10"}]}},"groupedMetrics":null}'
+        body: '{"userProfileId":12345678,"statisticsStartDate":"2025-12-01","statisticsEndDate":"2026-01-01","allMetrics":{"metricsMap":{"WELLNESS_RESTING_HEART_RATE":[{"value":49.0,"calendarDate":"2025-12-01"},{"value":53.0,"calendarDate":"2025-12-11"},{"value":47.0,"calendarDate":"2025-12-12"},{"value":45.0,"calendarDate":"2025-12-13"},{"value":53.0,"calendarDate":"2025-12-14"},{"value":49.0,"calendarDate":"2025-12-15"},{"value":53.0,"calendarDate":"2025-12-16"},{"value":53.0,"calendarDate":"2025-12-17"},{"value":50.0,"calendarDate":"2025-12-18"},{"value":48.0,"calendarDate":"2025-12-19"},{"value":50.0,"calendarDate":"2025-12-20"},{"value":54.0,"calendarDate":"2025-12-21"},{"value":49.0,"calendarDate":"2025-12-22"},{"value":49.0,"calendarDate":"2025-12-23"},{"value":47.0,"calendarDate":"2025-12-24"},{"value":47.0,"calendarDate":"2025-12-25"},{"value":45.0,"calendarDate":"2025-12-26"},{"value":53.0,"calendarDate":"2025-12-27"},{"value":47.0,"calendarDate":"2025-12-28"},{"value":48.0,"calendarDate":"2025-12-29"},{"value":49.0,"calendarDate":"2025-12-30"},{"value":52.0,"calendarDate":"2026-01-01"},{"value":46.0,"calendarDate":"2026-01-02"},{"value":49.0,"calendarDate":"2026-01-03"},{"value":47.0,"calendarDate":"2026-01-04"},{"value":49.0,"calendarDate":"2026-01-05"},{"value":52.0,"calendarDate":"2026-01-06"},{"value":46.0,"calendarDate":"2026-01-07"},{"value":48.0,"calendarDate":"2026-01-08"},{"value":48.0,"calendarDate":"2026-01-09"},{"value":46.0,"calendarDate":"2026-01-01"}]}},"groupedMetrics":null}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac447c8ffc00d2-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:45:31 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=A%2FLbPpKmCy7EoHKIHq6d4h%2FJmkeR2tDH0yst7zwRoKoGqXjRfGoaNtCtqiWDC6pRSauWYXaUyAtAzh5M1FEkEqa3iswmkSKf6ykbfFIl6gVWUL4yleb7XMCNo3c0TRGmR2FwB24p1lIuILnnUNmXwuR0cg%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 241.627542ms
+        duration: 100ms
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userstats-service/wellness/daily/testuser?fromDate=2025-12-01&metricId=60&untilDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"statisticsStartDate":"2025-12-01","statisticsEndDate":"2026-01-01","allMetrics":{"metricsMap":{"WELLNESS_RESTING_HEART_RATE":[{"value":49.0,"calendarDate":"2025-12-01"},{"value":53.0,"calendarDate":"2025-12-11"},{"value":47.0,"calendarDate":"2025-12-12"},{"value":45.0,"calendarDate":"2025-12-13"},{"value":53.0,"calendarDate":"2025-12-14"},{"value":49.0,"calendarDate":"2025-12-15"},{"value":53.0,"calendarDate":"2025-12-16"},{"value":53.0,"calendarDate":"2025-12-17"},{"value":50.0,"calendarDate":"2025-12-18"},{"value":48.0,"calendarDate":"2025-12-19"},{"value":50.0,"calendarDate":"2025-12-20"},{"value":54.0,"calendarDate":"2025-12-21"},{"value":49.0,"calendarDate":"2025-12-22"},{"value":49.0,"calendarDate":"2025-12-23"},{"value":47.0,"calendarDate":"2025-12-24"},{"value":47.0,"calendarDate":"2025-12-25"},{"value":45.0,"calendarDate":"2025-12-26"},{"value":53.0,"calendarDate":"2025-12-27"},{"value":47.0,"calendarDate":"2025-12-28"},{"value":48.0,"calendarDate":"2025-12-29"},{"value":49.0,"calendarDate":"2025-12-30"},{"value":52.0,"calendarDate":"2026-01-01"},{"value":46.0,"calendarDate":"2026-01-02"},{"value":49.0,"calendarDate":"2026-01-03"},{"value":47.0,"calendarDate":"2026-01-04"},{"value":49.0,"calendarDate":"2026-01-05"},{"value":52.0,"calendarDate":"2026-01-06"},{"value":46.0,"calendarDate":"2026-01-07"},{"value":48.0,"calendarDate":"2026-01-08"},{"value":48.0,"calendarDate":"2026-01-09"},{"value":46.0,"calendarDate":"2026-01-01"}]}},"groupedMetrics":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

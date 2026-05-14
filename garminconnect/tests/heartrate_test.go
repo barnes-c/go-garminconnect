@@ -14,7 +14,7 @@ func TestHeartRates(t *testing.T) {
 	hr, err := c.HeartRates(testDate)
 	require.NoError(t, err)
 
-	assert.Equal(t, "2026-05-10", hr.CalendarDate)
+	assert.Equal(t, "2026-01-01", hr.CalendarDate)
 	assert.Equal(t, 46, hr.RestingHeartRate)
 	assert.Equal(t, 42, hr.MinHeartRate)
 	assert.Equal(t, 93, hr.MaxHeartRate)

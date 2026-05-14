@@ -52,14 +52,10 @@ func (c *Client) DeleteWorkout(id int64) error {
 	return c.del(fmt.Sprintf("/workout-service/workout/%d", id))
 }
 
-// ScheduledWorkouts returns upcoming scheduled workouts with pagination.
-func (c *Client) ScheduledWorkouts(start, limit int) ([]ScheduledWorkout, error) {
-	params := url.Values{
-		"start": {fmt.Sprintf("%d", start)},
-		"limit": {fmt.Sprintf("%d", limit)},
-	}
-	var out []ScheduledWorkout
-	if err := c.get("/calendar-service/schedule/workouts", params, &out); err != nil {
+// ScheduledWorkouts returns the calendar for the given year and month.
+func (c *Client) ScheduledWorkouts(year, month int) (json.RawMessage, error) {
+	var out json.RawMessage
+	if err := c.get(fmt.Sprintf("/calendar-service/year/%d/month/%d", year, month-1), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil

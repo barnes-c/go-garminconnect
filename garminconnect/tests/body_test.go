@@ -2,7 +2,6 @@ package garminconnect_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -33,8 +32,7 @@ func TestBodyComposition(t *testing.T) {
 	c, stop := newVCRClient(t, "body_composition")
 	defer stop()
 
-	start := time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC)
-	bc, err := c.BodyComposition(start, testDate)
+	bc, err := c.BodyComposition(testDate, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, bc)

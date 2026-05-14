@@ -2,7 +2,6 @@ package garminconnect_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -40,8 +39,7 @@ func TestBodyBattery(t *testing.T) {
 	c, stop := newVCRClient(t, "body_battery")
 	defer stop()
 
-	start := time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC)
-	entries, err := c.BodyBattery(start, testDate)
+	entries, err := c.BodyBattery(testDate, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, entries)
@@ -89,7 +87,7 @@ func TestSpO2(t *testing.T) {
 
 	assert.Equal(t, 94.0, s.AverageSpO2)
 	assert.Equal(t, 85.0, s.LowestSpO2)
-	assert.InDelta(t, 94.714, s.LastSevenDaysAvgSpO2, 0.001)
+	assert.Equal(t, 95.0, s.LastSevenDaysAvgSpO2)
 	assert.NotEmpty(t, s.SpO2HourlyAverages)
 }
 

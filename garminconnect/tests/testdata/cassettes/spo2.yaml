@@ -9,31 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/wellness-service/wellness/daily/spo2/2026-05-10
+        url: https://connectapi.garmin.com/wellness-service/wellness/daily/spo2/2026-01-01
         method: GET
       response:
-        body: '{"userProfilePK":127516254,"calendarDate":"2026-05-10","startTimestampGMT":"2026-05-09T22:00:00.0","endTimestampGMT":"2026-05-10T22:00:00.0","startTimestampLocal":"2026-05-10T00:00:00.0","endTimestampLocal":"2026-05-11T00:00:00.0","sleepStartTimestampGMT":"2026-05-10T02:49:10.0","sleepEndTimestampGMT":"2026-05-10T07:28:29.0","sleepStartTimestampLocal":"2026-05-10T04:49:10.0","sleepEndTimestampLocal":"2026-05-10T09:28:29.0","tomorrowSleepStartTimestampGMT":null,"tomorrowSleepEndTimestampGMT":null,"tomorrowSleepStartTimestampLocal":null,"tomorrowSleepEndTimestampLocal":null,"averageSpO2":94.0,"lowestSpO2":85,"lastSevenDaysAvgSpO2":94.71428571428571,"latestSpO2":94,"latestSpO2TimestampGMT":"2026-05-10T21:48:00.0","latestSpO2TimestampLocal":"2026-05-10T23:48:00.0","avgSleepSpO2":96.0,"avgTomorrowSleepSpO2":null,"spO2ValueDescriptorsDTOList":[{"spo2ValueDescriptorIndex":0,"spo2ValueDescriptorKey":"timestamp"},{"spo2ValueDescriptorIndex":1,"spo2ValueDescriptorKey":"spo2Reading"},{"spo2ValueDescriptorIndex":2,"spo2ValueDescriptorKey":"singleReadingPlottable"}],"spO2SingleValues":null,"continuousReadingDTOList":null,"spO2HourlyAverages":[[1778364000000,95],[1778367600000,91],[1778371200000,94],[1778374800000,92],[1778378400000,96],[1778382000000,95],[1778443200000,91],[1778446800000,94]]}'
+        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-09T22:00:00.0","endTimestampGMT":"2026-01-01T22:00:00.0","startTimestampLocal":"2026-01-01T00:00:00.0","endTimestampLocal":"2026-01-11T00:00:00.0","sleepStartTimestampGMT":"2026-01-01T02:49:10.0","sleepEndTimestampGMT":"2026-01-01T07:28:29.0","sleepStartTimestampLocal":"2026-01-01T04:49:10.0","sleepEndTimestampLocal":"2026-01-01T09:28:29.0","tomorrowSleepStartTimestampGMT":null,"tomorrowSleepEndTimestampGMT":null,"tomorrowSleepStartTimestampLocal":null,"tomorrowSleepEndTimestampLocal":null,"averageSpO2":94.0,"lowestSpO2":85,"lastSevenDaysAvgSpO2":95,"latestSpO2":94,"latestSpO2TimestampGMT":"2026-01-01T21:48:00.0","latestSpO2TimestampLocal":"2026-01-01T23:48:00.0","avgSleepSpO2":96.0,"avgTomorrowSleepSpO2":null,"spO2ValueDescriptorsDTOList":[{"spo2ValueDescriptorIndex":0,"spo2ValueDescriptorKey":"timestamp"},{"spo2ValueDescriptorIndex":1,"spo2ValueDescriptorKey":"spo2Reading"},{"spo2ValueDescriptorIndex":2,"spo2ValueDescriptorKey":"singleReadingPlottable"}],"spO2SingleValues":null,"continuousReadingDTOList":null,"spO2HourlyAverages":[[1778364000000,95],[1778367600000,91],[1778371200000,94],[1778374800000,92],[1778378400000,96],[1778382000000,95],[1778443200000,91],[1778446800000,94]]}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac44302caaa3e7-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:45:18 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=jY78ANHrUC%2FY%2Fa4b9cUPirlWxGOsVeAetwECBvPCizkma4FYQKy%2B8aFg8zZIIKO5O%2B4MsOeYf5zpPbK3KAujlsJT%2BsXG1IdQDVTdKMzQFxmFkxybFTYRFqYDXbCac2RcOnQa3%2B8FMHj%2FOZKdLSL%2BLroghA%3D%3D"}]}'
-            Server:
-                - cloudflare
         status: 200 OK
         code: 200
-        duration: 273.405083ms
+        duration: 100ms

@@ -9,33 +9,15 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/metrics-service/metrics/runningtolerance/stats?endDate=2026-05-10&startDate=2026-04-10
+        url: https://connectapi.garmin.com/metrics-service/metrics/runningtolerance/stats?aggregation=daily&endDate=2026-01-01&startDate=2025-12-01
         method: GET
       response:
-        body: '{"errors":["''getRunningToleranceStatistics.arg3'' aggregation must be set(daily or weekly) (provided value: null)"]}'
+        body: '[]'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac48898dd913f4-CDG
             Content-Length:
-                - "115"
+                - "2"
             Content-Type:
                 - application/json;charset=UTF-8
-            Date:
-                - Tue, 12 May 2026 20:48:16 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=QT%2BmVyCgaCGWQ1pxr%2B36rN439sPgRl6HMrH%2FLEUletPUDUq0RHjXi5EAOgxmunYWQu75TOWli6BG3DHIc1e0F404XiXBcObKH6iEjCnzNOxAkmy%2Bg2q3H4WA8BDM9cIX%2BQnRPgOunNVluu%2BuqoK6752J7w%3D%3D"}]}'
-            Server:
-                - cloudflare
-        status: 400 Bad Request
-        code: 400
-        duration: 178.743ms
+        status: 200 OK
+        code: 200
+        duration: 100ms

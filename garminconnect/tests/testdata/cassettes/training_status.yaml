@@ -9,35 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/fitnessstats-service/fitness/statistics/training-status?calendarDate=2026-05-10
+        url: https://connectapi.garmin.com/metrics-service/metrics/trainingstatus/aggregated/2026-01-01
         method: GET
       response:
-        body: '{"timestamp":"2026-05-12T20:47:34.605+00:00","status":404,"error":"Not Found","path":"/fitnessstats-service/fitness/statistics/training-status"}'
+        body: '{"userId":12345678,"mostRecentVO2Max":{"userId":12345678,"generic":{"calendarDate":"2025-12-19","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-09","previousHeatAcclimationDate":"2026-01-08","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":3,"previousHeatAcclimationPercentage":4,"heatTrend":"DEACCLIMATIZING","altitudeTrend":null,"currentAltitude":494,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T23:54:21.0"}},"mostRecentTrainingLoadBalance":{"userId":12345678,"metricsTrainingLoadBalanceDTOMap":{"9876543210":{"calendarDate":"2026-01-01","deviceId":9876543210,"monthlyLoadAerobicLow":82,"monthlyLoadAerobicHigh":120,"monthlyLoadAnaerobic":53,"monthlyLoadAerobicLowTargetMin":202,"monthlyLoadAerobicLowTargetMax":465,"monthlyLoadAerobicHighTargetMin":279,"monthlyLoadAerobicHighTargetMax":542,"monthlyLoadAnaerobicTargetMin":0,"monthlyLoadAnaerobicTargetMax":262,"trainingBalanceFeedbackPhrase":"AEROBIC_LOW_SHORTAGE","primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}]},"mostRecentTrainingStatus":{"userId":12345678,"latestTrainingStatusData":{"9876543210":{"calendarDate":"2026-01-01","sinceDate":"2026-01-01","weeklyTrainingLoad":null,"trainingStatus":5,"timestamp":1778398109000,"deviceId":9876543210,"loadTunnelMin":null,"loadTunnelMax":null,"loadLevelTrend":null,"sport":null,"subSport":null,"fitnessTrendSport":"NONE","fitnessTrend":0,"trainingStatusFeedbackPhrase":"RECOVERY_1","trainingPaused":false,"acuteTrainingLoadDTO":{"acwrPercent":4,"acwrStatus":"LOW","acwrStatusFeedback":"FEEDBACK_1","dailyTrainingLoadAcute":27,"maxTrainingLoadChronic":328.5,"minTrainingLoadChronic":180,"dailyTrainingLoadChronic":219,"dailyAcuteChronicWorkloadRatio":0.1},"primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}],"showSelector":false,"lastPrimarySyncDate":"2026-01-01"},"heatAltitudeAcclimationDTO":null}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac47802ef09d54-CDG
             Content-Type:
-                - application/json
-            Date:
-                - Tue, 12 May 2026 20:47:34 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=DUJZsWI%2FRYP0MaLuSYKGk32UUjbEw4qv8sjT2z7WL%2BRMiCzxkWJFvNPqvKpcPwtRxyf0U6Jdlfp18tRAk%2F67sfAA2Z1OzAXNZBbZVVCl6FZOXTXSDp8R%2FlnWxclQvEbDWMh5NNV3EsHOzYdtjsxINGy4AQ%3D%3D"}]}'
-            Server:
-                - cloudflare
-            Vary:
-                - Origin
-                - Access-Control-Request-Method
-                - Access-Control-Request-Headers
-        status: 404 Not Found
-        code: 404
-        duration: 304.335291ms
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

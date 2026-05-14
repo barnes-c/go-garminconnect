@@ -50,15 +50,11 @@ type UserSummary struct {
 
 // BodyBatteryEntry is a single body battery reading.
 type BodyBatteryEntry struct {
-	StartTimestampGMT   string `json:"startTimestampGMT"`
-	EndTimestampGMT     string `json:"endTimestampGMT"`
-	StartTimestampLocal string `json:"startTimestampLocal"`
-	EndTimestampLocal   string `json:"endTimestampLocal"`
-	BodyBatteryValues   []struct {
-		Timestamp int64  `json:"timestamp"` // unix ms
-		Value     int    `json:"value"`
-		Status    string `json:"status"`
-	} `json:"bodyBatteryValuesArray"`
+	StartTimestampGMT   string          `json:"startTimestampGMT"`
+	EndTimestampGMT     string          `json:"endTimestampGMT"`
+	StartTimestampLocal string          `json:"startTimestampLocal"`
+	EndTimestampLocal   string          `json:"endTimestampLocal"`
+	BodyBatteryValues   json.RawMessage `json:"bodyBatteryValuesArray"` // [[timestamp_ms, level|null], ...]
 }
 
 // StressData holds the all-day stress data for a single day.
@@ -84,8 +80,8 @@ type FloorsData struct {
 	FloorsValueDescriptorDTOList []struct {
 		Key   string `json:"key"`
 		Index int    `json:"index"`
-	} `json:"floorValuesDescriptor"`
-	FloorValuesArray [][]int64 `json:"floorValuesArray"` // [timestamp_ms, ascended, descended]
+	} `json:"floorsValueDescriptorDTOList"`
+	FloorValuesArray json.RawMessage `json:"floorValuesArray"` // [["startTimeGMT", "endTimeGMT", ascended, descended], ...]
 }
 
 // HydrationData holds hydration intake for a day.
@@ -178,7 +174,7 @@ func (c *Client) BodyBattery(start, end time.Time) ([]BodyBatteryEntry, error) {
 		"endDate":   {date(end)},
 	}
 	var out []BodyBatteryEntry
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailyBodyBattery/%s", c.displayName), params, &out); err != nil {
+	if err := c.get("/wellness-service/wellness/bodyBattery/reports/daily", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -196,7 +192,7 @@ func (c *Client) AllDayStress(d time.Time) (*StressData, error) {
 // Floors returns floors ascended/descended data for the given date.
 func (c *Client) Floors(d time.Time) (*FloorsData, error) {
 	var out FloorsData
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailyFloor/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/wellness-service/wellness/floorsChartData/daily/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -205,7 +201,7 @@ func (c *Client) Floors(d time.Time) (*FloorsData, error) {
 // Hydration returns hydration intake data for the given date.
 func (c *Client) Hydration(d time.Time) (*HydrationData, error) {
 	var out HydrationData
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/hydration/dailyReport/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/usersummary-service/usersummary/hydration/daily/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -231,12 +227,8 @@ func (c *Client) SpO2(d time.Time) (*SpO2Data, error) {
 
 // IntensityMinutes returns intensity minutes data for the given date's week.
 func (c *Client) IntensityMinutes(d time.Time) (*IntensityMinutesData, error) {
-	params := url.Values{
-		"startDate": {date(d)},
-		"endDate":   {date(d)},
-	}
 	var out IntensityMinutesData
-	if err := c.get(fmt.Sprintf("/usersummary-service/usersummary/intensity_minutes/daily/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/wellness-service/wellness/daily/im/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -244,8 +236,9 @@ func (c *Client) IntensityMinutes(d time.Time) (*IntensityMinutesData, error) {
 
 // Steps returns step data for the given date in 15-minute intervals.
 func (c *Client) Steps(d time.Time) ([]StepEntry, error) {
+	params := url.Values{"date": {date(d)}}
 	var out []StepEntry
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailySteps/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailySummaryChart/%s", c.displayName), params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -253,12 +246,9 @@ func (c *Client) Steps(d time.Time) ([]StepEntry, error) {
 
 // BloodPressure returns blood pressure measurements between start and end dates.
 func (c *Client) BloodPressure(start, end time.Time) (*BloodPressureSummary, error) {
-	params := url.Values{
-		"startDate": {date(start)},
-		"endDate":   {date(end)},
-	}
+	params := url.Values{"includeAll": {"true"}}
 	var out BloodPressureSummary
-	if err := c.get(fmt.Sprintf("/bloodpressure-service/bloodpressure/range/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(fmt.Sprintf("/bloodpressure-service/bloodpressure/range/%s/%s", date(start), date(end)), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

@@ -9,35 +9,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/wellness-service/wellness/hydration/dailyReport/2026-05-10
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/hydration/daily/2026-01-01
         method: GET
       response:
-        body: '{"timestamp":"2026-05-12T20:45:06.566+00:00","status":404,"error":"Not Found","path":"/wellness-service/wellness/hydration/dailyReport/2026-05-10"}'
+        body: '{"userId":12345678,"calendarDate":"2026-01-01","valueInML":null,"goalInML":3000.0,"dailyAverageinML":null,"lastEntryTimestampLocal":null,"sweatLossInML":null,"activityIntakeInML":null}'
         headers:
-            Alt-Svc:
-                - h3=":443"; ma=86400
-            Cache-Control:
-                - no-cache, no-store, private
-            Cf-Cache-Status:
-                - DYNAMIC
-            Cf-Ray:
-                - 9fac43e3a98414c6-CDG
             Content-Type:
                 - application/json
-            Date:
-                - Tue, 12 May 2026 20:45:06 GMT
-            Nel:
-                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
-            Pragma:
-                - no-cache
-            Report-To:
-                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7QOGthyiYpVXYG95XiP4vJ8JthoZGX7xt63ks3u%2FZrLB4vfbFkwG2dOxwE5rJ2AwQNAnWNd3bOkH7QQ8KVxaBLG5Sh5qPupeL%2B0diMdDJRvZ1VptSId89jGx4KGnwcrVgZIXgFs6H2QJFxAUrvguP%2F1wdw%3D%3D"}]}'
-            Server:
-                - cloudflare
-            Vary:
-                - Origin
-                - Access-Control-Request-Method
-                - Access-Control-Request-Headers
-        status: 404 Not Found
-        code: 404
-        duration: 201.042084ms
+        status: 200 OK
+        code: 200
+        duration: 100ms
