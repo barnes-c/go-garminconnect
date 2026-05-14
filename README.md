@@ -12,57 +12,25 @@ Go client library for the Garmin Connect API.
 go get github.com/barnes-c/go-garminconnect
 ```
 
-Requires Go 1.21+.
+Requires Go 1.25+.
 
 ## Quick start
 
 ```go
-package main
-
-import (
-    "fmt"
-    "log"
-    "time"
-
-    "github.com/barnes-c/go-garminconnect/garminconnect"
-)
-
-func main() {
-    client := garminconnect.NewClient("~/.garminconnect/tokens.json")
-    if err := client.Login("user@example.com", "password"); err != nil {
-        log.Fatal(err)
-    }
-
-    summary, err := client.UserSummary(time.Now())
-    if err != nil {
-        log.Fatal(err)
-    }
-    fmt.Printf("Steps today: %d\n", summary.TotalSteps)
+client := garminconnect.NewClient("~/.garminconnect/tokens.json")
+if err := client.Login("user@example.com", "password"); err != nil {
+    log.Fatal(err)
 }
+
+summary, err := client.UserSummary(time.Now())
+fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 ```
 
 ## Authentication
 
-`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login as a last resort. The token is stored at the path passed to `NewClient` (mode 0600).
+`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login. Tokens are stored at the path passed to `NewClient` (mode 0600). MFA is not supported.
 
-The SSO flow uses the same mobile endpoint as the Garmin Connect Android app — no browser required. MFA is not currently supported.
-
-Token lifetime:
-- Access tokens auto-refresh from the stored refresh token.
-- A full re-login is only needed if the refresh token itself expires or is revoked.
-
-### Options
-
-```go
-// Inject a custom HTTP client (proxy, test recorder, etc.)
-garminconnect.WithHTTPClient(hc)
-
-// Pre-load an access token, skipping the SSO flow
-garminconnect.WithToken(accessToken)
-
-// Set display name, skipping the profile fetch on login
-garminconnect.WithDisplayName("username")
-```
+Options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`.
 
 ## API
 
@@ -137,7 +105,7 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 | `Workouts(start, limit)` | Saved workouts |
 | `Workout(id)` | Single workout detail |
 | `DeleteWorkout(id)` | Delete a workout |
-| `ScheduledWorkouts(start, limit)` | Scheduled workout calendar entries |
+| `ScheduledWorkouts(year, month)` | Scheduled workout calendar entries |
 | `ScheduleWorkout(workoutID, date)` | Add a workout to the calendar |
 | `UnscheduleWorkout(scheduledID)` | Remove a workout from the calendar |
 | `DownloadWorkout(id)` | Download workout as FIT |
@@ -156,7 +124,7 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 | `LactateThreshold()` | Lactate threshold data |
 | `FitnessAge(date)` | Fitness age estimate |
 | `RunningTolerance(start, end)` | Running load tolerance |
-| `CyclingFTP(start, end)` | Functional threshold power |
+| `CyclingFTP()` | Functional threshold power |
 
 ### Body composition
 
@@ -234,11 +202,11 @@ import "errors"
 acts, err := client.Activities(10)
 switch {
 case errors.Is(err, garminconnect.ErrUnauthorized):
-    // token expired or invalid — call Login again
+    // token expired — call Login again
 case errors.Is(err, garminconnect.ErrRateLimit):
     // back off and retry
 case errors.Is(err, garminconnect.ErrNoData):
-    // no records available for the query
+    // no records for the query
 }
 
 var apiErr *garminconnect.APIError
@@ -249,35 +217,21 @@ if errors.As(err, &apiErr) {
 
 ## Testing
 
-Tests use [go-vcr](https://github.com/dnaeon/go-vcr) cassettes to replay recorded HTTP interactions — no live credentials needed.
+Tests replay recorded HTTP interactions — no credentials needed.
 
 ```bash
-go test ./garminconnect/tests/...
+make test
 ```
 
-### Recording cassettes
-
-To re-record cassettes against a real Garmin Connect account:
+To re-record cassettes against a live account:
 
 ```bash
 GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret bash tools/record_cassettes.sh
-```
-
-This logs in once, records one cassette per test, then automatically runs `tools/sanitize_cassettes.py` to strip PII (IDs, UUIDs, emails, precise GPS coordinates and measurements) from every cassette before they are committed.
-
-To record only cassettes that don't exist yet (preserving existing ones):
-
-```bash
+# Only record missing cassettes:
 bash tools/record_cassettes.sh --missing
 ```
 
-### Tools
-
-| File | Purpose |
-|---|---|
-| `tools/gettoken/` | CLI that logs in and prints the OAuth token — used by `record_cassettes.sh` |
-| `tools/record_cassettes.sh` | Records cassettes for all tests against a live account |
-| `tools/sanitize_cassettes.py` | Strips PII from cassettes; run standalone or called automatically by the recording script |
+The script logs in once, records one cassette per test, then runs `tools/sanitize_cassettes.py` to strip PII before committing.
 
 [releases-shield]: https://img.shields.io/github/release/barnes-c/go-garminconnect.svg?style=for-the-badge
 [releases]: https://github.com/barnes-c/go-garminconnect/releases
