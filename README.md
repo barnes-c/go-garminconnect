@@ -28,7 +28,7 @@ fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 
 ## Authentication
 
-`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login. Tokens are stored at the path passed to `NewClient` (mode 0600). MFA is not supported.
+`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login. MFA is not supported.
 
 Options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`.
 
