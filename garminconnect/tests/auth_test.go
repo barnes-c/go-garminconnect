@@ -16,7 +16,7 @@ import (
 // TestLogin_FetchesProfile verifies that Login() populates DisplayName via the
 // social profile endpoint when a valid token is already present.
 func TestLogin_FetchesProfile(t *testing.T) {
-	r, err := recorder.New("testdata/cassettes/login_profile")
+	r, err := recorder.NewAsMode("testdata/cassettes/login_profile", recorder.ModeReplaying, nil)
 	require.NoError(t, err)
 	r.SetMatcher(func(req *http.Request, i cassette.Request) bool {
 		cu, _ := url.Parse(i.URL)

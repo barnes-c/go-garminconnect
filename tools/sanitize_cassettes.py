@@ -12,7 +12,8 @@ CASSETTE_DIR = "garminconnect/tests/testdata/cassettes"
 STRIP_HEADERS = {"Cf-Ray", "Date", "Nel", "Report-To", "Alt-Svc", "Cf-Cache-Status", "Cache-Control", "Pragma", "Server"}
 
 # Field names whose values should be replaced with a fixed synthetic ID.
-_PROFILE_FIELDS = {"userProfilePk", "userProfilePK", "userId"}
+# "id" catches the bare top-level Garmin user ID in social-profile responses.
+_PROFILE_FIELDS = {"userProfilePk", "userProfilePK", "userId", "id"}
 _DEVICE_FIELDS  = {"deviceId", "sourceDeviceId"}
 _PROFILE_SYNTH  = "12345678"
 _DEVICE_SYNTH   = "9876543210"
@@ -74,7 +75,7 @@ def discover(files: list[str]) -> dict[str, str]:
             content = f.read()
 
         for field, value in _FIELD_INT_RE.findall(content):
-            if field in _PROFILE_FIELDS and value != _PROFILE_SYNTH:
+            if field in _PROFILE_FIELDS and value != _PROFILE_SYNTH and not value.startswith("1000000"):
                 profile_ids.add(value)
             elif field in _DEVICE_FIELDS and value != _DEVICE_SYNTH:
                 device_ids.add(value)
@@ -139,6 +140,21 @@ def normalize_duration(content: str) -> str:
     return re.sub(r"duration: [\d.]+\w*s", "duration: 100ms", content)
 
 
+# Normalize datetime strings: fix date to test date, zero the time.
+# Matches "2025-12-31 13:50:13", "2025-12-31T13:50:13.944", etc.
+_DATETIME_RE = re.compile(r'\d{4}-\d{2}-\d{2}([T ])\d{2}:\d{2}:\d{2}(?:\.\d+)?')
+# Only replace date-only strings that are JSON string values (between double quotes).
+# This avoids touching dates in request URLs (which are YAML values, not JSON strings).
+_DATE_ONLY_RE = re.compile(r'(?<=")\d{4}-\d{2}-\d{2}(?=")')
+_SYNTH_DATE = "2026-01-01"
+
+
+def zero_datetimes(content: str) -> str:
+    content = _DATETIME_RE.sub(lambda m: f'{_SYNTH_DATE}{m.group(1)}00:00:00', content)
+    content = _DATE_ONLY_RE.sub(_SYNTH_DATE, content)
+    return content
+
+
 _PRECISE_FLOAT_RE = re.compile(r'-?\d+\.\d{4,}')
 
 
@@ -170,6 +186,29 @@ def apply_mapping(content: str, mapping: dict[str, str]) -> str:
     return content
 
 
+# Matches any field whose name ends in "fullname" (any capitalisation), plus
+# locationName, activityName, serialNumber — all of which may reveal identity.
+_STRING_FIELD_RE = re.compile(
+    r'("[a-zA-Z]*[Ff]ull[Nn]ame"\s*:\s*)"[^"]*"'
+    r'|("(?:locationName|activityName|serialNumber)"\s*:\s*)"[^"]*"'
+)
+_STRING_FIELD_SYNTH = {
+    "locationname": "Test Location",
+    "activityname": "Activity",
+    "serialnumber": "TEST000000",
+}
+
+
+def _replace_string_fields(content: str) -> str:
+    def _sub(m: re.Match) -> str:
+        # group(1) matches fullname variants, group(2) matches the named fields
+        prefix = m.group(1) or m.group(2)
+        key = re.search(r'"(\w+)"', prefix).group(1).lower()
+        synth = _STRING_FIELD_SYNTH.get(key, "Test User")
+        return f'{prefix}"{synth}"'
+    return _STRING_FIELD_RE.sub(_sub, content)
+
+
 def apply_static(content: str, display_name: str, email: str) -> str:
     if display_name:
         content = content.replace(f'"{display_name}"', '"Test User"')
@@ -178,6 +217,7 @@ def apply_static(content: str, display_name: str, email: str) -> str:
         content = content.replace(email, _SYNTH_EMAIL)
     # Replace any remaining real emails (catches addresses not passed via --email)
     content = _EMAIL_RE.sub(_SYNTH_EMAIL, content)
+    content = _replace_string_fields(content)
     for old, new in _STATIC:
         content = content.replace(old, new)
     return content
@@ -191,6 +231,7 @@ def sanitize_file(
 
     content = strip_response_headers(content)
     content = normalize_duration(content)
+    content = zero_datetimes(content)
     content = simplify_floats(content)
     content = apply_mapping(content, mapping)
     content = apply_static(content, display_name, email)

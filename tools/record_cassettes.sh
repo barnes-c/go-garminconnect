@@ -26,8 +26,6 @@ DELAY=5   # seconds between tests to avoid Connect API rate-limiting
 
 # Cassettes to leave untouched.
 KEEP=(
-    "user_summary"
-    "all_day_stress"
     "activities_empty"
     "login_profile"
 )
@@ -70,6 +68,8 @@ fi
 # One test per unique cassette.
 # Tests that share a cassette with another test are omitted (they replay).
 TESTS=(
+    TestUserSummary
+    TestAllDayStress
     TestActivities
     TestActivityDetail
     TestActivityCount

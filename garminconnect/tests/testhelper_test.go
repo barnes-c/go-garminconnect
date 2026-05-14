@@ -42,24 +42,30 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 		t.Skipf("cassette %q not found; set GARMIN_TOKEN+GARMIN_DISPLAY_NAME or GARMIN_EMAIL+GARMIN_PASSWORD to record", cassetteName)
 	}
 
-	// Obtain a live token. Prefer the pre-fetched token (no extra SSO call);
-	// fall back to email/password login if only those are provided.
+	// Obtain a live token only when recording. Prefer the pre-fetched token
+	// (no extra SSO call); fall back to email/password login if needed.
 	var liveToken, liveDisplayName string
-	if token != "" {
-		liveToken = token
-		liveDisplayName = displayName
-	} else if email != "" && password != "" {
-		authClient := gc.NewClient("")
-		if err := authClient.Login(email, password); err != nil {
-			t.Fatalf("garmin login: %v", err)
+	if needsRecording {
+		if token != "" {
+			liveToken = token
+			liveDisplayName = displayName
+		} else if email != "" && password != "" {
+			authClient := gc.NewClient("")
+			if err := authClient.Login(email, password); err != nil {
+				t.Fatalf("garmin login: %v", err)
+			}
+			liveToken = authClient.Token()
+			liveDisplayName = authClient.DisplayName()
 		}
-		liveToken = authClient.Token()
-		liveDisplayName = authClient.DisplayName()
 	}
 
-	r, err := recorder.New(cassettePath)
+	mode := recorder.ModeReplayingOrRecording
+	if !needsRecording {
+		mode = recorder.ModeReplaying
+	}
+	r, err := recorder.NewAsMode(cassettePath, mode, nil)
 	if err != nil {
-		t.Fatalf("recorder.New: %v", err)
+		t.Fatalf("recorder.NewAsMode: %v", err)
 	}
 
 	r.SetMatcher(func(req *http.Request, i cassette.Request) bool {

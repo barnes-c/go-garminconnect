@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/usersummary-service/stats/steps/daily/2025-12-25/2026-01-01
         method: GET
       response:
-        body: '[{"calendarDate":"2026-01-03","totalSteps":13811,"totalDistance":11210,"stepGoal":8260},{"calendarDate":"2026-01-04","totalSteps":10521,"totalDistance":8473,"stepGoal":9370},{"calendarDate":"2026-01-05","totalSteps":5084,"totalDistance":4094,"stepGoal":9600},{"calendarDate":"2026-01-06","totalSteps":18236,"totalDistance":15231,"stepGoal":9150},{"calendarDate":"2026-01-07","totalSteps":4878,"totalDistance":3928,"stepGoal":6950},{"calendarDate":"2026-01-08","totalSteps":2088,"totalDistance":1682,"stepGoal":6750},{"calendarDate":"2026-01-09","totalSteps":14843,"totalDistance":11972,"stepGoal":5820},{"calendarDate":"2026-01-01","totalSteps":3279,"totalDistance":2647,"stepGoal":6730}]'
+        body: '[{"calendarDate":"2026-01-01","totalSteps":13811,"totalDistance":11210,"stepGoal":8260},{"calendarDate":"2026-01-01","totalSteps":10521,"totalDistance":8473,"stepGoal":9370},{"calendarDate":"2026-01-01","totalSteps":5084,"totalDistance":4094,"stepGoal":9600},{"calendarDate":"2026-01-01","totalSteps":18236,"totalDistance":15231,"stepGoal":9150},{"calendarDate":"2026-01-01","totalSteps":4878,"totalDistance":3928,"stepGoal":6950},{"calendarDate":"2026-01-01","totalSteps":2088,"totalDistance":1682,"stepGoal":6750},{"calendarDate":"2026-01-01","totalSteps":14843,"totalDistance":11972,"stepGoal":5820},{"calendarDate":"2026-01-01","totalSteps":3279,"totalDistance":2647,"stepGoal":6730}]'
         headers:
             Content-Type:
                 - application/json

@@ -78,7 +78,7 @@ func TestLactateThreshold(t *testing.T) {
 	out, err := c.LactateThreshold()
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.Greater(t, len(out), 0)
+	assert.NotEmpty(t, out)
 }
 
 func TestFitnessAge(t *testing.T) {
