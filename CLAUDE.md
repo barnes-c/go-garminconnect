@@ -3,7 +3,8 @@
 ## Running tests
 
 ```bash
-go test ./garminconnect/tests/...
+make check        # lint + build + test + govulncheck
+go test ./garminconnect/tests/...  # tests only
 ```
 
 Tests use go-vcr cassettes (`garminconnect/tests/testdata/cassettes/*.yaml`) — they replay recorded HTTP interactions and never hit the live API. No credentials needed.
@@ -51,8 +52,11 @@ It is safe to re-run on already-sanitized cassettes (idempotent). What it replac
 - Integer fields by name: profile/user IDs → `12345678`, device IDs → `9876543210`, activity IDs → sequential `10000001+`, sample PKs → sequential `1000000000001+`
 - UUIDs (hyphenated and bare 32-char hex) → SHA-256-derived synthetic values
 - Email addresses → `test@example.com`
-- Display name (via `--display-name`) → `"Test User"`
-- Floats with 4+ decimal places → 2 significant figures (`11138.4501953125` → `11000`)
+- Display name (via `--display-name`) and all `*FullName` fields → `"Test User"`
+- `locationName` → `"Test Location"`, `activityName` → `"Activity"`, `serialNumber` → `"TEST000000"`
+- Datetime strings (`2025-12-31T13:50:13`, `2025-12-31 13:50:13.944`, etc.) → `2026-01-01T00:00:00` / `2026-01-01 00:00:00`
+- Date-only JSON string values → `"2026-01-01"`
+- Floats with 4+ decimal places → 2 significant figures
 - Response headers stripped: `Cf-Ray`, `Date`, `Nel`, `Report-To`, `Alt-Svc`, `Cf-Cache-Status`, `Cache-Control`, `Pragma`, `Server`
 - Response durations → `100ms`
 
@@ -60,6 +64,7 @@ It is safe to re-run on already-sanitized cassettes (idempotent). What it replac
 
 | Path | Purpose |
 |---|---|
+| `Makefile` | `make check` runs lint + build + test + govulncheck |
 | `tools/gettoken/` | Logs in and prints the OAuth token; used by `record_cassettes.sh` |
 | `tools/record_cassettes.sh` | Records cassettes for all tests against a live account |
 | `tools/sanitize_cassettes.py` | Strips PII from cassettes |
