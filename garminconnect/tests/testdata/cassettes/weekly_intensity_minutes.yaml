@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/stats/im/weekly/2025-12-25/2026-01-01
+        method: GET
+      response:
+        body: '[{"calendarDate":"2026-01-01","weeklyGoal":150,"moderateValue":119,"vigorousValue":43},{"calendarDate":"2026-01-01","weeklyGoal":150,"moderateValue":83,"vigorousValue":16}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

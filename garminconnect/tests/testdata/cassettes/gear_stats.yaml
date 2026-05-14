@@ -1,0 +1,59 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"totalKilocalories":2159.0,"activeKilocalories":22.0,"bmrKilocalories":2137.0,"wellnessKilocalories":2159.0,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":3279,"netCalorieGoal":null,"totalDistanceMeters":2647,"wellnessDistanceMeters":2647,"wellnessActiveKilocalories":22.0,"netRemainingKilocalories":22.0,"userDailySummaryId":12345678,"calendarDate":"2026-01-01","rule":{"typeId":2,"typeKey":"private"},"uuid":"00000000000000000000000000000001","dailyStepGoal":6730,"wellnessStartTimeGmt":"2026-01-01T00:00:00","wellnessStartTimeLocal":"2026-01-01T00:00:00","wellnessEndTimeGmt":"2026-01-01T00:00:00","wellnessEndTimeLocal":"2026-01-01T00:00:00","durationInMilliseconds":86400000,"wellnessDescription":null,"highlyActiveSeconds":485,"activeSeconds":751,"sedentarySeconds":68405,"sleepingSeconds":16759,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":0,"vigorousIntensityMinutes":0,"floorsAscendedInMeters":0.0,"floorsDescendedInMeters":6.703,"floorsAscended":0.0,"floorsDescended":2.2,"intensityMinutesGoal":150,"userFloorsAscendedGoal":10,"minHeartRate":42,"maxHeartRate":99,"restingHeartRate":46,"lastSevenDaysAvgRestingHeartRate":48,"source":"GARMIN","averageStressLevel":20,"maxStressLevel":91,"stressDuration":15660,"restStressDuration":53460,"activityStressDuration":9900,"uncategorizedStressDuration":5520,"totalStressDuration":84540,"lowStressDuration":13080,"mediumStressDuration":2220,"highStressDuration":360,"stressPercentage":18.52,"restStressPercentage":63.24,"activityStressPercentage":11.71,"uncategorizedStressPercentage":6.53,"lowStressPercentage":15.47,"mediumStressPercentage":2.63,"highStressPercentage":0.43,"stressQualifier":"CALM","measurableAwakeDuration":62280,"measurableAsleepDuration":16740,"lastSyncTimestampGMT":null,"minAvgHeartRate":42,"maxAvgHeartRate":93,"bodyBatteryChargedValue":63,"bodyBatteryDrainedValue":57,"bodyBatteryHighestValue":96,"bodyBatteryLowestValue":33,"bodyBatteryMostRecentValue":39,"bodyBatteryDuringSleep":35,"bodyBatteryAtWakeTime":95,"bodyBatteryVersion":3.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":94.0,"lowestSpo2":85,"latestSpo2":94,"latestSpo2ReadingTimeGmt":"2026-01-01T00:00:00","latestSpo2ReadingTimeLocal":"2026-01-01T00:00:00","averageMonitoringEnvironmentAltitude":494.0,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE"},"endOfDayBodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE"},"bodyBatteryActivityEventList":[{"eventType":"SLEEP","eventStartTimeGmt":"2026-01-01T00:00:00","timezoneOffset":7200000,"durationInMilliseconds":16740000,"bodyBatteryImpact":35,"feedbackType":"NONE","shortFeedback":"NONE","deviceId":9876543210,"activityName":null,"activityType":null,"activityId":null,"eventUpdateTimeGmt":"2026-01-01T00:00:00"}],"avgWakingRespirationValue":14.0,"highestRespirationValue":21.0,"lowestRespirationValue":7.0,"latestRespirationValue":16.0,"latestRespirationTimeGMT":"2026-01-01T00:00:00","respirationAlgorithmVersion":200}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/filterGear?userProfilePk=12345678
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"totalKilocalories":2159.0,"activeKilocalories":22.0,"bmrKilocalories":2137.0,"wellnessKilocalories":2159.0,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":3279,"netCalorieGoal":null,"totalDistanceMeters":2647,"wellnessDistanceMeters":2647,"wellnessActiveKilocalories":22.0,"netRemainingKilocalories":22.0,"userDailySummaryId":12345678,"calendarDate":"2026-01-01","rule":{"typeId":2,"typeKey":"private"},"uuid":"00000000000000000000000000000001","dailyStepGoal":6730,"wellnessStartTimeGmt":"2026-01-01T00:00:00","wellnessStartTimeLocal":"2026-01-01T00:00:00","wellnessEndTimeGmt":"2026-01-01T00:00:00","wellnessEndTimeLocal":"2026-01-01T00:00:00","durationInMilliseconds":86400000,"wellnessDescription":null,"highlyActiveSeconds":485,"activeSeconds":751,"sedentarySeconds":68405,"sleepingSeconds":16759,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":0,"vigorousIntensityMinutes":0,"floorsAscendedInMeters":0.0,"floorsDescendedInMeters":6.703,"floorsAscended":0.0,"floorsDescended":2.2,"intensityMinutesGoal":150,"userFloorsAscendedGoal":10,"minHeartRate":42,"maxHeartRate":99,"restingHeartRate":46,"lastSevenDaysAvgRestingHeartRate":48,"source":"GARMIN","averageStressLevel":20,"maxStressLevel":91,"stressDuration":15660,"restStressDuration":53460,"activityStressDuration":9900,"uncategorizedStressDuration":5520,"totalStressDuration":84540,"lowStressDuration":13080,"mediumStressDuration":2220,"highStressDuration":360,"stressPercentage":18.52,"restStressPercentage":63.24,"activityStressPercentage":11.71,"uncategorizedStressPercentage":6.53,"lowStressPercentage":15.47,"mediumStressPercentage":2.63,"highStressPercentage":0.43,"stressQualifier":"CALM","measurableAwakeDuration":62280,"measurableAsleepDuration":16740,"lastSyncTimestampGMT":null,"minAvgHeartRate":42,"maxAvgHeartRate":93,"bodyBatteryChargedValue":63,"bodyBatteryDrainedValue":57,"bodyBatteryHighestValue":96,"bodyBatteryLowestValue":33,"bodyBatteryMostRecentValue":39,"bodyBatteryDuringSleep":35,"bodyBatteryAtWakeTime":95,"bodyBatteryVersion":3.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":94.0,"lowestSpo2":85,"latestSpo2":94,"latestSpo2ReadingTimeGmt":"2026-01-01T00:00:00","latestSpo2ReadingTimeLocal":"2026-01-01T00:00:00","averageMonitoringEnvironmentAltitude":494.0,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_PREPARATION_RECOVERING_AND_INACTIVE"},"endOfDayBodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"HIGH","feedbackShortType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE","feedbackLongType":"SLEEP_TIME_PASSED_RECOVERING_AND_INACTIVE"},"bodyBatteryActivityEventList":[{"eventType":"SLEEP","eventStartTimeGmt":"2026-01-01T00:00:00","timezoneOffset":7200000,"durationInMilliseconds":16740000,"bodyBatteryImpact":35,"feedbackType":"NONE","shortFeedback":"NONE","deviceId":9876543210,"activityName":null,"activityType":null,"activityId":null,"eventUpdateTimeGmt":"2026-01-01T00:00:00"}],"avgWakingRespirationValue":14.0,"highestRespirationValue":21.0,"lowestRespirationValue":7.0,"latestRespirationValue":16.0,"latestRespirationTimeGMT":"2026-01-01T00:00:00","respirationAlgorithmVersion":200}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

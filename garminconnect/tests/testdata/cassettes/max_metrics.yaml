@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/maxmet/daily/2025-12-01/2026-01-01
+        method: GET
+      response:
+        body: '[{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":450,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}},{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":452,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

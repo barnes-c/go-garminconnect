@@ -1,0 +1,22 @@
+# Test binaries and coverage output
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Go workspace files (local development only)
+go.work
+go.work.sum
+
+# Token cache contains credentials
+.garmin_token.json
+*.token.json
+
+# Compiled dev tooling binaries
+/gettoken
+
+# Python cache
+__pycache__/
+
+# Dependency vendoring (use modules instead)
+/vendor/

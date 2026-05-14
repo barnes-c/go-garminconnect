@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/stats/stress/weekly/2026-01-01/4
+        method: GET
+      response:
+        body: '[{"calendarDate":"2026-01-01","value":34},{"calendarDate":"2026-01-01","value":27},{"calendarDate":"2026-01-01","value":31},{"calendarDate":"2026-01-01","value":26}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
