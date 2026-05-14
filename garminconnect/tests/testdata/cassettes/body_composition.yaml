@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/dateRange?endDate=2026-01-01&startDate=2026-01-01
+        method: GET
+      response:
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[{"samplePk":1000000000001,"date":1000000000003,"calendarDate":"2026-01-01","weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"MANUAL","timestampGMT":1000000000004,"weightDelta":null}],"totalAverage":{"from":1000000000005,"until":1000000000006,"weight":70000.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

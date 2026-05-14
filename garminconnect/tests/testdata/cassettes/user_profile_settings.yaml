@@ -1,0 +1,21 @@
+---
+version: 1
+interactions:
+    - request:
+        body: ""
+        form: {}
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/settings
+        method: GET
+      response:
+        body: '{"displayName":"aaaaaaaa-0000-0000-0000-000000000001","preferredLocale":"fr","measurementSystem":"metric","firstDayOfWeek":{"dayId":2,"dayName":"sunday","sortOrder":2,"isPossibleFirstDay":true},"numberFormat":"decimal_period","timeFormat":{"formatId":32,"formatKey":"time_twelve_hr","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":"h:mm a"},"dateFormat":{"formatId":23,"formatKey":"mmddyyyy","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":"EEE, MMM d, yyyy"},"powerFormat":{"formatId":30,"formatKey":"watt","minFraction":0,"maxFraction":0,"groupingUsed":true,"displayFormat":null},"heartRateFormat":{"formatId":21,"formatKey":"bpm","minFraction":0,"maxFraction":0,"groupingUsed":false,"displayFormat":null},"timeZone":"Europe/Paris","hydrationMeasurementUnit":"milliliter","hydrationContainers":[],"golfDistanceUnit":"statute_us","golfElevationUnit":null,"golfSpeedUnit":null,"availableTrainingDays":null,"preferredLongTrainingDays":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
