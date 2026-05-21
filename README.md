@@ -41,6 +41,7 @@ Options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`
 |---|---|
 | `UserSummary(date)` | Steps, calories, active minutes, stress |
 | `Steps(date)` | Intraday step entries |
+| `StepsData(date)` | Intraday step data in 15-minute intervals |
 | `DailySteps(start, end)` | Daily step totals over a date range |
 | `WeeklySteps(end, weeks)` | Weekly step aggregates |
 | `BodyBattery(start, end)` | Body Battery readings |
