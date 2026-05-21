@@ -87,16 +87,16 @@ func (c *Client) TrainingReadiness(d time.Time) ([]TrainingReadiness, error) {
 
 // TrainingStatusResponse is the aggregated training status response.
 type TrainingStatusResponse struct {
-	UserID                        int64                          `json:"userId"`
-	MostRecentVO2Max              *TrainingStatusVO2Max          `json:"mostRecentVO2Max"`
-	MostRecentTrainingLoadBalance *TrainingLoadBalance           `json:"mostRecentTrainingLoadBalance"`
-	MostRecentTrainingStatus      *MostRecentTrainingStatus      `json:"mostRecentTrainingStatus"`
+	UserID                        int64                     `json:"userId"`
+	MostRecentVO2Max              *TrainingStatusVO2Max     `json:"mostRecentVO2Max"`
+	MostRecentTrainingLoadBalance *TrainingLoadBalance      `json:"mostRecentTrainingLoadBalance"`
+	MostRecentTrainingStatus      *MostRecentTrainingStatus `json:"mostRecentTrainingStatus"`
 }
 
 // TrainingStatusVO2Max holds VO2 max data within the training status response.
 type TrainingStatusVO2Max struct {
-	Generic  *TrainingStatusGenericVO2Max  `json:"generic"`
-	Cycling  *TrainingStatusCyclingVO2Max  `json:"cycling"`
+	Generic *TrainingStatusGenericVO2Max `json:"generic"`
+	Cycling *TrainingStatusCyclingVO2Max `json:"cycling"`
 }
 
 // TrainingStatusGenericVO2Max holds generic (running) VO2 max fields.
@@ -211,8 +211,8 @@ type LactateThresholdEntry struct {
 	UserProfilePK    int64    `json:"userProfilePK"`
 	CalendarDate     string   `json:"calendarDate"`
 	Speed            *float64 `json:"speed"`            // running LT speed m/s
-	HearRate         *int     `json:"hearRate"`          // running LT HR bpm
-	HeartRateCycling *int     `json:"heartRateCycling"`  // cycling LT HR bpm
+	HearRate         *int     `json:"hearRate"`         // running LT HR bpm
+	HeartRateCycling *int     `json:"heartRateCycling"` // cycling LT HR bpm
 	RowSpeed         *float64 `json:"rowSpeed"`
 	HeartRateRowing  *int     `json:"heartRateRowing"`
 }
