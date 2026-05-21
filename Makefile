@@ -1,4 +1,5 @@
 .PHONY: lint test build vuln check
+.DEFAULT_GOAL := check
 
 lint:
 	golangci-lint run --config .github/.golangci.yml
