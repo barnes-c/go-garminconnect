@@ -2,8 +2,8 @@
 
 [![Build Status](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml)
 ![golangci-lint](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml/badge.svg)
-[![GitHub Release](https://img.shields.io/github/v/release/barnes-c/go-garminconnect)][releases]
-[![Go Report Card](https://goreportcard.com/badge/github.com/barnes-c/go-garminconnect)][goreportcard]
+[![GitHub Release](https://img.shields.io/github/v/release/barnes-c/go-garminconnect)](https://github.com/barnes-c/go-garminconnect/releases/latest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/barnes-c/go-garminconnect)](https://goreportcard.com/report/github.com/barnes-c/go-garminconnect)
 
 Go client library for the Garmin Connect API.
 
@@ -233,6 +233,3 @@ bash tools/record_cassettes.sh --missing
 ```
 
 The script logs in once, records one cassette per test, then runs `tools/sanitize_cassettes.py` to strip PII before committing.
-
-[releases]: https://github.com/barnes-c/go-garminconnect/releases/latest
-[goreportcard]: https://goreportcard.com/report/github.com/barnes-c/go-garminconnect
