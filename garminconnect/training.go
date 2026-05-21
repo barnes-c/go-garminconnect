@@ -85,13 +85,78 @@ func (c *Client) TrainingReadiness(d time.Time) ([]TrainingReadiness, error) {
 	return out, nil
 }
 
+// TrainingStatusResponse is the aggregated training status response.
+type TrainingStatusResponse struct {
+	UserID                        int64                          `json:"userId"`
+	MostRecentVO2Max              *TrainingStatusVO2Max          `json:"mostRecentVO2Max"`
+	MostRecentTrainingLoadBalance *TrainingLoadBalance           `json:"mostRecentTrainingLoadBalance"`
+	MostRecentTrainingStatus      *MostRecentTrainingStatus      `json:"mostRecentTrainingStatus"`
+}
+
+// TrainingStatusVO2Max holds VO2 max data within the training status response.
+type TrainingStatusVO2Max struct {
+	Generic  *TrainingStatusGenericVO2Max  `json:"generic"`
+	Cycling  *TrainingStatusCyclingVO2Max  `json:"cycling"`
+}
+
+// TrainingStatusGenericVO2Max holds generic (running) VO2 max fields.
+type TrainingStatusGenericVO2Max struct {
+	CalendarDate       string  `json:"calendarDate"`
+	VO2MaxPreciseValue float64 `json:"vo2MaxPreciseValue"`
+	FitnessAge         *int    `json:"fitnessAge"`
+}
+
+// TrainingStatusCyclingVO2Max holds cycling VO2 max fields.
+type TrainingStatusCyclingVO2Max struct {
+	CalendarDate       string  `json:"calendarDate"`
+	VO2MaxPreciseValue float64 `json:"vo2MaxPreciseValue"`
+}
+
+// TrainingLoadBalance holds monthly training load balance data keyed by device ID.
+type TrainingLoadBalance struct {
+	UserID     int64                                   `json:"userId"`
+	MetricsMap map[string]TrainingLoadBalancePerDevice `json:"metricsTrainingLoadBalanceDTOMap"`
+}
+
+// TrainingLoadBalancePerDevice holds load balance data for one device.
+type TrainingLoadBalancePerDevice struct {
+	MonthlyLoadAerobicLow  int  `json:"monthlyLoadAerobicLow"`
+	MonthlyLoadAerobicHigh int  `json:"monthlyLoadAerobicHigh"`
+	MonthlyLoadAnaerobic   int  `json:"monthlyLoadAnaerobic"`
+	PrimaryTrainingDevice  bool `json:"primaryTrainingDevice"`
+}
+
+// MostRecentTrainingStatus holds the latest training status data keyed by device ID.
+type MostRecentTrainingStatus struct {
+	UserID                   int64                              `json:"userId"`
+	LatestTrainingStatusData map[string]PerDeviceTrainingStatus `json:"latestTrainingStatusData"`
+}
+
+// PerDeviceTrainingStatus holds training status for a single device.
+type PerDeviceTrainingStatus struct {
+	CalendarDate          string             `json:"calendarDate"`
+	TrainingStatus        int                `json:"trainingStatus"`
+	WeeklyTrainingLoad    *float64           `json:"weeklyTrainingLoad"`
+	FitnessTrend          int                `json:"fitnessTrend"`
+	PrimaryTrainingDevice bool               `json:"primaryTrainingDevice"`
+	AcuteTrainingLoad     *AcuteTrainingLoad `json:"acuteTrainingLoadDTO"`
+}
+
+// AcuteTrainingLoad holds acute:chronic workload ratio data.
+type AcuteTrainingLoad struct {
+	ACWRPercent                    int     `json:"acwrPercent"`
+	DailyTrainingLoadAcute         int     `json:"dailyTrainingLoadAcute"`
+	DailyTrainingLoadChronic       int     `json:"dailyTrainingLoadChronic"`
+	DailyAcuteChronicWorkloadRatio float64 `json:"dailyAcuteChronicWorkloadRatio"`
+}
+
 // TrainingStatus returns training status metrics for the given date.
-func (c *Client) TrainingStatus(d time.Time) (json.RawMessage, error) {
-	var out json.RawMessage
+func (c *Client) TrainingStatus(d time.Time) (*TrainingStatusResponse, error) {
+	var out TrainingStatusResponse
 	if err := c.get(fmt.Sprintf("/metrics-service/metrics/trainingstatus/aggregated/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
 
 // MaxMetrics returns VO2 Max metrics between start and end dates.
@@ -140,9 +205,21 @@ func (c *Client) HillScore(start, end time.Time) (json.RawMessage, error) {
 	return out, nil
 }
 
+// LactateThresholdEntry holds a single lactate threshold measurement.
+// The HearRate field name preserves the API typo.
+type LactateThresholdEntry struct {
+	UserProfilePK    int64    `json:"userProfilePK"`
+	CalendarDate     string   `json:"calendarDate"`
+	Speed            *float64 `json:"speed"`            // running LT speed m/s
+	HearRate         *int     `json:"hearRate"`          // running LT HR bpm
+	HeartRateCycling *int     `json:"heartRateCycling"`  // cycling LT HR bpm
+	RowSpeed         *float64 `json:"rowSpeed"`
+	HeartRateRowing  *int     `json:"heartRateRowing"`
+}
+
 // LactateThreshold returns the latest lactate threshold measurement.
-func (c *Client) LactateThreshold() (json.RawMessage, error) {
-	var out json.RawMessage
+func (c *Client) LactateThreshold() ([]LactateThresholdEntry, error) {
+	var out []LactateThresholdEntry
 	if err := c.get("/biometric-service/biometric/latestLactateThreshold", nil, &out); err != nil {
 		return nil, err
 	}
@@ -158,14 +235,22 @@ func (c *Client) FitnessAge(d time.Time) (map[string]json.RawMessage, error) {
 	return out, nil
 }
 
+// RunningToleranceEntry holds a single day of running tolerance data.
+// Field names are inferred — verify against a live response if the API returns data.
+type RunningToleranceEntry struct {
+	CalendarDate string  `json:"calendarDate"`
+	Score        float64 `json:"score"`
+	Level        int     `json:"level"`
+}
+
 // RunningTolerance returns running tolerance statistics between start and end dates.
-func (c *Client) RunningTolerance(start, end time.Time) (json.RawMessage, error) {
+func (c *Client) RunningTolerance(start, end time.Time) ([]RunningToleranceEntry, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"daily"},
 	}
-	var out json.RawMessage
+	var out []RunningToleranceEntry
 	if err := c.get("/metrics-service/metrics/runningtolerance/stats", params, &out); err != nil {
 		return nil, err
 	}
