@@ -1,10 +1,11 @@
 # go-garminconnect
 
-Go client library for the Garmin Connect API.
+[![Build Status](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml)
+![golangci-lint](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml/badge.svg)
+[![GitHub Release](https://img.shields.io/github/v/release/barnes-c/go-garminconnect)][releases]
+[![Go Report Card](https://goreportcard.com/badge/github.com/barnes-c/go-garminconnect)][goreportcard]
 
-[![GitHub Release][releases-shield]][releases]
-[![GitHub Activity][commits-shield]][commits]
-![Project Maintenance][maintenance-shield]
+Go client library for the Garmin Connect API.
 
 ## Installation
 
@@ -233,8 +234,5 @@ bash tools/record_cassettes.sh --missing
 
 The script logs in once, records one cassette per test, then runs `tools/sanitize_cassettes.py` to strip PII before committing.
 
-[releases-shield]: https://img.shields.io/github/release/barnes-c/go-garminconnect.svg?style=for-the-badge
-[releases]: https://github.com/barnes-c/go-garminconnect/releases
-[commits-shield]: https://img.shields.io/github/commit-activity/y/barnes-c/go-garminconnect.svg?style=for-the-badge
-[commits]: https://github.com/barnes-c/go-garminconnect/commits/main
-[maintenance-shield]: https://img.shields.io/badge/maintainer-barnes--c-blue.svg?style=for-the-badge
+[releases]: https://github.com/barnes-c/go-garminconnect/releases/latest
+[goreportcard]: https://goreportcard.com/report/github.com/barnes-c/go-garminconnect
