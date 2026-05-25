@@ -5,6 +5,7 @@
 ```bash
 make check        # lint + build + test + govulncheck
 go test ./garminconnect/tests/...  # tests only
+make lint         # lint only
 ```
 
 Tests use go-vcr cassettes (`garminconnect/tests/testdata/cassettes/*.yaml`) — they replay recorded HTTP interactions and never hit the live API. No credentials needed.
