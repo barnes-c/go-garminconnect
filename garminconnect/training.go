@@ -120,10 +120,10 @@ type TrainingLoadBalance struct {
 
 // TrainingLoadBalancePerDevice holds load balance data for one device.
 type TrainingLoadBalancePerDevice struct {
-	MonthlyLoadAerobicLow  int  `json:"monthlyLoadAerobicLow"`
-	MonthlyLoadAerobicHigh int  `json:"monthlyLoadAerobicHigh"`
-	MonthlyLoadAnaerobic   int  `json:"monthlyLoadAnaerobic"`
-	PrimaryTrainingDevice  bool `json:"primaryTrainingDevice"`
+	MonthlyLoadAerobicLow  float64 `json:"monthlyLoadAerobicLow"`
+	MonthlyLoadAerobicHigh float64 `json:"monthlyLoadAerobicHigh"`
+	MonthlyLoadAnaerobic   float64 `json:"monthlyLoadAnaerobic"`
+	PrimaryTrainingDevice  bool    `json:"primaryTrainingDevice"`
 }
 
 // MostRecentTrainingStatus holds the latest training status data keyed by device ID.
