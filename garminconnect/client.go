@@ -50,6 +50,20 @@ func WithDisplayName(name string) Option {
 	return func(c *Client) { c.displayName = name }
 }
 
+// WithRefreshToken attaches a refresh token to the client so that expired or
+// revoked access tokens are automatically exchanged for a new one.
+func WithRefreshToken(refreshToken string) Option {
+	return func(c *Client) {
+		if c.token == nil {
+			c.token = &diToken{}
+		}
+		c.token.RefreshToken = refreshToken
+		if c.token.ClientID == "" {
+			c.token.ClientID = diClientIDs[0]
+		}
+	}
+}
+
 // WithBaseURL overrides the default API base URL. Primarily useful in tests
 // to point the client at an httptest.Server.
 func WithBaseURL(u string) Option {
@@ -107,6 +121,21 @@ func (c *Client) fetchProfile() error {
 	return nil
 }
 
+// withRefresh calls fn, and if the first attempt returns a 401, tries to
+// refresh the token and retries fn once. Returns (nil, ErrUnauthorized) if
+// the refresh fails or there is no refresh token available.
+func (c *Client) withRefresh(fn func() (*http.Response, error)) (*http.Response, error) {
+	resp, err := fn()
+	if err != nil || resp.StatusCode != http.StatusUnauthorized {
+		return resp, err
+	}
+	resp.Body.Close()
+	if c.token == nil || c.token.RefreshToken == "" || c.refreshToken(c.token) != nil {
+		return nil, ErrUnauthorized
+	}
+	return fn()
+}
+
 // get performs an authenticated GET against the Garmin Connect API and
 // JSON-decodes the response body into out.
 func (c *Client) get(path string, params url.Values, out any) error {
@@ -117,14 +146,15 @@ func (c *Client) getURL(rawURL string, params url.Values, out any) error {
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
-	req.Header.Set("Accept", "application/json")
-
-	resp, err := c.http.Do(req)
+	resp, err := c.withRefresh(func() (*http.Response, error) {
+		req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Accept", "application/json")
+		return c.http.Do(req)
+	})
 	if err != nil {
 		return err
 	}
@@ -147,24 +177,30 @@ func (c *Client) getURL(rawURL string, params url.Values, out any) error {
 
 // doRequest executes a non-GET HTTP request against the Garmin Connect API.
 func (c *Client) doRequest(method, rawURL string, body any, out any) error {
-	var br io.Reader
+	var data []byte
 	if body != nil {
-		data, err := json.Marshal(body)
+		var err error
+		data, err = json.Marshal(body)
 		if err != nil {
 			return err
 		}
-		br = bytes.NewReader(data)
 	}
-	req, err := http.NewRequest(method, rawURL, br)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
-	req.Header.Set("Accept", "application/json")
-	if body != nil {
-		req.Header.Set("Content-Type", "application/json")
-	}
-	resp, err := c.http.Do(req)
+	resp, err := c.withRefresh(func() (*http.Response, error) {
+		var br io.Reader
+		if data != nil {
+			br = bytes.NewReader(data)
+		}
+		req, err := http.NewRequest(method, rawURL, br)
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Accept", "application/json")
+		if data != nil {
+			req.Header.Set("Content-Type", "application/json")
+		}
+		return c.http.Do(req)
+	})
 	if err != nil {
 		return err
 	}
@@ -204,13 +240,14 @@ func (c *Client) getBytes(path string, params url.Values) ([]byte, error) {
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
-
-	resp, err := c.http.Do(req)
+	resp, err := c.withRefresh(func() (*http.Response, error) {
+		req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		return c.http.Do(req)
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -242,14 +279,19 @@ func (c *Client) upload(path string, data []byte, filename string, out any) erro
 	}
 	w.Close()
 
-	req, err := http.NewRequest(http.MethodPost, c.baseURL+path, &buf)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
-	req.Header.Set("Content-Type", w.FormDataContentType())
+	bodyBytes := buf.Bytes()
+	contentType := w.FormDataContentType()
+	rawURL := c.baseURL + path
 
-	resp, err := c.http.Do(req)
+	resp, err := c.withRefresh(func() (*http.Response, error) {
+		req, err := http.NewRequest(http.MethodPost, rawURL, bytes.NewReader(bodyBytes))
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Content-Type", contentType)
+		return c.http.Do(req)
+	})
 	if err != nil {
 		return err
 	}
@@ -262,7 +304,7 @@ func (c *Client) upload(path string, data []byte, filename string, out any) erro
 	case http.StatusTooManyRequests:
 		return ErrRateLimit
 	default:
-		return &APIError{StatusCode: resp.StatusCode, Path: c.baseURL + path}
+		return &APIError{StatusCode: resp.StatusCode, Path: rawURL}
 	}
 	if out == nil {
 		return nil
