@@ -111,6 +111,6 @@ func TestRefreshFailureReturnsUnauthorized(t *testing.T) {
 	)
 
 	_, err := c.UserProfile()
-	assert.ErrorIs(t, err, gc.ErrUnauthorized)
+	require.ErrorIs(t, err, gc.ErrUnauthorized)
 	assert.Equal(t, 2, calls)
 }
