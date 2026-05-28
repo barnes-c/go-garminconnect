@@ -29,9 +29,25 @@ fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 
 ## Authentication
 
-`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login. MFA is not supported.
+`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login.
 
-Options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`.
+If the account has MFA enabled, provide a callback via `WithMFAPrompt` that returns the verification code. Without it, `Login` returns `ErrMFARequired`.
+
+```go
+client := garminconnect.NewClient("~/.garminconnect/tokens.json",
+    garminconnect.WithMFAPrompt(func() (string, error) {
+        fmt.Print("MFA code: ")
+        var code string
+        _, err := fmt.Scan(&code)
+        return code, err
+    }),
+)
+if err := client.Login("user@example.com", "password"); err != nil {
+    log.Fatal(err)
+}
+```
+
+Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`.
 
 ## API
 
@@ -205,6 +221,8 @@ acts, err := client.Activities(10)
 switch {
 case errors.Is(err, garminconnect.ErrUnauthorized):
     // token expired — call Login again
+case errors.Is(err, garminconnect.ErrMFARequired):
+    // account requires MFA — provide WithMFAPrompt on client creation
 case errors.Is(err, garminconnect.ErrRateLimit):
     // back off and retry
 case errors.Is(err, garminconnect.ErrNoData):
