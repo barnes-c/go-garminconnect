@@ -8,6 +8,7 @@ import (
 var (
 	ErrUnauthorized = errors.New("unauthorized")
 	ErrRateLimit    = errors.New("rate limit exceeded")
+	ErrMFARequired  = errors.New("MFA required but no prompt configured")
 	ErrNoData       = errors.New("no data")
 )
 
