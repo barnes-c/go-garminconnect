@@ -9,6 +9,7 @@ import (
 	"mime/multipart"
 	"net"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"path/filepath"
 	"time"
@@ -25,6 +26,7 @@ type Client struct {
 	tokenFile   string
 	displayName string
 	baseURL     string // defaults to connectAPI; overridable in tests
+	mfaPrompt   func() (string, error)
 }
 
 // Option configures a Client.
@@ -64,6 +66,14 @@ func WithRefreshToken(refreshToken string) Option {
 	}
 }
 
+// WithMFAPrompt sets a callback that is invoked when Garmin's SSO requires
+// multi-factor authentication. The callback should return the MFA code
+// (e.g. read from stdin, a channel, or an HTTP handler). If no prompt is
+// configured and MFA is required, Login returns ErrMFARequired.
+func WithMFAPrompt(fn func() (string, error)) Option {
+	return func(c *Client) { c.mfaPrompt = fn }
+}
+
 // WithBaseURL overrides the default API base URL. Primarily useful in tests
 // to point the client at an httptest.Server.
 func WithBaseURL(u string) Option {
@@ -84,7 +94,9 @@ func NewClient(tokenFile string, opts ...Option) *Client {
 }
 
 func newUTLSClient() *http.Client {
+	jar, _ := cookiejar.New(nil)
 	return &http.Client{
+		Jar: jar,
 		Transport: &http.Transport{
 			DialTLSContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
 				host, _, _ := net.SplitHostPort(addr)

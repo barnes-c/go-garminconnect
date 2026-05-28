@@ -14,11 +14,12 @@ import (
 )
 
 const (
-	ssoLoginURL   = "https://sso.garmin.com/mobile/api/login"
-	diAuthURL     = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
-	ssoClientID   = "GCM_IOS_DARK"
-	ssoServiceURL = "https://mobile.integration.garmin.com/gcm/ios"
-	ssoUserAgent  = "GCM-iOS-5.7.2.1 (com.garmin.connect.mobile.sso)"
+	ssoLoginURL     = "https://sso.garmin.com/mobile/api/login"
+	ssoMFAVerifyURL = "https://sso.garmin.com/mobile/api/mfa/verifyCode"
+	diAuthURL       = "https://diauth.garmin.com/di-oauth2-service/oauth/token"
+	ssoClientID     = "GCM_IOS_DARK"
+	ssoServiceURL   = "https://mobile.integration.garmin.com/gcm/ios"
+	ssoUserAgent    = "GCM-iOS-5.7.2.1 (com.garmin.connect.mobile.sso)"
 )
 
 var diClientIDs = []string{
@@ -92,6 +93,22 @@ func (c *Client) saveToken(tok *diToken) error {
 	return os.WriteFile(c.tokenFile, data, 0600)
 }
 
+type ssoResponse struct {
+	ServiceTicketID string `json:"serviceTicketId"`
+	ServiceURL      string `json:"serviceURL"`
+	ResponseStatus  struct {
+		Type string `json:"type"`
+	} `json:"responseStatus"`
+	CustomerMfaInfo struct {
+		MfaLastMethodUsed string `json:"mfaLastMethodUsed"`
+	} `json:"customerMfaInfo"`
+}
+
+func (c *Client) ssoQueryParams() string {
+	return fmt.Sprintf("?clientId=%s&locale=en-US&service=%s",
+		ssoClientID, url.QueryEscape(ssoServiceURL))
+}
+
 func (c *Client) ssoLogin(username, password string) error {
 	body, _ := json.Marshal(map[string]any{
 		"username":     username,
@@ -100,8 +117,7 @@ func (c *Client) ssoLogin(username, password string) error {
 		"captchaToken": "",
 	})
 
-	loginURL := fmt.Sprintf("%s?clientId=%s&locale=en-US&service=%s",
-		ssoLoginURL, ssoClientID, url.QueryEscape(ssoServiceURL))
+	loginURL := ssoLoginURL + c.ssoQueryParams()
 
 	req, err := http.NewRequest(http.MethodPost, loginURL, bytes.NewReader(body))
 	if err != nil {
@@ -126,18 +142,77 @@ func (c *Client) ssoLogin(username, password string) error {
 		return fmt.Errorf("sso login read body: %w", err)
 	}
 
-	var ssoResp struct {
-		ServiceTicketID string `json:"serviceTicketId"`
-		ServiceURL      string `json:"serviceURL"`
-	}
+	var ssoResp ssoResponse
 	if err := json.Unmarshal(rawBody, &ssoResp); err != nil {
 		return fmt.Errorf("sso login decode: %w (body: %s)", err, rawBody)
 	}
+
+	if ssoResp.ResponseStatus.Type == "MFA_REQUIRED" {
+		return c.handleMFA(ssoResp.CustomerMfaInfo.MfaLastMethodUsed)
+	}
+
 	if ssoResp.ServiceTicketID == "" {
 		return fmt.Errorf("sso login: no ticket in response (body: %s)", rawBody)
 	}
 
 	return c.exchangeTicket(ssoResp.ServiceTicketID, ssoResp.ServiceURL)
+}
+
+func (c *Client) handleMFA(mfaMethod string) error {
+	if c.mfaPrompt == nil {
+		return ErrMFARequired
+	}
+	if mfaMethod == "" {
+		mfaMethod = "email"
+	}
+
+	code, err := c.mfaPrompt()
+	if err != nil {
+		return fmt.Errorf("mfa prompt: %w", err)
+	}
+
+	body, _ := json.Marshal(map[string]any{
+		"mfaMethod":           mfaMethod,
+		"mfaVerificationCode": code,
+		"rememberMyBrowser":   true,
+		"reconsentList":       []any{},
+		"mfaSetup":            false,
+	})
+
+	verifyURL := ssoMFAVerifyURL + c.ssoQueryParams()
+	req, err := http.NewRequest(http.MethodPost, verifyURL, bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("mfa verify request: %w", err)
+	}
+	req.Header.Set("User-Agent", ssoUserAgent)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return fmt.Errorf("mfa verify: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("mfa verify: status %d", resp.StatusCode)
+	}
+
+	rawBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("mfa verify read body: %w", err)
+	}
+
+	var mfaResp ssoResponse
+	if err := json.Unmarshal(rawBody, &mfaResp); err != nil {
+		return fmt.Errorf("mfa verify decode: %w (body: %s)", err, rawBody)
+	}
+
+	if mfaResp.ServiceTicketID == "" {
+		return fmt.Errorf("mfa verify: no ticket in response (body: %s)", rawBody)
+	}
+
+	return c.exchangeTicket(mfaResp.ServiceTicketID, mfaResp.ServiceURL)
 }
 
 func (c *Client) exchangeTicket(ticket, serviceURL string) error {
