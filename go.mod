@@ -6,6 +6,7 @@ require (
 	github.com/refraction-networking/utls v1.8.2
 	github.com/stretchr/testify v1.11.1
 	gopkg.in/dnaeon/go-vcr.v2 v2.3.0
+	gopkg.in/dnaeon/go-vcr.v4 v4.0.6
 )
 
 require (
