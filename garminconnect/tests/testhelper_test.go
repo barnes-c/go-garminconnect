@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/dnaeon/go-vcr.v2/cassette"
-	"gopkg.in/dnaeon/go-vcr.v2/recorder"
+	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
+	"gopkg.in/dnaeon/go-vcr.v4/pkg/recorder"
 
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
@@ -59,31 +59,34 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 		}
 	}
 
-	mode := recorder.ModeReplayingOrRecording
+	mode := recorder.ModeReplayWithNewEpisodes
 	if !needsRecording {
-		mode = recorder.ModeReplaying
-	}
-	r, err := recorder.NewAsMode(cassettePath, mode, nil)
-	if err != nil {
-		t.Fatalf("recorder.NewAsMode: %v", err)
+		mode = recorder.ModeReplayOnly
 	}
 
-	r.SetMatcher(func(req *http.Request, i cassette.Request) bool {
-		cu, err := url.Parse(i.URL)
-		if err != nil {
-			return false
-		}
-		return req.Method == i.Method && normaliseURL(req.URL) == normaliseURL(cu)
-	})
+	opts := []recorder.Option{
+		recorder.WithMode(mode),
+		recorder.WithMatcher(func(req *http.Request, i cassette.Request) bool {
+			cu, err := url.Parse(i.URL)
+			if err != nil {
+				return false
+			}
+			return req.Method == i.Method && normaliseURL(req.URL) == normaliseURL(cu)
+		}),
+	}
 
-	// When recording, scrub credentials before the cassette is written to disk.
 	if liveDisplayName != "" {
-		r.AddSaveFilter(func(i *cassette.Interaction) error {
+		opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
 			i.Request.Headers.Set("Authorization", "Bearer test")
-			i.URL = strings.ReplaceAll(i.URL, url.PathEscape(liveDisplayName), "testuser")
-			i.URL = strings.ReplaceAll(i.URL, liveDisplayName, "testuser")
+			i.Request.URL = strings.ReplaceAll(i.Request.URL, url.PathEscape(liveDisplayName), "testuser")
+			i.Request.URL = strings.ReplaceAll(i.Request.URL, liveDisplayName, "testuser")
 			return nil
-		})
+		}, recorder.BeforeSaveHook))
+	}
+
+	r, err := recorder.New(cassettePath, opts...)
+	if err != nil {
+		t.Fatalf("recorder.New: %v", err)
 	}
 
 	// Use real credentials when recording, synthetic ones when replaying.
