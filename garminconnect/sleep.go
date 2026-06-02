@@ -1,6 +1,7 @@
 package garminconnect
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"time"
@@ -85,19 +86,19 @@ type HRVData struct {
 
 // SleepData returns detailed sleep data for the given date.
 // The date should be the morning date (day you woke up).
-func (c *Client) SleepData(d time.Time) (*SleepData, error) {
+func (c *Client) SleepData(ctx context.Context, d time.Time) (*SleepData, error) {
 	params := url.Values{"date": {date(d)}}
 	var out SleepData
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailySleepData/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailySleepData/%s", c.displayName), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // HRVData returns heart rate variability data for the given date.
-func (c *Client) HRVData(d time.Time) (*HRVData, error) {
+func (c *Client) HRVData(ctx context.Context, d time.Time) (*HRVData, error) {
 	var out HRVData
-	if err := c.get(fmt.Sprintf("/hrv-service/hrv/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/hrv-service/hrv/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

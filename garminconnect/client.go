@@ -122,11 +122,11 @@ func (c *Client) Token() string {
 	return c.token.AccessToken
 }
 
-func (c *Client) fetchProfile() error {
+func (c *Client) fetchProfile(ctx context.Context) error {
 	var profile struct {
 		DisplayName string `json:"displayName"`
 	}
-	if err := c.get("/userprofile-service/socialProfile", nil, &profile); err != nil {
+	if err := c.get(ctx, "/userprofile-service/socialProfile", nil, &profile); err != nil {
 		return fmt.Errorf("fetch profile: %w", err)
 	}
 	c.displayName = profile.DisplayName
@@ -136,13 +136,13 @@ func (c *Client) fetchProfile() error {
 // withRefresh calls fn, and if the first attempt returns a 401, tries to
 // refresh the token and retries fn once. Returns (nil, ErrUnauthorized) if
 // the refresh fails or there is no refresh token available.
-func (c *Client) withRefresh(fn func() (*http.Response, error)) (*http.Response, error) {
+func (c *Client) withRefresh(ctx context.Context, fn func() (*http.Response, error)) (*http.Response, error) {
 	resp, err := fn()
 	if err != nil || resp.StatusCode != http.StatusUnauthorized {
 		return resp, err
 	}
 	resp.Body.Close()
-	if c.token == nil || c.token.RefreshToken == "" || c.refreshToken(c.token) != nil {
+	if c.token == nil || c.token.RefreshToken == "" || c.refreshToken(ctx, c.token) != nil {
 		return nil, ErrUnauthorized
 	}
 	return fn()
@@ -150,16 +150,16 @@ func (c *Client) withRefresh(fn func() (*http.Response, error)) (*http.Response,
 
 // get performs an authenticated GET against the Garmin Connect API and
 // JSON-decodes the response body into out.
-func (c *Client) get(path string, params url.Values, out any) error {
-	return c.getURL(c.baseURL+path, params, out)
+func (c *Client) get(ctx context.Context, path string, params url.Values, out any) error {
+	return c.getURL(ctx, c.baseURL+path, params, out)
 }
 
-func (c *Client) getURL(rawURL string, params url.Values, out any) error {
+func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, out any) error {
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	resp, err := c.withRefresh(func() (*http.Response, error) {
-		req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -188,7 +188,7 @@ func (c *Client) getURL(rawURL string, params url.Values, out any) error {
 }
 
 // doRequest executes a non-GET HTTP request against the Garmin Connect API.
-func (c *Client) doRequest(method, rawURL string, body any, out any) error {
+func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any, out any) error {
 	var data []byte
 	if body != nil {
 		var err error
@@ -197,12 +197,12 @@ func (c *Client) doRequest(method, rawURL string, body any, out any) error {
 			return err
 		}
 	}
-	resp, err := c.withRefresh(func() (*http.Response, error) {
+	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
 		var br io.Reader
 		if data != nil {
 			br = bytes.NewReader(data)
 		}
-		req, err := http.NewRequest(method, rawURL, br)
+		req, err := http.NewRequestWithContext(ctx, method, rawURL, br)
 		if err != nil {
 			return nil, err
 		}
@@ -233,27 +233,27 @@ func (c *Client) doRequest(method, rawURL string, body any, out any) error {
 	return json.NewDecoder(resp.Body).Decode(out)
 }
 
-func (c *Client) post(path string, body any, out any) error {
-	return c.doRequest(http.MethodPost, c.baseURL+path, body, out)
+func (c *Client) post(ctx context.Context, path string, body any, out any) error {
+	return c.doRequest(ctx, http.MethodPost, c.baseURL+path, body, out)
 }
 
-func (c *Client) put(path string, body any, out any) error {
-	return c.doRequest(http.MethodPut, c.baseURL+path, body, out)
+func (c *Client) put(ctx context.Context, path string, body any, out any) error {
+	return c.doRequest(ctx, http.MethodPut, c.baseURL+path, body, out)
 }
 
-func (c *Client) del(path string) error {
-	return c.doRequest(http.MethodDelete, c.baseURL+path, nil, nil)
+func (c *Client) del(ctx context.Context, path string) error {
+	return c.doRequest(ctx, http.MethodDelete, c.baseURL+path, nil, nil)
 }
 
 // getBytes performs an authenticated GET and returns the raw response body.
 // Used for binary downloads (FIT, GPX, TCX, etc.).
-func (c *Client) getBytes(path string, params url.Values) ([]byte, error) {
+func (c *Client) getBytes(ctx context.Context, path string, params url.Values) ([]byte, error) {
 	rawURL := c.baseURL + path
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	resp, err := c.withRefresh(func() (*http.Response, error) {
-		req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -279,7 +279,7 @@ func (c *Client) getBytes(path string, params url.Values) ([]byte, error) {
 
 // upload sends a file as multipart/form-data to the given path and
 // JSON-decodes the response into out (may be nil).
-func (c *Client) upload(path string, data []byte, filename string, out any) error {
+func (c *Client) upload(ctx context.Context, path string, data []byte, filename string, out any) error {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 	fw, err := w.CreateFormFile("file", filepath.Base(filename))
@@ -295,8 +295,8 @@ func (c *Client) upload(path string, data []byte, filename string, out any) erro
 	contentType := w.FormDataContentType()
 	rawURL := c.baseURL + path
 
-	resp, err := c.withRefresh(func() (*http.Response, error) {
-		req, err := http.NewRequest(http.MethodPost, rawURL, bytes.NewReader(bodyBytes))
+	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, rawURL, bytes.NewReader(bodyBytes))
 		if err != nil {
 			return nil, err
 		}

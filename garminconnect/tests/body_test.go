@@ -12,7 +12,7 @@ func TestWeighIns(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
-	out, err := c.WeighIns(start, testDate)
+	out, err := c.WeighIns(t.Context(), start, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
@@ -22,7 +22,7 @@ func TestDailyWeighIns(t *testing.T) {
 	c, stop := newVCRClient(t, "daily_weigh_ins")
 	defer stop()
 
-	out, err := c.DailyWeighIns(testDate)
+	out, err := c.DailyWeighIns(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
@@ -32,7 +32,7 @@ func TestBodyComposition(t *testing.T) {
 	c, stop := newVCRClient(t, "body_composition")
 	defer stop()
 
-	bc, err := c.BodyComposition(testDate, testDate)
+	bc, err := c.BodyComposition(t.Context(), testDate, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, bc)

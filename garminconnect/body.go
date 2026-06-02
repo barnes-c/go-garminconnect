@@ -1,6 +1,7 @@
 package garminconnect
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -63,33 +64,33 @@ type WeighInsResponse struct {
 }
 
 // BodyComposition returns body composition data between start and end dates.
-func (c *Client) BodyComposition(start, end time.Time) (*BodyComposition, error) {
+func (c *Client) BodyComposition(ctx context.Context, start, end time.Time) (*BodyComposition, error) {
 	params := url.Values{
 		"startDate": {date(start)},
 		"endDate":   {date(end)},
 	}
 	var out BodyComposition
-	if err := c.get("/weight-service/weight/dateRange", params, &out); err != nil {
+	if err := c.get(ctx, "/weight-service/weight/dateRange", params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // WeighIns returns all weigh-in measurements between start and end dates.
-func (c *Client) WeighIns(start, end time.Time) (*WeighInsResponse, error) {
+func (c *Client) WeighIns(ctx context.Context, start, end time.Time) (*WeighInsResponse, error) {
 	params := url.Values{"includeAll": {"true"}}
 	var out WeighInsResponse
-	if err := c.get(fmt.Sprintf("/weight-service/weight/range/%s/%s", date(start), date(end)), params, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/weight-service/weight/range/%s/%s", date(start), date(end)), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // DailyWeighIns returns weigh-in measurements for a specific date.
-func (c *Client) DailyWeighIns(d time.Time) (*WeighInsResponse, error) {
+func (c *Client) DailyWeighIns(ctx context.Context, d time.Time) (*WeighInsResponse, error) {
 	params := url.Values{"calendarDate": {date(d)}}
 	var out WeighInsResponse
-	if err := c.get(fmt.Sprintf("/weight-service/weight/dayview/%s", date(d)), params, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/weight-service/weight/dayview/%s", date(d)), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -97,7 +98,7 @@ func (c *Client) DailyWeighIns(d time.Time) (*WeighInsResponse, error) {
 
 // AddWeighIn records a new weigh-in. weightKg is in kilograms; timestamp is RFC3339.
 // The server stores weight in grams, so weightKg is converted automatically.
-func (c *Client) AddWeighIn(weightKg float64, unitKey, timestamp string) (map[string]json.RawMessage, error) {
+func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, timestamp string) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
 	body := map[string]any{
 		"unitKey":       unitKey, // e.g. "kg"
@@ -105,13 +106,13 @@ func (c *Client) AddWeighIn(weightKg float64, unitKey, timestamp string) (map[st
 		"dateTimestamp": timestamp,
 		"gmtTimestamp":  timestamp,
 	}
-	if err := c.post("/weight-service/user-weight", body, &out); err != nil {
+	if err := c.post(ctx, "/weight-service/user-weight", body, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // DeleteWeighIn removes a weigh-in by its primary key and calendar date.
-func (c *Client) DeleteWeighIn(cdate string, weightPK int64) error {
-	return c.del(fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))
+func (c *Client) DeleteWeighIn(ctx context.Context, cdate string, weightPK int64) error {
+	return c.del(ctx, fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))
 }

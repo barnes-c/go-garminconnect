@@ -1,6 +1,7 @@
 package garminconnect_test
 
 import (
+	"context"
 	"errors"
 	"io"
 	"net/http"
@@ -51,7 +52,7 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 			liveDisplayName = displayName
 		} else if email != "" && password != "" {
 			authClient := gc.NewClient("")
-			if err := authClient.Login(email, password); err != nil {
+			if err := authClient.Login(context.Background(), email, password); err != nil {
 				t.Fatalf("garmin login: %v", err)
 			}
 			liveToken = authClient.Token()

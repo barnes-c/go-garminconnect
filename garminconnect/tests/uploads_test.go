@@ -43,7 +43,7 @@ func TestUploadActivity_FIT(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	out, err := c.UploadActivity(fitData, "activity.fit")
+	out, err := c.UploadActivity(t.Context(), fitData, "activity.fit")
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -60,7 +60,7 @@ func TestUploadActivity_GPX(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	_, err := c.UploadActivity(gpxData, "track.gpx")
+	_, err := c.UploadActivity(t.Context(), gpxData, "track.gpx")
 	require.NoError(t, err)
 }
 
@@ -70,7 +70,7 @@ func TestUploadActivity_NoExtension(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	_, err := c.UploadActivity([]byte("data"), "noextension")
+	_, err := c.UploadActivity(t.Context(), []byte("data"), "noextension")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "extension")
 }
@@ -89,7 +89,7 @@ func TestUploadWorkout(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	out, err := c.UploadWorkout(fitData, "workout.fit")
+	out, err := c.UploadWorkout(t.Context(), fitData, "workout.fit")
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -100,6 +100,6 @@ func TestUploadActivity_ServerError(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	_, err := c.UploadActivity([]byte("data"), "file.fit")
+	_, err := c.UploadActivity(t.Context(), []byte("data"), "file.fit")
 	assert.ErrorIs(t, err, gc.ErrUnauthorized)
 }

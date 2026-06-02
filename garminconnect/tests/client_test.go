@@ -23,19 +23,19 @@ func clientWith(t *testing.T, code int) *gc.Client {
 
 func TestActivities_Unauthorized(t *testing.T) {
 	c := clientWith(t, http.StatusUnauthorized)
-	_, err := c.Activities(1)
+	_, err := c.Activities(t.Context(), 1)
 	assert.ErrorIs(t, err, gc.ErrUnauthorized)
 }
 
 func TestActivities_RateLimit(t *testing.T) {
 	c := clientWith(t, http.StatusTooManyRequests)
-	_, err := c.Activities(1)
+	_, err := c.Activities(t.Context(), 1)
 	assert.ErrorIs(t, err, gc.ErrRateLimit)
 }
 
 func TestActivities_APIError(t *testing.T) {
 	c := clientWith(t, http.StatusInternalServerError)
-	_, err := c.Activities(1)
+	_, err := c.Activities(t.Context(), 1)
 	require.Error(t, err)
 	var apiErr *gc.APIError
 	require.ErrorAs(t, err, &apiErr)
@@ -82,7 +82,7 @@ func TestAutoRefreshOnUnauthorized(t *testing.T) {
 		gc.WithRefreshToken("some-refresh-token"),
 	)
 
-	profile, err := c.UserProfile()
+	profile, err := c.UserProfile(t.Context())
 	require.NoError(t, err)
 	assert.Equal(t, "Test User", profile.DisplayName)
 	assert.Equal(t, 3, calls)
@@ -110,7 +110,7 @@ func TestRefreshFailureReturnsUnauthorized(t *testing.T) {
 		gc.WithRefreshToken("expired-refresh-token"),
 	)
 
-	_, err := c.UserProfile()
+	_, err := c.UserProfile(t.Context())
 	require.ErrorIs(t, err, gc.ErrUnauthorized)
 	assert.Equal(t, 2, calls)
 }

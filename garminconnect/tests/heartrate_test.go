@@ -11,7 +11,7 @@ func TestHeartRates(t *testing.T) {
 	c, stop := newVCRClient(t, "heart_rates")
 	defer stop()
 
-	hr, err := c.HeartRates(testDate)
+	hr, err := c.HeartRates(t.Context(), testDate)
 	require.NoError(t, err)
 
 	assert.NotEmpty(t, hr.CalendarDate)

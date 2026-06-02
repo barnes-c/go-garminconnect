@@ -1,6 +1,7 @@
 package garminconnect
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"time"
@@ -44,24 +45,24 @@ type RestingHeartRateResponse struct {
 }
 
 // HeartRates returns heart rate data for the given date.
-func (c *Client) HeartRates(d time.Time) (*HeartRates, error) {
+func (c *Client) HeartRates(ctx context.Context, d time.Time) (*HeartRates, error) {
 	params := url.Values{"date": {date(d)}}
 	var out HeartRates
-	if err := c.get(fmt.Sprintf("/wellness-service/wellness/dailyHeartRate/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailyHeartRate/%s", c.displayName), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // RestingHeartRate returns resting heart rate history between start and end dates.
-func (c *Client) RestingHeartRate(start, end time.Time) (*RestingHeartRateResponse, error) {
+func (c *Client) RestingHeartRate(ctx context.Context, start, end time.Time) (*RestingHeartRateResponse, error) {
 	params := url.Values{
 		"fromDate":  {date(start)},
 		"untilDate": {date(end)},
 		"metricId":  {"60"},
 	}
 	var out RestingHeartRateResponse
-	if err := c.get(fmt.Sprintf("/userstats-service/wellness/daily/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/userstats-service/wellness/daily/%s", c.displayName), params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

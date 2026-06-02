@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -21,7 +22,7 @@ func main() {
 	password := os.Getenv("GARMIN_PASSWORD")
 
 	c := gc.NewClient(*tokenFile)
-	if err := c.Login(email, password); err != nil {
+	if err := c.Login(context.Background(), email, password); err != nil {
 		log.Fatalf("login: %v", err)
 	}
 	fmt.Printf("%s\n%s\n", c.Token(), c.DisplayName())
