@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/wellness-service/wellness/daily/spo2/2026-01-01
         method: GET
       response:
-        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","sleepStartTimestampGMT":"2026-01-01T00:00:00","sleepEndTimestampGMT":"2026-01-01T00:00:00","sleepStartTimestampLocal":"2026-01-01T00:00:00","sleepEndTimestampLocal":"2026-01-01T00:00:00","tomorrowSleepStartTimestampGMT":null,"tomorrowSleepEndTimestampGMT":null,"tomorrowSleepStartTimestampLocal":null,"tomorrowSleepEndTimestampLocal":null,"averageSpO2":94.0,"lowestSpO2":85,"lastSevenDaysAvgSpO2":95,"latestSpO2":94,"latestSpO2TimestampGMT":"2026-01-01T00:00:00","latestSpO2TimestampLocal":"2026-01-01T00:00:00","avgSleepSpO2":96.0,"avgTomorrowSleepSpO2":null,"spO2ValueDescriptorsDTOList":[{"spo2ValueDescriptorIndex":0,"spo2ValueDescriptorKey":"timestamp"},{"spo2ValueDescriptorIndex":1,"spo2ValueDescriptorKey":"spo2Reading"},{"spo2ValueDescriptorIndex":2,"spo2ValueDescriptorKey":"singleReadingPlottable"}],"spO2SingleValues":null,"continuousReadingDTOList":null,"spO2HourlyAverages":[[1778364000000,95],[1778367600000,91],[1778371200000,94],[1778374800000,92],[1778378400000,96],[1778382000000,95],[1778443200000,91],[1778446800000,94]]}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","sleepStartTimestampGMT":null,"sleepEndTimestampGMT":null,"sleepStartTimestampLocal":null,"sleepEndTimestampLocal":null,"tomorrowSleepStartTimestampGMT":null,"tomorrowSleepEndTimestampGMT":null,"tomorrowSleepStartTimestampLocal":null,"tomorrowSleepEndTimestampLocal":null,"averageSpO2":null,"lowestSpO2":null,"lastSevenDaysAvgSpO2":96.2,"latestSpO2":null,"latestSpO2TimestampGMT":null,"latestSpO2TimestampLocal":null,"avgSleepSpO2":null,"avgTomorrowSleepSpO2":null,"spO2ValueDescriptorsDTOList":null,"spO2SingleValues":null,"continuousReadingDTOList":null,"spO2HourlyAverages":null}'
         headers:
             Content-Type:
                 - application/json

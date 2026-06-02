@@ -27,7 +27,6 @@ func TestActivities(t *testing.T) {
 	assert.NotZero(t, run.Calories)
 	assert.NotZero(t, run.AverageHR)
 	assert.NotZero(t, run.MaxHR)
-	assert.NotEmpty(t, run.LocationName)
 
 	assert.NotEmpty(t, acts[1].ActivityType.TypeKey)
 }

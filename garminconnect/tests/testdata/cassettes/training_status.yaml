@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/trainingstatus/aggregated/2026-01-01
         method: GET
       response:
-        body: '{"userId":12345678,"mostRecentVO2Max":{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":3,"previousHeatAcclimationPercentage":4,"heatTrend":"DEACCLIMATIZING","altitudeTrend":null,"currentAltitude":494,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}},"mostRecentTrainingLoadBalance":{"userId":12345678,"metricsTrainingLoadBalanceDTOMap":{"9876543210":{"calendarDate":"2026-01-01","deviceId":9876543210,"monthlyLoadAerobicLow":82,"monthlyLoadAerobicHigh":120,"monthlyLoadAnaerobic":53,"monthlyLoadAerobicLowTargetMin":202,"monthlyLoadAerobicLowTargetMax":465,"monthlyLoadAerobicHighTargetMin":279,"monthlyLoadAerobicHighTargetMax":542,"monthlyLoadAnaerobicTargetMin":0,"monthlyLoadAnaerobicTargetMax":262,"trainingBalanceFeedbackPhrase":"AEROBIC_LOW_SHORTAGE","primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}]},"mostRecentTrainingStatus":{"userId":12345678,"latestTrainingStatusData":{"9876543210":{"calendarDate":"2026-01-01","sinceDate":"2026-01-01","weeklyTrainingLoad":null,"trainingStatus":5,"timestamp":1778398109000,"deviceId":9876543210,"loadTunnelMin":null,"loadTunnelMax":null,"loadLevelTrend":null,"sport":null,"subSport":null,"fitnessTrendSport":"NONE","fitnessTrend":0,"trainingStatusFeedbackPhrase":"RECOVERY_1","trainingPaused":false,"acuteTrainingLoadDTO":{"acwrPercent":4,"acwrStatus":"LOW","acwrStatusFeedback":"FEEDBACK_1","dailyTrainingLoadAcute":27,"maxTrainingLoadChronic":328.5,"minTrainingLoadChronic":180,"dailyTrainingLoadChronic":219,"dailyAcuteChronicWorkloadRatio":0.1},"primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}],"showSelector":false,"lastPrimarySyncDate":"2026-01-01"},"heatAltitudeAcclimationDTO":null}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"userId":12345678,"mostRecentVO2Max":{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":54.5,"vo2MaxValue":55.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":474,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}},"mostRecentTrainingLoadBalance":{"userId":12345678,"metricsTrainingLoadBalanceDTOMap":{"9876543210":{"calendarDate":"2026-01-01","deviceId":9876543210,"monthlyLoadAerobicLow":170,"monthlyLoadAerobicHigh":0.0,"monthlyLoadAnaerobic":94,"monthlyLoadAerobicLowTargetMin":215,"monthlyLoadAerobicLowTargetMax":478,"monthlyLoadAerobicHighTargetMin":266,"monthlyLoadAerobicHighTargetMax":529,"monthlyLoadAnaerobicTargetMin":0,"monthlyLoadAnaerobicTargetMax":262,"trainingBalanceFeedbackPhrase":"AEROBIC_LOW_SHORTAGE","primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}]},"mostRecentTrainingStatus":{"userId":12345678,"latestTrainingStatusData":{"9876543210":{"calendarDate":"2026-01-01","sinceDate":"2026-01-01","weeklyTrainingLoad":null,"trainingStatus":4,"timestamp":1767245546000,"deviceId":9876543210,"loadTunnelMin":null,"loadTunnelMax":null,"loadLevelTrend":null,"sport":null,"subSport":null,"fitnessTrendSport":"NONE","fitnessTrend":0,"trainingStatusFeedbackPhrase":"MAINTAINING_1","trainingPaused":false,"acuteTrainingLoadDTO":{"acwrPercent":29,"acwrStatus":"LOW","acwrStatusFeedback":"FEEDBACK_1","dailyTrainingLoadAcute":174,"maxTrainingLoadChronic":328.5,"minTrainingLoadChronic":180,"dailyTrainingLoadChronic":219,"dailyAcuteChronicWorkloadRatio":0.7},"primaryTrainingDevice":true}},"recordedDevices":[{"deviceId":9876543210,"imageURL":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","deviceName":"Forerunner 965","category":0}],"showSelector":false,"lastPrimarySyncDate":"2026-01-01"},"heatAltitudeAcclimationDTO":null}'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8

@@ -1,9 +1,20 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        form:
+            aggregation:
+                - weekly
+            endDate:
+                - "2026-01-01"
+            startDate:
+                - "2026-01-01"
         headers:
             Accept:
                 - application/json
@@ -12,7 +23,11 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/endurancescore/stats?aggregation=weekly&endDate=2026-01-01&startDate=2025-12-01
         method: GET
       response:
-        body: '{"userProfilePK":12345678,"startDate":"2026-01-01","endDate":"2026-01-01","avg":5467,"max":5518,"groupMap":{"2026-01-01":{"groupAverage":5506,"groupMax":5507,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":69.39},{"activityTypeId":null,"group":0,"contribution":27.62},{"activityTypeId":null,"group":8,"contribution":2.99}]},"2026-01-01":{"groupAverage":5507,"groupMax":5518,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":64.63},{"activityTypeId":null,"group":0,"contribution":32},{"activityTypeId":null,"group":8,"contribution":3.1}]},"2026-01-01":{"groupAverage":5463,"groupMax":5472,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":55},{"activityTypeId":null,"group":0,"contribution":42},{"activityTypeId":null,"group":8,"contribution":3.6}]},"2026-01-01":{"groupAverage":5436,"groupMax":5442,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":51.43},{"activityTypeId":3,"group":null,"contribution":0.8},{"activityTypeId":231,"group":null,"contribution":1.7},{"activityTypeId":null,"group":0,"contribution":40.91},{"activityTypeId":null,"group":8,"contribution":5.2}]},"2026-01-01":{"groupAverage":5424,"groupMax":5430,"enduranceContributorDTOList":[{"activityTypeId":null,"group":3,"contribution":41},{"activityTypeId":231,"group":null,"contribution":13},{"activityTypeId":null,"group":0,"contribution":37},{"activityTypeId":null,"group":8,"contribution":9.1}]}},"enduranceScoreDTO":{"userProfilePK":12345678,"deviceId":9876543210,"calendarDate":"2026-01-01","overallScore":5419,"classification":2,"feedbackPhrase":30,"primaryTrainingDevice":true,"gaugeLowerLimit":3570,"classificationLowerLimitIntermediate":5100,"classificationLowerLimitTrained":5800,"classificationLowerLimitWellTrained":6600,"classificationLowerLimitExpert":7300,"classificationLowerLimitSuperior":8100,"classificationLowerLimitElite":8800,"gaugeUpperLimit":10560,"contributors":[{"activityTypeId":null,"group":0,"contribution":41.66},{"activityTypeId":null,"group":3,"contribution":30.93},{"activityTypeId":231,"group":null,"contribution":16.06},{"activityTypeId":null,"group":8,"contribution":11.35}]}}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"userProfilePK":12345678,"startDate":"2026-01-01","endDate":"2026-01-01","avg":5678,"max":5809,"groupMap":{"2026-01-01":{"groupAverage":5771,"groupMax":5809,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":17},{"activityTypeId":null,"group":0,"contribution":26},{"activityTypeId":null,"group":1,"contribution":55},{"activityTypeId":null,"group":8,"contribution":2.3}]},"2026-01-01":{"groupAverage":5709,"groupMax":5713,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":21},{"activityTypeId":null,"group":0,"contribution":25},{"activityTypeId":null,"group":1,"contribution":51},{"activityTypeId":null,"group":8,"contribution":2.2}]},"2026-01-01":{"groupAverage":5673,"groupMax":5703,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":21},{"activityTypeId":null,"group":0,"contribution":26},{"activityTypeId":null,"group":1,"contribution":50},{"activityTypeId":null,"group":8,"contribution":2.1}]},"2026-01-01":{"groupAverage":5631,"groupMax":5634,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":21},{"activityTypeId":null,"group":0,"contribution":28},{"activityTypeId":null,"group":1,"contribution":49},{"activityTypeId":null,"group":8,"contribution":2.1}]},"2026-01-01":{"groupAverage":5607,"groupMax":5629,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":19},{"activityTypeId":null,"group":0,"contribution":26},{"activityTypeId":null,"group":1,"contribution":45},{"activityTypeId":null,"group":8,"contribution":9.2}]}},"enduranceScoreDTO":{"userProfilePK":12345678,"deviceId":9876543210,"calendarDate":"2026-01-01","overallScore":5598,"classification":2,"feedbackPhrase":30,"primaryTrainingDevice":true,"gaugeLowerLimit":3570,"classificationLowerLimitIntermediate":5100,"classificationLowerLimitTrained":5800,"classificationLowerLimitWellTrained":6600,"classificationLowerLimitExpert":7300,"classificationLowerLimitSuperior":8100,"classificationLowerLimitElite":8800,"gaugeUpperLimit":10560,"contributors":[{"activityTypeId":null,"group":1,"contribution":42.09},{"activityTypeId":null,"group":0,"contribution":24.4},{"activityTypeId":3,"group":null,"contribution":18.12},{"activityTypeId":null,"group":8,"contribution":15.39}]}}'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8

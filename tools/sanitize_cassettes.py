@@ -9,7 +9,10 @@ import re
 
 CASSETTE_DIR = "garminconnect/tests/testdata/cassettes"
 
-STRIP_HEADERS = {"Cf-Ray", "Date", "Nel", "Report-To", "Alt-Svc", "Cf-Cache-Status", "Cache-Control", "Pragma", "Server"}
+STRIP_HEADERS = {
+    "Cf-Ray", "Date", "Nel", "Report-To", "Alt-Svc", "Cf-Cache-Status",
+    "Cache-Control", "Pragma", "Server", "Set-Cookie", "Content-Length",
+}
 
 # Field names whose values should be replaced with a fixed synthetic ID.
 # "id" catches the bare top-level Garmin user ID in social-profile responses.
@@ -140,6 +143,23 @@ def normalize_duration(content: str) -> str:
     return re.sub(r"duration: [\d.]+\w*s", "duration: 100ms", content)
 
 
+_HTTP2_PROTO_RE = re.compile(
+    r"^(\s+)proto: HTTP/2\.0\n\1proto_major: 2\n\1proto_minor: 0$",
+    re.MULTILINE,
+)
+_UNCOMPRESSED_RE = re.compile(r"^\s+uncompressed: (?:true|false)\n", re.MULTILINE)
+
+
+def normalize_response_metadata(content: str) -> str:
+    """Normalize HTTP/2 responses to HTTP/1.1 and drop go-vcr's uncompressed flag."""
+    content = _HTTP2_PROTO_RE.sub(
+        lambda m: f"{m.group(1)}proto: HTTP/1.1\n{m.group(1)}proto_major: 1\n{m.group(1)}proto_minor: 1",
+        content,
+    )
+    content = _UNCOMPRESSED_RE.sub("", content)
+    return content
+
+
 # Normalize datetime strings: fix date to test date, zero the time.
 # Matches "2025-12-31 13:50:13", "2025-12-31T13:50:13.944", etc.
 _DATETIME_RE = re.compile(r'\d{4}-\d{2}-\d{2}([T ])\d{2}:\d{2}:\d{2}(?:\.\d+)?')
@@ -209,6 +229,32 @@ def _replace_string_fields(content: str) -> str:
     return _STRING_FIELD_RE.sub(_sub, content)
 
 
+# Auth cassette sanitization: strip credentials and tokens from SSO / diAuth bodies.
+_AUTH_JSON_RE = re.compile(
+    r'"(password|access_token|refresh_token|serviceTicketId|mfaVerificationCode|username)"\s*:\s*"[^"]*"'
+)
+_AUTH_JSON_SYNTH = {
+    "password": "test",
+    "access_token": "test_access_token",
+    "refresh_token": "test_refresh_token",
+    "serviceTicketId": "ST-test",
+    "mfaVerificationCode": "123456",
+    "username": "test@example.com",
+}
+# URL-encoded form bodies (diAuth POSTs use application/x-www-form-urlencoded)
+_AUTH_FORM_RE = re.compile(r'((?:refresh_token|service_ticket)=)[^\s&\'"]+')
+
+
+def sanitize_auth_fields(content: str) -> str:
+    def _sub_json(m: re.Match) -> str:
+        field = re.search(r'"(\w+)"', m.group(0)).group(1)
+        return f'"{field}": "{_AUTH_JSON_SYNTH[field]}"'
+
+    content = _AUTH_JSON_RE.sub(_sub_json, content)
+    content = _AUTH_FORM_RE.sub(lambda m: m.group(1) + "test", content)
+    return content
+
+
 def apply_static(content: str, display_name: str, email: str) -> str:
     if display_name:
         content = content.replace(f'"{display_name}"', '"Test User"')
@@ -231,9 +277,11 @@ def sanitize_file(
 
     content = strip_response_headers(content)
     content = normalize_duration(content)
+    content = normalize_response_metadata(content)
     content = zero_datetimes(content)
     content = simplify_floats(content)
     content = apply_mapping(content, mapping)
+    content = sanitize_auth_fields(content)
     content = apply_static(content, display_name, email)
 
     with open(path, "w", encoding="utf-8") as f:

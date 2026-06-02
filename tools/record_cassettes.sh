@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # Record VCR cassettes for all tests that hit the real Garmin Connect API.
 #
-# Usage:
+# Usage — token file (refreshed automatically if expired):
+#   ./record_cassettes.sh --token-file /tmp/garmin_token.json
+#
+# Usage — credentials (logs in once; token cached in .garmin_token.json for reuse):
 #   GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret ./record_cassettes.sh
 #
-# Logs in once upfront, then passes the token to every test so Garmin's SSO
-# endpoint is only hit a single time regardless of how many cassettes are recorded.
+# Usage — pre-fetched token (skips the login step entirely):
+#   GARMIN_TOKEN=<token> GARMIN_DISPLAY_NAME=<name> ./record_cassettes.sh
 #
 # Cassettes already recorded with real data are preserved.
 # The synthetic activities_empty cassette (used for the ErrNoData test) is also
@@ -14,12 +17,18 @@ set -euo pipefail
 
 # -m / --missing  skip deletion; only record cassettes that don't exist yet
 MISSING_ONLY=false
-for arg in "$@"; do
-    [[ "$arg" == "-m" || "$arg" == "--missing" ]] && MISSING_ONLY=true
-done
+TOKEN_FILE=".garmin_token.json"
 
-: "${GARMIN_EMAIL:?GARMIN_EMAIL must be set}"
-: "${GARMIN_PASSWORD:?GARMIN_PASSWORD must be set}"
+args=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -m|--missing) MISSING_ONLY=true ;;
+        --token-file) TOKEN_FILE="$2"; shift ;;
+        *) args+=("$1") ;;
+    esac
+    shift
+done
+set -- "${args[@]+"${args[@]}"}"
 
 CASSETTE_DIR="garminconnect/tests/testdata/cassettes"
 DELAY=5   # seconds between tests to avoid Connect API rate-limiting
@@ -28,6 +37,7 @@ DELAY=5   # seconds between tests to avoid Connect API rate-limiting
 KEEP=(
     "activities_empty"
     "login_profile"
+    "login_sso"
 )
 
 keep() {
@@ -38,15 +48,29 @@ keep() {
     return 1
 }
 
-TOKEN_FILE=".garmin_token.json"
-
-echo "==> Logging in (once)..."
-token_line=$(go run ./tools/gettoken -token-file "$TOKEN_FILE")
-export GARMIN_TOKEN
-export GARMIN_DISPLAY_NAME
-GARMIN_TOKEN=$(printf '%s' "$token_line" | sed -n '1p')
-GARMIN_DISPLAY_NAME=$(printf '%s' "$token_line" | sed -n '2p')
-echo "    display_name=${GARMIN_DISPLAY_NAME}"
+# If GARMIN_TOKEN is already in the environment, use it directly.
+# Otherwise log in (gettoken reuses the cached token file if still valid,
+# so SSO is only hit when the cache is missing or expired).
+if [[ -n "${GARMIN_TOKEN:-}" ]]; then
+    echo "==> Using pre-set GARMIN_TOKEN (display_name=${GARMIN_DISPLAY_NAME:-<unset>})"
+    export GARMIN_TOKEN GARMIN_DISPLAY_NAME
+elif [[ -f "$TOKEN_FILE" ]]; then
+    echo "==> Loading token from $TOKEN_FILE (refreshing if expired)..."
+    token_line=$(go run ./tools/gettoken -token-file "$TOKEN_FILE")
+    export GARMIN_TOKEN GARMIN_DISPLAY_NAME
+    GARMIN_TOKEN=$(printf '%s' "$token_line" | sed -n '1p')
+    GARMIN_DISPLAY_NAME=$(printf '%s' "$token_line" | sed -n '2p')
+    echo "    display_name=${GARMIN_DISPLAY_NAME}"
+else
+    : "${GARMIN_EMAIL:?GARMIN_EMAIL must be set (or provide --token-file or pre-set GARMIN_TOKEN+GARMIN_DISPLAY_NAME)}"
+    : "${GARMIN_PASSWORD:?GARMIN_PASSWORD must be set (or provide --token-file or pre-set GARMIN_TOKEN+GARMIN_DISPLAY_NAME)}"
+    echo "==> Logging in (token cached at $TOKEN_FILE; SSO only if expired)..."
+    token_line=$(go run ./tools/gettoken -token-file "$TOKEN_FILE")
+    export GARMIN_TOKEN GARMIN_DISPLAY_NAME
+    GARMIN_TOKEN=$(printf '%s' "$token_line" | sed -n '1p')
+    GARMIN_DISPLAY_NAME=$(printf '%s' "$token_line" | sed -n '2p')
+    echo "    display_name=${GARMIN_DISPLAY_NAME}"
+fi
 
 echo ""
 if $MISSING_ONLY; then
@@ -67,6 +91,9 @@ fi
 
 # One test per unique cassette.
 # Tests that share a cassette with another test are omitted (they replay).
+# Pure unit tests (TestLogin_MFARequired, TestRefreshToken) need no cassette
+# and are not listed here — they run automatically with `go test ./...`.
+# TestLogin_SSO uses a hand-crafted synthetic cassette; omitted here.
 TESTS=(
     TestUserSummary
     TestAllDayStress

@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,6 +16,10 @@ interactions:
         url: https://connectapi.garmin.com/biometric-service/biometric/latestFunctionalThresholdPower/CYCLING
         method: GET
       response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
         body: '{"userProfilePK":12345678,"version":null,"calendarDate":null,"isStale":null,"sequence":null,"sport":null,"functionalThresholdPower":null,"biometricSourceType":null}'
         headers:
             Content-Type:

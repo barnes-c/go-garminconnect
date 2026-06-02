@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/device-service/deviceservice/mylastused
         method: GET
       response:
-        body: '{"userDeviceId":9876543210,"userProfileNumber":12345678,"applicationNumber":37086,"lastUsedDeviceApplicationKey":"forerunner965","lastUsedDeviceName":"Forerunner 965","lastUsedDeviceUploadTime":1778668874000,"imageUrl":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","released":true}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"userDeviceId":9876543210,"userProfileNumber":12345678,"applicationNumber":37086,"lastUsedDeviceApplicationKey":"forerunner965","lastUsedDeviceName":"Forerunner 965","lastUsedDeviceUploadTime":1780139737000,"imageUrl":"https://res.garmin.com/en/products/010-02809-10/v/c1_01_md.png","released":true}'
         headers:
             Content-Type:
                 - application/json

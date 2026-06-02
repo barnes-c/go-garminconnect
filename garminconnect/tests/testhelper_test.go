@@ -1,7 +1,9 @@
 package garminconnect_test
 
 import (
+	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -143,6 +145,79 @@ func normaliseURL(u *url.URL) string {
 	cp := *u
 	cp.RawQuery = cp.Query().Encode()
 	return cp.String()
+}
+
+// newAuthVCRClient returns a VCR-backed Client for auth flow tests.
+// Unlike newVCRClient, no token is pre-loaded so the full auth flow runs through
+// the cassette. Recording requires GARMIN_EMAIL and GARMIN_PASSWORD in env;
+// if the account has MFA, the user is prompted on stdin for the code.
+func newAuthVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
+	t.Helper()
+
+	cassettePath := "testdata/cassettes/" + cassetteName
+
+	needsRecording := false
+	if _, err := os.Stat(cassettePath + ".yaml"); os.IsNotExist(err) {
+		needsRecording = true
+	}
+
+	if needsRecording && (os.Getenv("GARMIN_EMAIL") == "" || os.Getenv("GARMIN_PASSWORD") == "") {
+		t.Skipf("cassette %q not found; set GARMIN_EMAIL and GARMIN_PASSWORD to record", cassetteName)
+	}
+
+	mode := recorder.ModeReplayWithNewEpisodes
+	if !needsRecording {
+		mode = recorder.ModeReplayOnly
+	}
+
+	opts := []recorder.Option{
+		recorder.WithMode(mode),
+		recorder.WithMatcher(func(req *http.Request, i cassette.Request) bool {
+			cu, err := url.Parse(i.URL)
+			if err != nil {
+				return false
+			}
+			return req.Method == i.Method && normaliseURL(req.URL) == normaliseURL(cu)
+		}),
+	}
+
+	// When recording, scrub Authorization headers before the cassette is saved.
+	// Request and response bodies still need sanitize_cassettes.py to clean
+	// passwords, tokens, and tickets.
+	if needsRecording {
+		opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
+			i.Request.Headers.Del("Authorization")
+			return nil
+		}, recorder.BeforeSaveHook))
+	}
+
+	r, err := recorder.New(cassettePath, opts...)
+	if err != nil {
+		t.Fatalf("recorder.New: %v", err)
+	}
+
+	clientOpts := []gc.Option{gc.WithHTTPClient(&http.Client{Transport: r})}
+	if needsRecording {
+		clientOpts = append(clientOpts, gc.WithMFAPrompt(func() (string, error) {
+			fmt.Fprint(os.Stderr, "Enter Garmin MFA code: ")
+			line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+			if err != nil {
+				return "", err
+			}
+			return strings.TrimSpace(line), nil
+		}))
+	} else {
+		clientOpts = append(clientOpts, gc.WithMFAPrompt(func() (string, error) {
+			return "123456", nil
+		}))
+	}
+
+	c := gc.NewClient("", clientOpts...)
+	return c, func() {
+		if err := r.Stop(); err != nil {
+			t.Errorf("recorder.Stop: %v", err)
+		}
+	}
 }
 
 // skipAPIError calls t.Skip when err signals a non-2xx response captured in the

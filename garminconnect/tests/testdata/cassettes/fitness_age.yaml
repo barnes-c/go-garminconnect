@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/fitnessage-service/fitnessage/2026-01-01
         method: GET
       response:
-        body: '{"chronologicalAge":26,"fitnessAge":21,"achievableFitnessAge":18.0,"previousFitnessAge":21,"components":{"vigorousDaysAvg":{"value":1.1,"targetValue":3,"potentialAge":21,"priority":3,"stale":false,"numOfWeeksForIm":6},"rhr":{"value":49,"stale":false},"vigorousMinutesAvg":{"value":57.0,"targetValue":75,"potentialAge":21,"priority":2,"stale":false,"numOfWeeksForIm":6},"bmi":{"value":24.7,"targetValue":20.7,"improvementValue":4.0,"potentialAge":18,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-01"}},"lastUpdated":"2026-01-01T00:00:00"}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"chronologicalAge":25,"fitnessAge":19,"achievableFitnessAge":18.0,"previousFitnessAge":19,"components":{"vigorousDaysAvg":{"value":1.3,"targetValue":3,"potentialAge":20,"priority":3,"stale":false,"numOfWeeksForIm":6},"rhr":{"value":49,"stale":false},"vigorousMinutesAvg":{"value":49.3,"targetValue":75,"potentialAge":20,"priority":2,"stale":false,"numOfWeeksForIm":6},"bmi":{"value":24.3,"targetValue":20.7,"improvementValue":3.7,"potentialAge":18.0,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-01"}},"lastUpdated":"2026-01-01T00:00:00"}'
         headers:
             Content-Type:
                 - application/json

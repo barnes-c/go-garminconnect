@@ -1,9 +1,16 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        form:
+            calendarDate:
+                - "2026-01-01"
         headers:
             Accept:
                 - application/json
@@ -12,7 +19,11 @@ interactions:
         url: https://connectapi.garmin.com/weight-service/weight/dayview/2026-01-01?calendarDate=2026-01-01
         method: GET
       response:
-        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[],"totalAverage":{"from":1778371200000,"until":1000000000006,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[],"totalAverage":{"from":1767225600000,"until":1767311999999,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
         headers:
             Content-Type:
                 - application/json

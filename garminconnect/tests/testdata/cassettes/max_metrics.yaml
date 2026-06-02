@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/maxmet/daily/2025-12-01/2026-01-01
         method: GET
       response:
-        body: '[{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":450,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}},{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":52.4,"vo2MaxValue":52.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":452,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}}]'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '[{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":54.7,"vo2MaxValue":55.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":453,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}},{"userId":12345678,"generic":{"calendarDate":"2026-01-01","vo2MaxPreciseValue":54.5,"vo2MaxValue":55.0,"fitnessAge":null,"fitnessAgeDescription":null,"maxMetCategory":0},"cycling":null,"heatAltitudeAcclimation":{"calendarDate":"2026-01-01","altitudeAcclimationDate":"2026-01-01","previousAltitudeAcclimationDate":"2026-01-01","heatAcclimationDate":"2026-01-01","previousHeatAcclimationDate":"2026-01-01","altitudeAcclimation":0,"previousAltitudeAcclimation":0,"heatAcclimationPercentage":0,"previousHeatAcclimationPercentage":0,"heatTrend":null,"altitudeTrend":null,"currentAltitude":451,"previousAltitude":0,"acclimationPercentage":0,"previousAcclimationPercentage":0,"altitudeAcclimationLocalTimestamp":"2026-01-01T00:00:00"}}]'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8

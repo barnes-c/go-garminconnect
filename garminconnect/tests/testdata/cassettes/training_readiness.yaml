@@ -1,9 +1,13 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
         headers:
             Accept:
                 - application/json
@@ -12,7 +16,11 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/trainingreadiness/2026-01-01
         method: GET
       response:
-        body: '[{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":9876543210,"level":"HIGH","feedbackLong":"HIGH_RT_HIGHEST_SS_AVAILABLE_ACWR_POS","feedbackShort":"EXCELLENT_RECOVERY","score":76,"sleepScore":61,"sleepScoreFactorPercent":41,"sleepScoreFactorFeedback":"MODERATE","recoveryTime":1,"recoveryTimeFactorPercent":99,"recoveryTimeFactorFeedback":"GOOD","acwrFactorPercent":100,"acwrFactorFeedback":"VERY_GOOD","acuteLoad":27,"stressHistoryFactorPercent":75,"stressHistoryFactorFeedback":"GOOD","hrvFactorPercent":85,"hrvFactorFeedback":"GOOD","hrvWeeklyAverage":71,"sleepHistoryFactorPercent":90,"sleepHistoryFactorFeedback":"VERY_GOOD","validSleep":true,"inputContext":"AFTER_WAKEUP_RESET","primaryActivityTracker":true,"recoveryTimeChangePhrase":"NO_CHANGE_SLEEP"},{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":9876543210,"level":"HIGH","feedbackLong":"HIGH_RT_AVAILABLE_SS_UNKNOWN_ACWR_POS","feedbackShort":"WELL_RECOVERED","score":94,"sleepScore":null,"sleepScoreFactorPercent":0,"sleepScoreFactorFeedback":"NONE","recoveryTime":0,"recoveryTimeFactorPercent":100,"recoveryTimeFactorFeedback":"VERY_GOOD","acwrFactorPercent":100,"acwrFactorFeedback":"VERY_GOOD","acuteLoad":38,"stressHistoryFactorPercent":82,"stressHistoryFactorFeedback":"GOOD","hrvFactorPercent":88,"hrvFactorFeedback":"GOOD","hrvWeeklyAverage":68,"sleepHistoryFactorPercent":90,"sleepHistoryFactorFeedback":"VERY_GOOD","validSleep":false,"inputContext":"UPDATE_REALTIME_VARIABLES","primaryActivityTracker":true,"recoveryTimeChangePhrase":null}]'
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: -1
+        body: '[{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":9876543210,"level":"MODERATE","feedbackLong":"UNKNOWN","feedbackShort":"UNKNOWN","score":64,"sleepScore":null,"sleepScoreFactorPercent":0,"sleepScoreFactorFeedback":"NONE","recoveryTime":0,"recoveryTimeFactorPercent":100,"recoveryTimeFactorFeedback":"VERY_GOOD","acwrFactorPercent":100,"acwrFactorFeedback":"VERY_GOOD","acuteLoad":174,"stressHistoryFactorPercent":0,"stressHistoryFactorFeedback":"NONE","hrvFactorPercent":95,"hrvFactorFeedback":"GOOD","hrvWeeklyAverage":61,"sleepHistoryFactorPercent":74,"sleepHistoryFactorFeedback":"GOOD","validSleep":false,"inputContext":"UPDATE_REALTIME_VARIABLES","primaryActivityTracker":true,"recoveryTimeChangePhrase":null},{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":9876543210,"level":"HIGH","feedbackLong":"HIGH_RT_AVAILABLE_SS_UNKNOWN","feedbackShort":"WELL_RECOVERED","score":79,"sleepScore":null,"sleepScoreFactorPercent":0,"sleepScoreFactorFeedback":"NONE","recoveryTime":1,"recoveryTimeFactorPercent":99,"recoveryTimeFactorFeedback":"GOOD","acwrFactorPercent":100,"acwrFactorFeedback":"VERY_GOOD","acuteLoad":174,"stressHistoryFactorPercent":0,"stressHistoryFactorFeedback":"NONE","hrvFactorPercent":95,"hrvFactorFeedback":"GOOD","hrvWeeklyAverage":61,"sleepHistoryFactorPercent":74,"sleepHistoryFactorFeedback":"GOOD","validSleep":false,"inputContext":"AFTER_WAKEUP_RESET","primaryActivityTracker":true,"recoveryTimeChangePhrase":null},{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":9876543210,"level":"HIGH","feedbackLong":"HIGH_RT_AVAILABLE_SS_UNKNOWN","feedbackShort":"WELL_RECOVERED","score":77,"sleepScore":null,"sleepScoreFactorPercent":0,"sleepScoreFactorFeedback":"NONE","recoveryTime":152,"recoveryTimeFactorPercent":96,"recoveryTimeFactorFeedback":"GOOD","acwrFactorPercent":100,"acwrFactorFeedback":"VERY_GOOD","acuteLoad":197,"stressHistoryFactorPercent":0,"stressHistoryFactorFeedback":"NONE","hrvFactorPercent":95,"hrvFactorFeedback":"GOOD","hrvWeeklyAverage":62,"sleepHistoryFactorPercent":74,"sleepHistoryFactorFeedback":"GOOD","validSleep":false,"inputContext":"UPDATE_REALTIME_VARIABLES","primaryActivityTracker":true,"recoveryTimeChangePhrase":null}]'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8

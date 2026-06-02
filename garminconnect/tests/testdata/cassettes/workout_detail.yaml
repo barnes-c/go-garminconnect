@@ -1,9 +1,18 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        form:
+            limit:
+                - "1"
+            start:
+                - "0"
         headers:
             Accept:
                 - application/json
@@ -12,10 +21,12 @@ interactions:
         url: https://connectapi.garmin.com/workout-service/workouts?limit=1&start=0
         method: GET
       response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 2
         body: '[]'
         headers:
-            Content-Length:
-                - "2"
             Content-Type:
                 - application/json
         status: 200 OK

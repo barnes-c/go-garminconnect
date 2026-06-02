@@ -1,9 +1,20 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        form:
+            limit:
+                - "10"
+            start:
+                - "0"
+            status:
+                - active
         headers:
             Accept:
                 - application/json
@@ -12,10 +23,12 @@ interactions:
         url: https://connectapi.garmin.com/goal-service/goal/goals?limit=10&start=0&status=active
         method: GET
       response:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 2
         body: '[]'
         headers:
-            Content-Length:
-                - "2"
             Content-Type:
                 - application/json;charset=UTF-8
         status: 200 OK
