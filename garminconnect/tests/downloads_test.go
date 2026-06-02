@@ -35,7 +35,7 @@ func TestDownloadActivity_URLFormats(t *testing.T) {
 			}))
 			c := newServerClient(t, srv)
 
-			_, err := c.DownloadActivity(42, tc.format)
+			_, err := c.DownloadActivity(t.Context(), 42, tc.format)
 			require.NoError(t, err)
 			assert.Equal(t, tc.wantURL, gotPath)
 		})
@@ -49,7 +49,7 @@ func TestDownloadActivity_ReturnsBody(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	got, err := c.DownloadActivity(1, gc.FormatOriginal)
+	got, err := c.DownloadActivity(t.Context(), 1, gc.FormatOriginal)
 	require.NoError(t, err)
 	assert.Equal(t, body, got)
 }
@@ -60,7 +60,7 @@ func TestDownloadActivity_Unauthorized(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	_, err := c.DownloadActivity(1, gc.FormatOriginal)
+	_, err := c.DownloadActivity(t.Context(), 1, gc.FormatOriginal)
 	assert.ErrorIs(t, err, gc.ErrUnauthorized)
 }
 
@@ -72,7 +72,7 @@ func TestDownloadWorkout(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	got, err := c.DownloadWorkout(99)
+	got, err := c.DownloadWorkout(t.Context(), 99)
 	require.NoError(t, err)
 	assert.Equal(t, body, got)
 }
@@ -84,6 +84,6 @@ func TestDownloadActivity_BearerToken(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	_, err := c.DownloadActivity(1, gc.FormatGPX)
+	_, err := c.DownloadActivity(t.Context(), 1, gc.FormatGPX)
 	require.NoError(t, err)
 }

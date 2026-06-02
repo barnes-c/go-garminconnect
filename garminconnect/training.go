@@ -1,6 +1,7 @@
 package garminconnect
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -77,9 +78,9 @@ type HillScoreEntry struct {
 
 // TrainingReadiness returns the training readiness scores for the given date.
 // The API returns an array (typically after-wakeup and realtime entries).
-func (c *Client) TrainingReadiness(d time.Time) ([]TrainingReadiness, error) {
+func (c *Client) TrainingReadiness(ctx context.Context, d time.Time) ([]TrainingReadiness, error) {
 	var out []TrainingReadiness
-	if err := c.get(fmt.Sprintf("/metrics-service/metrics/trainingreadiness/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/metrics-service/metrics/trainingreadiness/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -151,55 +152,55 @@ type AcuteTrainingLoad struct {
 }
 
 // TrainingStatus returns training status metrics for the given date.
-func (c *Client) TrainingStatus(d time.Time) (*TrainingStatusResponse, error) {
+func (c *Client) TrainingStatus(ctx context.Context, d time.Time) (*TrainingStatusResponse, error) {
 	var out TrainingStatusResponse
-	if err := c.get(fmt.Sprintf("/metrics-service/metrics/trainingstatus/aggregated/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/metrics-service/metrics/trainingstatus/aggregated/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // MaxMetrics returns VO2 Max metrics between start and end dates.
-func (c *Client) MaxMetrics(start, end time.Time) ([]MaxMetricsEntry, error) {
+func (c *Client) MaxMetrics(ctx context.Context, start, end time.Time) ([]MaxMetricsEntry, error) {
 	var out []MaxMetricsEntry
-	if err := c.get(fmt.Sprintf("/metrics-service/metrics/maxmet/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/metrics-service/metrics/maxmet/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // EnduranceScore returns endurance score data between start and end dates.
-func (c *Client) EnduranceScore(start, end time.Time) (json.RawMessage, error) {
+func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"weekly"},
 	}
 	var out json.RawMessage
-	if err := c.get("/metrics-service/metrics/endurancescore/stats", params, &out); err != nil {
+	if err := c.get(ctx, "/metrics-service/metrics/endurancescore/stats", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // RacePredictions returns the latest predicted finish times for the user.
-func (c *Client) RacePredictions() (*LatestRacePredictions, error) {
+func (c *Client) RacePredictions(ctx context.Context) (*LatestRacePredictions, error) {
 	var out LatestRacePredictions
-	if err := c.get(fmt.Sprintf("/metrics-service/metrics/racepredictions/latest/%s", c.displayName), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/metrics-service/metrics/racepredictions/latest/%s", c.displayName), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // HillScore returns hill score data between start and end dates.
-func (c *Client) HillScore(start, end time.Time) (json.RawMessage, error) {
+func (c *Client) HillScore(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"daily"},
 	}
 	var out json.RawMessage
-	if err := c.get("/metrics-service/metrics/hillscore/stats", params, &out); err != nil {
+	if err := c.get(ctx, "/metrics-service/metrics/hillscore/stats", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -218,18 +219,18 @@ type LactateThresholdEntry struct {
 }
 
 // LactateThreshold returns the latest lactate threshold measurement.
-func (c *Client) LactateThreshold() ([]LactateThresholdEntry, error) {
+func (c *Client) LactateThreshold(ctx context.Context) ([]LactateThresholdEntry, error) {
 	var out []LactateThresholdEntry
-	if err := c.get("/biometric-service/biometric/latestLactateThreshold", nil, &out); err != nil {
+	if err := c.get(ctx, "/biometric-service/biometric/latestLactateThreshold", nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // FitnessAge returns fitness age data for the given date.
-func (c *Client) FitnessAge(d time.Time) (map[string]json.RawMessage, error) {
+func (c *Client) FitnessAge(ctx context.Context, d time.Time) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/fitnessage-service/fitnessage/%s", date(d)), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/fitnessage-service/fitnessage/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -244,23 +245,23 @@ type RunningToleranceEntry struct {
 }
 
 // RunningTolerance returns running tolerance statistics between start and end dates.
-func (c *Client) RunningTolerance(start, end time.Time) ([]RunningToleranceEntry, error) {
+func (c *Client) RunningTolerance(ctx context.Context, start, end time.Time) ([]RunningToleranceEntry, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"daily"},
 	}
 	var out []RunningToleranceEntry
-	if err := c.get("/metrics-service/metrics/runningtolerance/stats", params, &out); err != nil {
+	if err := c.get(ctx, "/metrics-service/metrics/runningtolerance/stats", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // CyclingFTP returns the latest cycling FTP (functional threshold power) estimate.
-func (c *Client) CyclingFTP() (map[string]json.RawMessage, error) {
+func (c *Client) CyclingFTP(ctx context.Context) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get("/biometric-service/biometric/latestFunctionalThresholdPower/CYCLING", nil, &out); err != nil {
+	if err := c.get(ctx, "/biometric-service/biometric/latestFunctionalThresholdPower/CYCLING", nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil

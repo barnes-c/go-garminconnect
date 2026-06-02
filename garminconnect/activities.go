@@ -1,6 +1,7 @@
 package garminconnect
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -88,13 +89,13 @@ type PowerZone struct {
 }
 
 // Activities returns the most recent limit activities.
-func (c *Client) Activities(limit int) ([]Activity, error) {
+func (c *Client) Activities(ctx context.Context, limit int) ([]Activity, error) {
 	params := url.Values{
 		"start": {"0"},
 		"limit": {fmt.Sprintf("%d", limit)},
 	}
 	var out []Activity
-	if err := c.get("/activitylist-service/activities/search/activities", params, &out); err != nil {
+	if err := c.get(ctx, "/activitylist-service/activities/search/activities", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -103,7 +104,7 @@ func (c *Client) Activities(limit int) ([]Activity, error) {
 // ActivitiesByDate returns activities between start and end dates, optionally
 // filtered by activity type key (e.g. "running", "cycling"). Pass an empty
 // string for activityType to return all types.
-func (c *Client) ActivitiesByDate(start, end time.Time, activityType string) ([]Activity, error) {
+func (c *Client) ActivitiesByDate(ctx context.Context, start, end time.Time, activityType string) ([]Activity, error) {
 	params := url.Values{
 		"startDate": {date(start)},
 		"endDate":   {date(end)},
@@ -114,15 +115,15 @@ func (c *Client) ActivitiesByDate(start, end time.Time, activityType string) ([]
 		params.Set("activityType", activityType)
 	}
 	var out []Activity
-	if err := c.get("/activitylist-service/activities/search/activities", params, &out); err != nil {
+	if err := c.get(ctx, "/activitylist-service/activities/search/activities", params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // LastActivity returns the single most recent activity.
-func (c *Client) LastActivity() (*Activity, error) {
-	acts, err := c.Activities(1)
+func (c *Client) LastActivity(ctx context.Context) (*Activity, error) {
+	acts, err := c.Activities(ctx, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -134,108 +135,108 @@ func (c *Client) LastActivity() (*Activity, error) {
 
 // ActivityDetail returns the full detail for a single activity. The response
 // structure varies by activity type, so the raw JSON is returned as a map.
-func (c *Client) ActivityDetail(id int64) (map[string]json.RawMessage, error) {
+func (c *Client) ActivityDetail(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivityExerciseSets returns strength training exercise sets for an activity.
-func (c *Client) ActivityExerciseSets(id int64) (map[string]json.RawMessage, error) {
+func (c *Client) ActivityExerciseSets(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/exerciseSets", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/exerciseSets", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivityWeather returns the weather recorded during an activity.
-func (c *Client) ActivityWeather(id int64) (map[string]json.RawMessage, error) {
+func (c *Client) ActivityWeather(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/weather", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/weather", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // PersonalRecords returns personal records for the authenticated user.
-func (c *Client) PersonalRecords() ([]PersonalRecord, error) {
+func (c *Client) PersonalRecords(ctx context.Context) ([]PersonalRecord, error) {
 	var out []PersonalRecord
-	if err := c.get(fmt.Sprintf("/personalrecord-service/personalrecord/prs/%s", c.displayName), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/personalrecord-service/personalrecord/prs/%s", c.displayName), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivityCount returns the total number of activities for the authenticated user.
-func (c *Client) ActivityCount() (int, error) {
+func (c *Client) ActivityCount(ctx context.Context) (int, error) {
 	var out struct {
 		Count int `json:"totalCount"`
 	}
-	if err := c.get("/activitylist-service/activities/count", nil, &out); err != nil {
+	if err := c.get(ctx, "/activitylist-service/activities/count", nil, &out); err != nil {
 		return 0, err
 	}
 	return out.Count, nil
 }
 
 // ActivitySplits returns lap/split summaries for the given activity.
-func (c *Client) ActivitySplits(id int64) (*SplitsResponse, error) {
+func (c *Client) ActivitySplits(ctx context.Context, id int64) (*SplitsResponse, error) {
 	var out SplitsResponse
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/splits", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/splits", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
 }
 
 // ActivityTypedSplits returns typed split data (varies by sport type).
-func (c *Client) ActivityTypedSplits(id int64) (map[string]json.RawMessage, error) {
+func (c *Client) ActivityTypedSplits(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/typedsplits", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/typedsplits", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivitySplitSummaries returns split summary statistics for the given activity.
-func (c *Client) ActivitySplitSummaries(id int64) (map[string]json.RawMessage, error) {
+func (c *Client) ActivitySplitSummaries(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/split_summaries", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/split_summaries", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivityHRZones returns time spent in each heart rate zone for the given activity.
-func (c *Client) ActivityHRZones(id int64) ([]HRZone, error) {
+func (c *Client) ActivityHRZones(ctx context.Context, id int64) ([]HRZone, error) {
 	var out []HRZone
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/hrTimeInZones", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/hrTimeInZones", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // ActivityPowerZones returns time spent in each power zone for the given activity.
-func (c *Client) ActivityPowerZones(id int64) ([]PowerZone, error) {
+func (c *Client) ActivityPowerZones(ctx context.Context, id int64) ([]PowerZone, error) {
 	var out []PowerZone
-	if err := c.get(fmt.Sprintf("/activity-service/activity/%d/powerTimeInZones", id), nil, &out); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/powerTimeInZones", id), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
 // SetActivityName renames the given activity.
-func (c *Client) SetActivityName(id int64, name string) error {
-	return c.put(fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+func (c *Client) SetActivityName(ctx context.Context, id int64, name string) error {
+	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
 		"activityId":   id,
 		"activityName": name,
 	}, nil)
 }
 
 // SetActivityType changes the sport type of the given activity.
-func (c *Client) SetActivityType(id, typeID, parentTypeID int64, typeKey string) error {
-	return c.put(fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+func (c *Client) SetActivityType(ctx context.Context, id, typeID, parentTypeID int64, typeKey string) error {
+	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
 		"activityId": id,
 		"activityType": map[string]any{
 			"typeId":       typeID,
@@ -246,8 +247,8 @@ func (c *Client) SetActivityType(id, typeID, parentTypeID int64, typeKey string)
 }
 
 // DeleteActivity permanently deletes the given activity.
-func (c *Client) DeleteActivity(id int64) error {
-	return c.del(fmt.Sprintf("/activity-service/activity/%d", id))
+func (c *Client) DeleteActivity(ctx context.Context, id int64) error {
+	return c.del(ctx, fmt.Sprintf("/activity-service/activity/%d", id))
 }
 
 // DownloadFormat selects the file format for activity downloads.
@@ -263,25 +264,25 @@ const (
 
 // DownloadActivity returns the raw bytes of an activity file. FormatOriginal
 // returns the device-native FIT file; other formats are server-converted.
-func (c *Client) DownloadActivity(id int64, format DownloadFormat) ([]byte, error) {
+func (c *Client) DownloadActivity(ctx context.Context, id int64, format DownloadFormat) ([]byte, error) {
 	var path string
 	if format == FormatOriginal {
 		path = fmt.Sprintf("/download-service/files/activity/%d", id)
 	} else {
 		path = fmt.Sprintf("/download-service/export/%s/activity/%d", format, id)
 	}
-	return c.getBytes(path, nil)
+	return c.getBytes(ctx, path, nil)
 }
 
 // UploadActivity uploads a FIT, GPX, or TCX file and returns the server response.
 // The filename extension determines the format (.fit, .gpx, .tcx).
-func (c *Client) UploadActivity(data []byte, filename string) (map[string]json.RawMessage, error) {
+func (c *Client) UploadActivity(ctx context.Context, data []byte, filename string) (map[string]json.RawMessage, error) {
 	ext := filepath.Ext(filename)
 	if ext == "" {
 		return nil, fmt.Errorf("filename must include an extension (.fit, .gpx, or .tcx)")
 	}
 	var out map[string]json.RawMessage
-	if err := c.upload("/upload-service/upload"+ext, data, filename, &out); err != nil {
+	if err := c.upload(ctx, "/upload-service/upload"+ext, data, filename, &out); err != nil {
 		return nil, err
 	}
 	return out, nil

@@ -31,6 +31,6 @@ func TestLogin_FetchesProfile(t *testing.T) {
 		gc.WithToken("test"),
 	)
 
-	require.NoError(t, c.Login("", ""))
+	require.NoError(t, c.Login(t.Context(), "", ""))
 	assert.Equal(t, "testuser", c.DisplayName())
 }

@@ -23,7 +23,7 @@ func TestSetActivityName(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.SetActivityName(7, "Morning Run")
+	err := c.SetActivityName(t.Context(), 7, "Morning Run")
 	require.NoError(t, err)
 }
 
@@ -35,7 +35,7 @@ func TestDeleteActivity(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.DeleteActivity(42)
+	err := c.DeleteActivity(t.Context(), 42)
 	require.NoError(t, err)
 }
 
@@ -53,7 +53,7 @@ func TestAddWeighIn(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	out, err := c.AddWeighIn(75.5, "kg", "2026-05-10T08:00:00Z")
+	out, err := c.AddWeighIn(t.Context(), 75.5, "kg", "2026-05-10T08:00:00Z")
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -66,7 +66,7 @@ func TestDeleteWeighIn(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.DeleteWeighIn("2026-05-10", 12345)
+	err := c.DeleteWeighIn(t.Context(), "2026-05-10", 12345)
 	require.NoError(t, err)
 }
 
@@ -82,7 +82,7 @@ func TestScheduleWorkout(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	out, err := c.ScheduleWorkout(55, "2026-05-15")
+	out, err := c.ScheduleWorkout(t.Context(), 55, "2026-05-15")
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -95,7 +95,7 @@ func TestDeleteWorkout(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.DeleteWorkout(77)
+	err := c.DeleteWorkout(t.Context(), 77)
 	require.NoError(t, err)
 }
 
@@ -111,7 +111,7 @@ func TestSetActivityType(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.SetActivityType(10, 1, 0, "running")
+	err := c.SetActivityType(t.Context(), 10, 1, 0, "running")
 	require.NoError(t, err)
 }
 
@@ -123,7 +123,7 @@ func TestUnscheduleWorkout(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.UnscheduleWorkout(200)
+	err := c.UnscheduleWorkout(t.Context(), 200)
 	require.NoError(t, err)
 }
 
@@ -137,6 +137,6 @@ func TestSetActivityName_BearerToken(t *testing.T) {
 	}))
 	c := newServerClient(t, srv)
 
-	err := c.SetActivityName(1, "test")
+	err := c.SetActivityName(t.Context(), 1, "test")
 	require.NoError(t, err)
 }

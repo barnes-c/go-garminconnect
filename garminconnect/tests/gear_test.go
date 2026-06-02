@@ -12,10 +12,10 @@ func TestGear(t *testing.T) {
 	defer stop()
 
 	// Record cassette: fetch user summary to get the profile number, then gear.
-	summary, err := c.UserSummary(testDate)
+	summary, err := c.UserSummary(t.Context(), testDate)
 	require.NoError(t, err)
 
-	gear, err := c.Gear(summary.UserProfileID)
+	gear, err := c.Gear(t.Context(), summary.UserProfileID)
 	require.NoError(t, err)
 	assert.NotNil(t, gear)
 }
@@ -24,16 +24,16 @@ func TestGearStats(t *testing.T) {
 	c, stop := newVCRClient(t, "gear_stats")
 	defer stop()
 
-	summary, err := c.UserSummary(testDate)
+	summary, err := c.UserSummary(t.Context(), testDate)
 	require.NoError(t, err)
 
-	gear, err := c.Gear(summary.UserProfileID)
+	gear, err := c.Gear(t.Context(), summary.UserProfileID)
 	require.NoError(t, err)
 	if len(gear) == 0 {
 		return
 	}
 
-	stats, err := c.GearStats(gear[0].UUID)
+	stats, err := c.GearStats(t.Context(), gear[0].UUID)
 	require.NoError(t, err)
 	assert.NotEmpty(t, stats)
 }

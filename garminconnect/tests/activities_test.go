@@ -14,7 +14,7 @@ func TestActivities(t *testing.T) {
 	c, stop := newVCRClient(t, "activities")
 	defer stop()
 
-	acts, err := c.Activities(2)
+	acts, err := c.Activities(t.Context(), 2)
 	require.NoError(t, err)
 	require.Len(t, acts, 2)
 
@@ -38,7 +38,7 @@ func TestLastActivity(t *testing.T) {
 
 	// LastActivity uses limit=1 internally, but we reuse the activities cassette
 	// which returns 2. Stub it separately so we control the limit parameter.
-	acts, err := c.Activities(2)
+	acts, err := c.Activities(t.Context(), 2)
 	require.NoError(t, err)
 	assert.NotZero(t, acts[0].ActivityID)
 }
@@ -48,11 +48,11 @@ func TestActivityDetail(t *testing.T) {
 	defer stop()
 
 	// Record cassette: fetch the most recent activity to get a real ID.
-	acts, err := c.Activities(1)
+	acts, err := c.Activities(t.Context(), 1)
 	require.NoError(t, err)
 	require.NotEmpty(t, acts)
 
-	detail, err := c.ActivityDetail(acts[0].ActivityID)
+	detail, err := c.ActivityDetail(t.Context(), acts[0].ActivityID)
 	require.NoError(t, err)
 	assert.NotEmpty(t, detail)
 }
@@ -61,7 +61,7 @@ func TestActivityCount(t *testing.T) {
 	c, stop := newVCRClient(t, "activity_count")
 	defer stop()
 
-	count, err := c.ActivityCount()
+	count, err := c.ActivityCount(t.Context())
 	require.NoError(t, err)
 	assert.Positive(t, count)
 }
@@ -71,7 +71,7 @@ func TestActivitiesByDate(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
-	acts, err := c.ActivitiesByDate(start, testDate, "")
+	acts, err := c.ActivitiesByDate(t.Context(), start, testDate, "")
 	require.NoError(t, err)
 	assert.NotNil(t, acts)
 }
@@ -80,7 +80,7 @@ func TestPersonalRecords(t *testing.T) {
 	c, stop := newVCRClient(t, "personal_records")
 	defer stop()
 
-	prs, err := c.PersonalRecords()
+	prs, err := c.PersonalRecords(t.Context())
 	require.NoError(t, err)
 	assert.NotEmpty(t, prs)
 }
@@ -89,7 +89,7 @@ func TestIntensityMinutes(t *testing.T) {
 	c, stop := newVCRClient(t, "intensity_minutes")
 	defer stop()
 
-	out, err := c.IntensityMinutes(testDate)
+	out, err := c.IntensityMinutes(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, out)

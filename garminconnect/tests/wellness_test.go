@@ -11,7 +11,7 @@ func TestUserSummary(t *testing.T) {
 	c, stop := newVCRClient(t, "user_summary")
 	defer stop()
 
-	s, err := c.UserSummary(testDate)
+	s, err := c.UserSummary(t.Context(), testDate)
 	require.NoError(t, err)
 
 	assert.NotZero(t, s.UserProfileID)
@@ -22,7 +22,7 @@ func TestAllDayStress(t *testing.T) {
 	c, stop := newVCRClient(t, "all_day_stress")
 	defer stop()
 
-	s, err := c.AllDayStress(testDate)
+	s, err := c.AllDayStress(t.Context(), testDate)
 	require.NoError(t, err)
 
 	assert.NotZero(t, s.UserProfilePK)
@@ -33,7 +33,7 @@ func TestBodyBattery(t *testing.T) {
 	c, stop := newVCRClient(t, "body_battery")
 	defer stop()
 
-	entries, err := c.BodyBattery(testDate, testDate)
+	entries, err := c.BodyBattery(t.Context(), testDate, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, entries)
@@ -43,7 +43,7 @@ func TestFloors(t *testing.T) {
 	c, stop := newVCRClient(t, "floors")
 	defer stop()
 
-	f, err := c.Floors(testDate)
+	f, err := c.Floors(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, f)
@@ -53,7 +53,7 @@ func TestHydration(t *testing.T) {
 	c, stop := newVCRClient(t, "hydration")
 	defer stop()
 
-	h, err := c.Hydration(testDate)
+	h, err := c.Hydration(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, h)
@@ -63,7 +63,7 @@ func TestRespiration(t *testing.T) {
 	c, stop := newVCRClient(t, "respiration")
 	defer stop()
 
-	r, err := c.Respiration(testDate)
+	r, err := c.Respiration(t.Context(), testDate)
 	require.NoError(t, err)
 
 	if r.TodayAvgWakingRespirationValue == 0 {
@@ -79,7 +79,7 @@ func TestSpO2(t *testing.T) {
 	c, stop := newVCRClient(t, "spo2")
 	defer stop()
 
-	s, err := c.SpO2(testDate)
+	s, err := c.SpO2(t.Context(), testDate)
 	require.NoError(t, err)
 
 	if s.AverageSpO2 == 0 {
@@ -95,7 +95,7 @@ func TestSteps(t *testing.T) {
 	c, stop := newVCRClient(t, "steps")
 	defer stop()
 
-	steps, err := c.Steps(testDate)
+	steps, err := c.Steps(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, steps)
@@ -106,7 +106,7 @@ func TestRestingHeartRate(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
-	out, err := c.RestingHeartRate(start, testDate)
+	out, err := c.RestingHeartRate(t.Context(), start, testDate)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -116,7 +116,7 @@ func TestDailySteps(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, 0, -7)
-	entries, err := c.DailySteps(start, testDate)
+	entries, err := c.DailySteps(t.Context(), start, testDate)
 	require.NoError(t, err)
 	assert.NotEmpty(t, entries)
 }
@@ -125,7 +125,7 @@ func TestWeeklyStress(t *testing.T) {
 	c, stop := newVCRClient(t, "weekly_stress")
 	defer stop()
 
-	out, err := c.WeeklyStress(testDate, 4)
+	out, err := c.WeeklyStress(t.Context(), testDate, 4)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -135,7 +135,7 @@ func TestWeeklyIntensityMinutes(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, 0, -7)
-	out, err := c.WeeklyIntensityMinutes(start, testDate)
+	out, err := c.WeeklyIntensityMinutes(t.Context(), start, testDate)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
@@ -145,7 +145,7 @@ func TestBloodPressure(t *testing.T) {
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
-	out, err := c.BloodPressure(start, testDate)
+	out, err := c.BloodPressure(t.Context(), start, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, out)

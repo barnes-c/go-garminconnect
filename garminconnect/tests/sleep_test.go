@@ -11,7 +11,7 @@ func TestSleepData(t *testing.T) {
 	c, stop := newVCRClient(t, "sleep_data")
 	defer stop()
 
-	s, err := c.SleepData(testDate)
+	s, err := c.SleepData(t.Context(), testDate)
 	require.NoError(t, err)
 
 	assert.NotEmpty(t, s.DailySleepDTO.CalendarDate)
@@ -29,7 +29,7 @@ func TestHRVData(t *testing.T) {
 	c, stop := newVCRClient(t, "hrv_data")
 	defer stop()
 
-	h, err := c.HRVData(testDate)
+	h, err := c.HRVData(t.Context(), testDate)
 	require.NoError(t, err)
 
 	assert.NotZero(t, h.HRVSummary.WeeklyAvg)

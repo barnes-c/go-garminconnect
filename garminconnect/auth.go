@@ -2,6 +2,7 @@ package garminconnect
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -42,14 +43,14 @@ func (t *diToken) valid() bool {
 // Login ensures the client has a valid token, then fetches the user profile.
 // It loads from disk, refreshes if needed, or performs a full SSO login as a
 // last resort.
-func (c *Client) Login(username, password string) error {
-	if err := c.ensureToken(username, password); err != nil {
+func (c *Client) Login(ctx context.Context, username, password string) error {
+	if err := c.ensureToken(ctx, username, password); err != nil {
 		return err
 	}
-	return c.fetchProfile()
+	return c.fetchProfile(ctx)
 }
 
-func (c *Client) ensureToken(username, password string) error {
+func (c *Client) ensureToken(ctx context.Context, username, password string) error {
 	if c.token.valid() {
 		return nil
 	}
@@ -59,12 +60,12 @@ func (c *Client) ensureToken(username, password string) error {
 			return nil
 		}
 		if tok.RefreshToken != "" {
-			if err := c.refreshToken(tok); err == nil {
+			if err := c.refreshToken(ctx, tok); err == nil {
 				return nil
 			}
 		}
 	}
-	return c.ssoLogin(username, password)
+	return c.ssoLogin(ctx, username, password)
 }
 
 func (c *Client) loadToken() (*diToken, error) {
@@ -109,7 +110,7 @@ func (c *Client) ssoQueryParams() string {
 		ssoClientID, url.QueryEscape(ssoServiceURL))
 }
 
-func (c *Client) ssoLogin(username, password string) error {
+func (c *Client) ssoLogin(ctx context.Context, username, password string) error {
 	body, _ := json.Marshal(map[string]any{
 		"username":     username,
 		"password":     password,
@@ -119,7 +120,7 @@ func (c *Client) ssoLogin(username, password string) error {
 
 	loginURL := ssoLoginURL + c.ssoQueryParams()
 
-	req, err := http.NewRequest(http.MethodPost, loginURL, bytes.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, loginURL, bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
@@ -148,17 +149,17 @@ func (c *Client) ssoLogin(username, password string) error {
 	}
 
 	if ssoResp.ResponseStatus.Type == "MFA_REQUIRED" {
-		return c.handleMFA(ssoResp.CustomerMfaInfo.MfaLastMethodUsed)
+		return c.handleMFA(ctx, ssoResp.CustomerMfaInfo.MfaLastMethodUsed)
 	}
 
 	if ssoResp.ServiceTicketID == "" {
 		return fmt.Errorf("sso login: no ticket in response (body: %s)", rawBody)
 	}
 
-	return c.exchangeTicket(ssoResp.ServiceTicketID, ssoResp.ServiceURL)
+	return c.exchangeTicket(ctx, ssoResp.ServiceTicketID, ssoResp.ServiceURL)
 }
 
-func (c *Client) handleMFA(mfaMethod string) error {
+func (c *Client) handleMFA(ctx context.Context, mfaMethod string) error {
 	if c.mfaPrompt == nil {
 		return ErrMFARequired
 	}
@@ -180,7 +181,7 @@ func (c *Client) handleMFA(mfaMethod string) error {
 	})
 
 	verifyURL := ssoMFAVerifyURL + c.ssoQueryParams()
-	req, err := http.NewRequest(http.MethodPost, verifyURL, bytes.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, verifyURL, bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("mfa verify request: %w", err)
 	}
@@ -212,12 +213,12 @@ func (c *Client) handleMFA(mfaMethod string) error {
 		return fmt.Errorf("mfa verify: no ticket in response (body: %s)", rawBody)
 	}
 
-	return c.exchangeTicket(mfaResp.ServiceTicketID, mfaResp.ServiceURL)
+	return c.exchangeTicket(ctx, mfaResp.ServiceTicketID, mfaResp.ServiceURL)
 }
 
-func (c *Client) exchangeTicket(ticket, serviceURL string) error {
+func (c *Client) exchangeTicket(ctx context.Context, ticket, serviceURL string) error {
 	for _, clientID := range diClientIDs {
-		tok, err := c.doTokenRequest(url.Values{
+		tok, err := c.doTokenRequest(ctx, url.Values{
 			"client_id":      {clientID},
 			"service_ticket": {ticket},
 			"grant_type":     {"https://connectapi.garmin.com/di-oauth2-service/oauth/grant/service_ticket"},
@@ -232,8 +233,8 @@ func (c *Client) exchangeTicket(ticket, serviceURL string) error {
 	return fmt.Errorf("di token exchange failed for all client IDs")
 }
 
-func (c *Client) refreshToken(old *diToken) error {
-	tok, err := c.doTokenRequest(url.Values{
+func (c *Client) refreshToken(ctx context.Context, old *diToken) error {
+	tok, err := c.doTokenRequest(ctx, url.Values{
 		"grant_type":    {"refresh_token"},
 		"client_id":     {old.ClientID},
 		"refresh_token": {old.RefreshToken},
@@ -249,9 +250,9 @@ func (c *Client) refreshToken(old *diToken) error {
 	return c.saveToken(tok)
 }
 
-func (c *Client) doTokenRequest(params url.Values, clientID string) (*diToken, error) {
+func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID string) (*diToken, error) {
 	auth := base64.StdEncoding.EncodeToString([]byte(clientID + ":"))
-	req, err := http.NewRequest(http.MethodPost, diAuthURL, strings.NewReader(params.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, diAuthURL, strings.NewReader(params.Encode()))
 	if err != nil {
 		return nil, err
 	}
