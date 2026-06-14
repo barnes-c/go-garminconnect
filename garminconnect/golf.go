@@ -17,17 +17,34 @@ type GolfScorecard struct {
 	ToPar       int    `json:"differentialToPar"`
 }
 
-// GolfSummary returns raw JSON for a paginated list of scorecard summaries.
-func (c *Client) GolfSummary(ctx context.Context, start, limit int) (json.RawMessage, error) {
+// GolfSummary returns a paginated list of scorecard summaries.
+// The API returns a pagination wrapper; this function unwraps it and returns
+// the scorecard slice (empty when totalRows is 0).
+func (c *Client) GolfSummary(ctx context.Context, start, limit int) ([]GolfScorecard, error) {
 	params := url.Values{
 		"start": {fmt.Sprintf("%d", start)},
 		"limit": {fmt.Sprintf("%d", limit)},
 	}
-	var out json.RawMessage
-	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/scorecard/summary", params, &out); err != nil {
+	var raw map[string]json.RawMessage
+	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/scorecard/summary", params, &raw); err != nil {
 		return nil, err
 	}
-	return out, nil
+	var totalRows int
+	if b, ok := raw["totalRows"]; ok {
+		_ = json.Unmarshal(b, &totalRows)
+	}
+	if totalRows == 0 {
+		return nil, nil
+	}
+	for _, v := range raw {
+		if len(v) > 0 && v[0] == '[' {
+			var out []GolfScorecard
+			if err := json.Unmarshal(v, &out); err == nil {
+				return out, nil
+			}
+		}
+	}
+	return nil, nil
 }
 
 // GolfScorecard returns full details for a single scorecard.
