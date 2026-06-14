@@ -17,13 +17,13 @@ type GolfScorecard struct {
 	ToPar       int    `json:"differentialToPar"`
 }
 
-// GolfSummary returns a paginated list of scorecard summaries.
-func (c *Client) GolfSummary(ctx context.Context, start, limit int) ([]GolfScorecard, error) {
+// GolfSummary returns raw JSON for a paginated list of scorecard summaries.
+func (c *Client) GolfSummary(ctx context.Context, start, limit int) (json.RawMessage, error) {
 	params := url.Values{
 		"start": {fmt.Sprintf("%d", start)},
 		"limit": {fmt.Sprintf("%d", limit)},
 	}
-	var out []GolfScorecard
+	var out json.RawMessage
 	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/scorecard/summary", params, &out); err != nil {
 		return nil, err
 	}
