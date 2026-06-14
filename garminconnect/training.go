@@ -51,11 +51,10 @@ type MaxMetricsEntry struct {
 // EnduranceScoreEntry holds an endurance score data point.
 type EnduranceScoreEntry struct {
 	CalendarDate string  `json:"calendarDate"`
-	Score        float64 `json:"score"`
-	Level        string  `json:"level"`
+	Score        float64 `json:"overallScore"`
 	Contributors []struct {
-		ActivityType string  `json:"activityType"`
-		Contribution float64 `json:"contribution"`
+		ActivityTypeID *int    `json:"activityTypeId"`
+		Contribution   float64 `json:"contribution"`
 	} `json:"contributors"`
 }
 
@@ -71,9 +70,10 @@ type LatestRacePredictions struct {
 
 // HillScoreEntry holds a hill score data point.
 type HillScoreEntry struct {
-	CalendarDate string  `json:"calendarDate"`
-	HillScore    float64 `json:"hillScore"`
-	Level        string  `json:"level"`
+	CalendarDate   string  `json:"calendarDate"`
+	HillScore      float64 `json:"overallScore"`
+	StrengthScore  float64 `json:"strengthScore"`
+	EnduranceScore float64 `json:"enduranceScore"`
 }
 
 // TrainingReadiness returns the training readiness scores for the given date.
@@ -170,17 +170,23 @@ func (c *Client) MaxMetrics(ctx context.Context, start, end time.Time) ([]MaxMet
 }
 
 // EnduranceScore returns endurance score data between start and end dates.
-func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
+// The API returns a single current entry wrapped in {"enduranceScoreDTO": {...}}.
+func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) ([]EnduranceScoreEntry, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"weekly"},
 	}
-	var out json.RawMessage
-	if err := c.get(ctx, "/metrics-service/metrics/endurancescore/stats", params, &out); err != nil {
+	var wrapper struct {
+		Entry *EnduranceScoreEntry `json:"enduranceScoreDTO"`
+	}
+	if err := c.get(ctx, "/metrics-service/metrics/endurancescore/stats", params, &wrapper); err != nil {
 		return nil, err
 	}
-	return out, nil
+	if wrapper.Entry == nil {
+		return nil, nil
+	}
+	return []EnduranceScoreEntry{*wrapper.Entry}, nil
 }
 
 // RacePredictions returns the latest predicted finish times for the user.
@@ -193,17 +199,20 @@ func (c *Client) RacePredictions(ctx context.Context) (*LatestRacePredictions, e
 }
 
 // HillScore returns hill score data between start and end dates.
-func (c *Client) HillScore(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
+// The API returns entries wrapped in {"hillScoreDTOList": [...]}.
+func (c *Client) HillScore(ctx context.Context, start, end time.Time) ([]HillScoreEntry, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
 		"endDate":     {date(end)},
 		"aggregation": {"daily"},
 	}
-	var out json.RawMessage
-	if err := c.get(ctx, "/metrics-service/metrics/hillscore/stats", params, &out); err != nil {
+	var wrapper struct {
+		Entries []HillScoreEntry `json:"hillScoreDTOList"`
+	}
+	if err := c.get(ctx, "/metrics-service/metrics/hillscore/stats", params, &wrapper); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return wrapper.Entries, nil
 }
 
 // LactateThresholdEntry holds a single lactate threshold measurement.
