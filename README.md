@@ -18,12 +18,16 @@ Requires Go 1.25+.
 ## Quick start
 
 ```go
-client := garminconnect.NewClient("~/.garminconnect/tokens.json")
-if err := client.Login("user@example.com", "password"); err != nil {
+ctx := context.Background()
+client := garminconnect.NewClient(os.Getenv("HOME") + "/.garminconnect/tokens.json")
+if err := client.Login(ctx, "user@example.com", "password"); err != nil {
     log.Fatal(err)
 }
 
-summary, err := client.UserSummary(time.Now())
+summary, err := client.UserSummary(ctx,time.Now())
+if err != nil {
+	log.Fatal(err)
+}
 fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 ```
 
@@ -34,7 +38,7 @@ fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 If the account has MFA enabled, provide a callback via `WithMFAPrompt` that returns the verification code. Without it, `Login` returns `ErrMFARequired`.
 
 ```go
-client := garminconnect.NewClient("~/.garminconnect/tokens.json",
+client := garminconnect.NewClient(os.Getenv("HOME")+"/.garminconnect/tokens.json",
     garminconnect.WithMFAPrompt(func() (string, error) {
         fmt.Print("MFA code: ")
         var code string
@@ -42,7 +46,7 @@ client := garminconnect.NewClient("~/.garminconnect/tokens.json",
         return code, err
     }),
 )
-if err := client.Login("user@example.com", "password"); err != nil {
+if err := client.Login(context.Background(), "user@example.com", "password"); err != nil {
     log.Fatal(err)
 }
 ```
@@ -53,171 +57,171 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Wellness & daily health
 
-| Method | Description |
-|---|---|
-| `UserSummary(date)` | Steps, calories, active minutes, stress |
-| `Steps(date)` | Intraday step entries |
-| `StepsData(date)` | Intraday step data in 15-minute intervals |
-| `DailySteps(start, end)` | Daily step totals over a date range |
-| `WeeklySteps(end, weeks)` | Weekly step aggregates |
-| `BodyBattery(start, end)` | Body Battery readings |
-| `BodyBatteryEvents(date)` | Body Battery charge/drain events |
-| `AllDayStress(date)` | Stress measurements throughout the day |
-| `WeeklyStress(end, weeks)` | Weekly stress aggregates |
-| `Floors(date)` | Floors climbed |
-| `Hydration(date)` | Hydration log |
-| `AddHydration(ml, timestamp, date)` | Log a hydration entry |
-| `Respiration(date)` | Respiration rate |
-| `SpO2(date)` | Blood oxygen saturation |
-| `IntensityMinutes(date)` | Moderate and vigorous intensity minutes |
-| `WeeklyIntensityMinutes(start, end)` | Weekly intensity minute aggregates |
-| `BloodPressure(start, end)` | Blood pressure readings |
-| `SetBloodPressure(sys, dia, pulse, ts, notes)` | Log a blood pressure reading |
-| `DeleteBloodPressure(date, version)` | Delete a blood pressure entry |
-| `AllDayEvents(date)` | All wellness events for a day |
-| `LifestyleData(date)` | Lifestyle summary |
+| Method                                              | Description                               |
+|-----------------------------------------------------|-------------------------------------------|
+| `UserSummary(ctx, date)`                            | Steps, calories, active minutes, stress   |
+| `Steps(ctx, date)`                                  | Intraday step entries                     |
+| `StepsData(ctx, date)`                              | Intraday step data in 15-minute intervals |
+| `DailySteps(ctx, start, end)`                       | Daily step totals over a date range       |
+| `WeeklySteps(ctx, end, weeks)`                      | Weekly step aggregates                    |
+| `BodyBattery(ctx, start, end)`                      | Body Battery readings                     |
+| `BodyBatteryEvents(ctx, date)`                      | Body Battery charge/drain events          |
+| `AllDayStress(ctx, date)`                           | Stress measurements throughout the day    |
+| `WeeklyStress(ctx, end, weeks)`                     | Weekly stress aggregates                  |
+| `Floors(ctx, date)`                                 | Floors climbed                            |
+| `Hydration(ctx, date)`                              | Hydration log                             |
+| `AddHydration(ctx, ml, timestamp, date)`            | Log a hydration entry                     |
+| `Respiration(ctx, date)`                            | Respiration rate                          |
+| `SpO2(ctx, date)`                                   | Blood oxygen saturation                   |
+| `IntensityMinutes(ctx, date)`                       | Moderate and vigorous intensity minutes   |
+| `WeeklyIntensityMinutes(ctx, start, end)`           | Weekly intensity minute aggregates        |
+| `BloodPressure(ctx, start, end)`                    | Blood pressure readings                   |
+| `SetBloodPressure(ctx, sys, dia, pulse, ts, notes)` | Log a blood pressure reading              |
+| `DeleteBloodPressure(ctx, date, version)`           | Delete a blood pressure entry             |
+| `AllDayEvents(ctx, date)`                           | All wellness events for a day             |
+| `LifestyleData(ctx, date)`                          | Lifestyle summary                         |
 
 ### Heart rate
 
-| Method | Description |
-|---|---|
-| `HeartRates(date)` | Intraday heart rate readings |
-| `RestingHeartRate(start, end)` | Resting HR over a date range |
+| Method                              | Description                  |
+|-------------------------------------|------------------------------|
+| `HeartRates(ctx, date)`             | Intraday heart rate readings |
+| `RestingHeartRate(ctx, start, end)` | Resting HR over a date range |
 
 ### Sleep
 
-| Method | Description |
-|---|---|
-| `SleepData(date)` | Sleep stages and quality for a night |
-| `HRVData(date)` | HRV measurements during sleep |
+| Method                 | Description                          |
+|------------------------|--------------------------------------|
+| `SleepData(ctx, date)` | Sleep stages and quality for a night |
+| `HRVData(ctx, date)`   | HRV measurements during sleep        |
 
 ### Activities
 
-| Method | Description |
-|---|---|
-| `Activities(limit)` | Most recent N activities |
-| `ActivitiesByDate(start, end, type)` | Activities in a date range, optional type filter |
-| `LastActivity()` | Single most recent activity |
-| `ActivityCount()` | Total activity count |
-| `ActivityDetail(id)` | Full activity detail |
-| `ActivitySplits(id)` | Lap/split summaries |
-| `ActivityTypedSplits(id)` | Sport-specific split data |
-| `ActivitySplitSummaries(id)` | Split summary statistics |
-| `ActivityHRZones(id)` | Time in heart rate zones |
-| `ActivityPowerZones(id)` | Time in power zones |
-| `ActivityExerciseSets(id)` | Strength training exercise sets |
-| `ActivityWeather(id)` | Weather recorded during the activity |
-| `PersonalRecords()` | Personal bests |
-| `SetActivityName(id, name)` | Rename an activity |
-| `SetActivityType(id, typeID, parentID, key)` | Change activity sport type |
-| `DeleteActivity(id)` | Delete an activity |
-| `DownloadActivity(id, format)` | Download FIT, GPX, TCX, KML, or CSV |
-| `UploadActivity(data, filename)` | Upload a FIT, GPX, or TCX file |
+| Method                                             | Description                                      |
+|----------------------------------------------------|--------------------------------------------------|
+| `Activities(ctx, limit)`                           | Most recent N activities                         |
+| `ActivitiesByDate(ctx, start, end, type)`          | Activities in a date range, optional type filter |
+| `LastActivity(ctx, )`                              | Single most recent activity                      |
+| `ActivityCount(ctx, )`                             | Total activity count                             |
+| `ActivityDetail(ctx, id)`                          | Full activity detail                             |
+| `ActivitySplits(ctx, id)`                          | Lap/split summaries                              |
+| `ActivityTypedSplits(ctx, id)`                     | Sport-specific split data                        |
+| `ActivitySplitSummaries(ctx, id)`                  | Split summary statistics                         |
+| `ActivityHRZones(ctx, id)`                         | Time in heart rate zones                         |
+| `ActivityPowerZones(ctx, id)`                      | Time in power zones                              |
+| `ActivityExerciseSets(ctx, id)`                    | Strength training exercise sets                  |
+| `ActivityWeather(ctx, id)`                         | Weather recorded during the activity             |
+| `PersonalRecords(ctx, )`                           | Personal bests                                   |
+| `SetActivityName(ctx, id, name)`                   | Rename an activity                               |
+| `SetActivityType(ctx, id, typeID, parentID, key)`  | Change activity sport type                       |
+| `DeleteActivity(ctx, id)`                          | Delete an activity                               |
+| `DownloadActivity(ctx, id, format)`                | Download FIT, GPX, TCX, KML, or CSV              |
+| `UploadActivity(ctx, data, filename)`              | Upload a FIT, GPX, or TCX file                   |
 
 Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKML`, `FormatCSV`.
 
 ### Workouts
 
-| Method | Description |
-|---|---|
-| `Workouts(start, limit)` | Saved workouts |
-| `Workout(id)` | Single workout detail |
-| `DeleteWorkout(id)` | Delete a workout |
-| `ScheduledWorkouts(year, month)` | Scheduled workout calendar entries |
-| `ScheduleWorkout(workoutID, date)` | Add a workout to the calendar |
-| `UnscheduleWorkout(scheduledID)` | Remove a workout from the calendar |
-| `DownloadWorkout(id)` | Download workout as FIT |
-| `UploadWorkout(data, filename)` | Upload a workout file |
+| Method                                  | Description                        |
+|-----------------------------------------|------------------------------------|
+| `Workouts(ctx, start, limit)`           | Saved workouts                     |
+| `Workout(ctx, id)`                      | Single workout detail              |
+| `DeleteWorkout(ctx, id)`                | Delete a workout                   |
+| `ScheduledWorkouts(ctx, year, month)`   | Scheduled workout calendar entries |
+| `ScheduleWorkout(ctx, workoutID, date)` | Add a workout to the calendar      |
+| `UnscheduleWorkout(ctx, scheduledID)`   | Remove a workout from the calendar |
+| `DownloadWorkout(ctx, id)`              | Download workout as FIT            |
+| `UploadWorkout(ctx, data, filename)`    | Upload a workout file              |
 
 ### Training metrics
 
-| Method | Description |
-|---|---|
-| `TrainingReadiness(date)` | Training readiness score |
-| `TrainingStatus(date)` | Training status and load |
-| `MaxMetrics(start, end)` | VO2 Max and other max metrics |
-| `EnduranceScore(start, end)` | Endurance score trend |
-| `HillScore(start, end)` | Hill score trend |
-| `RacePredictions()` | Predicted race finish times |
-| `LactateThreshold()` | Lactate threshold data |
-| `FitnessAge(date)` | Fitness age estimate |
-| `RunningTolerance(start, end)` | Running load tolerance |
-| `CyclingFTP()` | Functional threshold power |
+| Method                              | Description                   |
+|-------------------------------------|-------------------------------|
+| `TrainingReadiness(ctx, date)`      | Training readiness score      |
+| `TrainingStatus(ctx, date)`         | Training status and load      |
+| `MaxMetrics(ctx, start, end)`       | VO2 Max and other max metrics |
+| `EnduranceScore(ctx, start, end)`   | Endurance score trend         |
+| `HillScore(ctx, start, end)`        | Hill score trend              |
+| `RacePredictions(ctx)`              | Predicted race finish times   |
+| `LactateThreshold(ctx)`             | Lactate threshold data        |
+| `FitnessAge(ctx, date)`             | Fitness age estimate          |
+| `RunningTolerance(ctx, start, end)` | Running load tolerance        |
+| `CyclingFTP(ctx)`                   | Functional threshold power    |
 
 ### Body composition
 
-| Method | Description |
-|---|---|
-| `BodyComposition(start, end)` | Weight and body composition over a range |
-| `WeighIns(start, end)` | All weigh-in entries in a range |
-| `DailyWeighIns(date)` | Weigh-ins for a single day |
-| `AddWeighIn(kg, unitKey, timestamp)` | Log a weigh-in |
-| `DeleteWeighIn(date, weightPK)` | Delete a weigh-in entry |
+| Method                                    | Description                              |
+|-------------------------------------------|------------------------------------------|
+| `BodyComposition(ctx, start, end)`        | Weight and body composition over a range |
+| `WeighIns(ctx, start, end)`               | All weigh-in entries in a range          |
+| `DailyWeighIns(ctx, date)`                | Weigh-ins for a single day               |
+| `AddWeighIn(ctx, kg, unitKey, timestamp)` | Log a weigh-in                           |
+| `DeleteWeighIn(ctx, date, weightPK)`      | Delete a weigh-in entry                  |
 
 ### Goals & achievements
 
-| Method | Description |
-|---|---|
-| `Goals(status, start, limit)` | Goals filtered by status |
-| `EarnedBadges()` | Earned badges |
-| `AvailableBadges()` | Available badges |
-| `AdHocChallenges(start, limit)` | Ad-hoc challenges |
-| `BadgeChallenges(start, limit)` | Badge challenges |
-| `AvailableBadgeChallenges(start, limit)` | Joinable badge challenges |
-| `InProgressVirtualChallenges(start, limit)` | Active virtual challenges |
+| Method                                           | Description               |
+|--------------------------------------------------|---------------------------|
+| `Goals(ctx, status, start, limit)`               | Goals filtered by status  |
+| `EarnedBadges(ctx)`                              | Earned badges             |
+| `AvailableBadges(ctx)`                           | Available badges          |
+| `AdHocChallenges(ctx, start, limit)`             | Ad-hoc challenges         |
+| `BadgeChallenges(ctx, start, limit)`             | Badge challenges          |
+| `AvailableBadgeChallenges(ctx, start, limit)`    | Joinable badge challenges |
+| `InProgressVirtualChallenges(ctx, start, limit)` | Active virtual challenges |
 
 ### Devices & gear
 
-| Method | Description |
-|---|---|
-| `Devices()` | Registered devices |
-| `DeviceSettings(deviceID)` | Settings for a specific device |
-| `LastUsedDevice()` | Most recently synced device |
-| `PrimaryTrainingDevice()` | Primary training device |
-| `DeviceSolarData(deviceID, start, end)` | Solar charging data |
-| `Gear(userProfileNumber)` | Gear items |
-| `GearStats(gearUUID)` | Usage stats for a gear item |
-| `GearActivities(gearUUID, start, limit)` | Activities using a gear item |
-| `GearDefaults(userProfileNumber)` | Default gear assignments |
+| Method                                        | Description                    |
+|-----------------------------------------------|--------------------------------|
+| `Devices(ctx)`                                | Registered devices             |
+| `DeviceSettings(ctx, deviceID)`               | Settings for a specific device |
+| `LastUsedDevice(ctx)`                         | Most recently synced device    |
+| `PrimaryTrainingDevice(ctx)`                  | Primary training device        |
+| `DeviceSolarData(ctx, deviceID, start, end)`  | Solar charging data            |
+| `Gear(ctx, userProfileNumber)`                | Gear items                     |
+| `GearStats(ctx, gearUUID)`                    | Usage stats for a gear item    |
+| `GearActivities(ctx, gearUUID, start, limit)` | Activities using a gear item   |
+| `GearDefaults(ctx, userProfileNumber)`        | Default gear assignments       |
 
 ### Profile
 
-| Method | Description |
-|---|---|
-| `UserProfile()` | Display name, location, join date |
-| `UserProfileSettings()` | Account settings |
-| `DisplayName()` | Cached display name (set on login) |
+| Method                     | Description                             |
+|----------------------------|-----------------------------------------|
+| `UserProfile(ctx)`         | Display name, location, join date       |
+| `UserProfileSettings(ctx)` | Account settings                        |
+| `DisplayName(ctx)`         | Cached display name (ctx, set on login) |
 
 ### Women's health
 
-| Method | Description |
-|---|---|
-| `MenstrualData(date)` | Menstrual cycle data for a day |
-| `MenstrualCalendar(start, end)` | Cycle data over a date range |
-| `PregnancySummary()` | Pregnancy snapshot |
+| Method                               | Description                    |
+|--------------------------------------|--------------------------------|
+| `MenstrualData(ctx, date)`           | Menstrual cycle data for a day |
+| `MenstrualCalendar(ctx, start, end)` | Cycle data over a date range   |
+| `PregnancySummary(ctx)`              | Pregnancy snapshot             |
 
 ### Nutrition
 
-| Method | Description |
-|---|---|
-| `NutritionFoodLog(date)` | Food log for a day |
-| `NutritionMeals(date)` | Meal breakdown |
-| `NutritionSettings(date)` | Nutrition goal settings |
+| Method                         | Description             |
+|--------------------------------|-------------------------|
+| `NutritionFoodLog(ctx, date)`  | Food log for a day      |
+| `NutritionMeals(ctx, date)`    | Meal breakdown          |
+| `NutritionSettings(ctx, date)` | Nutrition goal settings |
 
 ### Golf
 
-| Method | Description |
-|---|---|
-| `GolfSummary(start, limit)` | Scorecard summaries |
-| `GolfScorecard(scorecardID)` | Full scorecard detail |
-| `GolfShotData(scorecardID, holes)` | Shot-by-shot data for selected holes |
+| Method                                  | Description                          |
+|-----------------------------------------|--------------------------------------|
+| `GolfSummary(ctx, start, limit)`        | Scorecard summaries                  |
+| `GolfScorecard(ctx, scorecardID)`       | Full scorecard detail                |
+| `GolfShotData(ctx, scorecardID, holes)` | Shot-by-shot data for selected holes |
 
 ## Error handling
 
 ```go
 import "errors"
 
-acts, err := client.Activities(10)
+acts, err := client.Activities(context.Background(), 10)
 switch {
 case errors.Is(err, garminconnect.ErrUnauthorized):
     // token expired — call Login again
@@ -229,8 +233,7 @@ case errors.Is(err, garminconnect.ErrNoData):
     // no records for the query
 }
 
-var apiErr *garminconnect.APIError
-if errors.As(err, &apiErr) {
+if apiErr, ok := errors.AsType[*garminconnect.APIError](err); ok {
     fmt.Println(apiErr.StatusCode, apiErr.Path)
 }
 ```
