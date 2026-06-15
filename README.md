@@ -97,26 +97,26 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Activities
 
-| Method                                             | Description                                      |
-|----------------------------------------------------|--------------------------------------------------|
-| `Activities(ctx, limit)`                           | Most recent N activities                         |
-| `ActivitiesByDate(ctx, start, end, type)`          | Activities in a date range, optional type filter |
-| `LastActivity(ctx, )`                              | Single most recent activity                      |
-| `ActivityCount(ctx, )`                             | Total activity count                             |
-| `ActivityDetail(ctx, id)`                          | Full activity detail                             |
-| `ActivitySplits(ctx, id)`                          | Lap/split summaries                              |
-| `ActivityTypedSplits(ctx, id)`                     | Sport-specific split data                        |
-| `ActivitySplitSummaries(ctx, id)`                  | Split summary statistics                         |
-| `ActivityHRZones(ctx, id)`                         | Time in heart rate zones                         |
-| `ActivityPowerZones(ctx, id)`                      | Time in power zones                              |
-| `ActivityExerciseSets(ctx, id)`                    | Strength training exercise sets                  |
-| `ActivityWeather(ctx, id)`                         | Weather recorded during the activity             |
-| `PersonalRecords(ctx, )`                           | Personal bests                                   |
-| `SetActivityName(ctx, id, name)`                   | Rename an activity                               |
-| `SetActivityType(ctx, id, typeID, parentID, key)`  | Change activity sport type                       |
-| `DeleteActivity(ctx, id)`                          | Delete an activity                               |
-| `DownloadActivity(ctx, id, format)`                | Download FIT, GPX, TCX, KML, or CSV              |
-| `UploadActivity(ctx, data, filename)`              | Upload a FIT, GPX, or TCX file                   |
+| Method                                            | Description                                      |
+|---------------------------------------------------|--------------------------------------------------|
+| `Activities(ctx, limit)`                          | Most recent N activities                         |
+| `ActivitiesByDate(ctx, start, end, type)`         | Activities in a date range, optional type filter |
+| `LastActivity(ctx)`                               | Single most recent activity                      |
+| `ActivityCount(ctx)`                              | Total activity count                             |
+| `ActivityDetail(ctx, id)`                         | Full activity detail                             |
+| `ActivitySplits(ctx, id)`                         | Lap/split summaries                              |
+| `ActivityTypedSplits(ctx, id)`                    | Sport-specific split data                        |
+| `ActivitySplitSummaries(ctx, id)`                 | Split summary statistics                         |
+| `ActivityHRZones(ctx, id)`                        | Time in heart rate zones                         |
+| `ActivityPowerZones(ctx, id)`                     | Time in power zones                              |
+| `ActivityExerciseSets(ctx, id)`                   | Strength training exercise sets                  |
+| `ActivityWeather(ctx, id)`                        | Weather recorded during the activity             |
+| `PersonalRecords(ctx)`                            | Personal bests                                   |
+| `SetActivityName(ctx, id, name)`                  | Rename an activity                               |
+| `SetActivityType(ctx, id, typeID, parentID, key)` | Change activity sport type                       |
+| `DeleteActivity(ctx, id)`                         | Delete an activity                               |
+| `DownloadActivity(ctx, id, format)`               | Download FIT, GPX, TCX, KML, or CSV              |
+| `UploadActivity(ctx, data, filename)`             | Upload a FIT, GPX, or TCX file                   |
 
 Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKML`, `FormatCSV`.
 
