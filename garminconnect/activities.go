@@ -89,9 +89,10 @@ type PowerZone struct {
 }
 
 // Activities returns the most recent limit activities.
-func (c *Client) Activities(ctx context.Context, limit int) ([]Activity, error) {
+// Skips the first start activities.
+func (c *Client) Activities(ctx context.Context, start, limit int) ([]Activity, error) {
 	params := url.Values{
-		"start": {"0"},
+		"start": {fmt.Sprintf("%d", start)},
 		"limit": {fmt.Sprintf("%d", limit)},
 	}
 	var out []Activity
@@ -123,7 +124,7 @@ func (c *Client) ActivitiesByDate(ctx context.Context, start, end time.Time, act
 
 // LastActivity returns the single most recent activity.
 func (c *Client) LastActivity(ctx context.Context) (*Activity, error) {
-	acts, err := c.Activities(ctx, 1)
+	acts, err := c.Activities(ctx, 0, 1)
 	if err != nil {
 		return nil, err
 	}

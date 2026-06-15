@@ -23,19 +23,19 @@ func clientWith(t *testing.T, code int) *gc.Client {
 
 func TestActivities_Unauthorized(t *testing.T) {
 	c := clientWith(t, http.StatusUnauthorized)
-	_, err := c.Activities(t.Context(), 1)
+	_, err := c.Activities(t.Context(), 0, 1)
 	assert.ErrorIs(t, err, gc.ErrUnauthorized)
 }
 
 func TestActivities_RateLimit(t *testing.T) {
 	c := clientWith(t, http.StatusTooManyRequests)
-	_, err := c.Activities(t.Context(), 1)
+	_, err := c.Activities(t.Context(), 0, 1)
 	assert.ErrorIs(t, err, gc.ErrRateLimit)
 }
 
 func TestActivities_APIError(t *testing.T) {
 	c := clientWith(t, http.StatusInternalServerError)
-	_, err := c.Activities(t.Context(), 1)
+	_, err := c.Activities(t.Context(), 0, 1)
 	require.Error(t, err)
 	var apiErr *gc.APIError
 	require.ErrorAs(t, err, &apiErr)
