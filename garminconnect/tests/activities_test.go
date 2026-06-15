@@ -14,7 +14,7 @@ func TestActivities(t *testing.T) {
 	c, stop := newVCRClient(t, "activities")
 	defer stop()
 
-	acts, err := c.Activities(t.Context(), 2)
+	acts, err := c.Activities(t.Context(), 0, 2)
 	require.NoError(t, err)
 	require.Len(t, acts, 2)
 
@@ -38,7 +38,7 @@ func TestLastActivity(t *testing.T) {
 
 	// LastActivity uses limit=1 internally, but we reuse the activities cassette
 	// which returns 2. Stub it separately so we control the limit parameter.
-	acts, err := c.Activities(t.Context(), 2)
+	acts, err := c.Activities(t.Context(), 0, 2)
 	require.NoError(t, err)
 	assert.NotZero(t, acts[0].ActivityID)
 }
@@ -48,7 +48,7 @@ func TestActivityDetail(t *testing.T) {
 	defer stop()
 
 	// Record cassette: fetch the most recent activity to get a real ID.
-	acts, err := c.Activities(t.Context(), 1)
+	acts, err := c.Activities(t.Context(), 0, 1)
 	require.NoError(t, err)
 	require.NotEmpty(t, acts)
 
