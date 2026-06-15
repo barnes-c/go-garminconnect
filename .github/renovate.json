@@ -13,6 +13,11 @@
       "automerge": true
     },
     {
+      "description": "Workflow input fields (e.g. golangci-lint-action `version:`, setup-go `go-version:`) cannot carry a digest comment, so pinDigests fails the branch.",
+      "matchDepTypes": ["uses-with"],
+      "pinDigests": false
+    },
+    {
       "matchManagers": ["gomod"],
       "groupName": "Go dependencies"
     },
