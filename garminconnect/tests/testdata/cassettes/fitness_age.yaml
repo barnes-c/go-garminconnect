@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/fitnessage-service/fitnessage/2026-01-01
         method: GET
       response:
-        body: '{"chronologicalAge":26,"fitnessAge":21,"achievableFitnessAge":18.0,"previousFitnessAge":21,"components":{"vigorousDaysAvg":{"value":1.1,"targetValue":3,"potentialAge":21,"priority":3,"stale":false,"numOfWeeksForIm":6},"rhr":{"value":49,"stale":false},"vigorousMinutesAvg":{"value":57.0,"targetValue":75,"potentialAge":21,"priority":2,"stale":false,"numOfWeeksForIm":6},"bmi":{"value":24.7,"targetValue":20.7,"improvementValue":4.0,"potentialAge":18,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-01"}},"lastUpdated":"2026-01-01T00:00:00"}'
+        body: '{"chronologicalAge":1,"fitnessAge":1,"achievableFitnessAge":1,"previousFitnessAge":1,"components":{"vigorousDaysAvg":{"value":1,"targetValue":1,"potentialAge":1,"priority":3,"stale":false,"numOfWeeksForIm":1},"rhr":{"value":1,"stale":false},"vigorousMinutesAvg":{"value":1,"targetValue":1,"potentialAge":1,"priority":2,"stale":false,"numOfWeeksForIm":1},"bmi":{"value":1,"targetValue":1,"improvementValue":1,"potentialAge":1,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-01"}},"lastUpdated":"2026-01-01T00:00:00"}'
         headers:
             Content-Type:
                 - application/json

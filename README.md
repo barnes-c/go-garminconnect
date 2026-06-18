@@ -90,10 +90,12 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Sleep
 
-| Method                 | Description                          |
-|------------------------|--------------------------------------|
-| `SleepData(ctx, date)` | Sleep stages and quality for a night |
-| `HRVData(ctx, date)`   | HRV measurements during sleep        |
+| Method                        | Description                                       |
+|-------------------------------|---------------------------------------------------|
+| `SleepData(ctx, date)`        | Sleep stages and quality for a night              |
+| `DailySleepData(ctx, date)`   | Sleep data for a night (sleep-service endpoint)   |
+| `SleepStats(ctx, start, end)` | Daily sleep statistics over a range (max 28 days) |
+| `HRVData(ctx, date)`          | HRV measurements during sleep                     |
 
 ### Activities
 

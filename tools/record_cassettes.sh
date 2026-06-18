@@ -101,6 +101,8 @@ TESTS=(
     TestHeartRates
     TestHRVData
     TestSleepData
+    TestDailySleepData
+    TestSleepStats
     TestDevices
     TestLastUsedDevice
     TestPrimaryTrainingDevice

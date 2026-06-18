@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/usersummary-service/usersummary/hydration/daily/2026-01-01
         method: GET
       response:
-        body: '{"userId":12345678,"calendarDate":"2026-01-01","valueInML":null,"goalInML":3000.0,"dailyAverageinML":null,"lastEntryTimestampLocal":null,"sweatLossInML":null,"activityIntakeInML":null}'
+        body: '{"userId":12345678,"calendarDate":"2026-01-01","valueInML":null,"goalInML":1,"dailyAverageinML":null,"lastEntryTimestampLocal":null,"sweatLossInML":null,"activityIntakeInML":null}'
         headers:
             Content-Type:
                 - application/json

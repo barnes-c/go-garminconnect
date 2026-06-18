@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/racepredictions/latest/testuser
         method: GET
       response:
-        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-01","time5K":1490,"time10K":3319,"timeHalfMarathon":7676,"timeMarathon":17123}'
+        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-01","time5K":1,"time10K":1,"timeHalfMarathon":1,"timeMarathon":1}'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8
@@ -30,7 +30,7 @@ interactions:
         url: https://connectapi.garmin.com/metrics-service/metrics/racepredictions/latest/testuser
         method: GET
       response:
-        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-01","time5K":1492,"time10K":3324,"timeHalfMarathon":7687,"timeMarathon":17144}'
+        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-01","time5K":1,"time10K":1,"timeHalfMarathon":1,"timeMarathon":1}'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8

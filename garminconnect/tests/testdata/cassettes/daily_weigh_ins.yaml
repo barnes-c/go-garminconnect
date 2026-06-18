@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/weight-service/weight/dayview/2026-01-01?calendarDate=2026-01-01
         method: GET
       response:
-        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[],"totalAverage":{"from":1767225600000,"until":1000000000006,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[],"totalAverage":{"from":1,"until":1,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
         headers:
             Content-Type:
                 - application/json

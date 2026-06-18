@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/biometric-service/biometric/latestLactateThreshold
         method: GET
       response:
-        body: '[{"userProfilePK":12345678,"version":1767225600000,"calendarDate":"2026-01-01T00:00:00","sequence":1767225600000,"speed":0.4,"hearRate":null,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null},{"userProfilePK":12345678,"version":1767225600000,"calendarDate":"2026-01-01T00:00:00","sequence":1767225600000,"speed":null,"hearRate":177,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null}]'
+        body: '[{"userProfilePK":12345678,"version":1767225600000,"calendarDate":"2026-01-01T00:00:00","sequence":1767225600000,"speed":1,"hearRate":null,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null},{"userProfilePK":12345678,"version":1767225600000,"calendarDate":"2026-01-01T00:00:00","sequence":1767225600000,"speed":null,"hearRate":1,"heartRateCycling":null,"rowSpeed":null,"heartRateRowing":null}]'
         headers:
             Content-Type:
                 - application/json
