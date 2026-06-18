@@ -48,26 +48,15 @@ GARMIN_SUMMARY_DATE=2026-06-18 GARMIN_EMAIL=... GARMIN_PASSWORD=... bash tools/r
 
 ## Sanitizing cassettes
 
-The sanitizer runs automatically after recording. To run it standalone:
+`record_cassettes.sh` runs the sanitizer automatically before cassettes land on disk, so you rarely invoke it directly. It strips PII (IDs, UUIDs, emails, names, dates, epoch timestamps), rounds floats to 2 significant figures (which also coarsens GPS coordinates), and is safe to re-run (idempotent). **Never commit an unsanitized cassette.**
+
+The replacement rules live in `tools/sanitize_cassettes.py` — change them there, not here. Run it standalone after hand-editing a cassette:
 
 ```bash
 python3 tools/sanitize_cassettes.py [--display-name "Real Name"] [--email real@example.com]
 ```
 
-It is safe to re-run on already-sanitized cassettes (idempotent). What it replaces:
-
-- Integer fields by name: profile/user/owner IDs → `12345678`, device IDs → `9876543210`, activity IDs → sequential `10000001+`, sample PKs → sequential `1000000000001+`
-- UUIDs (hyphenated and bare 32-char hex) → a single all-`f` constant (`aaaaaaaa-0000-0000-0000-ffffffffffff` / `00000000000000000000ffffffffffff`); nothing is derived from the real value
-- Epoch-millisecond timestamps (13-digit, ~2017-2033 range, e.g. `startGMT`) → `1767225600000` (2026-01-01T00:00:00Z), which the ISO-date rules don't reach
-- Email addresses → `test@example.com`
-- Display name (via `--display-name`) and all `*FullName` fields → `"Test User"`
-- `locationName` → `"Test Location"`, `activityName` → `"Activity"`, `serialNumber` → `"TEST000000"`
-- Datetime strings (`2025-12-31T13:50:13`, `2025-12-31 13:50:13.944`, etc.) → `2026-01-01T00:00:00` / `2026-01-01 00:00:00`
-- Date-only JSON string values → `"2026-01-01"`
-- Request-URL dates later than `2026-01-01` → `2026-01-01`. Synthetic test dates are anchored at `testDate` and only ever look backward, so any URL date after it is a real recording date (e.g. the day an activity was logged) and gets scrubbed. Dates on or before `testDate` (range starts like `2025-12-01`) are left intact so URL matching still works.
-- Floats with 4+ decimal places → 2 significant figures
-- Response headers stripped: `Cf-Ray`, `Date`, `Nel`, `Report-To`, `Alt-Svc`, `Cf-Cache-Status`, `Cache-Control`, `Pragma`, `Server`
-- Response durations → `100ms`
+Pass `--display-name` and `--email` when recording: the script can't infer your real name and address from the data, so they must be supplied to be scrubbed.
 
 ## Tools
 

@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
-"""Sanitize VCR cassettes: dynamically detect and replace PII."""
+"""Sanitize VCR cassettes: detect and replace PII before cassettes are committed.
+
+Idempotent — safe to re-run on already-sanitized cassettes. Replacements:
+
+- Integer ID fields by name: profile/user/owner IDs -> 12345678, device IDs ->
+  9876543210, activity IDs -> sequential 10000001+, sample PKs -> 1000000000001+
+- UUIDs (hyphenated and bare 32-char hex) -> one all-f constant; nothing is
+  derived from the real value
+- Epoch-millisecond timestamps (13-digit, ~2017-2033, e.g. startGMT) ->
+  1767225600000 (2026-01-01T00:00:00Z); ISO-date rules don't reach these
+- Datetime / date-only strings -> 2026-01-01[T00:00:00]
+- Request-URL dates after 2026-01-01 -> 2026-01-01 (real recording dates;
+  synthetic test dates only ever look back from testDate, so they're left alone)
+- Emails -> test@example.com; display name (--display-name) and *FullName ->
+  "Test User"; locationName/activityName/serialNumber -> fixed placeholders
+- Floats with 4+ decimals -> 2 significant figures
+- Volatile response headers stripped; durations -> 100ms
+"""
 
 import argparse
 import math
