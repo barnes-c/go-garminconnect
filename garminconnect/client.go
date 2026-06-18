@@ -289,7 +289,9 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 	if _, err := fw.Write(data); err != nil {
 		return err
 	}
-	w.Close()
+	if err := w.Close(); err != nil {
+		return err
+	}
 
 	bodyBytes := buf.Bytes()
 	contentType := w.FormDataContentType()
