@@ -12,7 +12,7 @@ interactions:
         url: https://connectapi.garmin.com/wellness-service/wellness/daily/im/2026-01-01
         method: GET
       response:
-        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","weeklyModerate":83,"weeklyVigorous":16,"weeklyTotal":115,"weekGoal":150,"dayOfGoalMet":null,"startDayMinutes":115,"endDayMinutes":115,"moderateMinutes":0,"vigorousMinutes":0,"imValueDescriptorsDTOList":null,"imValuesArray":null}'
+        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","weeklyModerate":1,"weeklyVigorous":1,"weeklyTotal":1,"weekGoal":1,"dayOfGoalMet":null,"startDayMinutes":1,"endDayMinutes":1,"moderateMinutes":1,"vigorousMinutes":1,"imValueDescriptorsDTOList":null,"imValuesArray":null}'
         headers:
             Content-Type:
                 - application/json

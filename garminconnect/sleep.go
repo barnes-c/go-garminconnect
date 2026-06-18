@@ -2,6 +2,7 @@ package garminconnect
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -57,23 +58,26 @@ type HRVReading struct {
 	StartGMT string `json:"startGMT"`
 }
 
+// HRVBaseline holds the HRV baseline range used to classify nightly status.
+type HRVBaseline struct {
+	LowUpper      int     `json:"lowUpper"`
+	BalancedLow   int     `json:"balancedLow"`
+	BalancedUpper int     `json:"balancedUpper"`
+	MarkerValue   float64 `json:"markerValue"`
+}
+
 // HRVSummary holds nightly HRV statistics.
 type HRVSummary struct {
-	UserProfilePK     int `json:"userProfilePK"`
-	WeeklyAvg         int `json:"weeklyAvg"`
-	LastNight         int `json:"lastNightAvg"`
-	LastNight5MinHigh int `json:"lastNight5MinHigh"`
-	Baseline          struct {
-		LowUpper      int     `json:"lowUpper"`
-		BalancedLow   int     `json:"balancedLow"`
-		BalancedUpper int     `json:"balancedUpper"`
-		MarkerValue   float64 `json:"markerValue"`
-	} `json:"baseline"`
-	Status            string `json:"status"`
-	FeedbackPhrase    string `json:"feedbackPhrase"`
-	CalendarDate      string `json:"calendarDate"`
-	StartTimestampGMT string `json:"startTimestampGMT"`
-	EndTimestampGMT   string `json:"endTimestampGMT"`
+	UserProfilePK     int         `json:"userProfilePK"`
+	WeeklyAvg         int         `json:"weeklyAvg"`
+	LastNight         int         `json:"lastNightAvg"`
+	LastNight5MinHigh int         `json:"lastNight5MinHigh"`
+	Baseline          HRVBaseline `json:"baseline"`
+	Status            string      `json:"status"`
+	FeedbackPhrase    string      `json:"feedbackPhrase"`
+	CalendarDate      string      `json:"calendarDate"`
+	StartTimestampGMT string      `json:"startTimestampGMT"`
+	EndTimestampGMT   string      `json:"endTimestampGMT"`
 }
 
 // HRVData is the full HRV response.
@@ -93,6 +97,30 @@ func (c *Client) SleepData(ctx context.Context, d time.Time) (*SleepData, error)
 		return nil, err
 	}
 	return &out, nil
+}
+
+// DailySleepData returns sleep data for the given date from the sleep-service
+// endpoint (distinct from SleepData, which uses the wellness-service path).
+// The response shares SleepData's structure (dailySleepDTO, sleepLevels,
+// sleepMovement).
+func (c *Client) DailySleepData(ctx context.Context, d time.Time) (*SleepData, error) {
+	params := url.Values{"date": {date(d)}}
+	var out SleepData
+	if err := c.get(ctx, "/sleep-service/sleep/dailySleepData", params, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// SleepStats returns daily sleep statistics between start and end dates.
+// The response wraps overall stats and a per-day series; the range must not
+// exceed 28 days.
+func (c *Client) SleepStats(ctx context.Context, start, end time.Time) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(ctx, fmt.Sprintf("/sleep-service/stats/sleep/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 // HRVData returns heart rate variability data for the given date.

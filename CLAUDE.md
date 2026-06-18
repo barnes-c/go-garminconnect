@@ -15,7 +15,7 @@ Tests use go-vcr cassettes (`garminconnect/tests/testdata/cassettes/*.yaml`) —
 - `testDate` is fixed at `time.Date(2026, 1, 1, ...)` in `activities_test.go`. Cassette URLs are keyed to this date; changing it breaks URL matching.
 - `newVCRClient(t, "cassette_name")` wires a client to a cassette for replay.
 - `skipAPIError(t, err)` skips a test when the cassette captured a 4xx — the endpoint isn't available on the recorded account. Use it before `require.NoError` for optional endpoints.
-- Float assertions use **2-significant-figure values** (`1500.0`, `4100.0`), not raw API precision (`1484.8990478515625`). The sanitizer rounds all floats with 4+ decimal places to 2 sig figs before cassettes are committed.
+- The sanitizer replaces every measurement value with **`1`** (`1.0` for floats) and every free-text string with **`"TEST"`**, so tests assert structure and non-zero/non-empty — never specific values. IDs are synthesized and string/date/UUID fields are preserved structurally. See `tools/sanitize_cassettes.py`.
 
 ## Adding a new API method
 
@@ -23,6 +23,8 @@ Tests use go-vcr cassettes (`garminconnect/tests/testdata/cassettes/*.yaml`) —
 2. Write a test in `garminconnect/tests/<area>_test.go` using `newVCRClient`.
 3. Add the test function name to the `TESTS` array in `tools/record_cassettes.sh`.
 4. Record the cassette (see below).
+5. **Inspect the recorded cassette for sensitive data** the sanitizer doesn't already cover (new ID fields, biometric/behavioural metrics, location, schedule times). If anything personal survives sanitization, extend `tools/sanitize_cassettes.py` and re-run it before committing.
+6. Add the method to the API table in `README.md` under the relevant section.
 
 ## Recording cassettes
 
@@ -40,10 +42,14 @@ bash tools/record_cassettes.sh --missing
 
 The script logs in once, records each cassette, then runs `tools/sanitize_cassettes.py` automatically to strip PII before commit.
 
-`TestActivitiesForDailySummary` replays against `testDate`, which has no activities. To capture a non-empty response, set `GARMIN_SUMMARY_DATE` to a day with a logged activity when recording — the sanitizer rewrites that real date back to `2026-01-01` in the cassette URL so it still replays:
+Some tests replay against `testDate`, which may have no data. To capture a non-empty response, set a date-override env var to a recent day that has data when recording — the sanitizer rewrites that real date back to `2026-01-01` in the cassette URL (dates after `testDate` are scrubbed) so it still replays:
+
+- `GARMIN_SUMMARY_DATE` → `TestActivitiesForDailySummary` (a day with a logged activity)
+- `GARMIN_SLEEP_DATE` → `TestDailySleepData` (a night with recorded sleep)
 
 ```bash
-GARMIN_SUMMARY_DATE=2026-06-18 GARMIN_EMAIL=... GARMIN_PASSWORD=... bash tools/record_cassettes.sh --missing
+GARMIN_SLEEP_DATE=2026-06-17 GARMIN_SUMMARY_DATE=2026-06-18 \
+  GARMIN_EMAIL=... GARMIN_PASSWORD=... bash tools/record_cassettes.sh --missing
 ```
 
 ## Sanitizing cassettes

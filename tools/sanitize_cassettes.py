@@ -7,19 +7,23 @@ Idempotent — safe to re-run on already-sanitized cassettes. Replacements:
   9876543210, activity IDs -> sequential 10000001+, sample PKs -> 1000000000001+
 - UUIDs (hyphenated and bare 32-char hex) -> one all-f constant; nothing is
   derived from the real value
-- Epoch-millisecond timestamps (13-digit, ~2017-2033, e.g. startGMT) ->
-  1767225600000 (2026-01-01T00:00:00Z); ISO-date rules don't reach these
 - Datetime / date-only strings -> 2026-01-01[T00:00:00]
 - Request-URL dates after 2026-01-01 -> 2026-01-01 (real recording dates;
   synthetic test dates only ever look back from testDate, so they're left alone)
-- Emails -> test@example.com; display name (--display-name) and *FullName ->
-  "Test User"; locationName/activityName/serialNumber -> fixed placeholders
-- Floats with 4+ decimals -> 2 significant figures
+- Emails -> test@example.com
+- Every free-text string value in a response body -> "TEST", except dates,
+  UUID-shaped values, and the "testuser"/"Test User" display-name placeholders.
+  Catches names, gear/workout/device labels, descriptions, etc. generically
+- Every numeric value in a response body -> 1, EXCEPT identifier/structural
+  fields (*Id, *Pk, *Count, *Index, *Version, *Number, ...). This covers every
+  real measurement (heart rate, sleep, SpO2, GPS, distance, calories, epoch
+  timestamps, ...) generically. The constant 1 (not 0) keeps NotZero assertions
+  meaningful as field-decoding checks. Number type is preserved (float -> 1.0,
+  int -> 1) so Go decoding is unaffected
 - Volatile response headers stripped; durations -> 100ms
 """
 
 import argparse
-import math
 import os
 import re
 
@@ -27,21 +31,11 @@ CASSETTE_DIR = "garminconnect/tests/testdata/cassettes"
 
 STRIP_HEADERS = {"Cf-Ray", "Date", "Nel", "Report-To", "Alt-Svc", "Cf-Cache-Status", "Cache-Control", "Pragma", "Server"}
 
-# Field names whose values should be replaced with a fixed synthetic ID.
-# "id" catches the bare top-level Garmin user ID in social-profile responses.
-_PROFILE_FIELDS = {"userProfilePk", "userProfilePK", "userId", "ownerId", "id"}
-_DEVICE_FIELDS  = {"deviceId", "sourceDeviceId"}
-_PROFILE_SYNTH  = "12345678"
-_DEVICE_SYNTH   = "9876543210"
-
-# Field names whose values get sequential synthetic IDs.
-_ACTIVITY_FIELDS = {"activityId", "parentActivityId", "activitySummaryId"}
-_SAMPLE_FIELDS   = {"samplePk"}
-_ACTIVITY_BASE   = 10_000_001
-_SAMPLE_BASE     = 1_000_000_000_001
-
-# Detect JSON integer fields: "fieldName": 123456
-_FIELD_INT_RE = re.compile(r'"([A-Za-z][A-Za-z0-9_]*)"[ \t]*:[ \t]*(\d{6,})')
+# Identifier fields — name ends in Id/Pk with a 6+ digit value — hold real Garmin
+# IDs. Every distinct value collapses to one synthetic constant. Small ids (type
+# enums like typeId:1) are left alone. Idempotent: _SYNTH_ID is skipped on re-runs.
+_ID_FIELD_RE = re.compile(r'"[A-Za-z0-9_]*(?:[Ii]d|[Pp][Kk])":\s*(\d{6,})')
+_SYNTH_ID = "12345678"
 
 _UUID_RE = re.compile(
     r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', re.I
@@ -71,42 +65,17 @@ def scrub_uuids(content: str) -> str:
 
 
 def discover(files: list[str]) -> dict[str, str]:
-    """Two-pass: collect all real PII values, then build consistent mapping."""
-    profile_ids: set[str] = set()
-    device_ids: set[str]  = set()
-    activity_ids: set[str] = set()
-    sample_ids: set[str]   = set()
-
+    """Collect real Garmin IDs (any *Id/*Pk field) and map each to one synthetic
+    constant. Done across all files so a value is replaced consistently, including
+    where it appears in a request URL."""
+    ids: set[str] = set()
     for path in files:
         with open(path, encoding="utf-8") as f:
             content = f.read()
-
-        for field, value in _FIELD_INT_RE.findall(content):
-            if field in _PROFILE_FIELDS and value != _PROFILE_SYNTH and not value.startswith("1000000"):
-                profile_ids.add(value)
-            elif field in _DEVICE_FIELDS and value != _DEVICE_SYNTH:
-                device_ids.add(value)
-            elif field in _ACTIVITY_FIELDS:
-                # Skip already-synthetic values (≤8 digits)
-                if len(value) > 8:
-                    activity_ids.add(value)
-            elif field in _SAMPLE_FIELDS:
-                if not value.startswith("100000000000"):
-                    sample_ids.add(value)
-
-    mapping: dict[str, str] = {}
-
-    for v in profile_ids:
-        mapping[v] = _PROFILE_SYNTH
-    for v in device_ids:
-        mapping[v] = _DEVICE_SYNTH
-
-    for i, v in enumerate(sorted(activity_ids, reverse=True)):
-        mapping[v] = str(_ACTIVITY_BASE + i)
-    for i, v in enumerate(sorted(sample_ids)):
-        mapping[v] = str(_SAMPLE_BASE + i)
-
-    return mapping
+        for value in _ID_FIELD_RE.findall(content):
+            if value != _SYNTH_ID:
+                ids.add(value)
+    return {v: _SYNTH_ID for v in ids}
 
 
 def strip_response_headers(content: str) -> str:
@@ -164,41 +133,45 @@ def scrub_url_dates(content: str) -> str:
     return "\n".join(fix(line) for line in content.split("\n"))
 
 
-# Epoch-millisecond timestamps (e.g. "startGMT": 1781716567000) encode the real
-# time of an activity but aren't ISO strings, so the date regexes miss them.
-# Replace any 13-digit value in the plausible-epoch range (~2017-2033) with the
-# 2026-01-01T00:00:00Z epoch. The lower bound excludes already-synthetic sample
-# PKs (1_000_000_000_001) and activity IDs.
-_EPOCH_MILLIS_RE = re.compile(r'(?<![\d.])1[5-9]\d{11}(?![\d.])')
-_SYNTH_EPOCH_MILLIS = "1767225600000"
+# Generic privacy rule: in a response body, every numeric value is a real
+# measurement (heart rate, sleep, SpO2, GPS, distance, calories, ...) unless its
+# field is an identifier or structural metadata. Replace them all with 1 so no
+# real personal data is committed (1, not 0, so NotZero assertions still verify
+# decoding). Being generic avoids maintaining a per-metric list and covers future
+# cassettes for free. Identifier/structural fields are preserved so synthetic IDs
+# still flow into chained request URLs and counts/types/versions stay coherent.
+_PRESERVE_KEY_RE = re.compile(
+    r'(?i)(id|pk|count|index|version|number|order|sequence|priority|'
+    r'category|month|year|offset|zoneid|typekey)$'
+)
+_KEY_NUM_RE = re.compile(r'"([A-Za-z_][A-Za-z0-9_]*)":\s*(-?\d+(?:\.\d+)?)')
+_ARRAY_NUM_RE = re.compile(r'([\[,])(-?\d+(?:\.\d+)?)(?=[,\]])')
+_BODY_LINE_RE = re.compile(r'^\s*body:\s')
 
 
-def normalize_epoch_millis(content: str) -> str:
-    return _EPOCH_MILLIS_RE.sub(_SYNTH_EPOCH_MILLIS, content)
+def _placeholder(num: str) -> str:
+    # Replace real measurements with a constant 1 (1.0 for floats), not 0, so the
+    # many NotZero assertions still confirm a field decoded correctly while no
+    # real value is committed. Type is preserved: Go won't decode 1.0 into an int.
+    return "1.0" if "." in num else "1"
 
 
-_PRECISE_FLOAT_RE = re.compile(r'-?\d+\.\d{4,}')
+def neutralize_metrics(content: str) -> str:
+    def key_sub(m: re.Match) -> str:
+        key, num = m.group(1), m.group(2)
+        return m.group(0) if _PRESERVE_KEY_RE.search(key) else f'"{key}":{_placeholder(num)}'
 
+    def array_sub(m: re.Match) -> str:
+        return f"{m.group(1)}{_placeholder(m.group(2))}"
 
-def _round_2sig(v: float) -> str:
-    """Round to 2 significant figures; keep 1 decimal for values < 1."""
-    if v == 0.0:
-        return "0.0"
-    if abs(v) < 1:
-        return f"{v:.1f}"
-    exp = math.floor(math.log10(abs(v)))
-    sig_decimals = max(0, 1 - exp)
-    factor = 10 ** (exp - 1)
-    # Re-round to sig_decimals to eliminate float multiplication artifacts.
-    rounded = round(round(v / factor) * factor, sig_decimals)
-    if sig_decimals == 0:
-        return str(int(rounded))
-    return f"{rounded:.{sig_decimals}f}"
+    def fix(line: str) -> str:
+        if not _BODY_LINE_RE.match(line):
+            return line
+        line = _KEY_NUM_RE.sub(key_sub, line)
+        line = _ARRAY_NUM_RE.sub(array_sub, line)
+        return line
 
-
-def simplify_floats(content: str) -> str:
-    """Replace IEEE 754 precise floats with 2-significant-figure round numbers."""
-    return _PRECISE_FLOAT_RE.sub(lambda m: _round_2sig(float(m.group(0))), content)
+    return "\n".join(fix(line) for line in content.split("\n"))
 
 
 def apply_mapping(content: str, mapping: dict[str, str]) -> str:
@@ -208,27 +181,30 @@ def apply_mapping(content: str, mapping: dict[str, str]) -> str:
     return content
 
 
-# Matches any field whose name ends in "fullname" (any capitalisation), plus
-# locationName, activityName, serialNumber — all of which may reveal identity.
-_STRING_FIELD_RE = re.compile(
-    r'("[a-zA-Z]*[Ff]ull[Nn]ame"\s*:\s*)"[^"]*"'
-    r'|("(?:locationName|activityName|serialNumber)"\s*:\s*)"[^"]*"'
-)
-_STRING_FIELD_SYNTH = {
-    "locationname": "Test Location",
-    "activityname": "Activity",
-    "serialnumber": "TEST000000",
-}
+# Generic string-value scrub: any free-text value in a response body could carry
+# identity (names, gear/workout/device labels, descriptions, ...), so replace
+# them all with "TEST". Preserve values other steps depend on: dates (already
+# normalized), UUID-shaped values (scrub_uuids collapses them), and the display
+# name placeholders that login_profile.yaml and its test rely on.
+_TEXT_VALUE_RE = re.compile(r':"((?:[^"\\]|\\.)*)"')
+_PRESERVE_TEXT = {"testuser", "Test User"}
+_DATEISH_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
+_UUIDISH_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$", re.I)
 
 
-def _replace_string_fields(content: str) -> str:
-    def _sub(m: re.Match) -> str:
-        # group(1) matches fullname variants, group(2) matches the named fields
-        prefix = m.group(1) or m.group(2)
-        key = re.search(r'"(\w+)"', prefix).group(1).lower()
-        synth = _STRING_FIELD_SYNTH.get(key, "Test User")
-        return f'{prefix}"{synth}"'
-    return _STRING_FIELD_RE.sub(_sub, content)
+def scrub_text_values(content: str) -> str:
+    def sub(m: re.Match) -> str:
+        val = m.group(1)
+        if not val or val in _PRESERVE_TEXT or _DATEISH_RE.match(val) or _UUIDISH_RE.match(val):
+            return m.group(0)
+        return ':"TEST"'
+
+    def fix(line: str) -> str:
+        if not _BODY_LINE_RE.match(line):
+            return line
+        return _TEXT_VALUE_RE.sub(sub, line)
+
+    return "\n".join(fix(line) for line in content.split("\n"))
 
 
 def apply_static(content: str, display_name: str, email: str) -> str:
@@ -239,7 +215,6 @@ def apply_static(content: str, display_name: str, email: str) -> str:
         content = content.replace(email, _SYNTH_EMAIL)
     # Replace any remaining real emails (catches addresses not passed via --email)
     content = _EMAIL_RE.sub(_SYNTH_EMAIL, content)
-    content = _replace_string_fields(content)
     for old, new in _STATIC:
         content = content.replace(old, new)
     return content
@@ -255,9 +230,9 @@ def sanitize_file(
     content = normalize_duration(content)
     content = zero_datetimes(content)
     content = scrub_url_dates(content)
-    content = simplify_floats(content)
+    content = neutralize_metrics(content)
     content = apply_mapping(content, mapping)
-    content = normalize_epoch_millis(content)
+    content = scrub_text_values(content)
     content = scrub_uuids(content)
     content = apply_static(content, display_name, email)
 
