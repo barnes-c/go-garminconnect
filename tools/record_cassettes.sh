@@ -72,6 +72,9 @@ TESTS=(
     TestAllDayStress
     TestActivities
     TestActivityDetail
+    TestActivityDetails
+    TestActivityTypes
+    TestActivitiesForDailySummary
     TestActivityCount
     TestActivitiesByDate
     TestPersonalRecords

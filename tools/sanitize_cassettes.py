@@ -2,7 +2,6 @@
 """Sanitize VCR cassettes: dynamically detect and replace PII."""
 
 import argparse
-import hashlib
 import math
 import os
 import re
@@ -13,7 +12,7 @@ STRIP_HEADERS = {"Cf-Ray", "Date", "Nel", "Report-To", "Alt-Svc", "Cf-Cache-Stat
 
 # Field names whose values should be replaced with a fixed synthetic ID.
 # "id" catches the bare top-level Garmin user ID in social-profile responses.
-_PROFILE_FIELDS = {"userProfilePk", "userProfilePK", "userId", "id"}
+_PROFILE_FIELDS = {"userProfilePk", "userProfilePK", "userId", "ownerId", "id"}
 _DEVICE_FIELDS  = {"deviceId", "sourceDeviceId"}
 _PROFILE_SYNTH  = "12345678"
 _DEVICE_SYNTH   = "9876543210"
@@ -31,8 +30,6 @@ _UUID_RE = re.compile(
     r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', re.I
 )
 _UUID_BARE_RE = re.compile(r'(?<![0-9a-f-])[0-9a-f]{32}(?![0-9a-f-])', re.I)
-_SYNTH_UUID_PREFIX = "aaaaaaaa-0000-0000-0000-"
-_SYNTH_UUID_BARE_PREFIX = "00000000000000000000"
 
 _EMAIL_RE    = re.compile(r'[\w.+%-]+@[\w.-]+\.[a-z]{2,}', re.I)
 _SYNTH_EMAIL = "test@example.com"
@@ -43,22 +40,17 @@ _STATIC = [
 ]
 
 
-def _synth_uuid(original: str) -> str:
-    h = hashlib.sha256(original.lower().encode()).hexdigest()[:12]
-    return f"{_SYNTH_UUID_PREFIX}{h}"
+# Every UUID collapses to one obviously-bogus all-f value (hyphen-stripped for
+# bare 32-char hex); nothing in the tests distinguishes one UUID from another,
+# and nothing is derived from the real value. Idempotent: re-running rewrites
+# already-synthetic UUIDs to the same value.
+_SYNTH_UUID = "ffffffff-ffff-ffff-ffff-ffffffffffff"
 
 
-def _synth_uuid_bare(original: str) -> str:
-    h = hashlib.sha256(original.lower().encode()).hexdigest()[:12]
-    return f"{_SYNTH_UUID_BARE_PREFIX}{h}"
-
-
-def _is_synthetic_uuid(s: str) -> bool:
-    return s.lower().startswith(_SYNTH_UUID_PREFIX)
-
-
-def _is_synthetic_uuid_bare(s: str) -> bool:
-    return s.lower().startswith(_SYNTH_UUID_BARE_PREFIX)
+def scrub_uuids(content: str) -> str:
+    content = _UUID_RE.sub(_SYNTH_UUID, content)
+    content = _UUID_BARE_RE.sub(_SYNTH_UUID.replace("-", ""), content)
+    return content
 
 
 def discover(files: list[str]) -> dict[str, str]:
@@ -67,8 +59,6 @@ def discover(files: list[str]) -> dict[str, str]:
     device_ids: set[str]  = set()
     activity_ids: set[str] = set()
     sample_ids: set[str]   = set()
-    uuids: set[str]        = set()
-    uuid_bares: set[str]   = set()
 
     for path in files:
         with open(path, encoding="utf-8") as f:
@@ -87,16 +77,6 @@ def discover(files: list[str]) -> dict[str, str]:
                 if not value.startswith("100000000000"):
                     sample_ids.add(value)
 
-        for m in _UUID_RE.finditer(content):
-            v = m.group(0)
-            if not _is_synthetic_uuid(v):
-                uuids.add(v.lower())
-
-        for m in _UUID_BARE_RE.finditer(content):
-            v = m.group(0)
-            if not _is_synthetic_uuid_bare(v):
-                uuid_bares.add(v.lower())
-
     mapping: dict[str, str] = {}
 
     for v in profile_ids:
@@ -108,13 +88,6 @@ def discover(files: list[str]) -> dict[str, str]:
         mapping[v] = str(_ACTIVITY_BASE + i)
     for i, v in enumerate(sorted(sample_ids)):
         mapping[v] = str(_SAMPLE_BASE + i)
-
-    for v in uuids:
-        mapping[v] = _synth_uuid(v)
-        mapping[v.upper()] = _synth_uuid(v)
-    for v in uuid_bares:
-        mapping[v] = _synth_uuid_bare(v)
-        mapping[v.upper()] = _synth_uuid_bare(v)
 
     return mapping
 
@@ -153,6 +126,38 @@ def zero_datetimes(content: str) -> str:
     content = _DATETIME_RE.sub(lambda m: f'{_SYNTH_DATE}{m.group(1)}00:00:00', content)
     content = _DATE_ONLY_RE.sub(_SYNTH_DATE, content)
     return content
+
+
+# Scrub real dates from request URLs. Synthetic test dates are anchored at
+# _SYNTH_DATE and only ever look backward (testDate, testDate.AddDate(0,-1,0),
+# ...), so any URL date later than _SYNTH_DATE is a real recording date (e.g.
+# the day an activity was logged) and must not be committed. ISO dates compare
+# lexicographically, so a string ">" is a chronological "after".
+_URL_LINE_RE = re.compile(r'^\s*url:\s*https?://')
+_BARE_DATE_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
+
+
+def scrub_url_dates(content: str) -> str:
+    def fix(line: str) -> str:
+        if not _URL_LINE_RE.match(line):
+            return line
+        return _BARE_DATE_RE.sub(
+            lambda m: _SYNTH_DATE if m.group(0) > _SYNTH_DATE else m.group(0), line
+        )
+    return "\n".join(fix(line) for line in content.split("\n"))
+
+
+# Epoch-millisecond timestamps (e.g. "startGMT": 1781716567000) encode the real
+# time of an activity but aren't ISO strings, so the date regexes miss them.
+# Replace any 13-digit value in the plausible-epoch range (~2017-2033) with the
+# 2026-01-01T00:00:00Z epoch. The lower bound excludes already-synthetic sample
+# PKs (1_000_000_000_001) and activity IDs.
+_EPOCH_MILLIS_RE = re.compile(r'(?<![\d.])1[5-9]\d{11}(?![\d.])')
+_SYNTH_EPOCH_MILLIS = "1767225600000"
+
+
+def normalize_epoch_millis(content: str) -> str:
+    return _EPOCH_MILLIS_RE.sub(_SYNTH_EPOCH_MILLIS, content)
 
 
 _PRECISE_FLOAT_RE = re.compile(r'-?\d+\.\d{4,}')
@@ -232,8 +237,11 @@ def sanitize_file(
     content = strip_response_headers(content)
     content = normalize_duration(content)
     content = zero_datetimes(content)
+    content = scrub_url_dates(content)
     content = simplify_floats(content)
     content = apply_mapping(content, mapping)
+    content = normalize_epoch_millis(content)
+    content = scrub_uuids(content)
     content = apply_static(content, display_name, email)
 
     with open(path, "w", encoding="utf-8") as f:
