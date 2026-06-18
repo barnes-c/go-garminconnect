@@ -3,6 +3,7 @@
 
 lint:
 	golangci-lint run --config .github/.golangci.yml
+	yamllint -c .github/.yamllint .
 
 build:
 	go build ./...
