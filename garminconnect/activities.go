@@ -11,33 +11,42 @@ import (
 
 // Activity represents a single Garmin Connect activity summary.
 type Activity struct {
-	ActivityID   int64  `json:"activityId"`
-	ActivityName string `json:"activityName"`
-	ActivityType struct {
-		TypeKey string `json:"typeKey"`
-	} `json:"activityType"`
-	StartTimeGMT                          string  `json:"startTimeGMT"`
-	StartTimeLocal                        string  `json:"startTimeLocal"`
-	Duration                              float64 `json:"duration"`        // seconds
-	ElapsedDuration                       float64 `json:"elapsedDuration"` // seconds
-	MovingDuration                        float64 `json:"movingDuration"`  // seconds
-	Distance                              float64 `json:"distance"`        // meters
-	Calories                              float64 `json:"calories"`
-	AverageHR                             float64 `json:"averageHR"`
-	MaxHR                                 float64 `json:"maxHR"`
-	AverageSpeed                          float64 `json:"averageSpeed"` // meters/second
-	MaxSpeed                              float64 `json:"maxSpeed"`     // meters/second
-	ElevationGain                         float64 `json:"elevationGain"`
-	ElevationLoss                         float64 `json:"elevationLoss"`
-	Steps                                 int64   `json:"steps"`
-	TrainingEffect                        float64 `json:"trainingEffect"`
-	AnaerobicTrainingEffect               float64 `json:"anaerobicTrainingEffect"`
-	AerobicTrainingEffectMessage          string  `json:"aerobicTrainingEffectMessage"`
-	AverageRunningCadenceInStepsPerMinute float64 `json:"averageRunningCadenceInStepsPerMinute"`
-	VO2MaxValue                           float64 `json:"vO2MaxValue"`
-	LocationName                          string  `json:"locationName"`
-	OwnerID                               int64   `json:"ownerId"`
-	HasPolyline                           bool    `json:"hasPolyline"`
+	ActivityID                            int64        `json:"activityId"`
+	ActivityName                          string       `json:"activityName"`
+	Description                           string       `json:"description"`
+	ActivityType                          ActivityType `json:"activityType"`
+	StartTimeGMT                          string       `json:"startTimeGMT"`
+	StartTimeLocal                        string       `json:"startTimeLocal"`
+	EndTimeGMT                            string       `json:"endTimeGMT"`
+	Duration                              float64      `json:"duration"`        // seconds
+	ElapsedDuration                       float64      `json:"elapsedDuration"` // seconds
+	MovingDuration                        float64      `json:"movingDuration"`  // seconds
+	Distance                              float64      `json:"distance"`        // meters
+	Calories                              float64      `json:"calories"`
+	AverageHR                             float64      `json:"averageHR"`
+	MaxHR                                 float64      `json:"maxHR"`
+	AverageSpeed                          float64      `json:"averageSpeed"` // meters/second
+	MaxSpeed                              float64      `json:"maxSpeed"`     // meters/second
+	ElevationGain                         float64      `json:"elevationGain"`
+	ElevationLoss                         float64      `json:"elevationLoss"`
+	Steps                                 int64        `json:"steps"`
+	TrainingEffect                        float64      `json:"trainingEffect"`
+	AnaerobicTrainingEffect               float64      `json:"anaerobicTrainingEffect"`
+	AerobicTrainingEffectMessage          string       `json:"aerobicTrainingEffectMessage"`
+	AverageRunningCadenceInStepsPerMinute float64      `json:"averageRunningCadenceInStepsPerMinute"`
+	VO2MaxValue                           float64      `json:"vO2MaxValue"`
+	LocationName                          string       `json:"locationName"`
+	OwnerID                               int64        `json:"ownerId"`
+	HasPolyline                           bool         `json:"hasPolyline"`
+}
+
+type ActivityType struct {
+	TypeID       int    `json:"typeId"`
+	TypeKey      string `json:"typeKey"`
+	ParentTypeID int    `json:"parentTypeId"`
+	IsHidden     bool   `json:"isHidden"`
+	Restricted   bool   `json:"restricted"`
+	Trimmable    bool   `json:"trimmable"`
 }
 
 // PersonalRecord represents a personal best for a given activity type.
