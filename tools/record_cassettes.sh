@@ -75,6 +75,9 @@ TESTS=(
     TestActivityDetails
     TestActivityTypes
     TestActivitiesForDailySummary
+    TestActiveTrainingPlan
+    TestCompletedTrainingPlans
+    TestTrainingPlanTypes
     TestActivityCount
     TestActivitiesByDate
     TestPersonalRecords

@@ -1,0 +1,55 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/atp-api/atp/athlete/active
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        content_length: 0
+        body: ""
+        headers:
+            Alt-Svc:
+                - h3=":443"; ma=86400
+            Cache-Control:
+                - no-cache, no-store, max-age=0, must-revalidate
+            Cf-Cache-Status:
+                - DYNAMIC
+            Cf-Ray:
+                - a0dc169f6e7bd0ae-CDG
+            Date:
+                - Thu, 18 Jun 2026 17:42:03 GMT
+            Expires:
+                - "0"
+            Nel:
+                - '{"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}'
+            Pragma:
+                - no-cache
+            Report-To:
+                - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=fi7%2FgRlUZeRdDW6fdwl%2BAkFlPJKSLN3r%2B8uQQ1re6UZdYyFQ9KYzSge6OoHsDyriE4l%2Fo52XHu%2BVGjZmgbrYIxy3avZt3SVUihT10bl3l%2BiKyeofdynDeEtVHSRA39QZs2ske2jML3iX2bUpDUdIpNKbvQ%3D%3D"}]}'
+            Server:
+                - cloudflare
+            Strict-Transport-Security:
+                - max-age=31536000 ; includeSubDomains
+            X-Content-Type-Options:
+                - nosniff
+            X-Frame-Options:
+                - DENY
+            X-Xss-Protection:
+                - 1; mode=block
+        status: 204 No Content
+        code: 204
+        duration: 205.625ms

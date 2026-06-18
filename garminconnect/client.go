@@ -174,6 +174,8 @@ func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, o
 
 	switch resp.StatusCode {
 	case http.StatusOK:
+	case http.StatusNoContent:
+		return nil // no body to decode (e.g. no active plan)
 	case http.StatusUnauthorized:
 		return ErrUnauthorized
 	case http.StatusTooManyRequests:
