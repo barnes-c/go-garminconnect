@@ -140,10 +140,14 @@ def scrub_url_dates(content: str) -> str:
 # decoding). Being generic avoids maintaining a per-metric list and covers future
 # cassettes for free. Identifier/structural fields are preserved so synthetic IDs
 # still flow into chained request URLs and counts/types/versions stay coherent.
+# Exception: a preserved field is still neutralized if its value looks like an
+# epoch-ms timestamp — Garmin reuses structural fields like "version"/"sequence"
+# to hold record timestamps (e.g. weight/latest), which would leak a real time.
 _PRESERVE_KEY_RE = re.compile(
     r'(?i)(id|pk|count|index|version|number|order|sequence|priority|'
     r'category|month|year|offset|zoneid|typekey)$'
 )
+_EPOCH_MS_RE = re.compile(r'^1[5-9]\d{11}$')  # 13-digit, ~2017-2033
 _KEY_NUM_RE = re.compile(r'"([A-Za-z_][A-Za-z0-9_]*)":\s*(-?\d+(?:\.\d+)?)')
 _ARRAY_NUM_RE = re.compile(r'([\[,])(-?\d+(?:\.\d+)?)(?=[,\]])')
 _BODY_LINE_RE = re.compile(r'^\s*body:\s')
@@ -159,7 +163,9 @@ def _placeholder(num: str) -> str:
 def neutralize_metrics(content: str) -> str:
     def key_sub(m: re.Match) -> str:
         key, num = m.group(1), m.group(2)
-        return m.group(0) if _PRESERVE_KEY_RE.search(key) else f'"{key}":{_placeholder(num)}'
+        if _PRESERVE_KEY_RE.search(key) and not _EPOCH_MS_RE.match(num):
+            return m.group(0)
+        return f'"{key}":{_placeholder(num)}'
 
     def array_sub(m: re.Match) -> str:
         return f"{m.group(1)}{_placeholder(m.group(2))}"

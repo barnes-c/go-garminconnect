@@ -92,6 +92,7 @@ TESTS=(
     TestBloodPressure
     TestWeighIns
     TestDailyWeighIns
+    TestLatestWeight
     TestBodyComposition
     TestGear
     TestGearStats

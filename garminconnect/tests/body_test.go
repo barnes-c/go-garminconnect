@@ -28,6 +28,18 @@ func TestDailyWeighIns(t *testing.T) {
 	assert.NotNil(t, out)
 }
 
+func TestLatestWeight(t *testing.T) {
+	c, stop := newVCRClient(t, "latest_weight")
+	defer stop()
+
+	out, err := c.LatestWeight(t.Context(), testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, out)
+	assert.NotZero(t, out.Weight)
+	assert.NotEmpty(t, out.SourceType)
+}
+
 func TestBodyComposition(t *testing.T) {
 	c, stop := newVCRClient(t, "body_composition")
 	defer stop()

@@ -157,6 +157,7 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 | `BodyComposition(ctx, start, end)`        | Weight and body composition over a range |
 | `WeighIns(ctx, start, end)`               | All weigh-in entries in a range          |
 | `DailyWeighIns(ctx, date)`                | Weigh-ins for a single day               |
+| `LatestWeight(ctx, date)`                 | Most recent weigh-in as of a date        |
 | `AddWeighIn(ctx, kg, unitKey, timestamp)` | Log a weigh-in                           |
 | `DeleteWeighIn(ctx, date, weightPK)`      | Delete a weigh-in entry                  |
 

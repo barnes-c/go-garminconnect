@@ -96,6 +96,36 @@ func (c *Client) DailyWeighIns(ctx context.Context, d time.Time) (*WeighInsRespo
 	return &out, nil
 }
 
+// LatestWeightEntry is the most recent weigh-in with optional body-composition
+// metrics (the composition fields are null when entered manually).
+type LatestWeightEntry struct {
+	Date           int64   `json:"date"`         // unix ms
+	TimestampGMT   int64   `json:"timestampGMT"` // unix ms
+	Version        int64   `json:"version"`
+	Weight         float64 `json:"weight"`      // grams
+	WeightDelta    float64 `json:"weightDelta"` // grams
+	Bmi            float64 `json:"bmi"`
+	BodyFat        float64 `json:"bodyFat"`
+	BodyWater      float64 `json:"bodyWater"`
+	BoneMass       float64 `json:"boneMass"`
+	MuscleMass     float64 `json:"muscleMass"`
+	VisceralFat    float64 `json:"visceralFat"`
+	MetabolicAge   float64 `json:"metabolicAge"`
+	PhysiqueRating float64 `json:"physiqueRating"`
+	CaloricIntake  float64 `json:"caloricIntake"`
+	SourceType     string  `json:"sourceType"`
+}
+
+// LatestWeight returns the most recent weigh-in measurement as of the given date.
+func (c *Client) LatestWeight(ctx context.Context, d time.Time) (*LatestWeightEntry, error) {
+	params := url.Values{"date": {date(d)}}
+	var out LatestWeightEntry
+	if err := c.get(ctx, "/weight-service/weight/latest", params, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 // AddWeighIn records a new weigh-in. weightKg is in kilograms; timestamp is RFC3339.
 // The server stores weight in grams, so weightKg is converted automatically.
 func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, timestamp string) (map[string]json.RawMessage, error) {
