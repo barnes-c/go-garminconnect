@@ -1,6 +1,7 @@
 package garminconnect_test
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -55,6 +56,51 @@ func TestActivityDetail(t *testing.T) {
 	detail, err := c.ActivityDetail(t.Context(), acts[0].ActivityID)
 	require.NoError(t, err)
 	assert.NotEmpty(t, detail)
+}
+
+func TestActivityDetails(t *testing.T) {
+	c, stop := newVCRClient(t, "activity_details")
+	defer stop()
+
+	acts, err := c.Activities(t.Context(), 0, 1)
+	require.NoError(t, err)
+	require.NotEmpty(t, acts)
+
+	details, err := c.ActivityDetails(t.Context(), acts[0].ActivityID)
+	require.NoError(t, err)
+	assert.NotEmpty(t, details)
+}
+
+func TestActivityTypes(t *testing.T) {
+	c, stop := newVCRClient(t, "activity_types")
+	defer stop()
+
+	types, err := c.ActivityTypes(t.Context())
+	require.NoError(t, err)
+	require.NotEmpty(t, types)
+	assert.NotEmpty(t, types[0].TypeKey)
+}
+
+func TestActivitiesForDailySummary(t *testing.T) {
+	c, stop := newVCRClient(t, "activities_for_daily_summary")
+	defer stop()
+
+	// Replay queries testDate. To record a non-empty response, set
+	// GARMIN_SUMMARY_DATE to a day with a logged activity; the sanitizer rewrites
+	// that real date back to testDate in the cassette URL so it replays cleanly.
+	summaryDate := testDate
+	if d := os.Getenv("GARMIN_SUMMARY_DATE"); d != "" {
+		parsed, err := time.Parse("2006-01-02", d)
+		require.NoError(t, err)
+		summaryDate = parsed
+	}
+	out, err := c.ActivitiesForDailySummary(t.Context(), summaryDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	for _, a := range out {
+		assert.NotZero(t, a.ActivityID)
+	}
 }
 
 func TestActivityCount(t *testing.T) {

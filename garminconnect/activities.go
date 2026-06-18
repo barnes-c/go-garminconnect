@@ -153,6 +153,38 @@ func (c *Client) ActivityDetail(ctx context.Context, id int64) (map[string]json.
 	return out, nil
 }
 
+// ActivityDetails returns the full detail object for a single activity,
+// including metric descriptors and per-sample metrics. The structure varies
+// by activity type, so the raw JSON is returned as a map.
+func (c *Client) ActivityDetails(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d/details", id), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivityTypes returns the catalog of supported activity types
+// (running, cycling, kayaking_v2, ...).
+func (c *Client) ActivityTypes(ctx context.Context) ([]ActivityType, error) {
+	var out []ActivityType
+	if err := c.get(ctx, "/activity-service/activity/activityTypes", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivitiesForDailySummary returns the activities that make up the daily
+// summary for the given date.
+func (c *Client) ActivitiesForDailySummary(ctx context.Context, d time.Time) ([]Activity, error) {
+	params := url.Values{"calendarDate": {date(d)}}
+	var out []Activity
+	if err := c.get(ctx, fmt.Sprintf("/activitylist-service/activities/fordailysummary/%s", c.displayName), params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ActivityExerciseSets returns strength training exercise sets for an activity.
 func (c *Client) ActivityExerciseSets(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage

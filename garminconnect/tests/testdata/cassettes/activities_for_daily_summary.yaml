@@ -1,0 +1,33 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        host: connectapi.garmin.com
+        form:
+            calendarDate:
+                - "2026-01-01"
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/fordailysummary/testuser?calendarDate=2026-01-01
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        content_length: -1
+        uncompressed: true
+        body: '[{"activityId":10000001,"activityName":"Activity","startTimeLocal":"2026-01-01T00:00:00","startTimeGMT":"2026-01-01T00:00:00","activityType":{"typeId":1,"typeKey":"running","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventType":{"typeId":9,"typeKey":"uncategorized","sortOrder":10},"distance":0.0,"duration":17,"activeSplitSummaryDuration":17,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","calories":1.0,"bmrCalories":0.4,"activeCalories":0.6,"steps":0,"privacy":{"typeId":2,"typeKey":"private"},"requestorHasAccess":true,"elapsedDuration":17,"lapCount":1,"averageHR":80.0,"maxSpeed":0.0,"maxSplitDistance":0,"noOfSplits":1,"totalAscent":0.0,"purposefull":false,"favorite":false,"parent":false,"pr":false,"atpActivity":false}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
