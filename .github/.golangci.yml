@@ -3,16 +3,29 @@ version: "2"
 linters:
   enable:
     - bodyclose
-    - gosec
+    - depguard
     - misspell
     - revive
     - testifylint
+  settings:
+    depguard:
+      rules:
+        no_exec_policy:
+          files:
+            - "!$test"
+          deny:
+            - pkg: os/exec
+              desc: Using os/exec to run sub processes is not allowed by policy
+    revive:
+      rules:
+        - name: unused-parameter
+          severity: warning
+          disabled: true
   exclusions:
     generated: lax
     presets:
       - comments
       - common-false-positives
-      - legacy
       - std-error-handling
     rules:
       - linters:
