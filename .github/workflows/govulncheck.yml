@@ -3,9 +3,10 @@ name: govulncheck
 on:
   pull_request:
     paths:
+      - "**.go"
       - go.mod
       - go.sum
-      - "**/*.go"
+      - ".github/workflows/govulncheck.yml"
   schedule:
     - cron: "33 2 * * *"
 
