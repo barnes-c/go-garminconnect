@@ -40,32 +40,29 @@ bash tools/record_cassettes.sh --missing
 
 The script logs in once, records each cassette, then runs `tools/sanitize_cassettes.py` automatically to strip PII before commit.
 
+`TestActivitiesForDailySummary` replays against `testDate`, which has no activities. To capture a non-empty response, set `GARMIN_SUMMARY_DATE` to a day with a logged activity when recording — the sanitizer rewrites that real date back to `2026-01-01` in the cassette URL so it still replays:
+
+```bash
+GARMIN_SUMMARY_DATE=2026-06-18 GARMIN_EMAIL=... GARMIN_PASSWORD=... bash tools/record_cassettes.sh --missing
+```
+
 ## Sanitizing cassettes
 
-The sanitizer runs automatically after recording. To run it standalone:
+`record_cassettes.sh` runs the sanitizer automatically before cassettes land on disk, so you rarely invoke it directly. It strips PII (IDs, UUIDs, emails, names, dates, epoch timestamps), rounds floats to 2 significant figures (which also coarsens GPS coordinates), and is safe to re-run (idempotent). **Never commit an unsanitized cassette.**
+
+The replacement rules live in `tools/sanitize_cassettes.py` — change them there, not here. Run it standalone after hand-editing a cassette:
 
 ```bash
 python3 tools/sanitize_cassettes.py [--display-name "Real Name"] [--email real@example.com]
 ```
 
-It is safe to re-run on already-sanitized cassettes (idempotent). What it replaces:
-
-- Integer fields by name: profile/user IDs → `12345678`, device IDs → `9876543210`, activity IDs → sequential `10000001+`, sample PKs → sequential `1000000000001+`
-- UUIDs (hyphenated and bare 32-char hex) → SHA-256-derived synthetic values
-- Email addresses → `test@example.com`
-- Display name (via `--display-name`) and all `*FullName` fields → `"Test User"`
-- `locationName` → `"Test Location"`, `activityName` → `"Activity"`, `serialNumber` → `"TEST000000"`
-- Datetime strings (`2025-12-31T13:50:13`, `2025-12-31 13:50:13.944`, etc.) → `2026-01-01T00:00:00` / `2026-01-01 00:00:00`
-- Date-only JSON string values → `"2026-01-01"`
-- Floats with 4+ decimal places → 2 significant figures
-- Response headers stripped: `Cf-Ray`, `Date`, `Nel`, `Report-To`, `Alt-Svc`, `Cf-Cache-Status`, `Cache-Control`, `Pragma`, `Server`
-- Response durations → `100ms`
+Pass `--display-name` and `--email` when recording: the script can't infer your real name and address from the data, so they must be supplied to be scrubbed.
 
 ## Tools
 
-| Path | Purpose |
-|---|---|
-| `Makefile` | `make check` runs lint + build + test + govulncheck |
-| `tools/gettoken/` | Logs in and prints the OAuth token; used by `record_cassettes.sh` |
-| `tools/record_cassettes.sh` | Records cassettes for all tests against a live account |
-| `tools/sanitize_cassettes.py` | Strips PII from cassettes |
+|             Path              |                              Purpose                              |
+| ----------------------------- | ----------------------------------------------------------------- |
+| `Makefile`                    | `make check` runs lint + build + test + govulncheck               |
+| `tools/gettoken/`             | Logs in and prints the OAuth token; used by `record_cassettes.sh` |
+| `tools/record_cassettes.sh`   | Records cassettes for all tests against a live account            |
+| `tools/sanitize_cassettes.py` | Strips PII from cassettes                                         |
