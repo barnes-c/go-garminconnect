@@ -31,13 +31,25 @@ func (c *Client) Gear(ctx context.Context, userProfileNumber int) ([]Gear, error
 	return out, nil
 }
 
-// GearStats returns usage statistics for the given gear UUID.
-func (c *Client) GearStats(ctx context.Context, gearUUID string) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+// GearStats holds lifetime usage statistics for a piece of gear.
+type GearStats struct {
+	GearPK          int64   `json:"gearPk"`
+	UUID            string  `json:"uuid"`
+	TotalDistance   float64 `json:"totalDistance"` // meters
+	TotalActivities int     `json:"totalActivities"`
+	IsProcessing    bool    `json:"isProcessing"`
+	Processing      bool    `json:"processing"`
+	CreateDate      int64   `json:"createDate"`
+	UpdateDate      int64   `json:"updateDate"`
+}
+
+// GearStats returns lifetime usage statistics for the given gear UUID.
+func (c *Client) GearStats(ctx context.Context, gearUUID string) (*GearStats, error) {
+	var out GearStats
 	if err := c.get(ctx, fmt.Sprintf("/gear-service/gear/stats/%s", gearUUID), nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
 
 // GearActivities returns activities that used the given gear.
