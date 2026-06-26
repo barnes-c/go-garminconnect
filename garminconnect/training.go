@@ -2,7 +2,6 @@ package garminconnect
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -236,13 +235,38 @@ func (c *Client) LactateThreshold(ctx context.Context) ([]LactateThresholdEntry,
 	return out, nil
 }
 
+// FitnessAge holds fitness-age data for a single date. The headline ages are
+// floats; Garmin reports ChronologicalAge as a whole number.
+type FitnessAge struct {
+	ChronologicalAge     int                            `json:"chronologicalAge"`
+	FitnessAge           float64                        `json:"fitnessAge"`
+	AchievableFitnessAge float64                        `json:"achievableFitnessAge"`
+	PreviousFitnessAge   float64                        `json:"previousFitnessAge"`
+	LastUpdated          string                         `json:"lastUpdated"`
+	Components           map[string]FitnessAgeComponent `json:"components"`
+}
+
+// FitnessAgeComponent is one contributing factor to the fitness age (e.g. bmi,
+// rhr, vigorousMinutesAvg). Optional fields are pointers because they vary by
+// factor; resting heart rate, for example, carries only Value and Stale.
+type FitnessAgeComponent struct {
+	Value               float64  `json:"value"`
+	TargetValue         *float64 `json:"targetValue"`
+	ImprovementValue    *float64 `json:"improvementValue"`
+	PotentialAge        *float64 `json:"potentialAge"`
+	Priority            *int     `json:"priority"`
+	Stale               bool     `json:"stale"`
+	NumOfWeeksForIM     *int     `json:"numOfWeeksForIm"`
+	LastMeasurementDate string   `json:"lastMeasurementDate"`
+}
+
 // FitnessAge returns fitness age data for the given date.
-func (c *Client) FitnessAge(ctx context.Context, d time.Time) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+func (c *Client) FitnessAge(ctx context.Context, d time.Time) (*FitnessAge, error) {
+	var out FitnessAge
 	if err := c.get(ctx, fmt.Sprintf("/fitnessage-service/fitnessage/%s", date(d)), nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
 
 // RunningToleranceEntry holds a single day of running tolerance data.
@@ -267,11 +291,21 @@ func (c *Client) RunningTolerance(ctx context.Context, start, end time.Time) ([]
 	return out, nil
 }
 
+// CyclingFTP holds the latest cycling FTP (functional threshold power)
+// estimate. FunctionalThresholdPower is the FTP in watts.
+type CyclingFTP struct {
+	UserProfilePK            int64    `json:"userProfilePK"`
+	FunctionalThresholdPower *float64 `json:"functionalThresholdPower"`
+	Sport                    *string  `json:"sport"`
+	CalendarDate             *string  `json:"calendarDate"`
+	BiometricSourceType      *string  `json:"biometricSourceType"`
+}
+
 // CyclingFTP returns the latest cycling FTP (functional threshold power) estimate.
-func (c *Client) CyclingFTP(ctx context.Context) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+func (c *Client) CyclingFTP(ctx context.Context) (*CyclingFTP, error) {
+	var out CyclingFTP
 	if err := c.get(ctx, "/biometric-service/biometric/latestFunctionalThresholdPower/CYCLING", nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
