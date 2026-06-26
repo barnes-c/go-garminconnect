@@ -292,8 +292,7 @@ func (c *Client) RunningTolerance(ctx context.Context, start, end time.Time) ([]
 }
 
 // CyclingFTP holds the latest cycling FTP (functional threshold power)
-// estimate. FunctionalThresholdPower is the FTP in watts, or nil when the
-// account has no estimate (e.g. no power data recorded).
+// estimate. FunctionalThresholdPower is the FTP in watts.
 type CyclingFTP struct {
 	UserProfilePK            int64    `json:"userProfilePK"`
 	FunctionalThresholdPower *float64 `json:"functionalThresholdPower"`
