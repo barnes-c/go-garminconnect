@@ -3,6 +3,8 @@ package garminconnect_test
 import (
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,4 +35,24 @@ func TestLogin_FetchesProfile(t *testing.T) {
 
 	require.NoError(t, c.Login(t.Context(), "", ""))
 	assert.Equal(t, "testuser", c.DisplayName())
+}
+
+// TestLogout clears the in-memory token and removes the cached token file.
+func TestLogout(t *testing.T) {
+	tokenFile := filepath.Join(t.TempDir(), "token.json")
+	require.NoError(t, os.WriteFile(tokenFile, []byte(`{"access_token":"x"}`), 0600))
+
+	c := gc.NewClient(tokenFile, gc.WithToken("x"), gc.WithDisplayName("testuser"))
+	require.NoError(t, c.Logout())
+
+	assert.Empty(t, c.Token())
+	assert.Empty(t, c.DisplayName())
+	assert.NoFileExists(t, tokenFile)
+}
+
+// TestLogout_NoTokenFile is a no-op when no token file is configured.
+func TestLogout_NoTokenFile(t *testing.T) {
+	c := gc.NewClient("", gc.WithToken("x"))
+	require.NoError(t, c.Logout())
+	assert.Empty(t, c.Token())
 }
