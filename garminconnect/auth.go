@@ -50,6 +50,21 @@ func (c *Client) Login(ctx context.Context, username, password string) error {
 	return c.fetchProfile(ctx)
 }
 
+// Logout clears the in-memory token and removes the cached token file on disk,
+// if one is configured. The next Login then runs a full SSO flow instead of
+// resuming the cached token.
+func (c *Client) Logout() error {
+	c.token = nil
+	c.displayName = ""
+	if c.tokenFile == "" {
+		return nil
+	}
+	if err := os.Remove(c.tokenFile); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	return nil
+}
+
 func (c *Client) ensureToken(ctx context.Context, username, password string) error {
 	if c.token.valid() {
 		return nil
