@@ -34,3 +34,17 @@ func (c *Client) UserProfileSettings(ctx context.Context) (map[string]json.RawMe
 	}
 	return out, nil
 }
+
+// UnitSystem returns the authenticated user's measurement system,
+// e.g. "metric" or "statute_us".
+func (c *Client) UnitSystem(ctx context.Context) (string, error) {
+	var out struct {
+		UserData struct {
+			MeasurementSystem string `json:"measurementSystem"`
+		} `json:"userData"`
+	}
+	if err := c.get(ctx, "/userprofile-service/userprofile/user-settings", nil, &out); err != nil {
+		return "", err
+	}
+	return out.UserData.MeasurementSystem, nil
+}

@@ -26,3 +26,13 @@ func TestUserProfileSettings(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, out)
 }
+
+func TestUnitSystem(t *testing.T) {
+	c, stop := newVCRClient(t, "unit_system")
+	defer stop()
+
+	out, err := c.UnitSystem(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out)
+}
