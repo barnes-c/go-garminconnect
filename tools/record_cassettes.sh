@@ -119,6 +119,7 @@ TESTS=(
     TestCyclingFTP
     TestUserProfile
     TestUserProfileSettings
+    TestUserSettings
     TestWorkouts
     TestWorkout
     TestScheduledWorkouts

@@ -193,7 +193,10 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 |----------------------------|-----------------------------------------|
 | `UserProfile(ctx)`         | Display name, location, join date       |
 | `UserProfileSettings(ctx)` | Account settings                        |
+| `UserSettings(ctx)`        | Account-level preferences (typed)       |
+| `UnitSystem(ctx)`          | Measurement system (metric/statute)     |
 | `DisplayName(ctx)`         | Cached display name (ctx, set on login) |
+| `Logout()`                 | Clear in-memory token and cached file   |
 
 ### Women's health
 

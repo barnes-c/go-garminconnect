@@ -3,8 +3,9 @@
 ## Running tests
 
 ```bash
+make              # check all
 make check        # lint + build + test + govulncheck
-go test ./garminconnect/tests/...  # tests only
+make test         # tests only
 make lint         # lint only
 ```
 
@@ -59,7 +60,7 @@ GARMIN_SLEEP_DATE=2026-06-17 GARMIN_SUMMARY_DATE=2026-06-18 \
 The replacement rules live in `tools/sanitize_cassettes.py` — change them there, not here. Run it standalone after hand-editing a cassette:
 
 ```bash
-python3 tools/sanitize_cassettes.py [--display-name "Real Name"] [--email real@example.com]
+python3 tools/sanitize_cassettes.py
 ```
 
 Pass `--display-name` and `--email` when recording: the script can't infer your real name and address from the data, so they must be supplied to be scrubbed.
