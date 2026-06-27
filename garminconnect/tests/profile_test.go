@@ -24,11 +24,23 @@ func TestUserProfileSettings(t *testing.T) {
 	out, err := c.UserProfileSettings(t.Context())
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotEmpty(t, out)
+	require.NotNil(t, out)
+	assert.NotEmpty(t, out.MeasurementSystem)
+}
+
+func TestUserSettings(t *testing.T) {
+	c, stop := newVCRClient(t, "user_settings")
+	defer stop()
+
+	out, err := c.UserSettings(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, out)
+	assert.NotEmpty(t, out.UserData.MeasurementSystem)
 }
 
 func TestUnitSystem(t *testing.T) {
-	c, stop := newVCRClient(t, "unit_system")
+	c, stop := newVCRClient(t, "user_settings")
 	defer stop()
 
 	out, err := c.UnitSystem(t.Context())
