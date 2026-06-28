@@ -17,15 +17,6 @@ type UserProfile struct {
 	Biography            string `json:"biography"`
 }
 
-// UserProfile returns detailed profile information for the authenticated user.
-func (c *Client) UserProfile(ctx context.Context) (*UserProfile, error) {
-	var out UserProfile
-	if err := c.get(ctx, "/userprofile-service/socialProfile", nil, &out); err != nil {
-		return nil, err
-	}
-	return &out, nil
-}
-
 // UserProfileSettings holds account and display settings for the authenticated
 // user. Format fields reuse MeasurementFormat and FirstDayOfWeek.
 type UserProfileSettings struct {
@@ -157,6 +148,15 @@ type SleepWindow struct {
 	SleepWindowFrequency              string `json:"sleepWindowFrequency"`
 	StartSleepTimeSecondsFromMidnight int    `json:"startSleepTimeSecondsFromMidnight"`
 	EndSleepTimeSecondsFromMidnight   int    `json:"endSleepTimeSecondsFromMidnight"`
+}
+
+// UserProfile returns detailed profile information for the authenticated user.
+func (c *Client) UserProfile(ctx context.Context) (*UserProfile, error) {
+	var out UserProfile
+	if err := c.get(ctx, "/userprofile-service/socialProfile", nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // UserSettings returns the authenticated user's account-level preferences.

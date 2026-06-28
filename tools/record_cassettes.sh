@@ -107,6 +107,8 @@ TESTS=(
     TestDevices
     TestLastUsedDevice
     TestPrimaryTrainingDevice
+    TestDeviceSettings
+    TestDeviceSolarData
     TestTrainingReadiness
     TestTrainingStatus
     TestMaxMetrics
