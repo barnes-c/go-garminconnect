@@ -15,6 +15,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/recorder"
 
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
+	"github.com/barnes-c/go-garminconnect/internal/sanitize"
 )
 
 // newVCRClient returns a Client wired to a cassette named after the calling
@@ -78,14 +79,12 @@ func newVCRClient(t *testing.T) (*gc.Client, func()) {
 		}),
 	}
 
-	if liveDisplayName != "" {
-		opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
-			i.Request.Headers.Set("Authorization", "Bearer test")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, url.PathEscape(liveDisplayName), "testuser")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, liveDisplayName, "testuser")
-			return nil
-		}, recorder.BeforeSaveHook))
-	}
+	// Sanitize every interaction inline, before it is written to disk, so a
+	// cassette is never persisted with PII. Fires only when recording.
+	opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
+		sanitize.Interaction(i, liveDisplayName)
+		return nil
+	}, recorder.BeforeSaveHook))
 
 	r, err := recorder.New(cassettePath, opts...)
 	if err != nil {

@@ -255,9 +255,9 @@ make test
 To re-record cassettes against a live account:
 
 ```bash
-GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret bash tools/record_cassettes.sh
+GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/record
 # Only record missing cassettes:
-bash tools/record_cassettes.sh --missing
+go run ./internal/record --missing
 ```
 
-The script logs in once, records one cassette per test, then runs `tools/sanitize_cassettes.py` to strip PII before committing.
+The tool logs in once and records one cassette per test. PII is stripped **inline** as each cassette is written (the recorder's `BeforeSaveHook` calls `internal/sanitize`), so cassettes are never persisted unsanitized.
