@@ -8,14 +8,13 @@
 //
 // Usage:
 //
-//	GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./tools/record
-//	go run ./tools/record --missing   # only record cassettes that don't exist yet
+//	GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/record
+//	go run ./internal/record --missing   # only record cassettes that don't exist yet
 //
 // Credentials may be omitted if a valid cached token exists in the token file.
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -26,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	gc "github.com/barnes-c/go-garminconnect/garminconnect"
+	"github.com/barnes-c/go-garminconnect/internal/login"
 )
 
 const (
@@ -51,10 +50,11 @@ func main() {
 }
 
 func run(missingOnly bool) error {
-	token, displayName, err := login()
+	c, err := login.Client(tokenFile)
 	if err != nil {
-		return err
+		return fmt.Errorf("login: %w", err)
 	}
+	token, displayName := c.Token(), c.DisplayName()
 	fmt.Printf("==> Logged in (display_name=%s)\n", displayName)
 
 	tests, err := discoverTests()
@@ -107,16 +107,6 @@ func run(missingOnly bool) error {
 		return fmt.Errorf("%d test(s) failed", len(fail))
 	}
 	return nil
-}
-
-// login reuses a cached token if present, otherwise authenticates with
-// GARMIN_EMAIL / GARMIN_PASSWORD, and returns the access token and display name.
-func login() (token, displayName string, err error) {
-	c := gc.NewClient(tokenFile)
-	if err := c.Login(context.Background(), os.Getenv("GARMIN_EMAIL"), os.Getenv("GARMIN_PASSWORD")); err != nil {
-		return "", "", fmt.Errorf("login: %w", err)
-	}
-	return c.Token(), c.DisplayName(), nil
 }
 
 var (
