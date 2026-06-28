@@ -8,7 +8,7 @@ import (
 )
 
 func TestWorkouts(t *testing.T) {
-	c, stop := newVCRClient(t, "workouts")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	workouts, err := c.Workouts(t.Context(), 0, 5)
@@ -21,7 +21,7 @@ func TestWorkouts(t *testing.T) {
 }
 
 func TestWorkout(t *testing.T) {
-	c, stop := newVCRClient(t, "workout_detail")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	workouts, err := c.Workouts(t.Context(), 0, 1)
@@ -36,7 +36,7 @@ func TestWorkout(t *testing.T) {
 }
 
 func TestScheduledWorkouts(t *testing.T) {
-	c, stop := newVCRClient(t, "scheduled_workouts")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	sw, err := c.ScheduledWorkouts(t.Context(), testDate.Year(), int(testDate.Month()))

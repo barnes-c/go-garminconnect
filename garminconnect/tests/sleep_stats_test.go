@@ -10,7 +10,7 @@ import (
 )
 
 func TestDailySleepData(t *testing.T) {
-	c, stop := newVCRClient(t, "daily_sleep_data")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	// Replay queries testDate. To record a night with actual sleep, set
@@ -30,7 +30,7 @@ func TestDailySleepData(t *testing.T) {
 }
 
 func TestSleepStats(t *testing.T) {
-	c, stop := newVCRClient(t, "sleep_stats")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, 0, -27)

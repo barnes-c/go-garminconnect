@@ -17,7 +17,8 @@ import (
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
-// newVCRClient returns a Client wired to the named cassette for replay.
+// newVCRClient returns a Client wired to a cassette named after the calling
+// test (t.Name(), e.g. TestFloors -> testdata/cassettes/TestFloors.yaml) for replay.
 // To record a new cassette set either:
 //   - GARMIN_TOKEN + GARMIN_DISPLAY_NAME  (preferred: no extra SSO call)
 //   - GARMIN_EMAIL + GARMIN_PASSWORD      (triggers one SSO login per test)
@@ -25,9 +26,10 @@ import (
 // Real credentials are scrubbed from saved cassettes so they can be committed:
 //   - Authorization header → "Bearer test"
 //   - real display name in URLs → "testuser"
-func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
+func newVCRClient(t *testing.T) (*gc.Client, func()) {
 	t.Helper()
 
+	cassetteName := t.Name()
 	cassettePath := "testdata/cassettes/" + cassetteName
 	token := os.Getenv("GARMIN_TOKEN")
 	displayName := os.Getenv("GARMIN_DISPLAY_NAME")

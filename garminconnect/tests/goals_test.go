@@ -8,7 +8,7 @@ import (
 )
 
 func TestGoals(t *testing.T) {
-	c, stop := newVCRClient(t, "goals")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	goals, err := c.Goals(t.Context(), "active", 0, 10)
@@ -17,7 +17,7 @@ func TestGoals(t *testing.T) {
 }
 
 func TestEarnedBadges(t *testing.T) {
-	c, stop := newVCRClient(t, "earned_badges")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	badges, err := c.EarnedBadges(t.Context())
@@ -26,7 +26,7 @@ func TestEarnedBadges(t *testing.T) {
 }
 
 func TestAvailableBadges(t *testing.T) {
-	c, stop := newVCRClient(t, "available_badges")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	badges, err := c.AvailableBadges(t.Context())

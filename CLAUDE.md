@@ -14,18 +14,17 @@ Tests use go-vcr cassettes (`garminconnect/tests/testdata/cassettes/*.yaml`) —
 ## Test conventions
 
 - `testDate` is fixed at `time.Date(2026, 1, 1, ...)` in `activities_test.go`. Cassette URLs are keyed to this date; changing it breaks URL matching.
-- `newVCRClient(t, "cassette_name")` wires a client to a cassette for replay.
+- `newVCRClient(t)` wires a client to a cassette for replay. The cassette is named after the test (`t.Name()`), e.g. `TestFloors` → `testdata/cassettes/TestFloors.yaml`. One cassette per test — no shared cassettes.
 - `skipAPIError(t, err)` skips a test when the cassette captured a 4xx — the endpoint isn't available on the recorded account. Use it before `require.NoError` for optional endpoints.
 - The sanitizer replaces every measurement value with **`1`** (`1.0` for floats) and every free-text string with **`"TEST"`**, so tests assert structure and non-zero/non-empty — never specific values. IDs are synthesized and string/date/UUID fields are preserved structurally. See `tools/sanitize_cassettes.py`.
 
 ## Adding a new API method
 
 1. Implement the method in `garminconnect/`.
-2. Write a test in `garminconnect/tests/<area>_test.go` using `newVCRClient`.
-3. Add the test function name to the `TESTS` array in `tools/record_cassettes.sh`.
-4. Record the cassette (see below).
-5. **Inspect the recorded cassette for sensitive data** the sanitizer doesn't already cover (new ID fields, biometric/behavioural metrics, location, schedule times). If anything personal survives sanitization, extend `tools/sanitize_cassettes.py` and re-run it before committing.
-6. Add the method to the API table in `README.md` under the relevant section.
+2. Write a test in `garminconnect/tests/<area>_test.go` using `newVCRClient(t)`. The record script auto-discovers it — no list to update.
+3. Record the cassette (see below).
+4. **Inspect the recorded cassette for sensitive data** the sanitizer doesn't already cover (new ID fields, biometric/behavioural metrics, location, schedule times). If anything personal survives sanitization, extend `tools/sanitize_cassettes.py` and re-run it before committing.
+5. Add the method to the API table in `README.md` under the relevant section.
 
 ## Recording cassettes
 

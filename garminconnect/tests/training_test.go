@@ -8,7 +8,7 @@ import (
 )
 
 func TestTrainingReadiness(t *testing.T) {
-	c, stop := newVCRClient(t, "training_readiness")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	entries, err := c.TrainingReadiness(t.Context(), testDate)
@@ -19,7 +19,7 @@ func TestTrainingReadiness(t *testing.T) {
 }
 
 func TestTrainingStatus(t *testing.T) {
-	c, stop := newVCRClient(t, "training_status")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	entries, err := c.TrainingStatus(t.Context(), testDate)
@@ -29,7 +29,7 @@ func TestTrainingStatus(t *testing.T) {
 }
 
 func TestMaxMetrics(t *testing.T) {
-	c, stop := newVCRClient(t, "max_metrics")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -40,7 +40,7 @@ func TestMaxMetrics(t *testing.T) {
 }
 
 func TestEnduranceScore(t *testing.T) {
-	c, stop := newVCRClient(t, "endurance_score")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -51,7 +51,7 @@ func TestEnduranceScore(t *testing.T) {
 }
 
 func TestRacePredictions(t *testing.T) {
-	c, stop := newVCRClient(t, "race_predictions")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	preds, err := c.RacePredictions(t.Context())
@@ -61,7 +61,7 @@ func TestRacePredictions(t *testing.T) {
 }
 
 func TestHillScore(t *testing.T) {
-	c, stop := newVCRClient(t, "hill_score")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -72,7 +72,7 @@ func TestHillScore(t *testing.T) {
 }
 
 func TestLactateThreshold(t *testing.T) {
-	c, stop := newVCRClient(t, "lactate_threshold")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.LactateThreshold(t.Context())
@@ -82,7 +82,7 @@ func TestLactateThreshold(t *testing.T) {
 }
 
 func TestFitnessAge(t *testing.T) {
-	c, stop := newVCRClient(t, "fitness_age")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.FitnessAge(t.Context(), testDate)
@@ -91,7 +91,7 @@ func TestFitnessAge(t *testing.T) {
 }
 
 func TestRunningTolerance(t *testing.T) {
-	c, stop := newVCRClient(t, "running_tolerance")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -105,7 +105,7 @@ func TestRunningTolerance(t *testing.T) {
 }
 
 func TestCyclingFTP(t *testing.T) {
-	c, stop := newVCRClient(t, "cycling_ftp")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.CyclingFTP(t.Context())

@@ -8,7 +8,7 @@ import (
 )
 
 func TestUserProfile(t *testing.T) {
-	c, stop := newVCRClient(t, "user_profile")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.UserProfile(t.Context())
@@ -18,7 +18,7 @@ func TestUserProfile(t *testing.T) {
 }
 
 func TestUserProfileSettings(t *testing.T) {
-	c, stop := newVCRClient(t, "user_profile_settings")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.UserProfileSettings(t.Context())
@@ -29,7 +29,7 @@ func TestUserProfileSettings(t *testing.T) {
 }
 
 func TestUserSettings(t *testing.T) {
-	c, stop := newVCRClient(t, "user_settings")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.UserSettings(t.Context())
@@ -40,7 +40,7 @@ func TestUserSettings(t *testing.T) {
 }
 
 func TestUnitSystem(t *testing.T) {
-	c, stop := newVCRClient(t, "user_settings")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.UnitSystem(t.Context())

@@ -7,9 +7,9 @@
 # Logs in once upfront, then passes the token to every test so Garmin's SSO
 # endpoint is only hit a single time regardless of how many cassettes are recorded.
 #
-# Cassettes already recorded with real data are preserved.
-# The synthetic activities_empty cassette (used for the ErrNoData test) is also
-# preserved because it cannot be recorded from a real account.
+# The test list is auto-discovered from the tests themselves: every test that
+# calls newVCRClient owns a cassette named after it (t.Name()), so this script
+# never needs hand-editing when tests are added.
 set -euo pipefail
 
 # -m / --missing  skip deletion; only record cassettes that don't exist yet
@@ -21,13 +21,13 @@ done
 : "${GARMIN_EMAIL:?GARMIN_EMAIL must be set}"
 : "${GARMIN_PASSWORD:?GARMIN_PASSWORD must be set}"
 
-CASSETTE_DIR="garminconnect/tests/testdata/cassettes"
+TEST_DIR="garminconnect/tests"
+CASSETTE_DIR="$TEST_DIR/testdata/cassettes"
 DELAY=5   # seconds between tests to avoid Connect API rate-limiting
 
-# Cassettes to leave untouched.
+# Cassettes to leave untouched (recorded specially, not via newVCRClient).
 KEEP=(
-    "activities_empty"
-    "login_profile"
+    "TestLogin_FetchesProfile"
 )
 
 keep() {
@@ -65,67 +65,17 @@ else
     done
 fi
 
-# One test per unique cassette.
-# Tests that share a cassette with another test are omitted (they replay).
-TESTS=(
-    TestUserSummary
-    TestAllDayStress
-    TestActivities
-    TestActivityDetail
-    TestActivityDetails
-    TestActivityTypes
-    TestActivitiesForDailySummary
-    TestActivityCount
-    TestActivitiesByDate
-    TestPersonalRecords
-    TestIntensityMinutes
-    TestBodyBattery
-    TestFloors
-    TestHydration
-    TestRespiration
-    TestSpO2
-    TestSteps
-    TestRestingHeartRate
-    TestDailySteps
-    TestWeeklyStress
-    TestWeeklyIntensityMinutes
-    TestBloodPressure
-    TestWeighIns
-    TestDailyWeighIns
-    TestLatestWeight
-    TestBodyComposition
-    TestGear
-    TestGearStats
-    TestGoals
-    TestEarnedBadges
-    TestAvailableBadges
-    TestHeartRates
-    TestHRVData
-    TestSleepData
-    TestDailySleepData
-    TestSleepStats
-    TestDevices
-    TestLastUsedDevice
-    TestPrimaryTrainingDevice
-    TestDeviceSettings
-    TestDeviceSolarData
-    TestTrainingReadiness
-    TestTrainingStatus
-    TestMaxMetrics
-    TestEnduranceScore
-    TestRacePredictions
-    TestHillScore
-    TestLactateThreshold
-    TestFitnessAge
-    TestRunningTolerance
-    TestCyclingFTP
-    TestUserProfile
-    TestUserProfileSettings
-    TestUserSettings
-    TestWorkouts
-    TestWorkout
-    TestScheduledWorkouts
-)
+# Auto-discover every test that drives a cassette (i.e. calls newVCRClient).
+# Each owns a cassette named after it, so the list maintains itself.
+TESTS=()
+while IFS= read -r t; do
+    TESTS+=("$t")
+done < <(perl -ne 'if(/^func\s+(Test\w+)/){$f=$1;$p=0} if(/newVCRClient\(t\)/ && !$p){print "$f\n";$p=1}' "$TEST_DIR"/*.go)
+
+if [[ ${#TESTS[@]} -eq 0 ]]; then
+    echo "No cassette-backed tests found under $TEST_DIR" >&2
+    exit 1
+fi
 
 PASS=()
 FAIL=()

@@ -8,7 +8,7 @@ import (
 )
 
 func TestDevices(t *testing.T) {
-	c, stop := newVCRClient(t, "devices")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	devices, err := c.Devices(t.Context())
@@ -17,7 +17,7 @@ func TestDevices(t *testing.T) {
 }
 
 func TestLastUsedDevice(t *testing.T) {
-	c, stop := newVCRClient(t, "last_used_device")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	d, err := c.LastUsedDevice(t.Context())
@@ -27,7 +27,7 @@ func TestLastUsedDevice(t *testing.T) {
 }
 
 func TestPrimaryTrainingDevice(t *testing.T) {
-	c, stop := newVCRClient(t, "primary_training_device")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	d, err := c.PrimaryTrainingDevice(t.Context())
@@ -37,7 +37,7 @@ func TestPrimaryTrainingDevice(t *testing.T) {
 }
 
 func TestDeviceSettings(t *testing.T) {
-	c, stop := newVCRClient(t, "device_settings")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	devices, err := c.Devices(t.Context())
@@ -51,7 +51,7 @@ func TestDeviceSettings(t *testing.T) {
 }
 
 func TestDeviceSolarData(t *testing.T) {
-	c, stop := newVCRClient(t, "device_solar_data")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	devices, err := c.Devices(t.Context())

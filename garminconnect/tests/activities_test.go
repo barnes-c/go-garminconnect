@@ -12,7 +12,7 @@ import (
 var testDate = time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 
 func TestActivities(t *testing.T) {
-	c, stop := newVCRClient(t, "activities")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	acts, err := c.Activities(t.Context(), 0, 2)
@@ -34,7 +34,7 @@ func TestActivities(t *testing.T) {
 }
 
 func TestLastActivity(t *testing.T) {
-	c, stop := newVCRClient(t, "activities")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	// LastActivity uses limit=1 internally, but we reuse the activities cassette
@@ -45,7 +45,7 @@ func TestLastActivity(t *testing.T) {
 }
 
 func TestActivityDetail(t *testing.T) {
-	c, stop := newVCRClient(t, "activity_detail")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	// Record cassette: fetch the most recent activity to get a real ID.
@@ -59,7 +59,7 @@ func TestActivityDetail(t *testing.T) {
 }
 
 func TestActivityDetails(t *testing.T) {
-	c, stop := newVCRClient(t, "activity_details")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	acts, err := c.Activities(t.Context(), 0, 1)
@@ -72,7 +72,7 @@ func TestActivityDetails(t *testing.T) {
 }
 
 func TestActivityTypes(t *testing.T) {
-	c, stop := newVCRClient(t, "activity_types")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	types, err := c.ActivityTypes(t.Context())
@@ -82,7 +82,7 @@ func TestActivityTypes(t *testing.T) {
 }
 
 func TestActivitiesForDailySummary(t *testing.T) {
-	c, stop := newVCRClient(t, "activities_for_daily_summary")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	// Replay queries testDate. To record a non-empty response, set
@@ -104,7 +104,7 @@ func TestActivitiesForDailySummary(t *testing.T) {
 }
 
 func TestActivityCount(t *testing.T) {
-	c, stop := newVCRClient(t, "activity_count")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	count, err := c.ActivityCount(t.Context())
@@ -113,7 +113,7 @@ func TestActivityCount(t *testing.T) {
 }
 
 func TestActivitiesByDate(t *testing.T) {
-	c, stop := newVCRClient(t, "activities_by_date")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -123,7 +123,7 @@ func TestActivitiesByDate(t *testing.T) {
 }
 
 func TestPersonalRecords(t *testing.T) {
-	c, stop := newVCRClient(t, "personal_records")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	prs, err := c.PersonalRecords(t.Context())
@@ -132,7 +132,7 @@ func TestPersonalRecords(t *testing.T) {
 }
 
 func TestIntensityMinutes(t *testing.T) {
-	c, stop := newVCRClient(t, "intensity_minutes")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.IntensityMinutes(t.Context(), testDate)

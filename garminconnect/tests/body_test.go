@@ -8,7 +8,7 @@ import (
 )
 
 func TestWeighIns(t *testing.T) {
-	c, stop := newVCRClient(t, "weigh_ins")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -19,7 +19,7 @@ func TestWeighIns(t *testing.T) {
 }
 
 func TestDailyWeighIns(t *testing.T) {
-	c, stop := newVCRClient(t, "daily_weigh_ins")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.DailyWeighIns(t.Context(), testDate)
@@ -29,7 +29,7 @@ func TestDailyWeighIns(t *testing.T) {
 }
 
 func TestLatestWeight(t *testing.T) {
-	c, stop := newVCRClient(t, "latest_weight")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.LatestWeight(t.Context(), testDate)
@@ -41,7 +41,7 @@ func TestLatestWeight(t *testing.T) {
 }
 
 func TestBodyComposition(t *testing.T) {
-	c, stop := newVCRClient(t, "body_composition")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	bc, err := c.BodyComposition(t.Context(), testDate, testDate)
