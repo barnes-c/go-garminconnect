@@ -33,6 +33,26 @@ func TestBody_ScrubsPII(t *testing.T) {
 	}
 }
 
+// TestBody_LeakVectors covers the three leaks found by a full re-record that a
+// naive field/value scrub misses: IDs under non-Id field names, IDs used as
+// JSON object keys, and numbers in scientific notation (epoch timestamps).
+func TestBody_LeakVectors(t *testing.T) {
+	in := `{"userProfileNumber":127516254,"loadMap":{"3493638919":{"x":1.0}},` +
+		`"metrics":[1.782637918E12,2.5,1.0E13]}`
+	out := sanitize.Body(in, "")
+
+	for _, leak := range []string{"127516254", "3493638919", "1.782637918E12", "1.0E13", "2.5"} {
+		if strings.Contains(out, leak) {
+			t.Errorf("leaked %q in: %s", leak, out)
+		}
+	}
+	for _, want := range []string{`"userProfileNumber":12345678`, `"12345678":{`, `"metrics":[1.0,1.0,1.0]`} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in: %s", want, out)
+		}
+	}
+}
+
 func TestURL_ScrubsIDsDatesAndName(t *testing.T) {
 	name := "e15d1c9d-827d-4db9-b030-48792c1d1fa6"
 	// A real recording date (after testDate) must be rewritten back.

@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"go.yaml.in/yaml/v4"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/recorder"
 
@@ -85,6 +86,16 @@ func newVCRClient(t *testing.T) (*gc.Client, func()) {
 		sanitize.Interaction(i, liveDisplayName)
 		return nil
 	}, recorder.BeforeSaveHook))
+
+	// Trim unused HTTP metadata (proto, content_length, host, ...) at save time
+	// so cassettes stay lean, matching the leaner vcrpy format.
+	opts = append(opts, recorder.WithMarshalFunc(func(v any) ([]byte, error) {
+		b, err := yaml.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+		return []byte(sanitize.StripNoise(string(b))), nil
+	}))
 
 	r, err := recorder.New(cassettePath, opts...)
 	if err != nil {

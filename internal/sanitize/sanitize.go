@@ -21,6 +21,7 @@ package sanitize
 
 import (
 	"net/url"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -49,15 +50,22 @@ var staticReplacements = [][2]string{
 var preserveText = map[string]bool{"testuser": true, "Test User": true}
 
 var (
-	datetimeRE    = regexp.MustCompile(`\d{4}-\d{2}-\d{2}([T ])\d{2}:\d{2}:\d{2}(?:\.\d+)?`)
-	dateOnlyRE    = regexp.MustCompile(`"\d{4}-\d{2}-\d{2}"`)
-	bareDateRE    = regexp.MustCompile(`\d{4}-\d{2}-\d{2}`)
-	uuidRE        = regexp.MustCompile(`(?i)[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
-	emailRE       = regexp.MustCompile(`(?i)[\w.+%-]+@[\w.-]+\.[a-z]{2,}`)
-	idFieldRE     = regexp.MustCompile(`("[A-Za-z0-9_]*(?:[Ii]d|[Pp][Kk])":\s*)\d{6,}`)
+	datetimeRE = regexp.MustCompile(`\d{4}-\d{2}-\d{2}([T ])\d{2}:\d{2}:\d{2}(?:\.\d+)?`)
+	dateOnlyRE = regexp.MustCompile(`"\d{4}-\d{2}-\d{2}"`)
+	bareDateRE = regexp.MustCompile(`\d{4}-\d{2}-\d{2}`)
+	uuidRE     = regexp.MustCompile(`(?i)[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
+	emailRE    = regexp.MustCompile(`(?i)[\w.+%-]+@[\w.-]+\.[a-z]{2,}`)
+	// Identifier fields hold real Garmin IDs. *Number is included because some
+	// IDs (e.g. userProfileNumber) are not named *Id/*Pk; a 6+ digit *Number is
+	// always an identifier, never a small enum/count.
+	idFieldRE = regexp.MustCompile(`("[A-Za-z0-9_]*(?:[Ii]d|[Pp][Kk]|[Nn]umber)":\s*)\d{6,}`)
+	// objectKeyIDRE catches IDs used as JSON object keys, e.g. {"3493638919":{...}}.
+	objectKeyIDRE = regexp.MustCompile(`([\[{,]")\d{6,}(":)`)
 	digits6RE     = regexp.MustCompile(`\d{6,}`)
-	keyNumRE      = regexp.MustCompile(`"([A-Za-z_][A-Za-z0-9_]*)":\s*(-?\d+(?:\.\d+)?)`)
-	arrayNumRE    = regexp.MustCompile(`[\[,]-?\d+(?:\.\d+)?`)
+	// Number patterns include an optional exponent so scientific-notation values
+	// (e.g. epoch timestamps serialized as 1.78E12) are neutralized too.
+	keyNumRE      = regexp.MustCompile(`"([A-Za-z_][A-Za-z0-9_]*)":\s*(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)`)
+	arrayNumRE    = regexp.MustCompile(`[\[,]-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?`)
 	preserveKeyRE = regexp.MustCompile(`(?i)(id|pk|count|index|version|number|order|sequence|priority|category|month|year|offset|zoneid|typekey)$`)
 	epochMsRE     = regexp.MustCompile(`^1[5-9]\d{11}$`)
 	textValueRE   = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
@@ -77,6 +85,9 @@ func Interaction(i *cassette.Interaction, displayName string) {
 	i.Request.URL = URL(i.Request.URL, displayName)
 	i.Request.Body = Body(i.Request.Body, displayName)
 	i.Response.Body = Body(i.Response.Body, displayName)
+	// Form just duplicates the URL query (and held PII like userProfilePk).
+	// It is unused for matching, so drop it (the field is omitempty).
+	i.Request.Form = nil
 }
 
 func stripVolatileHeaders(h map[string][]string) {
@@ -117,6 +128,7 @@ func Body(s, displayName string) string {
 	s = zeroDatetimes(s)
 	s = neutralizeMetrics(s)
 	s = idFieldRE.ReplaceAllString(s, "${1}"+synthID)
+	s = objectKeyIDRE.ReplaceAllString(s, "${1}"+synthID+"${2}")
 	s = scrubTextValues(s)
 	s = scrubUUIDs(s)
 	s = applyStatic(s, displayName)
@@ -130,7 +142,7 @@ func zeroDatetimes(s string) string {
 }
 
 func placeholder(num string) string {
-	if strings.Contains(num, ".") {
+	if strings.ContainsAny(num, ".eE") {
 		return "1.0"
 	}
 	return "1"
@@ -216,6 +228,64 @@ func replaceBareHex(s string) string {
 
 func isHexOrHyphen(c byte) bool {
 	return c == '-' || (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')
+}
+
+// HTTP metadata fields go-vcr records but the tests never use (the matcher uses
+// method+URL and the body is rebuilt from the string). Dropping them keeps
+// cassettes small. None have an omitempty tag, so they must be stripped as text.
+var noiseKeyRE = regexp.MustCompile(`^(proto|proto_major|proto_minor|content_length|host|uncompressed|transfer_encoding):`)
+
+// StripNoise removes unused HTTP metadata from cassette YAML: the single-line
+// fields above and the multi-line form block (which just duplicates the URL
+// query). Used as a go-vcr marshal post-step so cassettes are written without
+// them, and by File to retrofit existing cassettes.
+func StripNoise(content string) string {
+	in := strings.Split(content, "\n")
+	out := make([]string, 0, len(in))
+	formIndent := -1
+	for _, line := range in {
+		trimmed := strings.TrimSpace(line)
+		indent := len(line) - len(strings.TrimLeft(line, " "))
+		if formIndent >= 0 {
+			if trimmed != "" && indent > formIndent {
+				continue // still inside the form block
+			}
+			formIndent = -1 // block ended
+		}
+		if trimmed == "form:" { // multi-line block
+			formIndent = indent
+			continue
+		}
+		if strings.HasPrefix(trimmed, "form:") { // inline, e.g. "form: {}"
+			continue
+		}
+		if noiseKeyRE.MatchString(trimmed) {
+			continue
+		}
+		out = append(out, line)
+	}
+	return strings.Join(out, "\n")
+}
+
+// File re-sanitizes an existing cassette file in place: strips unused HTTP
+// metadata lines and re-applies the body and URL scrubbers. Used to normalize
+// previously recorded or hand-edited cassettes to the current rules without a
+// live re-record. Idempotent.
+func File(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	lines := strings.Split(StripNoise(string(data)), "\n")
+	for i, line := range lines {
+		switch {
+		case strings.HasPrefix(strings.TrimSpace(line), "body:"):
+			lines[i] = Body(line, "")
+		case strings.HasPrefix(strings.TrimSpace(line), "url:"):
+			lines[i] = URL(line, "")
+		}
+	}
+	return os.WriteFile(path, []byte(strings.Join(lines, "\n")), 0600)
 }
 
 func applyStatic(s, displayName string) string {

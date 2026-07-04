@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/barnes-c/go-garminconnect/internal/login"
+	"github.com/barnes-c/go-garminconnect/internal/sanitize"
 )
 
 const (
@@ -41,12 +42,34 @@ var keep = map[string]bool{"TestLogin_FetchesProfile": true}
 func main() {
 	missingOnly := flag.Bool("missing", false, "only record cassettes that don't exist yet")
 	flag.BoolVar(missingOnly, "m", false, "shorthand for --missing")
+	sanitizeOnly := flag.Bool("sanitize", false, "re-sanitize existing cassettes in place; do not record")
 	flag.Parse()
 
-	if err := run(*missingOnly); err != nil {
+	var err error
+	if *sanitizeOnly {
+		err = sanitizeAll()
+	} else {
+		err = run(*missingOnly)
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
+}
+
+// sanitizeAll re-runs the sanitizer over every cassette on disk.
+func sanitizeAll() error {
+	files, err := filepath.Glob(filepath.Join(cassetteDir, "*.yaml"))
+	if err != nil {
+		return err
+	}
+	for _, f := range files {
+		if err := sanitize.File(f); err != nil {
+			return fmt.Errorf("sanitize %s: %w", f, err)
+		}
+	}
+	fmt.Printf("Sanitized %d cassettes.\n", len(files))
+	return nil
 }
 
 func run(missingOnly bool) error {

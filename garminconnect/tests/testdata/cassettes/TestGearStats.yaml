@@ -1,9 +1,8 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
         headers:
             Accept:
                 - application/json
@@ -12,16 +11,15 @@ interactions:
         url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-01-01
         method: GET
       response:
-        body: '{"userProfileId":12345678,"totalKilocalories":1,"activeKilocalories":1,"bmrKilocalories":1,"wellnessKilocalories":1,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":1,"netCalorieGoal":null,"totalDistanceMeters":1,"wellnessDistanceMeters":1,"wellnessActiveKilocalories":1,"netRemainingKilocalories":1,"userDailySummaryId":12345678,"calendarDate":"2026-01-01","rule":{"typeId":2,"typeKey":"TEST"},"uuid":"ffffffffffffffffffffffffffffffff","dailyStepGoal":1,"wellnessStartTimeGmt":"2026-01-01T00:00:00","wellnessStartTimeLocal":"2026-01-01T00:00:00","wellnessEndTimeGmt":"2026-01-01T00:00:00","wellnessEndTimeLocal":"2026-01-01T00:00:00","durationInMilliseconds":1,"wellnessDescription":null,"highlyActiveSeconds":1,"activeSeconds":1,"sedentarySeconds":1,"sleepingSeconds":1,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":1,"vigorousIntensityMinutes":1,"floorsAscendedInMeters":1,"floorsDescendedInMeters":1,"floorsAscended":1,"floorsDescended":1,"intensityMinutesGoal":1,"userFloorsAscendedGoal":1,"minHeartRate":1,"maxHeartRate":1,"restingHeartRate":1,"lastSevenDaysAvgRestingHeartRate":1,"source":"TEST","averageStressLevel":1,"maxStressLevel":1,"stressDuration":1,"restStressDuration":1,"activityStressDuration":1,"uncategorizedStressDuration":1,"totalStressDuration":1,"lowStressDuration":1,"mediumStressDuration":1,"highStressDuration":1,"stressPercentage":1,"restStressPercentage":1,"activityStressPercentage":1,"uncategorizedStressPercentage":1,"lowStressPercentage":1,"mediumStressPercentage":1,"highStressPercentage":1,"stressQualifier":"TEST","measurableAwakeDuration":1,"measurableAsleepDuration":1,"lastSyncTimestampGMT":null,"minAvgHeartRate":1,"maxAvgHeartRate":1,"bodyBatteryChargedValue":1,"bodyBatteryDrainedValue":1,"bodyBatteryHighestValue":1,"bodyBatteryLowestValue":1,"bodyBatteryMostRecentValue":1,"bodyBatteryDuringSleep":1,"bodyBatteryAtWakeTime":1,"bodyBatteryVersion":1.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":1,"lowestSpo2":1,"latestSpo2":1,"latestSpo2ReadingTimeGmt":"2026-01-01T00:00:00","latestSpo2ReadingTimeLocal":"2026-01-01T00:00:00","averageMonitoringEnvironmentAltitude":1,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"},"endOfDayBodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"},"bodyBatteryActivityEventList":[{"eventType":"TEST","eventStartTimeGmt":"2026-01-01T00:00:00","timezoneOffset":7200000,"durationInMilliseconds":1,"bodyBatteryImpact":1,"feedbackType":"TEST","shortFeedback":"TEST","deviceId":12345678,"activityName":null,"activityType":null,"activityId":null,"eventUpdateTimeGmt":"2026-01-01T00:00:00"}],"avgWakingRespirationValue":1,"highestRespirationValue":1,"lowestRespirationValue":1,"latestRespirationValue":1,"latestRespirationTimeGMT":"2026-01-01T00:00:00","respirationAlgorithmVersion":1}'
+        body: '{"userProfileId":12345678,"totalKilocalories":1.0,"activeKilocalories":1.0,"bmrKilocalories":1.0,"wellnessKilocalories":1.0,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":null,"netCalorieGoal":null,"totalDistanceMeters":null,"wellnessDistanceMeters":null,"wellnessActiveKilocalories":1.0,"netRemainingKilocalories":1.0,"userDailySummaryId":12345678,"calendarDate":"2026-01-01","rule":{"typeId":2,"typeKey":"TEST"},"uuid":"ffffffffffffffffffffffffffffffff","dailyStepGoal":1,"wellnessStartTimeGmt":"2026-01-01T00:00:00","wellnessStartTimeLocal":"2026-01-01T00:00:00","wellnessEndTimeGmt":"2026-01-01T00:00:00","wellnessEndTimeLocal":"2026-01-01T00:00:00","durationInMilliseconds":1,"wellnessDescription":null,"highlyActiveSeconds":1,"activeSeconds":1,"sedentarySeconds":1,"sleepingSeconds":1,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":1,"vigorousIntensityMinutes":1,"floorsAscendedInMeters":1.0,"floorsDescendedInMeters":1.0,"floorsAscended":1.0,"floorsDescended":1.0,"intensityMinutesGoal":1,"userFloorsAscendedGoal":1,"minHeartRate":null,"maxHeartRate":null,"restingHeartRate":null,"lastSevenDaysAvgRestingHeartRate":null,"source":"TEST","averageStressLevel":1,"maxStressLevel":null,"stressDuration":null,"restStressDuration":null,"activityStressDuration":null,"uncategorizedStressDuration":1,"totalStressDuration":1,"lowStressDuration":null,"mediumStressDuration":null,"highStressDuration":null,"stressPercentage":1.0,"restStressPercentage":1.0,"activityStressPercentage":1.0,"uncategorizedStressPercentage":1.0,"lowStressPercentage":1.0,"mediumStressPercentage":1.0,"highStressPercentage":1.0,"stressQualifier":"TEST","measurableAwakeDuration":1,"measurableAsleepDuration":1,"lastSyncTimestampGMT":null,"minAvgHeartRate":null,"maxAvgHeartRate":null,"bodyBatteryChargedValue":null,"bodyBatteryDrainedValue":null,"bodyBatteryHighestValue":null,"bodyBatteryLowestValue":null,"bodyBatteryMostRecentValue":null,"bodyBatteryDuringSleep":null,"bodyBatteryAtWakeTime":null,"bodyBatteryVersion":3.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":null,"lowestSpo2":null,"latestSpo2":null,"latestSpo2ReadingTimeGmt":null,"latestSpo2ReadingTimeLocal":null,"averageMonitoringEnvironmentAltitude":1.0,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"}}'
         headers:
             Content-Type:
                 - application/json
         status: 200 OK
         code: 200
         duration: 100ms
-    - request:
-        body: ""
-        form: {}
+    - id: 1
+      request:
         headers:
             Accept:
                 - application/json
@@ -30,30 +28,27 @@ interactions:
         url: https://connectapi.garmin.com/gear-service/gear/filterGear?userProfilePk=12345678
         method: GET
       response:
-        body: '[]'
+        body: '[{"gearPk":12345678,"uuid":"ffffffffffffffffffffffffffffffff","userProfilePk":12345678,"gearMakeName":"TEST","gearModelName":"TEST","gearTypeName":"TEST","gearStatusName":"TEST","displayName":"TEST","customMakeModel":"TEST","imageNameLarge":null,"imageNameMedium":null,"imageNameSmall":null,"dateBegin":"2026-01-01T00:00:00","dateEnd":null,"maximumMeters":1.0,"notified":false,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00"},{"gearPk":12345678,"uuid":"ffffffffffffffffffffffffffffffff","userProfilePk":12345678,"gearMakeName":"TEST","gearModelName":"TEST","gearTypeName":"TEST","gearStatusName":"TEST","displayName":"TEST","customMakeModel":"TEST","imageNameLarge":null,"imageNameMedium":null,"imageNameSmall":null,"dateBegin":"2026-01-01T00:00:00","dateEnd":null,"maximumMeters":1.0,"notified":false,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00"}]'
         headers:
-            Content-Length:
-                - "2"
             Content-Type:
                 - application/json;charset=UTF-8
         status: 200 OK
         code: 200
         duration: 100ms
-    - request:
-        body: ""
-        form: {}
+    - id: 2
+      request:
         headers:
             Accept:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/testuser?calendarDate=2026-01-01
+        url: https://connectapi.garmin.com/gear-service/gear/stats/ffffffffffffffffffffffffffffffff
         method: GET
       response:
-        body: '{"userProfileId":12345678,"totalKilocalories":1,"activeKilocalories":1,"bmrKilocalories":1,"wellnessKilocalories":1,"burnedKilocalories":null,"consumedKilocalories":null,"remainingKilocalories":null,"totalSteps":1,"netCalorieGoal":null,"totalDistanceMeters":1,"wellnessDistanceMeters":1,"wellnessActiveKilocalories":1,"netRemainingKilocalories":1,"userDailySummaryId":12345678,"calendarDate":"2026-01-01","rule":{"typeId":2,"typeKey":"TEST"},"uuid":"ffffffffffffffffffffffffffffffff","dailyStepGoal":1,"wellnessStartTimeGmt":"2026-01-01T00:00:00","wellnessStartTimeLocal":"2026-01-01T00:00:00","wellnessEndTimeGmt":"2026-01-01T00:00:00","wellnessEndTimeLocal":"2026-01-01T00:00:00","durationInMilliseconds":1,"wellnessDescription":null,"highlyActiveSeconds":1,"activeSeconds":1,"sedentarySeconds":1,"sleepingSeconds":1,"includesWellnessData":true,"includesActivityData":false,"includesCalorieConsumedData":false,"privacyProtected":false,"moderateIntensityMinutes":1,"vigorousIntensityMinutes":1,"floorsAscendedInMeters":1,"floorsDescendedInMeters":1,"floorsAscended":1,"floorsDescended":1,"intensityMinutesGoal":1,"userFloorsAscendedGoal":1,"minHeartRate":1,"maxHeartRate":1,"restingHeartRate":1,"lastSevenDaysAvgRestingHeartRate":1,"source":"TEST","averageStressLevel":1,"maxStressLevel":1,"stressDuration":1,"restStressDuration":1,"activityStressDuration":1,"uncategorizedStressDuration":1,"totalStressDuration":1,"lowStressDuration":1,"mediumStressDuration":1,"highStressDuration":1,"stressPercentage":1,"restStressPercentage":1,"activityStressPercentage":1,"uncategorizedStressPercentage":1,"lowStressPercentage":1,"mediumStressPercentage":1,"highStressPercentage":1,"stressQualifier":"TEST","measurableAwakeDuration":1,"measurableAsleepDuration":1,"lastSyncTimestampGMT":null,"minAvgHeartRate":1,"maxAvgHeartRate":1,"bodyBatteryChargedValue":1,"bodyBatteryDrainedValue":1,"bodyBatteryHighestValue":1,"bodyBatteryLowestValue":1,"bodyBatteryMostRecentValue":1,"bodyBatteryDuringSleep":1,"bodyBatteryAtWakeTime":1,"bodyBatteryVersion":1.0,"abnormalHeartRateAlertsCount":null,"averageSpo2":1,"lowestSpo2":1,"latestSpo2":1,"latestSpo2ReadingTimeGmt":"2026-01-01T00:00:00","latestSpo2ReadingTimeLocal":"2026-01-01T00:00:00","averageMonitoringEnvironmentAltitude":1,"restingCaloriesFromActivity":null,"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"},"endOfDayBodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"},"bodyBatteryActivityEventList":[{"eventType":"TEST","eventStartTimeGmt":"2026-01-01T00:00:00","timezoneOffset":7200000,"durationInMilliseconds":1,"bodyBatteryImpact":1,"feedbackType":"TEST","shortFeedback":"TEST","deviceId":12345678,"activityName":null,"activityType":null,"activityId":null,"eventUpdateTimeGmt":"2026-01-01T00:00:00"}],"avgWakingRespirationValue":1,"highestRespirationValue":1,"lowestRespirationValue":1,"latestRespirationValue":1,"latestRespirationTimeGMT":"2026-01-01T00:00:00","respirationAlgorithmVersion":1}'
+        body: '{"gearPk":12345678,"uuid":"ffffffffffffffffffffffffffffffff","createDate":1,"updateDate":1,"totalDistance":1.0,"totalActivities":1,"isProcessing":false,"processing":false}'
         headers:
             Content-Type:
-                - application/json
+                - application/json;charset=UTF-8
         status: 200 OK
         code: 200
         duration: 100ms

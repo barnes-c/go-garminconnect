@@ -3,7 +3,6 @@ version: 2
 interactions:
     - request:
         body: ""
-        form: {}
         headers:
             Accept:
                 - application/json

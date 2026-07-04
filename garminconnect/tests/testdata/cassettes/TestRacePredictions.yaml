@@ -1,27 +1,8 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
-        headers:
-            Accept:
-                - application/json
-            Authorization:
-                - Bearer test
-        url: https://connectapi.garmin.com/metrics-service/metrics/racepredictions/latest/testuser
-        method: GET
-      response:
-        body: '{"userId":12345678,"fromCalendarDate":null,"toCalendarDate":null,"calendarDate":"2026-01-01","time5K":1,"time10K":1,"timeHalfMarathon":1,"timeMarathon":1}'
-        headers:
-            Content-Type:
-                - application/json;charset=UTF-8
-        status: 200 OK
-        code: 200
-        duration: 100ms
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
         headers:
             Accept:
                 - application/json

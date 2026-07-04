@@ -1,9 +1,8 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
-        form: {}
+    - id: 0
+      request:
         headers:
             Accept:
                 - application/json
@@ -12,7 +11,7 @@ interactions:
         url: https://connectapi.garmin.com/activitylist-service/activities/count
         method: GET
       response:
-        body: '{"totalCount":303,"multisportParentCount":0,"multisportChildCount":0,"nonMultisportCount":303}'
+        body: '{"totalCount":320,"multisportParentCount":0,"multisportChildCount":0,"nonMultisportCount":320}'
         headers:
             Content-Type:
                 - application/json;charset=UTF-8
