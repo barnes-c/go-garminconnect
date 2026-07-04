@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/testuser?date=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfilePK":12345678,"calendarDate":"2026-01-01","startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","maxHeartRate":null,"minHeartRate":null,"restingHeartRate":null,"lastSevenDaysAvgRestingHeartRate":null,"heartRateValueDescriptors":null,"heartRateValues":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

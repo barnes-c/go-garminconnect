@@ -8,7 +8,7 @@ import (
 )
 
 func TestSleepData(t *testing.T) {
-	c, stop := newVCRClient(t, "sleep_data")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	s, err := c.SleepData(t.Context(), testDate)
@@ -26,7 +26,7 @@ func TestSleepData(t *testing.T) {
 }
 
 func TestHRVData(t *testing.T) {
-	c, stop := newVCRClient(t, "hrv_data")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	h, err := c.HRVData(t.Context(), testDate)

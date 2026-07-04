@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/range/2025-12-01/2026-01-01?includeAll=true
+        method: GET
+      response:
+        body: '{"dailyWeightSummaries":[{"summaryDate":"2026-01-01","numOfWeightEntries":1,"minWeight":1.0,"maxWeight":1.0,"latestWeight":{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0},"allWeightMetrics":[{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0}]},{"summaryDate":"2026-01-01","numOfWeightEntries":1,"minWeight":1.0,"maxWeight":1.0,"latestWeight":{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0},"allWeightMetrics":[{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0}]},{"summaryDate":"2026-01-01","numOfWeightEntries":1,"minWeight":1.0,"maxWeight":1.0,"latestWeight":{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0},"allWeightMetrics":[{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1.0}]},{"summaryDate":"2026-01-01","numOfWeightEntries":1,"minWeight":1.0,"maxWeight":1.0,"latestWeight":{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":null},"allWeightMetrics":[{"samplePk":1,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":null}]}],"totalAverage":{"from":1,"until":1,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null},"previousDateWeight":{"samplePk":null,"date":null,"calendarDate":null,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":null,"timestampGMT":null,"weightDelta":null},"nextDateWeight":{"samplePk":null,"date":null,"calendarDate":null,"weight":null,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":null,"timestampGMT":null,"weightDelta":null}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

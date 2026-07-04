@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userstats-service/wellness/daily/testuser?fromDate=2025-12-01&metricId=60&untilDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"statisticsStartDate":"2026-01-01","statisticsEndDate":"2026-01-01","allMetrics":{"metricsMap":{"WELLNESS_RESTING_HEART_RATE":[{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":1.0,"calendarDate":"2026-01-01"},{"value":null,"calendarDate":"2026-01-01"}]}},"groupedMetrics":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

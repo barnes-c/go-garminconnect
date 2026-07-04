@@ -31,7 +31,7 @@ func jsonResp(code int, body string) *http.Response {
 // TestLogin_FetchesProfile verifies that Login() populates DisplayName via the
 // social profile endpoint when a valid token is already present.
 func TestLogin_FetchesProfile(t *testing.T) {
-	r, err := recorder.New("testdata/cassettes/login_profile",
+	r, err := recorder.New("testdata/cassettes/TestLogin_FetchesProfile",
 		recorder.WithMode(recorder.ModeReplayOnly),
 		recorder.WithMatcher(func(req *http.Request, i cassette.Request) bool {
 			cu, _ := url.Parse(i.URL)

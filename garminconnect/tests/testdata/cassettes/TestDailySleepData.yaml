@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/sleep-service/sleep/dailySleepData?date=2026-01-01
+        method: GET
+      response:
+        body: '{"dailySleepDTO":{"id":null,"userProfilePK":12345678,"calendarDate":"2026-01-01","sleepTimeSeconds":null,"napTimeSeconds":null,"sleepWindowConfirmed":null,"sleepWindowConfirmationType":null,"sleepStartTimestampGMT":null,"sleepEndTimestampGMT":null,"sleepStartTimestampLocal":null,"sleepEndTimestampLocal":null,"autoSleepStartTimestampGMT":null,"autoSleepEndTimestampGMT":null,"sleepQualityTypePK":null,"sleepResultTypePK":null,"unmeasurableSleepSeconds":null,"deepSleepSeconds":null,"lightSleepSeconds":null,"remSleepSeconds":null,"awakeSleepSeconds":null,"deviceRemCapable":false,"retro":false,"sleepNeed":{"userProfilePk":12345678,"calendarDate":"2026-01-01","deviceId":12345678,"timestampGmt":"2026-01-01T00:00:00","baseline":1,"actual":1,"feedback":"TEST","trainingFeedback":"TEST","sleepHistoryAdjustment":"TEST","hrvAdjustment":"TEST","napAdjustment":"TEST","displayedForTheDay":false,"preferredActivityTracker":true},"nextSleepNeed":{"userProfilePk":12345678,"calendarDate":"2026-01-01","deviceId":12345678,"timestampGmt":"2026-01-01T00:00:00","baseline":1,"actual":1,"feedback":"TEST","trainingFeedback":"TEST","sleepHistoryAdjustment":"TEST","hrvAdjustment":"TEST","napAdjustment":"TEST","displayedForTheDay":false,"preferredActivityTracker":true}},"sleepMovement":null,"remSleepData":null,"sleepLevels":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

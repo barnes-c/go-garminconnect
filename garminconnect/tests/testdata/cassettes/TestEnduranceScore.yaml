@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/endurancescore/stats?aggregation=weekly&endDate=2026-01-01&startDate=2025-12-01
+        method: GET
+      response:
+        body: '{"userProfilePK":12345678,"startDate":"2026-01-01","endDate":"2026-01-01","avg":1,"max":1,"groupMap":{"2026-01-01":{"groupAverage":1,"groupMax":1,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]},"2026-01-01":{"groupAverage":1,"groupMax":1,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]},"2026-01-01":{"groupAverage":1,"groupMax":1,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]},"2026-01-01":{"groupAverage":1,"groupMax":1,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]},"2026-01-01":{"groupAverage":1,"groupMax":1,"enduranceContributorDTOList":[{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]}},"enduranceScoreDTO":{"userProfilePK":12345678,"deviceId":12345678,"calendarDate":"2026-01-01","overallScore":1,"classification":1,"feedbackPhrase":1,"primaryTrainingDevice":true,"gaugeLowerLimit":1,"classificationLowerLimitIntermediate":1,"classificationLowerLimitTrained":1,"classificationLowerLimitWellTrained":1,"classificationLowerLimitExpert":1,"classificationLowerLimitSuperior":1,"classificationLowerLimitElite":1,"gaugeUpperLimit":1,"contributors":[{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0},{"activityTypeId":3,"group":null,"contribution":1.0},{"activityTypeId":null,"group":1,"contribution":1.0}]}}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

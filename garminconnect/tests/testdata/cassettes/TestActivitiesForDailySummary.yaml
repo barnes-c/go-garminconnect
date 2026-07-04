@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/fordailysummary/testuser?calendarDate=2026-01-01
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"activityName":"TEST","startTimeLocal":"2026-01-01T00:00:00","startTimeGMT":"2026-01-01T00:00:00","activityType":{"typeId":1,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventType":{"typeId":9,"typeKey":"TEST","sortOrder":10},"distance":1,"duration":1,"activeSplitSummaryDuration":1,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","calories":1,"bmrCalories":1,"activeCalories":1,"steps":1,"privacy":{"typeId":2,"typeKey":"TEST"},"requestorHasAccess":true,"elapsedDuration":1,"lapCount":1,"averageHR":1,"maxSpeed":1,"maxSplitDistance":1,"noOfSplits":1,"totalAscent":1,"purposefull":false,"favorite":false,"parent":false,"pr":false,"atpActivity":false}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

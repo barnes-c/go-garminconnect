@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/device-service/deviceservice/mylastused
+        method: GET
+      response:
+        body: '{"userDeviceId":12345678,"userProfileNumber":12345678,"applicationNumber":37086,"lastUsedDeviceApplicationKey":"TEST","lastUsedDeviceName":"TEST","lastUsedDeviceUploadTime":1,"imageUrl":"TEST","released":true}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

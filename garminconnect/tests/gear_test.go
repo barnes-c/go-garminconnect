@@ -8,7 +8,7 @@ import (
 )
 
 func TestGear(t *testing.T) {
-	c, stop := newVCRClient(t, "gear")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	// Record cassette: fetch user summary to get the profile number, then gear.
@@ -21,7 +21,7 @@ func TestGear(t *testing.T) {
 }
 
 func TestGearStats(t *testing.T) {
-	c, stop := newVCRClient(t, "gear_stats")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	summary, err := c.UserSummary(t.Context(), testDate)

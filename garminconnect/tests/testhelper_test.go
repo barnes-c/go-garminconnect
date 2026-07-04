@@ -11,13 +11,16 @@ import (
 	"strings"
 	"testing"
 
+	"go.yaml.in/yaml/v4"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/recorder"
 
 	gc "github.com/barnes-c/go-garminconnect/garminconnect"
+	"github.com/barnes-c/go-garminconnect/internal/sanitize"
 )
 
-// newVCRClient returns a Client wired to the named cassette for replay.
+// newVCRClient returns a Client wired to a cassette named after the calling
+// test (t.Name(), e.g. TestFloors -> testdata/cassettes/TestFloors.yaml) for replay.
 // To record a new cassette set either:
 //   - GARMIN_TOKEN + GARMIN_DISPLAY_NAME  (preferred: no extra SSO call)
 //   - GARMIN_EMAIL + GARMIN_PASSWORD      (triggers one SSO login per test)
@@ -25,9 +28,10 @@ import (
 // Real credentials are scrubbed from saved cassettes so they can be committed:
 //   - Authorization header → "Bearer test"
 //   - real display name in URLs → "testuser"
-func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
+func newVCRClient(t *testing.T) (*gc.Client, func()) {
 	t.Helper()
 
+	cassetteName := t.Name()
 	cassettePath := "testdata/cassettes/" + cassetteName
 	token := os.Getenv("GARMIN_TOKEN")
 	displayName := os.Getenv("GARMIN_DISPLAY_NAME")
@@ -76,14 +80,22 @@ func newVCRClient(t *testing.T, cassetteName string) (*gc.Client, func()) {
 		}),
 	}
 
-	if liveDisplayName != "" {
-		opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
-			i.Request.Headers.Set("Authorization", "Bearer test")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, url.PathEscape(liveDisplayName), "testuser")
-			i.Request.URL = strings.ReplaceAll(i.Request.URL, liveDisplayName, "testuser")
-			return nil
-		}, recorder.BeforeSaveHook))
-	}
+	// Sanitize every interaction inline, before it is written to disk, so a
+	// cassette is never persisted with PII. Fires only when recording.
+	opts = append(opts, recorder.WithHook(func(i *cassette.Interaction) error {
+		sanitize.Interaction(i, liveDisplayName)
+		return nil
+	}, recorder.BeforeSaveHook))
+
+	// Trim unused HTTP metadata (proto, content_length, host, ...) at save time
+	// so cassettes stay lean, matching the leaner vcrpy format.
+	opts = append(opts, recorder.WithMarshalFunc(func(v any) ([]byte, error) {
+		b, err := yaml.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+		return []byte(sanitize.StripNoise(string(b))), nil
+	}))
 
 	r, err := recorder.New(cassettePath, opts...)
 	if err != nil {

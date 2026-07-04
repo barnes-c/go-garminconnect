@@ -8,7 +8,7 @@ import (
 )
 
 func TestUserSummary(t *testing.T) {
-	c, stop := newVCRClient(t, "user_summary")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	s, err := c.UserSummary(t.Context(), testDate)
@@ -19,7 +19,7 @@ func TestUserSummary(t *testing.T) {
 }
 
 func TestAllDayStress(t *testing.T) {
-	c, stop := newVCRClient(t, "all_day_stress")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	s, err := c.AllDayStress(t.Context(), testDate)
@@ -30,7 +30,7 @@ func TestAllDayStress(t *testing.T) {
 }
 
 func TestBodyBattery(t *testing.T) {
-	c, stop := newVCRClient(t, "body_battery")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	entries, err := c.BodyBattery(t.Context(), testDate, testDate)
@@ -40,7 +40,7 @@ func TestBodyBattery(t *testing.T) {
 }
 
 func TestFloors(t *testing.T) {
-	c, stop := newVCRClient(t, "floors")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	f, err := c.Floors(t.Context(), testDate)
@@ -50,7 +50,7 @@ func TestFloors(t *testing.T) {
 }
 
 func TestHydration(t *testing.T) {
-	c, stop := newVCRClient(t, "hydration")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	h, err := c.Hydration(t.Context(), testDate)
@@ -60,7 +60,7 @@ func TestHydration(t *testing.T) {
 }
 
 func TestRespiration(t *testing.T) {
-	c, stop := newVCRClient(t, "respiration")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	r, err := c.Respiration(t.Context(), testDate)
@@ -76,7 +76,7 @@ func TestRespiration(t *testing.T) {
 }
 
 func TestSpO2(t *testing.T) {
-	c, stop := newVCRClient(t, "spo2")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	s, err := c.SpO2(t.Context(), testDate)
@@ -92,7 +92,7 @@ func TestSpO2(t *testing.T) {
 }
 
 func TestSteps(t *testing.T) {
-	c, stop := newVCRClient(t, "steps")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	steps, err := c.Steps(t.Context(), testDate)
@@ -102,7 +102,7 @@ func TestSteps(t *testing.T) {
 }
 
 func TestRestingHeartRate(t *testing.T) {
-	c, stop := newVCRClient(t, "resting_heart_rate")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)
@@ -112,7 +112,7 @@ func TestRestingHeartRate(t *testing.T) {
 }
 
 func TestDailySteps(t *testing.T) {
-	c, stop := newVCRClient(t, "daily_steps")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, 0, -7)
@@ -122,7 +122,7 @@ func TestDailySteps(t *testing.T) {
 }
 
 func TestWeeklyStress(t *testing.T) {
-	c, stop := newVCRClient(t, "weekly_stress")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	out, err := c.WeeklyStress(t.Context(), testDate, 4)
@@ -131,7 +131,7 @@ func TestWeeklyStress(t *testing.T) {
 }
 
 func TestWeeklyIntensityMinutes(t *testing.T) {
-	c, stop := newVCRClient(t, "weekly_intensity_minutes")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, 0, -7)
@@ -141,7 +141,7 @@ func TestWeeklyIntensityMinutes(t *testing.T) {
 }
 
 func TestBloodPressure(t *testing.T) {
-	c, stop := newVCRClient(t, "blood_pressure")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	start := testDate.AddDate(0, -1, 0)

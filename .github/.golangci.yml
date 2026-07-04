@@ -13,6 +13,8 @@ linters:
         no_exec_policy:
           files:
             - "!$test"
+            # The record tool must spawn `go test` to refresh cassettes.
+            - "!**/internal/record/**"
           deny:
             - pkg: os/exec
               desc: Using os/exec to run sub processes is not allowed by policy

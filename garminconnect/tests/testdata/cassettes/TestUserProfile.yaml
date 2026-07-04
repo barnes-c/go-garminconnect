@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/socialProfile
+        method: GET
+      response:
+        body: '{"id":12345678,"profileId":12345678,"garminGUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","userName":"TEST","profileImageType":"TEST","profileImageUrlLarge":"TEST","profileImageUrlMedium":"TEST","profileImageUrlSmall":"TEST","hasPremiumSocialIcon":false,"location":"","facebookUrl":null,"twitterUrl":null,"personalWebsite":null,"motivation":null,"bio":null,"primaryActivity":null,"favoriteActivityTypes":[],"runningTrainingSpeed":1.0,"cyclingTrainingSpeed":1.0,"favoriteCyclingActivityTypes":[],"cyclingClassification":null,"cyclingMaxAvgPower":1.0,"swimmingTrainingSpeed":1.0,"profileVisibility":"TEST","activityStartVisibility":"TEST","activityMapVisibility":"TEST","courseVisibility":"TEST","activityHeartRateVisibility":"TEST","activityPowerVisibility":"TEST","badgeVisibility":"TEST","showAge":false,"showWeight":false,"showHeight":false,"showWeightClass":false,"showAgeRange":false,"showGender":false,"showActivityClass":false,"showVO2Max":false,"showPersonalRecords":false,"showLast12Months":false,"showLifetimeTotals":false,"showUpcomingEvents":false,"showRecentFavorites":true,"showRecentDevice":false,"showRecentGear":false,"showBadges":true,"otherActivity":null,"otherPrimaryActivity":null,"otherMotivation":null,"userRoles":["SCOPE_OMT_DISCOUNTS_READ","SCOPE_DI_COACHING_WRITE","SCOPE_GARMINPAY_WRITE","SCOPE_ATP_READ","SCOPE_GHS_SAMD","SCOPE_INSIGHTS_READ","SCOPE_OMT_DISCOUNTS_CREATE","SCOPE_CIQ_APPSTORE_SERVICES_CREATE","SCOPE_DI_TOUM_NATIVE_REPORTED_DETAIL_WRITE","SCOPE_COMMUNITY_COURSE_WRITE","SCOPE_GCOFFER_WRITE","SCOPE_DI_API_READ","SCOPE_DT_CLIENT_ANALYTICS_WRITE","SCOPE_CIQ_APPSTORE_SERVICES_DELETE","SCOPE_OMT_SUBSCRIPTION_READ","SCOPE_DI_COACHING_READ","SCOPE_CONNECT_READ","SCOPE_COMMUNITY_COURSE_READ","SCOPE_GOLF_API_READ","SCOPE_GHS_UPLOAD","SCOPE_DIVE_API_READ","SCOPE_CIQ_APPSTORE_SERVICES_READ","SCOPE_CIQ_APPSTORE_SERVICES_UPDATE","SCOPE_CONNECT_WRITE","SCOPE_CONNECT_MCT_DAILY_LOG_READ","SCOPE_GARMINPAY_READ","SCOPE_DI_OAUTH_2_AUTHORIZATION_CODE_CREATE","SCOPE_GOLF_API_WRITE","SCOPE_INSIGHTS_WRITE","SCOPE_PRODUCT_SEARCH_READ","SCOPE_OMT_CAMPAIGN_READ","SCOPE_GCOFFER_READ","SCOPE_ATP_WRITE","ROLE_CONNECTUSER","ROLE_FITNESS_USER","ROLE_WELLNESS_USER","ROLE_OUTDOOR_USER","ROLE_GARMIN_USER"],"nameApproved":true,"userProfileFullName":"TEST","makeGolfScorecardsPrivate":true,"allowGolfLiveScoring":false,"allowGolfScoringByConnections":true,"userLevel":1,"userPoint":1,"levelUpdateDate":"2026-01-01T00:00:00","levelIsViewed":false,"levelPointThreshold":1,"userPointOffset":0,"userPro":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

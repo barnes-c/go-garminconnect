@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/bodyBattery/reports/daily?endDate=2026-01-01&startDate=2026-01-01
+        method: GET
+      response:
+        body: '[{"date":"2026-01-01","charged":null,"drained":null,"startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","bodyBatteryValuesArray":[[1,null],[1,null],[1,null],[1,null],[1,null],[1,null]],"bodyBatteryValueDescriptorDTOList":[{"bodyBatteryValueDescriptorIndex":0,"bodyBatteryValueDescriptorKey":"TEST"},{"bodyBatteryValueDescriptorIndex":1,"bodyBatteryValueDescriptorKey":"TEST"}],"bodyBatteryDynamicFeedbackEvent":{"eventTimestampGmt":"2026-01-01T00:00:00","bodyBatteryLevel":"TEST","feedbackShortType":"TEST","feedbackLongType":"TEST"}}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

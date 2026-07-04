@@ -1,0 +1,22 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workouts?limit=5&start=0
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

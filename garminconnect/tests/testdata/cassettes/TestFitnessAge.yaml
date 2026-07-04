@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessage-service/fitnessage/2026-01-01
+        method: GET
+      response:
+        body: '{"chronologicalAge":1,"fitnessAge":1.0,"achievableFitnessAge":1.0,"previousFitnessAge":1.0,"components":{"vigorousDaysAvg":{"value":1.0,"targetValue":1,"potentialAge":1.0,"priority":3,"stale":false,"numOfWeeksForIm":1},"rhr":{"value":1,"stale":false},"vigorousMinutesAvg":{"value":1.0,"targetValue":1,"potentialAge":1.0,"priority":2,"stale":false,"numOfWeeksForIm":1},"bmi":{"value":1.0,"targetValue":1.0,"improvementValue":1.0,"potentialAge":1.0,"priority":1,"stale":false,"lastMeasurementDate":"2026-01-01"}},"lastUpdated":"2026-01-01T00:00:00"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

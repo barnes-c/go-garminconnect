@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/count
+        method: GET
+      response:
+        body: '{"totalCount":320,"multisportParentCount":0,"multisportChildCount":0,"nonMultisportCount":320}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

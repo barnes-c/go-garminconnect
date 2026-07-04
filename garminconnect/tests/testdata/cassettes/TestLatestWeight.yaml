@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/latest?date=2026-01-01
+        method: GET
+      response:
+        body: '{"date":1,"version":1,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"caloricIntake":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":1}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

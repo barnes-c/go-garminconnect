@@ -8,7 +8,7 @@ import (
 )
 
 func TestHeartRates(t *testing.T) {
-	c, stop := newVCRClient(t, "heart_rates")
+	c, stop := newVCRClient(t)
 	defer stop()
 
 	hr, err := c.HeartRates(t.Context(), testDate)

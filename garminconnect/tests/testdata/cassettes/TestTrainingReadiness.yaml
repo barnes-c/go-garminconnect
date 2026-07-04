@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/trainingreadiness/2026-01-01
+        method: GET
+      response:
+        body: '[{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":12345678,"level":"TEST","feedbackLong":"TEST","feedbackShort":"TEST","score":1,"sleepScore":null,"sleepScoreFactorPercent":1,"sleepScoreFactorFeedback":"TEST","recoveryTime":1,"recoveryTimeFactorPercent":1,"recoveryTimeFactorFeedback":"TEST","acwrFactorPercent":1,"acwrFactorFeedback":"TEST","acuteLoad":1,"stressHistoryFactorPercent":1,"stressHistoryFactorFeedback":"TEST","hrvFactorPercent":1,"hrvFactorFeedback":"TEST","hrvWeeklyAverage":1,"sleepHistoryFactorPercent":1,"sleepHistoryFactorFeedback":"TEST","validSleep":false,"inputContext":"TEST","primaryActivityTracker":true,"recoveryTimeChangePhrase":null},{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":12345678,"level":"TEST","feedbackLong":"TEST","feedbackShort":"TEST","score":1,"sleepScore":null,"sleepScoreFactorPercent":1,"sleepScoreFactorFeedback":"TEST","recoveryTime":1,"recoveryTimeFactorPercent":1,"recoveryTimeFactorFeedback":"TEST","acwrFactorPercent":1,"acwrFactorFeedback":"TEST","acuteLoad":1,"stressHistoryFactorPercent":1,"stressHistoryFactorFeedback":"TEST","hrvFactorPercent":1,"hrvFactorFeedback":"TEST","hrvWeeklyAverage":1,"sleepHistoryFactorPercent":1,"sleepHistoryFactorFeedback":"TEST","validSleep":false,"inputContext":"TEST","primaryActivityTracker":true,"recoveryTimeChangePhrase":null},{"userProfilePK":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","timestampLocal":"2026-01-01T00:00:00","deviceId":12345678,"level":"TEST","feedbackLong":"TEST","feedbackShort":"TEST","score":1,"sleepScore":null,"sleepScoreFactorPercent":1,"sleepScoreFactorFeedback":"TEST","recoveryTime":1,"recoveryTimeFactorPercent":1,"recoveryTimeFactorFeedback":"TEST","acwrFactorPercent":1,"acwrFactorFeedback":"TEST","acuteLoad":1,"stressHistoryFactorPercent":1,"stressHistoryFactorFeedback":"TEST","hrvFactorPercent":1,"hrvFactorFeedback":"TEST","hrvWeeklyAverage":1,"sleepHistoryFactorPercent":1,"sleepHistoryFactorFeedback":"TEST","validSleep":false,"inputContext":"TEST","primaryActivityTracker":true,"recoveryTimeChangePhrase":null}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

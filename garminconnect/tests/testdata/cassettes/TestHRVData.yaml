@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/hrv-service/hrv/2026-01-01
+        method: GET
+      response:
+        body: '{"userProfilePk":12345678,"hrvSummary":{"calendarDate":"2026-01-01","weeklyAvg":1,"lastNightAvg":null,"lastNight5MinHigh":null,"baseline":{"lowUpper":1,"balancedLow":1,"balancedUpper":1,"markerValue":1.0},"status":"TEST","feedbackPhrase":"TEST","createTimeStamp":"2026-01-01T00:00:00"},"hrvReadings":[],"startTimestampGMT":"2026-01-01T00:00:00","endTimestampGMT":"2026-01-01T00:00:00","startTimestampLocal":"2026-01-01T00:00:00","endTimestampLocal":"2026-01-01T00:00:00","sleepStartTimestampGMT":null,"sleepEndTimestampGMT":null,"sleepStartTimestampLocal":null,"sleepEndTimestampLocal":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
