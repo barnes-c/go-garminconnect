@@ -54,7 +54,10 @@ type PersonalRecord struct {
 	ID             int64   `json:"id"`
 	TypeID         int64   `json:"typeId"`
 	ActivityID     int64   `json:"activityId"`
+	ActivityName   string  `json:"activityName"`
+	ActivityType   string  `json:"activityType"`
 	StartTimeGMT   string  `json:"startTimeGMT"`
+	PrStartTimeGmt int64   `json:"prStartTimeGmt"` // epoch milliseconds
 	Value          float64 `json:"value"`
 	PrTypeLabelKey string  `json:"prTypeLabelKey"`
 }
@@ -75,10 +78,13 @@ type Split struct {
 	Calories       float64 `json:"calories"`
 }
 
-// SplitsResponse wraps the activity splits endpoint response.
+// SplitsResponse wraps the activity splits endpoint response. Regular laps
+// (auto-lap or manual) arrive in LapDTOs; SplitSummaries is only populated
+// for structured workouts.
 type SplitsResponse struct {
 	ActivityID     int64   `json:"activityId"`
 	SplitSummaries []Split `json:"splitSummaries"`
+	LapDTOs        []Split `json:"lapDTOs"`
 }
 
 // HRZone holds heart rate time-in-zone data for an activity.
