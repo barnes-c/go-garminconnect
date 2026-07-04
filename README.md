@@ -3,7 +3,6 @@
 [![Build Status](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml)
 [![golangci-lint](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/barnes-c/go-garminconnect)](https://github.com/barnes-c/go-garminconnect/releases/latest)
-[![Go Report Card](https://goreportcard.com/badge/github.com/barnes-c/go-garminconnect)](https://goreportcard.com/report/github.com/barnes-c/go-garminconnect)
 
 Go client library for the Garmin Connect API.
 
@@ -26,7 +25,7 @@ if err := client.Login(ctx, "user@example.com", "password"); err != nil {
 
 summary, err := client.UserSummary(ctx,time.Now())
 if err != nil {
-	log.Fatal(err)
+ log.Fatal(err)
 }
 fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 ```
@@ -57,8 +56,8 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Wellness & daily health
 
-| Method                                              | Description                               |
-|-----------------------------------------------------|-------------------------------------------|
+|                       Method                        |                Description                |
+| --------------------------------------------------- | ----------------------------------------- |
 | `UserSummary(ctx, date)`                            | Steps, calories, active minutes, stress   |
 | `Steps(ctx, date)`                                  | Intraday step entries                     |
 | `StepsData(ctx, date)`                              | Intraday step data in 15-minute intervals |
@@ -83,15 +82,15 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Heart rate
 
-| Method                              | Description                  |
-|-------------------------------------|------------------------------|
+|               Method                |         Description          |
+| ----------------------------------- | ---------------------------- |
 | `HeartRates(ctx, date)`             | Intraday heart rate readings |
 | `RestingHeartRate(ctx, start, end)` | Resting HR over a date range |
 
 ### Sleep
 
-| Method                        | Description                                       |
-|-------------------------------|---------------------------------------------------|
+|            Method             |                    Description                    |
+| ----------------------------- | ------------------------------------------------- |
 | `SleepData(ctx, date)`        | Sleep stages and quality for a night              |
 | `DailySleepData(ctx, date)`   | Sleep data for a night (sleep-service endpoint)   |
 | `SleepStats(ctx, start, end)` | Daily sleep statistics over a range (max 28 days) |
@@ -99,8 +98,8 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 ### Activities
 
-| Method                                            | Description                                      |
-|---------------------------------------------------|--------------------------------------------------|
+|                      Method                       |                   Description                    |
+| ------------------------------------------------- | ------------------------------------------------ |
 | `Activities(ctx, limit)`                          | Most recent N activities                         |
 | `ActivitiesByDate(ctx, start, end, type)`         | Activities in a date range, optional type filter |
 | `LastActivity(ctx)`                               | Single most recent activity                      |
@@ -124,8 +123,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Workouts
 
-| Method                                  | Description                        |
-|-----------------------------------------|------------------------------------|
+|                 Method                  |            Description             |
+| --------------------------------------- | ---------------------------------- |
 | `Workouts(ctx, start, limit)`           | Saved workouts                     |
 | `Workout(ctx, id)`                      | Single workout detail              |
 | `DeleteWorkout(ctx, id)`                | Delete a workout                   |
@@ -137,8 +136,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Training metrics
 
-| Method                              | Description                   |
-|-------------------------------------|-------------------------------|
+|               Method                |          Description          |
+| ----------------------------------- | ----------------------------- |
 | `TrainingReadiness(ctx, date)`      | Training readiness score      |
 | `TrainingStatus(ctx, date)`         | Training status and load      |
 | `MaxMetrics(ctx, start, end)`       | VO2 Max and other max metrics |
@@ -152,8 +151,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Body composition
 
-| Method                                    | Description                              |
-|-------------------------------------------|------------------------------------------|
+|                  Method                   |               Description                |
+| ----------------------------------------- | ---------------------------------------- |
 | `BodyComposition(ctx, start, end)`        | Weight and body composition over a range |
 | `WeighIns(ctx, start, end)`               | All weigh-in entries in a range          |
 | `DailyWeighIns(ctx, date)`                | Weigh-ins for a single day               |
@@ -163,8 +162,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Goals & achievements
 
-| Method                                           | Description               |
-|--------------------------------------------------|---------------------------|
+|                      Method                      |        Description        |
+| ------------------------------------------------ | ------------------------- |
 | `Goals(ctx, status, start, limit)`               | Goals filtered by status  |
 | `EarnedBadges(ctx)`                              | Earned badges             |
 | `AvailableBadges(ctx)`                           | Available badges          |
@@ -175,8 +174,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Devices & gear
 
-| Method                                        | Description                    |
-|-----------------------------------------------|--------------------------------|
+|                    Method                     |          Description           |
+| --------------------------------------------- | ------------------------------ |
 | `Devices(ctx)`                                | Registered devices             |
 | `DeviceSettings(ctx, deviceID)`               | Settings for a specific device |
 | `LastUsedDevice(ctx)`                         | Most recently synced device    |
@@ -189,8 +188,8 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Profile
 
-| Method                     | Description                             |
-|----------------------------|-----------------------------------------|
+|           Method           |               Description               |
+| -------------------------- | --------------------------------------- |
 | `UserProfile(ctx)`         | Display name, location, join date       |
 | `UserProfileSettings(ctx)` | Account settings                        |
 | `UserSettings(ctx)`        | Account-level preferences (typed)       |
@@ -200,24 +199,24 @@ Download format constants: `FormatOriginal`, `FormatTCX`, `FormatGPX`, `FormatKM
 
 ### Women's health
 
-| Method                               | Description                    |
-|--------------------------------------|--------------------------------|
+|                Method                |          Description           |
+| ------------------------------------ | ------------------------------ |
 | `MenstrualData(ctx, date)`           | Menstrual cycle data for a day |
 | `MenstrualCalendar(ctx, start, end)` | Cycle data over a date range   |
 | `PregnancySummary(ctx)`              | Pregnancy snapshot             |
 
 ### Nutrition
 
-| Method                         | Description             |
-|--------------------------------|-------------------------|
+|             Method             |       Description       |
+| ------------------------------ | ----------------------- |
 | `NutritionFoodLog(ctx, date)`  | Food log for a day      |
 | `NutritionMeals(ctx, date)`    | Meal breakdown          |
 | `NutritionSettings(ctx, date)` | Nutrition goal settings |
 
 ### Golf
 
-| Method                                  | Description                          |
-|-----------------------------------------|--------------------------------------|
+|                 Method                  |             Description              |
+| --------------------------------------- | ------------------------------------ |
 | `GolfSummary(ctx, start, limit)`        | Scorecard summaries                  |
 | `GolfScorecard(ctx, scorecardID)`       | Full scorecard detail                |
 | `GolfShotData(ctx, scorecardID, holes)` | Shot-by-shot data for selected holes |
