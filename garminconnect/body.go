@@ -42,7 +42,7 @@ type BodyComposition struct {
 // WeighIn represents a single weigh-in measurement.
 type WeighIn struct {
 	SamplePK     int64   `json:"samplePk"`
-	Date         string  `json:"date"`
+	Date         int64   `json:"date"` // epoch milliseconds
 	CalendarDate string  `json:"calendarDate"`
 	Weight       float64 `json:"weight"` // grams
 	Bmi          float64 `json:"bmi"`
@@ -53,14 +53,30 @@ type WeighIn struct {
 	VisceralFat  float64 `json:"visceralFat"`
 	MetabolicAge float64 `json:"metabolicAge"`
 	SourceType   string  `json:"sourceType"`
+	TimestampGMT int64   `json:"timestampGMT"` // epoch milliseconds
 }
 
-// WeighInsResponse wraps the weigh-ins API response.
+// DailyWeightSummary groups the weigh-ins recorded on one day.
+type DailyWeightSummary struct {
+	SummaryDate        string    `json:"summaryDate"`
+	NumOfWeightEntries int       `json:"numOfWeightEntries"`
+	MinWeight          float64   `json:"minWeight"`
+	MaxWeight          float64   `json:"maxWeight"`
+	LatestWeight       *WeighIn  `json:"latestWeight"`
+	AllWeightMetrics   []WeighIn `json:"allWeightMetrics"`
+}
+
+// WeighInsResponse wraps the weigh-ins range API response.
 type WeighInsResponse struct {
+	DailyWeightSummaries []DailyWeightSummary `json:"dailyWeightSummaries"`
+}
+
+// DailyWeighInsResponse wraps the single-day weigh-ins (dayview) response,
+// which uses a flat list rather than per-day summaries.
+type DailyWeighInsResponse struct {
 	StartDate      string    `json:"startDate"`
 	EndDate        string    `json:"endDate"`
 	DateWeightList []WeighIn `json:"dateWeightList"`
-	TotalCount     int       `json:"totalCount"`
 }
 
 // BodyComposition returns body composition data between start and end dates.
@@ -87,9 +103,9 @@ func (c *Client) WeighIns(ctx context.Context, start, end time.Time) (*WeighInsR
 }
 
 // DailyWeighIns returns weigh-in measurements for a specific date.
-func (c *Client) DailyWeighIns(ctx context.Context, d time.Time) (*WeighInsResponse, error) {
+func (c *Client) DailyWeighIns(ctx context.Context, d time.Time) (*DailyWeighInsResponse, error) {
 	params := url.Values{"calendarDate": {date(d)}}
-	var out WeighInsResponse
+	var out DailyWeighInsResponse
 	if err := c.get(ctx, fmt.Sprintf("/weight-service/weight/dayview/%s", date(d)), params, &out); err != nil {
 		return nil, err
 	}
