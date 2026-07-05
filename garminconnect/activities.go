@@ -29,6 +29,10 @@ type Activity struct {
 	MaxSpeed                              float64      `json:"maxSpeed"`     // meters/second
 	ElevationGain                         float64      `json:"elevationGain"`
 	ElevationLoss                         float64      `json:"elevationLoss"`
+	StartLatitude                         *float64     `json:"startLatitude"` // nil for indoor activities
+	StartLongitude                        *float64     `json:"startLongitude"`
+	EndLatitude                           *float64     `json:"endLatitude"`
+	EndLongitude                          *float64     `json:"endLongitude"`
 	Steps                                 int64        `json:"steps"`
 	TrainingEffect                        float64      `json:"trainingEffect"`
 	AnaerobicTrainingEffect               float64      `json:"anaerobicTrainingEffect"`
