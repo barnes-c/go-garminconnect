@@ -309,3 +309,48 @@ func (c *Client) CyclingFTP(ctx context.Context) (*CyclingFTP, error) {
 	}
 	return &out, nil
 }
+
+// HeartRateZoneConfig holds the configured heart rate zones for one sport.
+type HeartRateZoneConfig struct {
+	Sport                         string `json:"sport"`
+	TrainingMethod                string `json:"trainingMethod"`
+	RestingHeartRateUsed          int    `json:"restingHeartRateUsed"`
+	LactateThresholdHeartRateUsed int    `json:"lactateThresholdHeartRateUsed"`
+	MaxHeartRateUsed              int    `json:"maxHeartRateUsed"`
+	Zone1Floor                    int    `json:"zone1Floor"`
+	Zone2Floor                    int    `json:"zone2Floor"`
+	Zone3Floor                    int    `json:"zone3Floor"`
+	Zone4Floor                    int    `json:"zone4Floor"`
+	Zone5Floor                    int    `json:"zone5Floor"`
+}
+
+// HeartRateZones returns the configured heart rate zones per sport.
+func (c *Client) HeartRateZones(ctx context.Context) ([]HeartRateZoneConfig, error) {
+	var out []HeartRateZoneConfig
+	if err := c.get(ctx, "/biometric-service/heartRateZones", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PowerZoneConfig holds the configured power zones for one sport.
+type PowerZoneConfig struct {
+	Sport                    string  `json:"sport"`
+	FunctionalThresholdPower float64 `json:"functionalThresholdPower"`
+	Zone1Floor               float64 `json:"zone1Floor"`
+	Zone2Floor               float64 `json:"zone2Floor"`
+	Zone3Floor               float64 `json:"zone3Floor"`
+	Zone4Floor               float64 `json:"zone4Floor"`
+	Zone5Floor               float64 `json:"zone5Floor"`
+	Zone6Floor               float64 `json:"zone6Floor"`
+	Zone7Floor               float64 `json:"zone7Floor"`
+}
+
+// PowerZones returns the configured power zones per sport.
+func (c *Client) PowerZones(ctx context.Context) ([]PowerZoneConfig, error) {
+	var out []PowerZoneConfig
+	if err := c.get(ctx, "/biometric-service/powerZones/sports/all", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
