@@ -124,13 +124,18 @@ type SpO2Data struct {
 	SpO2HourlyAverages   [][]float64 `json:"spO2HourlyAverages"` // [timestamp_ms, value]
 }
 
-// IntensityMinutesData holds weekly intensity minutes.
+// IntensityMinutesData holds intensity minutes for one day, plus the
+// week-to-date aggregates Garmin reports alongside. WeeklyTotal counts
+// vigorous minutes double, matching Garmin's goal accounting.
 type IntensityMinutesData struct {
 	UserProfilePK            int    `json:"userProfilePK"`
 	CalendarDate             string `json:"calendarDate"`
-	WeeklyGoal               int    `json:"weeklyGoal"`
-	ModerateIntensityMinutes int    `json:"moderateIntensityMinutes"`
-	VigorousIntensityMinutes int    `json:"vigorousIntensityMinutes"`
+	WeeklyGoal               int    `json:"weekGoal"`
+	ModerateIntensityMinutes int    `json:"moderateMinutes"`
+	VigorousIntensityMinutes int    `json:"vigorousMinutes"`
+	WeeklyModerate           int    `json:"weeklyModerate"`
+	WeeklyVigorous           int    `json:"weeklyVigorous"`
+	WeeklyTotal              int    `json:"weeklyTotal"`
 }
 
 // StepEntry is a single steps reading for a time interval.
