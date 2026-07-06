@@ -41,6 +41,26 @@ func (t *diToken) valid() bool {
 	return t != nil && t.AccessToken != "" && time.Now().Before(t.ExpiresAt)
 }
 
+// jwtExpiry reads the "exp" claim from a JWT access token without verifying its
+// signature. It returns false if the token is not a JWT or has no exp claim.
+func jwtExpiry(token string) (time.Time, bool) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return time.Time{}, false
+	}
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return time.Time{}, false
+	}
+	var claims struct {
+		Exp int64 `json:"exp"`
+	}
+	if err := json.Unmarshal(payload, &claims); err != nil || claims.Exp == 0 {
+		return time.Time{}, false
+	}
+	return time.Unix(claims.Exp, 0), true
+}
+
 // Login ensures the client has a valid token, then fetches the user profile.
 // It loads from disk, refreshes if needed, or performs a full SSO login as a
 // last resort.
