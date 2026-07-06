@@ -74,15 +74,12 @@ type StressData struct {
 
 // FloorsData holds floors ascended/descended for a day.
 type FloorsData struct {
-	UserProfilePK                int    `json:"userProfilePK"`
-	CalendarDate                 string `json:"calendarDate"`
-	StartTimestampGMT            string `json:"startTimestampGMT"`
-	EndTimestampGMT              string `json:"endTimestampGMT"`
-	FloorsValueDescriptorDTOList []struct {
-		Key   string `json:"key"`
-		Index int    `json:"index"`
-	} `json:"floorsValueDescriptorDTOList"`
-	FloorValuesArray json.RawMessage `json:"floorValuesArray"` // [["startTimeGMT", "endTimeGMT", ascended, descended], ...]
+	UserProfilePK                int               `json:"userProfilePK"`
+	CalendarDate                 string            `json:"calendarDate"`
+	StartTimestampGMT            string            `json:"startTimestampGMT"`
+	EndTimestampGMT              string            `json:"endTimestampGMT"`
+	FloorsValueDescriptorDTOList []ValueDescriptor `json:"floorsValueDescriptorDTOList"`
+	FloorValuesArray             json.RawMessage   `json:"floorValuesArray"` // [["startTimeGMT", "endTimeGMT", ascended, descended], ...]
 }
 
 // HydrationData holds hydration intake for a day.
@@ -98,18 +95,15 @@ type HydrationData struct {
 
 // RespirationData holds breathing rate data for a day.
 type RespirationData struct {
-	StartTimestampGMT                  string  `json:"startTimestampGMT"`
-	EndTimestampGMT                    string  `json:"endTimestampGMT"`
-	StartTimestampLocal                string  `json:"startTimestampLocal"`
-	EndTimestampLocal                  string  `json:"endTimestampLocal"`
-	TodayAvgWakingRespirationValue     float64 `json:"avgWakingRespirationValue"`
-	HighestRespirationValue            float64 `json:"highestRespirationValue"`
-	LowestRespirationValue             float64 `json:"lowestRespirationValue"`
-	RespirationValueDescriptorsDTOList []struct {
-		Key   string `json:"key"`
-		Index int    `json:"index"`
-	} `json:"respirationValueDescriptorsDTOList"`
-	RespirationValuesArray [][]float64 `json:"respirationValuesArray"` // [timestamp_ms, value]
+	StartTimestampGMT                  string            `json:"startTimestampGMT"`
+	EndTimestampGMT                    string            `json:"endTimestampGMT"`
+	StartTimestampLocal                string            `json:"startTimestampLocal"`
+	EndTimestampLocal                  string            `json:"endTimestampLocal"`
+	TodayAvgWakingRespirationValue     float64           `json:"avgWakingRespirationValue"`
+	HighestRespirationValue            float64           `json:"highestRespirationValue"`
+	LowestRespirationValue             float64           `json:"lowestRespirationValue"`
+	RespirationValueDescriptorsDTOList []ValueDescriptor `json:"respirationValueDescriptorsDTOList"`
+	RespirationValuesArray             [][]float64       `json:"respirationValuesArray"` // [timestamp_ms, value]
 }
 
 // SpO2Data holds blood oxygen saturation data for a day.

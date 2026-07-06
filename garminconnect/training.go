@@ -34,27 +34,36 @@ type TrainingStatusEntry struct {
 
 // MaxMetricsEntry holds a VO2 Max data point.
 type MaxMetricsEntry struct {
-	Generic *struct {
-		CalendarDate   string  `json:"calendarDate"`
-		VO2MaxValue    float64 `json:"vo2MaxValue"`
-		FitnessAge     int     `json:"fitnessAge"`
-		FitnessAgeDesc string  `json:"fitnessAgeDescription"`
-	} `json:"generic"`
-	Cycling *struct {
-		CalendarDate string  `json:"calendarDate"`
-		VO2MaxValue  float64 `json:"vo2MaxValue"`
-		FitnessAge   int     `json:"fitnessAge"`
-	} `json:"cycling"`
+	Generic *GenericMaxMetrics `json:"generic"`
+	Cycling *CyclingMaxMetrics `json:"cycling"`
+}
+
+// GenericMaxMetrics holds the generic (running) VO2 Max metrics.
+type GenericMaxMetrics struct {
+	CalendarDate   string  `json:"calendarDate"`
+	VO2MaxValue    float64 `json:"vo2MaxValue"`
+	FitnessAge     int     `json:"fitnessAge"`
+	FitnessAgeDesc string  `json:"fitnessAgeDescription"`
+}
+
+// CyclingMaxMetrics holds the cycling VO2 Max metrics.
+type CyclingMaxMetrics struct {
+	CalendarDate string  `json:"calendarDate"`
+	VO2MaxValue  float64 `json:"vo2MaxValue"`
+	FitnessAge   int     `json:"fitnessAge"`
 }
 
 // EnduranceScoreEntry holds an endurance score data point.
 type EnduranceScoreEntry struct {
-	CalendarDate string  `json:"calendarDate"`
-	Score        float64 `json:"overallScore"`
-	Contributors []struct {
-		ActivityTypeID *int    `json:"activityTypeId"`
-		Contribution   float64 `json:"contribution"`
-	} `json:"contributors"`
+	CalendarDate string                      `json:"calendarDate"`
+	Score        float64                     `json:"overallScore"`
+	Contributors []EnduranceScoreContributor `json:"contributors"`
+}
+
+// EnduranceScoreContributor is a single activity type's contribution to an endurance score.
+type EnduranceScoreContributor struct {
+	ActivityTypeID *int    `json:"activityTypeId"`
+	Contribution   float64 `json:"contribution"`
 }
 
 // LatestRacePredictions holds the most recent predicted finish times for standard distances.

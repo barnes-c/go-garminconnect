@@ -148,14 +148,18 @@ func (c *Client) saveToken(tok *diToken) error {
 }
 
 type ssoResponse struct {
-	ServiceTicketID string `json:"serviceTicketId"`
-	ServiceURL      string `json:"serviceURL"`
-	ResponseStatus  struct {
-		Type string `json:"type"`
-	} `json:"responseStatus"`
-	CustomerMfaInfo struct {
-		MfaLastMethodUsed string `json:"mfaLastMethodUsed"`
-	} `json:"customerMfaInfo"`
+	ServiceTicketID string             `json:"serviceTicketId"`
+	ServiceURL      string             `json:"serviceURL"`
+	ResponseStatus  ssoResponseStatus  `json:"responseStatus"`
+	CustomerMfaInfo ssoCustomerMfaInfo `json:"customerMfaInfo"`
+}
+
+type ssoResponseStatus struct {
+	Type string `json:"type"`
+}
+
+type ssoCustomerMfaInfo struct {
+	MfaLastMethodUsed string `json:"mfaLastMethodUsed"`
 }
 
 func (c *Client) ssoQueryParams() string {

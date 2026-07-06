@@ -9,19 +9,22 @@ import (
 
 // Device holds registration information for a Garmin device.
 type Device struct {
-	DeviceID               int64  `json:"deviceId"`
-	ProductDisplayName     string `json:"productDisplayName"`
-	DisplayName            string `json:"displayName"`
-	UnitID                 int64  `json:"unitId"`
-	DeviceStatus           string `json:"deviceStatus"`
-	ActiveForGoals         bool   `json:"activeForGoals"`
-	ImageURL               string `json:"imageUrl"`
-	SerialNumber           string `json:"serialNumber"`
-	CurrentFirmwareVersion string `json:"currentFirmwareVersion"`
-	RegisteredDate         int64  `json:"registeredDate"` // epoch milliseconds
-	RegistrationDate       struct {
-		LocalRegistrationAppDate string `json:"localRegistrationAppDate"`
-	} `json:"registrationDate"`
+	DeviceID               int64                  `json:"deviceId"`
+	ProductDisplayName     string                 `json:"productDisplayName"`
+	DisplayName            string                 `json:"displayName"`
+	UnitID                 int64                  `json:"unitId"`
+	DeviceStatus           string                 `json:"deviceStatus"`
+	ActiveForGoals         bool                   `json:"activeForGoals"`
+	ImageURL               string                 `json:"imageUrl"`
+	SerialNumber           string                 `json:"serialNumber"`
+	CurrentFirmwareVersion string                 `json:"currentFirmwareVersion"`
+	RegisteredDate         int64                  `json:"registeredDate"` // epoch milliseconds
+	RegistrationDate       DeviceRegistrationDate `json:"registrationDate"`
+}
+
+// DeviceRegistrationDate holds the local registration date of a device.
+type DeviceRegistrationDate struct {
+	LocalRegistrationAppDate string `json:"localRegistrationAppDate"`
 }
 
 // Devices returns all Garmin devices registered to the authenticated user.
