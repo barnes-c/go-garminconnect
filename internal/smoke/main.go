@@ -43,7 +43,12 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("login: %w", err)
 	}
-	fmt.Printf("==> Logged in (display_name=%s)\n", c.DisplayName())
+	// The display name is PII and appears in API URLs (and therefore in
+	// APIError messages) — have GitHub redact it from public logs.
+	if os.Getenv("GITHUB_ACTIONS") == "true" {
+		fmt.Printf("::add-mask::%s\n", c.DisplayName())
+	}
+	fmt.Println("==> Logged in")
 
 	ctx := context.Background()
 	today := time.Now()
