@@ -1,0 +1,26 @@
+---
+name: Release
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    steps:
+      # Prerelease semantics match Go modules: a hyphen suffix (v0.7.0-rc.1,
+      # v0.7.0-test) is a prerelease — never marked "Latest", never moves the
+      # release badge, never selected by `go get` without an explicit version.
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prerelease=""
+          case "$GITHUB_REF_NAME" in
+            *-*) prerelease="--prerelease" ;;
+          esac
+          gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes \
+            $prerelease --repo "$GITHUB_REPOSITORY"
