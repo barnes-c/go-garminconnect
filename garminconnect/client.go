@@ -1,3 +1,7 @@
+// Package garminconnect is a Go client for the Garmin Connect API.
+//
+// Create a [Client] with [NewClient], authenticate with [Client.Login], then
+// call any of the data methods. See the README for a capability overview.
 package garminconnect
 
 import (
@@ -39,10 +43,15 @@ func WithHTTPClient(hc *http.Client) Option {
 }
 
 // WithToken pre-loads an access token, skipping the SSO login flow.
-// The token is assumed valid; no refresh or SSO will be performed.
+// No refresh or SSO will be performed. If the token is a JWT its expiry is
+// read from the "exp" claim; otherwise it is assumed valid for 24 hours.
 func WithToken(accessToken string) Option {
 	return func(c *Client) {
-		c.token = &diToken{AccessToken: accessToken, ExpiresAt: time.Now().Add(24 * time.Hour)}
+		expiresAt := time.Now().Add(24 * time.Hour)
+		if exp, ok := jwtExpiry(accessToken); ok {
+			expiresAt = exp
+		}
+		c.token = &diToken{AccessToken: accessToken, ExpiresAt: expiresAt}
 	}
 }
 

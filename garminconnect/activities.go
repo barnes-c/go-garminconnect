@@ -44,6 +44,7 @@ type Activity struct {
 	HasPolyline                           bool         `json:"hasPolyline"`
 }
 
+// ActivityType identifies the sport type of an activity.
 type ActivityType struct {
 	TypeID       int    `json:"typeId"`
 	TypeKey      string `json:"typeKey"`
