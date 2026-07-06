@@ -115,3 +115,9 @@ go run ./internal/record --missing
 ```
 
 The tool logs in once and records one cassette per test. PII is stripped **inline** as each cassette is written (the recorder's `BeforeSaveHook` calls `internal/sanitize`), so cassettes are never persisted unsanitized.
+
+A scheduled [smoke-test workflow](.github/workflows/smoke.yml) runs `internal/smoke` weekly against the live API to catch drift the cassettes can't see. It can also be run locally:
+
+```bash
+GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/smoke
+```

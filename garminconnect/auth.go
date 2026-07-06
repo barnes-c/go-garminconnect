@@ -31,10 +31,11 @@ var diClientIDs = []string{
 }
 
 type diToken struct {
-	AccessToken  string    `json:"access_token"`
-	RefreshToken string    `json:"refresh_token"`
-	ClientID     string    `json:"client_id"`
-	ExpiresAt    time.Time `json:"expires_at"`
+	AccessToken      string    `json:"access_token"`
+	RefreshToken     string    `json:"refresh_token"`
+	ClientID         string    `json:"client_id"`
+	ExpiresAt        time.Time `json:"expires_at"`
+	RefreshExpiresAt time.Time `json:"refresh_expires_at,omitzero"`
 }
 
 func (t *diToken) valid() bool {
@@ -302,6 +303,7 @@ func (c *Client) refreshToken(ctx context.Context, old *diToken) error {
 	tok.ClientID = old.ClientID
 	if tok.RefreshToken == "" {
 		tok.RefreshToken = old.RefreshToken
+		tok.RefreshExpiresAt = old.RefreshExpiresAt
 	}
 	c.token = tok
 	return c.saveToken(tok)
@@ -327,18 +329,23 @@ func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID
 	}
 
 	var raw struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-		ExpiresIn    int    `json:"expires_in"`
+		AccessToken           string `json:"access_token"`
+		RefreshToken          string `json:"refresh_token"`
+		ExpiresIn             int    `json:"expires_in"`
+		RefreshTokenExpiresIn int    `json:"refresh_token_expires_in"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
 		return nil, fmt.Errorf("di token decode: %w", err)
 	}
 
 	expiry := time.Duration(raw.ExpiresIn)*time.Second - 60*time.Second
-	return &diToken{
+	tok := &diToken{
 		AccessToken:  raw.AccessToken,
 		RefreshToken: raw.RefreshToken,
 		ExpiresAt:    time.Now().Add(expiry),
-	}, nil
+	}
+	if raw.RefreshTokenExpiresIn > 0 {
+		tok.RefreshExpiresAt = time.Now().Add(time.Duration(raw.RefreshTokenExpiresIn) * time.Second)
+	}
+	return tok, nil
 }
