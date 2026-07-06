@@ -10,33 +10,39 @@ import (
 
 // BodyComposition holds body composition metrics over a date range.
 type BodyComposition struct {
-	StartDate    string `json:"startDate"`
-	EndDate      string `json:"endDate"`
-	TotalAverage struct {
-		From            int64   `json:"from"`  // unix ms
-		Until           int64   `json:"until"` // unix ms
-		WeightTimestamp string  `json:"weightTimestamp"`
-		Weight          float64 `json:"weight"`
-		Bmi             float64 `json:"bmi"`
-		BodyFat         float64 `json:"bodyFat"`
-		BodyWater       float64 `json:"bodyWater"`
-		BoneMass        float64 `json:"boneMass"`
-		MuscleMass      float64 `json:"muscleMass"`
-		VisceralFat     float64 `json:"visceralFat"`
-		MetabolicAge    float64 `json:"metabolicAge"`
-		PhysiqueRating  float64 `json:"physiqueRating"`
-	} `json:"totalAverage"`
-	DateWeightList []struct {
-		CalendarDate string  `json:"calendarDate"`
-		Weight       float64 `json:"weight"`
-		Bmi          float64 `json:"bmi"`
-		BodyFat      float64 `json:"bodyFat"`
-		BodyWater    float64 `json:"bodyWater"`
-		BoneMass     float64 `json:"boneMass"`
-		MuscleMass   float64 `json:"muscleMass"`
-		VisceralFat  float64 `json:"visceralFat"`
-		MetabolicAge float64 `json:"metabolicAge"`
-	} `json:"dateWeightList"`
+	StartDate      string                  `json:"startDate"`
+	EndDate        string                  `json:"endDate"`
+	TotalAverage   BodyCompositionAverage  `json:"totalAverage"`
+	DateWeightList []BodyCompositionSample `json:"dateWeightList"`
+}
+
+// BodyCompositionAverage is the averaged body composition over the date range.
+type BodyCompositionAverage struct {
+	From            int64   `json:"from"`  // unix ms
+	Until           int64   `json:"until"` // unix ms
+	WeightTimestamp string  `json:"weightTimestamp"`
+	Weight          float64 `json:"weight"`
+	Bmi             float64 `json:"bmi"`
+	BodyFat         float64 `json:"bodyFat"`
+	BodyWater       float64 `json:"bodyWater"`
+	BoneMass        float64 `json:"boneMass"`
+	MuscleMass      float64 `json:"muscleMass"`
+	VisceralFat     float64 `json:"visceralFat"`
+	MetabolicAge    float64 `json:"metabolicAge"`
+	PhysiqueRating  float64 `json:"physiqueRating"`
+}
+
+// BodyCompositionSample is a single day's body composition measurement.
+type BodyCompositionSample struct {
+	CalendarDate string  `json:"calendarDate"`
+	Weight       float64 `json:"weight"`
+	Bmi          float64 `json:"bmi"`
+	BodyFat      float64 `json:"bodyFat"`
+	BodyWater    float64 `json:"bodyWater"`
+	BoneMass     float64 `json:"boneMass"`
+	MuscleMass   float64 `json:"muscleMass"`
+	VisceralFat  float64 `json:"visceralFat"`
+	MetabolicAge float64 `json:"metabolicAge"`
 }
 
 // WeighIn represents a single weigh-in measurement.

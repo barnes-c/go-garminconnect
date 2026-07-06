@@ -9,21 +9,18 @@ import (
 
 // HeartRates holds daily heart rate data.
 type HeartRates struct {
-	UserProfilePK                    int    `json:"userProfilePK"`
-	CalendarDate                     string `json:"calendarDate"`
-	StartTimestampGMT                string `json:"startTimestampGMT"`
-	EndTimestampGMT                  string `json:"endTimestampGMT"`
-	StartTimestampLocal              string `json:"startTimestampLocal"`
-	EndTimestampLocal                string `json:"endTimestampLocal"`
-	RestingHeartRate                 int    `json:"restingHeartRate"`
-	MinHeartRate                     int    `json:"minHeartRate"`
-	MaxHeartRate                     int    `json:"maxHeartRate"`
-	LastSevenDaysAvgRestingHeartRate int    `json:"lastSevenDaysAvgRestingHeartRate"`
-	HeartRateValueDescriptors        []struct {
-		Key   string `json:"key"`
-		Index int    `json:"index"`
-	} `json:"heartRateValueDescriptors"`
-	HeartRateValues [][]int64 `json:"heartRateValues"` // [timestamp_ms, bpm]
+	UserProfilePK                    int               `json:"userProfilePK"`
+	CalendarDate                     string            `json:"calendarDate"`
+	StartTimestampGMT                string            `json:"startTimestampGMT"`
+	EndTimestampGMT                  string            `json:"endTimestampGMT"`
+	StartTimestampLocal              string            `json:"startTimestampLocal"`
+	EndTimestampLocal                string            `json:"endTimestampLocal"`
+	RestingHeartRate                 int               `json:"restingHeartRate"`
+	MinHeartRate                     int               `json:"minHeartRate"`
+	MaxHeartRate                     int               `json:"maxHeartRate"`
+	LastSevenDaysAvgRestingHeartRate int               `json:"lastSevenDaysAvgRestingHeartRate"`
+	HeartRateValueDescriptors        []ValueDescriptor `json:"heartRateValueDescriptors"`
+	HeartRateValues                  [][]int64         `json:"heartRateValues"` // [timestamp_ms, bpm]
 }
 
 // RestingHeartRateEntry is a single resting heart rate data point.
@@ -37,11 +34,23 @@ type RestingHeartRateEntry struct {
 
 // RestingHeartRateResponse wraps the resting heart rate API response.
 type RestingHeartRateResponse struct {
-	AllMetrics struct {
-		MetricsMap struct {
-			WellnessRestingHeartRate []RestingHeartRateEntry `json:"WELLNESS_RESTING_HEART_RATE"`
-		} `json:"metricsMap"`
-	} `json:"allMetrics"`
+	AllMetrics RestingHeartRateMetrics `json:"allMetrics"`
+}
+
+// RestingHeartRateMetrics holds the metrics map of a resting heart rate response.
+type RestingHeartRateMetrics struct {
+	MetricsMap RestingHeartRateMetricsMap `json:"metricsMap"`
+}
+
+// RestingHeartRateMetricsMap maps metric keys to their resting heart rate entries.
+type RestingHeartRateMetricsMap struct {
+	WellnessRestingHeartRate []RestingHeartRateEntry `json:"WELLNESS_RESTING_HEART_RATE"`
+}
+
+// ValueDescriptor labels a column in a wellness values array by key and index.
+type ValueDescriptor struct {
+	Key   string `json:"key"`
+	Index int    `json:"index"`
 }
 
 // HeartRates returns heart rate data for the given date.

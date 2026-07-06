@@ -9,14 +9,17 @@ import (
 
 // Workout is a saved workout definition.
 type Workout struct {
-	WorkoutID   int64  `json:"workoutId"`
-	WorkoutName string `json:"workoutName"`
-	Description string `json:"description"`
-	SportType   struct {
-		SportTypeKey string `json:"sportTypeKey"`
-	} `json:"sportType"`
-	CreatedDate string `json:"createdDate"`
-	UpdatedDate string `json:"updatedDate"`
+	WorkoutID   int64            `json:"workoutId"`
+	WorkoutName string           `json:"workoutName"`
+	Description string           `json:"description"`
+	SportType   WorkoutSportType `json:"sportType"`
+	CreatedDate string           `json:"createdDate"`
+	UpdatedDate string           `json:"updatedDate"`
+}
+
+// WorkoutSportType identifies the sport a workout targets.
+type WorkoutSportType struct {
+	SportTypeKey string `json:"sportTypeKey"`
 }
 
 // ScheduledWorkout links a workout to a specific calendar date.

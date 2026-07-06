@@ -9,14 +9,17 @@ import (
 
 // Goal represents a user-defined fitness goal.
 type Goal struct {
-	GoalID   int64 `json:"goalId"`
-	GoalType struct {
-		TypeKey string `json:"typeKey"`
-	} `json:"goalType"`
-	GoalValueInMetric float64 `json:"goalValueInMetric"`
-	StartDate         string  `json:"startDate"`
-	EndDate           string  `json:"endDate"`
-	Status            string  `json:"status"`
+	GoalID            int64    `json:"goalId"`
+	GoalType          GoalType `json:"goalType"`
+	GoalValueInMetric float64  `json:"goalValueInMetric"`
+	StartDate         string   `json:"startDate"`
+	EndDate           string   `json:"endDate"`
+	Status            string   `json:"status"`
+}
+
+// GoalType identifies the kind of a goal.
+type GoalType struct {
+	TypeKey string `json:"typeKey"`
 }
 
 // Badge represents an earned or available achievement badge.
