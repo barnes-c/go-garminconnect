@@ -13,7 +13,7 @@ Go client library for the Garmin Connect API.
 go get github.com/barnes-c/go-garminconnect
 ```
 
-Requires Go 1.25+.
+Requires Go 1.24+.
 
 ## Quick start
 
@@ -92,7 +92,8 @@ case errors.Is(err, garminconnect.ErrNoData):
     // no records for the query
 }
 
-if apiErr, ok := errors.AsType[*garminconnect.APIError](err); ok {
+var apiErr *garminconnect.APIError
+if errors.As(err, &apiErr) {
     fmt.Println(apiErr.StatusCode, apiErr.Path)
 }
 ```
