@@ -57,21 +57,21 @@ Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(
 
 The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.com/barnes-c/go-garminconnect/garminconnect), generated from the source. The client covers:
 
-|         Area         |                                                    What it exposes                                                    |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Wellness**         | Steps, Body Battery, stress, floors, hydration, respiration, SpO₂, intensity minutes, blood pressure                  |
-| **Heart rate**       | Intraday and resting heart rate                                                                                       |
-| **Sleep**            | Sleep stages, sleep statistics, and HRV                                                                               |
-| **Activities**       | Listing, detail, splits, HR/power zones, exercise sets, weather, personal records, edit/delete, and download & upload |
-| **Workouts**         | Saved workouts, scheduling, and download & upload                                                                     |
-| **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, lactate threshold, fitness age, cycling FTP     |
-| **Body composition** | Weigh-ins and body composition history                                                                                |
-| **Goals**            | Goals, badges, and challenges                                                                                         |
-| **Devices & gear**   | Registered devices, settings, solar data, and gear tracking                                                           |
-| **Profile**          | User profile, settings, and unit system                                                                               |
-| **Women's health**   | Menstrual cycle and pregnancy data                                                                                    |
-| **Nutrition**        | Food log, meals, and goals                                                                                            |
-| **Golf**             | Scorecards and shot data                                                                                              |
+|         Area         |                                                                       What it exposes                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Wellness**         | Steps, Body Battery, stress, floors, hydration, respiration, SpO₂, intensity minutes, blood pressure                                                         |
+| **Heart rate**       | Intraday and resting heart rate                                                                                                                              |
+| **Sleep**            | Sleep stages, sleep statistics, and HRV                                                                                                                      |
+| **Activities**       | Listing, detail, splits, HR/power zones, exercise sets, weather, personal records, edit/delete, and download & upload                                        |
+| **Workouts**         | Saved workouts, scheduling, and download & upload                                                                                                            |
+| **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP, HR/power zone settings |
+| **Body composition** | Weigh-ins and body composition history                                                                                                                       |
+| **Goals**            | Goals, badges, and challenges                                                                                                                                |
+| **Devices & gear**   | Registered devices, settings, solar data, and gear tracking                                                                                                  |
+| **Profile**          | User profile, settings, and unit system                                                                                                                      |
+| **Women's health**   | Menstrual cycle and pregnancy data                                                                                                                           |
+| **Nutrition**        | Food log, meals, and goals                                                                                                                                   |
+| **Golf**             | Scorecards and shot data                                                                                                                                     |
 
 Activity and workout files support FIT, GPX, TCX, KML, and CSV (see the `Format*` constants).
 

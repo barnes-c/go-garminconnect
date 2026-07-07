@@ -24,7 +24,7 @@ func TestBody_ScrubsPII(t *testing.T) {
 		}
 	}
 	for _, want := range []string{`"userProfileId":12345678`, `"deviceId":12345678`, `"fullName":"TEST"`,
-		`"email":"TEST"`, `"contacts":["test@example.com"]`, `"weight":1.0`, `"heartRate":1`,
+		`"email":"TEST"`, `"contacts":["TEST"]`, `"weight":1.0`, `"heartRate":1`,
 		`"calendarDate":"2026-01-01"`, `"samples":[1.0,1.0]`, `"version":1`, `"typeId":3`,
 		"ffffffff-ffff-ffff-ffff-ffffffffffff"} {
 		if !strings.Contains(out, want) {
@@ -47,6 +47,33 @@ func TestBody_LeakVectors(t *testing.T) {
 		}
 	}
 	for _, want := range []string{`"userProfileNumber":12345678`, `"12345678":{`, `"metrics":[1.0,1.0,1.0]`} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in: %s", want, out)
+		}
+	}
+}
+
+// TestBody_ArrayStrings covers string elements inside JSON arrays, which the
+// object-value scrub (`:"..."`) does not reach. A real re-record leaked the
+// recording account's userRoles OAuth scope list through this gap.
+func TestBody_ArrayStrings(t *testing.T) {
+	in := `{"userRoles":["SCOPE_CONNECT_READ","SCOPE_DI_OAUTH_2_TOKEN_ADMIN"],` +
+		`"dates":["2026-01-01","2026-01-01T00:00:00"],` +
+		`"ids":["ffffffff-ffff-ffff-ffff-ffffffffffff"],"names":["testuser","Test User"],` +
+		`"mixed":["free text",1,"2026-01-01"],"nested":[{"k":"v"},["deep","2026-01-01"]]}`
+	out := sanitize.Body(in, "")
+
+	for _, leak := range []string{"SCOPE_CONNECT_READ", "SCOPE_DI_OAUTH_2_TOKEN_ADMIN", "free text", `"deep"`, `"k":"v"`} {
+		if strings.Contains(out, leak) {
+			t.Errorf("leaked %q in: %s", leak, out)
+		}
+	}
+	for _, want := range []string{`"userRoles":["TEST","TEST"]`,
+		`"dates":["2026-01-01","2026-01-01T00:00:00"]`,
+		`"ids":["ffffffff-ffff-ffff-ffff-ffffffffffff"]`,
+		`"names":["testuser","Test User"]`,
+		`"mixed":["TEST",1,"2026-01-01"]`,
+		`"nested":[{"k":"TEST"},["TEST","2026-01-01"]]`} {
 		if !strings.Contains(out, want) {
 			t.Errorf("missing %q in: %s", want, out)
 		}

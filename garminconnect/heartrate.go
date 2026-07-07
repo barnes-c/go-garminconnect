@@ -2,7 +2,6 @@ package garminconnect
 
 import (
 	"context"
-	"fmt"
 	"net/url"
 	"time"
 )
@@ -55,9 +54,13 @@ type ValueDescriptor struct {
 
 // HeartRates returns heart rate data for the given date.
 func (c *Client) HeartRates(ctx context.Context, d time.Time) (*HeartRates, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	params := url.Values{"date": {date(d)}}
 	var out HeartRates
-	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailyHeartRate/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/wellness-service/wellness/dailyHeartRate/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -70,8 +73,12 @@ func (c *Client) RestingHeartRate(ctx context.Context, start, end time.Time) (*R
 		"untilDate": {date(end)},
 		"metricId":  {"60"},
 	}
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	var out RestingHeartRateResponse
-	if err := c.get(ctx, fmt.Sprintf("/userstats-service/wellness/daily/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/userstats-service/wellness/daily/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

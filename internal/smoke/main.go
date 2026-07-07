@@ -116,7 +116,9 @@ func warnRefreshExpiry() {
 }
 
 func skippable(err error) bool {
-	if errors.Is(err, gc.ErrNoData) {
+	// 401 and 429 are mapped to sentinels before *APIError is built; a real
+	// auth breakage still fails the run at the login step above.
+	if errors.Is(err, gc.ErrNoData) || errors.Is(err, gc.ErrUnauthorized) || errors.Is(err, gc.ErrRateLimit) {
 		return true
 	}
 	var apiErr *gc.APIError

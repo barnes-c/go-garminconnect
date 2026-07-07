@@ -11,8 +11,8 @@
 //   - Datetime / date-only string values -> 2026-01-01[T00:00:00]
 //   - Request-URL dates after 2026-01-01 -> 2026-01-01
 //   - Emails -> test@example.com
-//   - Every free-text object value in a body -> "TEST" (except dates, UUIDs and
-//     the "testuser"/"Test User" placeholders)
+//   - Every free-text object value and string array element in a body -> "TEST"
+//     (except dates, UUIDs and the "testuser"/"Test User" placeholders)
 //   - Every numeric body value -> 1 (1.0 for floats), except identifier/
 //     structural fields (*Id, *Pk, *Count, *Version, ...) unless the value looks
 //     like an epoch-ms timestamp
@@ -37,10 +37,12 @@ const (
 )
 
 // Volatile response headers that vary between runs and carry no test value.
+// Set-Cookie would carry live session tokens if Garmin ever starts setting
+// cookies on an API response.
 var stripHeaders = map[string]bool{
 	"Cf-Ray": true, "Date": true, "Nel": true, "Report-To": true,
 	"Alt-Svc": true, "Cf-Cache-Status": true, "Cache-Control": true,
-	"Pragma": true, "Server": true,
+	"Pragma": true, "Server": true, "Set-Cookie": true,
 }
 
 var staticReplacements = [][2]string{
@@ -69,6 +71,7 @@ var (
 	preserveKeyRE = regexp.MustCompile(`(?i)(id|pk|count|index|version|number|order|sequence|priority|category|month|year|offset|zoneid|typekey)$`)
 	epochMsRE     = regexp.MustCompile(`^1[5-9]\d{11}$`)
 	textValueRE   = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
+	arrayStrRE    = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
 	dateishRE     = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
 	uuidishRE     = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
 	hexRunRE      = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
@@ -80,6 +83,7 @@ func Interaction(i *cassette.Interaction, displayName string) {
 	stripVolatileHeaders(i.Response.Headers)
 	if i.Request.Headers != nil {
 		i.Request.Headers.Set("Authorization", "Bearer test")
+		i.Request.Headers.Del("Cookie")
 	}
 	i.Response.Duration = 100 * time.Millisecond
 	i.Request.URL = URL(i.Request.URL, displayName)
@@ -130,6 +134,7 @@ func Body(s, displayName string) string {
 	s = idFieldRE.ReplaceAllString(s, "${1}"+synthID)
 	s = objectKeyIDRE.ReplaceAllString(s, "${1}"+synthID+"${2}")
 	s = scrubTextValues(s)
+	s = scrubArrayStrings(s)
 	s = scrubUUIDs(s)
 	s = applyStatic(s, displayName)
 	return s
@@ -193,6 +198,35 @@ func scrubTextValues(s string) string {
 		}
 		return `:"TEST"`
 	})
+}
+
+// scrubArrayStrings replaces string array elements (a string led by '[' or ','
+// and followed by ',' or ']') with "TEST", using the same preservation rules
+// as scrubTextValues. Object values are led by ':' and object keys are
+// followed by ':', so neither matches here.
+func scrubArrayStrings(s string) string {
+	locs := arrayStrRE.FindAllStringIndex(s, -1)
+	if locs == nil {
+		return s
+	}
+	var b strings.Builder
+	prev := 0
+	for _, loc := range locs {
+		start, end := loc[0], loc[1]
+		if end >= len(s) || (s[end] != ',' && s[end] != ']') {
+			continue // an object key or truncated tail, not an array element
+		}
+		val := s[start+2 : end-1]
+		if val == "" || preserveText[val] || dateishRE.MatchString(val) || uuidishRE.MatchString(val) {
+			continue
+		}
+		b.WriteString(s[prev:start])
+		b.WriteByte(s[start]) // leading '[' or ','
+		b.WriteString(`"TEST"`)
+		prev = end
+	}
+	b.WriteString(s[prev:])
+	return b.String()
 }
 
 func scrubUUIDs(s string) string {

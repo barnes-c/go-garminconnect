@@ -27,8 +27,11 @@ func Client(tokenFile string) (*gc.Client, error) {
 func promptMFA() (string, error) {
 	fmt.Fprint(os.Stderr, "MFA code: ")
 	line, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
+	code := strings.TrimSpace(line)
+	// ReadString returns the data alongside io.EOF when stdin ends without a
+	// newline (e.g. `echo -n 123456 |`); only fail if no code was read.
+	if err != nil && code == "" {
 		return "", err
 	}
-	return strings.TrimSpace(line), nil
+	return code, nil
 }

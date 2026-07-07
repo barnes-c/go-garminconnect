@@ -169,7 +169,9 @@ func discoverTests() ([]string, error) {
 func filterMissing(tests []string) []string {
 	var out []string
 	for _, test := range tests {
-		if _, err := os.Stat(filepath.Join(cassetteDir, test+".yaml")); os.IsNotExist(err) {
+		// Any stat error counts as missing; a re-record attempt will surface
+		// the real problem instead of silently skipping the test.
+		if _, err := os.Stat(filepath.Join(cassetteDir, test+".yaml")); err != nil {
 			out = append(out, test)
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -76,7 +77,7 @@ func (c *Client) Login(ctx context.Context, username, password string) error {
 // if one is configured. The next Login then runs a full SSO flow instead of
 // resuming the cached token.
 func (c *Client) Logout() error {
-	c.token = nil
+	c.setToken(nil)
 	c.displayName = ""
 	if c.tokenFile == "" {
 		return nil
@@ -88,12 +89,12 @@ func (c *Client) Logout() error {
 }
 
 func (c *Client) ensureToken(ctx context.Context, username, password string) error {
-	if c.token.valid() {
+	if c.currentToken().valid() {
 		return nil
 	}
 	if tok, err := c.loadToken(); err == nil {
 		if tok.valid() {
-			c.token = tok
+			c.setToken(tok)
 			return nil
 		}
 		if tok.RefreshToken != "" {
@@ -275,6 +276,7 @@ func (c *Client) handleMFA(ctx context.Context, mfaMethod string) error {
 }
 
 func (c *Client) exchangeTicket(ctx context.Context, ticket, serviceURL string) error {
+	var errs []error
 	for _, clientID := range diClientIDs {
 		tok, err := c.doTokenRequest(ctx, url.Values{
 			"client_id":      {clientID},
@@ -282,13 +284,15 @@ func (c *Client) exchangeTicket(ctx context.Context, ticket, serviceURL string) 
 			"grant_type":     {"https://connectapi.garmin.com/di-oauth2-service/oauth/grant/service_ticket"},
 			"service_url":    {serviceURL},
 		}, clientID)
-		if err == nil {
-			tok.ClientID = clientID
-			c.token = tok
-			return c.saveToken(tok)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("%s: %w", clientID, err))
+			continue
 		}
+		tok.ClientID = clientID
+		c.setToken(tok)
+		return c.saveToken(tok)
 	}
-	return fmt.Errorf("di token exchange failed for all client IDs")
+	return fmt.Errorf("di token exchange failed for all client IDs: %w", errors.Join(errs...))
 }
 
 func (c *Client) refreshToken(ctx context.Context, old *diToken) error {
@@ -305,7 +309,7 @@ func (c *Client) refreshToken(ctx context.Context, old *diToken) error {
 		tok.RefreshToken = old.RefreshToken
 		tok.RefreshExpiresAt = old.RefreshExpiresAt
 	}
-	c.token = tok
+	c.setToken(tok)
 	return c.saveToken(tok)
 }
 
@@ -338,7 +342,12 @@ func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID
 		return nil, fmt.Errorf("di token decode: %w", err)
 	}
 
-	expiry := time.Duration(raw.ExpiresIn)*time.Second - 60*time.Second
+	// Expire a minute early so a token is refreshed before the server rejects
+	// it, but never let the buffer push the expiry into the past.
+	expiry := time.Duration(raw.ExpiresIn) * time.Second
+	if expiry > time.Minute {
+		expiry -= time.Minute
+	}
 	tok := &diToken{
 		AccessToken:  raw.AccessToken,
 		RefreshToken: raw.RefreshToken,
