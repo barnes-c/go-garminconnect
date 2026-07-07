@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -16,6 +17,7 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"path/filepath"
+	"sync"
 	"time"
 
 	utls "github.com/refraction-networking/utls"
@@ -23,9 +25,12 @@ import (
 
 const connectAPI = "https://connectapi.garmin.com"
 
-// Client is an authenticated Garmin Connect API client.
+// Client is an authenticated Garmin Connect API client. It is safe for
+// concurrent use by multiple goroutines.
 type Client struct {
 	http        *http.Client
+	mu          sync.Mutex // guards token
+	refreshMu   sync.Mutex // serializes 401-triggered token refreshes
 	token       *diToken
 	tokenFile   string
 	displayName string
@@ -43,15 +48,20 @@ func WithHTTPClient(hc *http.Client) Option {
 }
 
 // WithToken pre-loads an access token, skipping the SSO login flow.
-// No refresh or SSO will be performed. If the token is a JWT its expiry is
-// read from the "exp" claim; otherwise it is assumed valid for 24 hours.
+// Unless a refresh token is also configured (WithRefreshToken), no refresh or
+// SSO will be performed. If the token is a JWT its expiry is read from the
+// "exp" claim; otherwise it is assumed valid for 24 hours.
 func WithToken(accessToken string) Option {
 	return func(c *Client) {
 		expiresAt := time.Now().Add(24 * time.Hour)
 		if exp, ok := jwtExpiry(accessToken); ok {
 			expiresAt = exp
 		}
-		c.token = &diToken{AccessToken: accessToken, ExpiresAt: expiresAt}
+		if c.token == nil {
+			c.token = &diToken{}
+		}
+		c.token.AccessToken = accessToken
+		c.token.ExpiresAt = expiresAt
 	}
 }
 
@@ -125,10 +135,22 @@ func (c *Client) DisplayName() string { return c.displayName }
 
 // Token returns the current access token, or empty string if not authenticated.
 func (c *Client) Token() string {
-	if c.token == nil {
-		return ""
+	if t := c.currentToken(); t != nil {
+		return t.AccessToken
 	}
-	return c.token.AccessToken
+	return ""
+}
+
+func (c *Client) currentToken() *diToken {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.token
+}
+
+func (c *Client) setToken(t *diToken) {
+	c.mu.Lock()
+	c.token = t
+	c.mu.Unlock()
 }
 
 func (c *Client) fetchProfile(ctx context.Context) error {
@@ -142,19 +164,40 @@ func (c *Client) fetchProfile(ctx context.Context) error {
 	return nil
 }
 
-// withRefresh calls fn, and if the first attempt returns a 401, tries to
-// refresh the token and retries fn once. Returns (nil, ErrUnauthorized) if
-// the refresh fails or there is no refresh token available.
-func (c *Client) withRefresh(ctx context.Context, fn func() (*http.Response, error)) (*http.Response, error) {
-	resp, err := fn()
+// withRefresh calls fn with the current access token, and if the first
+// attempt returns a 401, tries to refresh the token and retries fn once.
+// Returns (nil, ErrUnauthorized) if the client has no token, the refresh
+// fails, or there is no refresh token available.
+func (c *Client) withRefresh(ctx context.Context, fn func(accessToken string) (*http.Response, error)) (*http.Response, error) {
+	tok := c.currentToken()
+	if tok == nil {
+		return nil, ErrUnauthorized
+	}
+	resp, err := fn(tok.AccessToken)
 	if err != nil || resp.StatusCode != http.StatusUnauthorized {
 		return resp, err
 	}
 	resp.Body.Close()
-	if c.token == nil || c.token.RefreshToken == "" || c.refreshToken(ctx, c.token) != nil {
+	if c.refreshAfter401(ctx, tok.AccessToken) != nil {
 		return nil, ErrUnauthorized
 	}
-	return fn()
+	return fn(c.Token())
+}
+
+// refreshAfter401 exchanges the refresh token after a request using usedToken
+// got a 401. Concurrent callers are serialized; whoever arrives after a
+// successful refresh sees a changed access token and skips the exchange.
+func (c *Client) refreshAfter401(ctx context.Context, usedToken string) error {
+	c.refreshMu.Lock()
+	defer c.refreshMu.Unlock()
+	tok := c.currentToken()
+	if tok == nil || tok.RefreshToken == "" {
+		return ErrUnauthorized
+	}
+	if tok.AccessToken != usedToken {
+		return nil
+	}
+	return c.refreshToken(ctx, tok)
 }
 
 // get performs an authenticated GET against the Garmin Connect API and
@@ -167,12 +210,12 @@ func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, o
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+	resp, err := c.withRefresh(ctx, func(token string) (*http.Response, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 		if err != nil {
 			return nil, err
 		}
-		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+token)
 		req.Header.Set("Accept", "application/json")
 		return c.http.Do(req)
 	})
@@ -206,7 +249,7 @@ func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any,
 			return err
 		}
 	}
-	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+	resp, err := c.withRefresh(ctx, func(token string) (*http.Response, error) {
 		var br io.Reader
 		if data != nil {
 			br = bytes.NewReader(data)
@@ -215,7 +258,7 @@ func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any,
 		if err != nil {
 			return nil, err
 		}
-		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+token)
 		req.Header.Set("Accept", "application/json")
 		if data != nil {
 			req.Header.Set("Content-Type", "application/json")
@@ -261,12 +304,12 @@ func (c *Client) getBytes(ctx context.Context, path string, params url.Values) (
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
-	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+	resp, err := c.withRefresh(ctx, func(token string) (*http.Response, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 		if err != nil {
 			return nil, err
 		}
-		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+token)
 		return c.http.Do(req)
 	})
 	if err != nil {
@@ -306,12 +349,12 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 	contentType := w.FormDataContentType()
 	rawURL := c.baseURL + path
 
-	resp, err := c.withRefresh(ctx, func() (*http.Response, error) {
+	resp, err := c.withRefresh(ctx, func(token string) (*http.Response, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodPost, rawURL, bytes.NewReader(bodyBytes))
 		if err != nil {
 			return nil, err
 		}
-		req.Header.Set("Authorization", "Bearer "+c.token.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+token)
 		req.Header.Set("Content-Type", contentType)
 		return c.http.Do(req)
 	})
@@ -336,3 +379,15 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 }
 
 func date(t time.Time) string { return t.Format("2006-01-02") }
+
+var errNoDisplayName = errors.New("display name not set: call Login or use WithDisplayName")
+
+// displayNamePath returns the display name escaped for use as a URL path
+// segment, or an error when the client has none (e.g. WithToken without
+// WithDisplayName and no Login).
+func (c *Client) displayNamePath() (string, error) {
+	if c.displayName == "" {
+		return "", errNoDisplayName
+	}
+	return url.PathEscape(c.displayName), nil
+}

@@ -199,8 +199,12 @@ func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) ([]En
 
 // RacePredictions returns the latest predicted finish times for the user.
 func (c *Client) RacePredictions(ctx context.Context) (*LatestRacePredictions, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	var out LatestRacePredictions
-	if err := c.get(ctx, fmt.Sprintf("/metrics-service/metrics/racepredictions/latest/%s", c.displayName), nil, &out); err != nil {
+	if err := c.get(ctx, "/metrics-service/metrics/racepredictions/latest/"+name, nil, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

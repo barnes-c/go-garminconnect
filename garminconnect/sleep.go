@@ -91,9 +91,13 @@ type HRVData struct {
 // SleepData returns detailed sleep data for the given date.
 // The date should be the morning date (day you woke up).
 func (c *Client) SleepData(ctx context.Context, d time.Time) (*SleepData, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	params := url.Values{"date": {date(d)}}
 	var out SleepData
-	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailySleepData/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/wellness-service/wellness/dailySleepData/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil

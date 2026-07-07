@@ -159,9 +159,13 @@ type BloodPressureSummary struct {
 
 // UserSummary returns the daily wellness summary for the given date.
 func (c *Client) UserSummary(ctx context.Context, d time.Time) (*UserSummary, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	params := url.Values{"calendarDate": {date(d)}}
 	var out UserSummary
-	if err := c.get(ctx, fmt.Sprintf("/usersummary-service/usersummary/daily/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/usersummary-service/usersummary/daily/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -236,9 +240,13 @@ func (c *Client) IntensityMinutes(ctx context.Context, d time.Time) (*IntensityM
 
 // Steps returns step data for the given date in 15-minute intervals.
 func (c *Client) Steps(ctx context.Context, d time.Time) ([]StepEntry, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	params := url.Values{"date": {date(d)}}
 	var out []StepEntry
-	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailySummaryChart/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/wellness-service/wellness/dailySummaryChart/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -297,14 +305,12 @@ type WeeklyIMStat struct {
 	VigorousIntensityMinutes int    `json:"vigorousIntensityMinutes"`
 }
 
-// StepsData returns intraday step data in 15-minute intervals via the summary chart endpoint.
+// StepsData returns intraday step data in 15-minute intervals.
+//
+// Deprecated: StepsData hits the same endpoint as [Client.Steps] and now
+// delegates to it; use Steps directly.
 func (c *Client) StepsData(ctx context.Context, d time.Time) ([]StepEntry, error) {
-	params := url.Values{"calendarDate": {date(d)}}
-	var out []StepEntry
-	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/dailySummaryChart/%s", c.displayName), params, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
+	return c.Steps(ctx, d)
 }
 
 // DailySteps returns daily step totals between start and end dates.

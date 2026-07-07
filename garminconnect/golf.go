@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"net/url"
+	"slices"
 	"strings"
 )
 
@@ -18,8 +20,10 @@ type GolfScorecard struct {
 }
 
 // GolfSummary returns a paginated list of scorecard summaries.
-// The API returns a pagination wrapper; this function unwraps it and returns
-// the scorecard slice (empty when totalRows is 0).
+// The API returns a pagination wrapper whose scorecard field name is not
+// stable across accounts; this function unwraps it by locating the array
+// value (scanning keys in sorted order for determinism) and returns the
+// scorecard slice.
 func (c *Client) GolfSummary(ctx context.Context, start, limit int) ([]GolfScorecard, error) {
 	params := url.Values{
 		"start": {fmt.Sprintf("%d", start)},
@@ -29,22 +33,22 @@ func (c *Client) GolfSummary(ctx context.Context, start, limit int) ([]GolfScore
 	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/scorecard/summary", params, &raw); err != nil {
 		return nil, err
 	}
-	var totalRows int
-	if b, ok := raw["totalRows"]; ok {
-		_ = json.Unmarshal(b, &totalRows)
-	}
-	if totalRows == 0 {
-		return nil, nil
-	}
-	for _, v := range raw {
-		if len(v) > 0 && v[0] == '[' {
-			var out []GolfScorecard
-			if err := json.Unmarshal(v, &out); err == nil {
-				return out, nil
-			}
+	var firstErr error
+	for _, k := range slices.Sorted(maps.Keys(raw)) {
+		v := raw[k]
+		if len(v) == 0 || v[0] != '[' {
+			continue
 		}
+		var out []GolfScorecard
+		if err := json.Unmarshal(v, &out); err != nil {
+			if firstErr == nil {
+				firstErr = fmt.Errorf("decode scorecard summary %q: %w", k, err)
+			}
+			continue
+		}
+		return out, nil
 	}
-	return nil, nil
+	return nil, firstErr
 }
 
 // GolfScorecard returns full details for a single scorecard.

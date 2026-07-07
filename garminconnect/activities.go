@@ -122,24 +122,32 @@ func (c *Client) Activities(ctx context.Context, start, limit int) ([]Activity, 
 	return out, nil
 }
 
-// ActivitiesByDate returns activities between start and end dates, optionally
-// filtered by activity type key (e.g. "running", "cycling"). Pass an empty
-// string for activityType to return all types.
+// ActivitiesByDate returns all activities between start and end dates,
+// optionally filtered by activity type key (e.g. "running", "cycling"). Pass
+// an empty string for activityType to return all types. Paginates internally
+// until the full range is fetched.
 func (c *Client) ActivitiesByDate(ctx context.Context, start, end time.Time, activityType string) ([]Activity, error) {
+	const pageSize = 999
 	params := url.Values{
 		"startDate": {date(start)},
 		"endDate":   {date(end)},
-		"start":     {"0"},
-		"limit":     {"999"},
+		"limit":     {fmt.Sprintf("%d", pageSize)},
 	}
 	if activityType != "" {
 		params.Set("activityType", activityType)
 	}
-	var out []Activity
-	if err := c.get(ctx, "/activitylist-service/activities/search/activities", params, &out); err != nil {
-		return nil, err
+	var all []Activity
+	for offset := 0; ; offset += pageSize {
+		params.Set("start", fmt.Sprintf("%d", offset))
+		var page []Activity
+		if err := c.get(ctx, "/activitylist-service/activities/search/activities", params, &page); err != nil {
+			return nil, err
+		}
+		all = append(all, page...)
+		if len(page) < pageSize {
+			return all, nil
+		}
 	}
-	return out, nil
 }
 
 // LastActivity returns the single most recent activity.
@@ -188,9 +196,13 @@ func (c *Client) ActivityTypes(ctx context.Context) ([]ActivityType, error) {
 // ActivitiesForDailySummary returns the activities that make up the daily
 // summary for the given date.
 func (c *Client) ActivitiesForDailySummary(ctx context.Context, d time.Time) ([]Activity, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	params := url.Values{"calendarDate": {date(d)}}
 	var out []Activity
-	if err := c.get(ctx, fmt.Sprintf("/activitylist-service/activities/fordailysummary/%s", c.displayName), params, &out); err != nil {
+	if err := c.get(ctx, "/activitylist-service/activities/fordailysummary/"+name, params, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -216,8 +228,12 @@ func (c *Client) ActivityWeather(ctx context.Context, id int64) (map[string]json
 
 // PersonalRecords returns personal records for the authenticated user.
 func (c *Client) PersonalRecords(ctx context.Context) ([]PersonalRecord, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
 	var out []PersonalRecord
-	if err := c.get(ctx, fmt.Sprintf("/personalrecord-service/personalrecord/prs/%s", c.displayName), nil, &out); err != nil {
+	if err := c.get(ctx, "/personalrecord-service/personalrecord/prs/"+name, nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
