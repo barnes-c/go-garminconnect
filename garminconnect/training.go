@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"sort"
 	"time"
 )
 
@@ -177,8 +178,10 @@ func (c *Client) MaxMetrics(ctx context.Context, start, end time.Time) ([]MaxMet
 	return out, nil
 }
 
-// EnduranceScore returns endurance score data between start and end dates.
-// The API returns a single current entry wrapped in {"enduranceScoreDTO": {...}}.
+// EnduranceScore returns weekly endurance scores between start and end dates.
+// The response carries the series in "groupMap" (week start date → weekly
+// average/max); "enduranceScoreDTO" only holds the single current score and
+// is used as a fallback when the map is empty.
 func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) ([]EnduranceScoreEntry, error) {
 	params := url.Values{
 		"startDate":   {date(start)},
@@ -186,10 +189,22 @@ func (c *Client) EnduranceScore(ctx context.Context, start, end time.Time) ([]En
 		"aggregation": {"weekly"},
 	}
 	var wrapper struct {
+		GroupMap map[string]struct {
+			GroupAverage float64 `json:"groupAverage"`
+			GroupMax     float64 `json:"groupMax"`
+		} `json:"groupMap"`
 		Entry *EnduranceScoreEntry `json:"enduranceScoreDTO"`
 	}
 	if err := c.get(ctx, "/metrics-service/metrics/endurancescore/stats", params, &wrapper); err != nil {
 		return nil, err
+	}
+	if len(wrapper.GroupMap) > 0 {
+		entries := make([]EnduranceScoreEntry, 0, len(wrapper.GroupMap))
+		for d, g := range wrapper.GroupMap {
+			entries = append(entries, EnduranceScoreEntry{CalendarDate: d, Score: g.GroupAverage})
+		}
+		sort.Slice(entries, func(i, j int) bool { return entries[i].CalendarDate < entries[j].CalendarDate })
+		return entries, nil
 	}
 	if wrapper.Entry == nil {
 		return nil, nil
