@@ -121,3 +121,10 @@ A scheduled [smoke-test workflow](.github/workflows/smoke.yml) runs `internal/sm
 ```bash
 GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/smoke
 ```
+
+## Used by
+
+- [garmin_exporter](https://github.com/barnes-c/garmin_exporter) — OTel-native Prometheus exporter for Garmin Connect
+- [garmin-datasource](https://github.com/barnes-c/garmin-datasource) — Grafana data source for Garmin Connect
+
+Using this client in your own project? Open a PR to add it here.
