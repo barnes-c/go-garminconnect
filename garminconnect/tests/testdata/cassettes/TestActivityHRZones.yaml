@@ -1,0 +1,37 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=1&start=0
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"activityName":"TEST","startTimeLocal":"2026-01-01 00:00:00","startTimeGMT":"2026-01-01 00:00:00","activityType":{"typeId":2,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventType":{"typeId":9,"typeKey":"TEST","sortOrder":10},"distance":1.0,"duration":1.0,"elapsedDuration":1.0,"movingDuration":1.0,"elevationGain":1.0,"elevationLoss":1.0,"averageSpeed":1.0,"maxSpeed":1.0,"startLatitude":1.0,"startLongitude":1.0,"hasPolyline":true,"hasImages":false,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","ownerFullName":"TEST","ownerProfileImageUrlSmall":"TEST","ownerProfileImageUrlMedium":"TEST","ownerProfileImageUrlLarge":"TEST","calories":1.0,"bmrCalories":1.0,"averageHR":1.0,"maxHR":1.0,"averageBikingCadenceInRevPerMinute":1.0,"maxBikingCadenceInRevPerMinute":1.0,"userRoles":["TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST"],"privacy":{"typeId":2,"typeKey":"TEST"},"userPro":false,"hasVideo":false,"timeZoneId":124,"beginTimestamp":1,"sportTypeId":2,"avgPower":1.0,"maxPower":1.0,"aerobicTrainingEffect":1.0,"anaerobicTrainingEffect":1.0,"strokes":1.0,"normPower":1.0,"max20MinPower":1.0,"trainingStressScore":1.0,"intensityFactor":1.0,"vO2MaxValue":1.0,"deviceId":12345678,"minElevation":1.0,"maxElevation":1.0,"avgElevation":1.0,"summarizedDiveInfo":{"summarizedDiveGases":[]},"maxVerticalSpeed":1.0,"manufacturer":"TEST","locationName":"TEST","lapCount":9,"endLatitude":1.0,"endLongitude":1.0,"waterEstimated":1.0,"maxAvgPower_1":1,"maxAvgPower_2":1,"maxAvgPower_5":1,"maxAvgPower_10":1,"maxAvgPower_20":1,"maxAvgPower_30":1,"maxAvgPower_60":1,"maxAvgPower_120":1,"maxAvgPower_300":1,"maxAvgPower_600":1,"maxAvgPower_1200":1,"maxAvgPower_1800":1,"maxAvgPower_3600":1,"maxAvgPower_7200":1,"excludeFromPowerCurveReports":false,"trainingEffectLabel":"TEST","activityTrainingLoad":1.0,"minActivityLapDuration":1.0,"aerobicTrainingEffectMessage":"TEST","anaerobicTrainingEffectMessage":"TEST","splitSummaries":[],"hasSplits":false,"hasIntensityIntervals":false,"moderateIntensityMinutes":1,"vigorousIntensityMinutes":1,"differenceBodyBattery":1,"hasHeatMap":false,"fastestSplit_40000":1.0,"hrTimeInZone_1":1.0,"hrTimeInZone_2":1.0,"hrTimeInZone_3":1.0,"hrTimeInZone_4":1.0,"hrTimeInZone_5":1.0,"powerTimeInZone_1":1.0,"powerTimeInZone_2":1.0,"powerTimeInZone_3":1.0,"powerTimeInZone_4":1.0,"powerTimeInZone_5":1.0,"powerTimeInZone_6":1.0,"powerTimeInZone_7":1.0,"endTimeGMT":"2026-01-01 00:00:00","qualifyingDive":false,"activityUUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","purposeful":false,"manualActivity":false,"decoDive":false,"elevationCorrected":false,"atpActivity":false,"autoCalcCalories":false,"favorite":false,"parent":false,"pr":true}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678/hrTimeInZones
+        method: GET
+      response:
+        body: '[{"zoneNumber":1,"secsInZone":1.0,"zoneLowBoundary":1},{"zoneNumber":2,"secsInZone":1.0,"zoneLowBoundary":1},{"zoneNumber":3,"secsInZone":1.0,"zoneLowBoundary":1},{"zoneNumber":4,"secsInZone":1.0,"zoneLowBoundary":1},{"zoneNumber":5,"secsInZone":1.0,"zoneLowBoundary":1}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

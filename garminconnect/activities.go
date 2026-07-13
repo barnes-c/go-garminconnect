@@ -92,20 +92,22 @@ type SplitsResponse struct {
 	LapDTOs        []Split `json:"lapDTOs"`
 }
 
-// HRZone holds heart rate time-in-zone data for an activity.
+// HRZone holds heart rate time-in-zone data for an activity. Garmin only
+// sends each zone's lower boundary; a zone's upper boundary is the next
+// zone's lower one, and the last zone is open-ended.
 type HRZone struct {
-	ZoneNumber  int     `json:"zoneNumber"`
-	SecsInZone  float64 `json:"secsInZone"`
-	ZoneLowBPM  int     `json:"zoneLowBoundary"`
-	ZoneHighBPM int     `json:"zoneHighBoundary"`
+	ZoneNumber int     `json:"zoneNumber"`
+	SecsInZone float64 `json:"secsInZone"`
+	ZoneLowBPM int     `json:"zoneLowBoundary"`
 }
 
-// PowerZone holds power time-in-zone data for an activity.
+// PowerZone holds power time-in-zone data for an activity. Garmin only
+// sends each zone's lower boundary; a zone's upper boundary is the next
+// zone's lower one, and the last zone is open-ended.
 type PowerZone struct {
-	ZoneNumber    int     `json:"zoneNumber"`
-	SecsInZone    float64 `json:"secsInZone"`
-	ZoneLowWatts  int     `json:"zoneLowBoundary"`
-	ZoneHighWatts int     `json:"zoneHighBoundary"`
+	ZoneNumber   int     `json:"zoneNumber"`
+	SecsInZone   float64 `json:"secsInZone"`
+	ZoneLowWatts int     `json:"zoneLowBoundary"`
 }
 
 // Activities returns the most recent limit activities.

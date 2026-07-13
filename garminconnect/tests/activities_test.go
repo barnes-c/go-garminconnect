@@ -103,6 +103,47 @@ func TestActivitiesForDailySummary(t *testing.T) {
 	}
 }
 
+func TestActivityHRZones(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	// Record cassette: fetch the most recent activity to get a real ID.
+	acts, err := c.Activities(t.Context(), 0, 1)
+	require.NoError(t, err)
+	require.NotEmpty(t, acts)
+
+	zones, err := c.ActivityHRZones(t.Context(), acts[0].ActivityID)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, zones)
+	for i, z := range zones {
+		assert.Equal(t, i+1, z.ZoneNumber)
+	}
+	// Garmin sends no zoneHighBoundary on this endpoint, only lower bounds.
+	assert.Positive(t, zones[len(zones)-1].ZoneLowBPM)
+}
+
+func TestActivityPowerZones(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	// Record cassette: fetch the most recent activity to get a real ID. The
+	// activity must have power data (e.g. a ride or run with a power source).
+	acts, err := c.Activities(t.Context(), 0, 1)
+	require.NoError(t, err)
+	require.NotEmpty(t, acts)
+
+	zones, err := c.ActivityPowerZones(t.Context(), acts[0].ActivityID)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, zones)
+	for i, z := range zones {
+		assert.Equal(t, i+1, z.ZoneNumber)
+	}
+	// Garmin sends no zoneHighBoundary on this endpoint, only lower bounds.
+	assert.Positive(t, zones[len(zones)-1].ZoneLowWatts)
+}
+
 func TestActivityCount(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
