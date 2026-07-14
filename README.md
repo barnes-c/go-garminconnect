@@ -80,7 +80,7 @@ Activity and workout files support FIT, GPX, TCX, KML, and CSV (see the `Format*
 ```go
 import "errors"
 
-acts, err := client.Activities(context.Background(), 10)
+acts, err := client.Activities(context.Background(), 0, 10)
 switch {
 case errors.Is(err, garminconnect.ErrUnauthorized):
     // automatic token refresh failed — call Login again to re-authenticate
