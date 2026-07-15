@@ -85,6 +85,24 @@ func WithRefreshToken(refreshToken string) Option {
 	}
 }
 
+// WithTokenJSON pre-loads a full token from its JSON form — the same format
+// written to the token file and returned by [Client.TokenJSON]. It lets
+// callers persist tokens in an external store (e.g. a secret backend)
+// instead of a file. Invalid or empty input is ignored, in which case Login
+// falls back to the SSO flow.
+func WithTokenJSON(data []byte) Option {
+	return func(c *Client) {
+		var tok diToken
+		if err := json.Unmarshal(data, &tok); err != nil || (tok.AccessToken == "" && tok.RefreshToken == "") {
+			return
+		}
+		if tok.ClientID == "" {
+			tok.ClientID = diClientIDs[0]
+		}
+		c.token = &tok
+	}
+}
+
 // WithMFAPrompt sets a callback that is invoked when Garmin's SSO requires
 // multi-factor authentication. The callback should return the MFA code
 // (e.g. read from stdin, a channel, or an HTTP handler). If no prompt is
@@ -139,6 +157,18 @@ func (c *Client) Token() string {
 		return t.AccessToken
 	}
 	return ""
+}
+
+// TokenJSON returns the current token serialized in the token file format,
+// for persistence outside the client (e.g. a secret store). Pass the result
+// to [WithTokenJSON] to resume the session later. Returns ErrUnauthorized if
+// the client has no token.
+func (c *Client) TokenJSON() ([]byte, error) {
+	tok := c.currentToken()
+	if tok == nil {
+		return nil, ErrUnauthorized
+	}
+	return json.Marshal(tok)
 }
 
 func (c *Client) currentToken() *diToken {

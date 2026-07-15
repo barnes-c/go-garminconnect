@@ -92,6 +92,13 @@ func (c *Client) ensureToken(ctx context.Context, username, password string) err
 	if c.currentToken().valid() {
 		return nil
 	}
+	// An expired preset token (WithTokenJSON/WithRefreshToken) can still be
+	// exchanged without a full SSO round trip.
+	if tok := c.currentToken(); tok != nil && tok.RefreshToken != "" {
+		if err := c.refreshToken(ctx, tok); err == nil {
+			return nil
+		}
+	}
 	if tok, err := c.loadToken(); err == nil {
 		if tok.valid() {
 			c.setToken(tok)

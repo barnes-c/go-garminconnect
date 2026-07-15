@@ -193,3 +193,59 @@ func TestLogin_RefreshFailsUnauthorized(t *testing.T) {
 	err := c.Login(t.Context(), "", "")
 	require.ErrorIs(t, err, gc.ErrUnauthorized)
 }
+
+// TestTokenJSON_RoundTrip verifies that a token loaded via WithTokenJSON is
+// returned unchanged by TokenJSON, enabling file-less persistence.
+func TestTokenJSON_RoundTrip(t *testing.T) {
+	in := `{"access_token":"a1","refresh_token":"r1","client_id":"cid","expires_at":"2099-01-01T00:00:00Z"}`
+
+	c := gc.NewClient("", gc.WithTokenJSON([]byte(in)))
+	assert.Equal(t, "a1", c.Token())
+
+	out, err := c.TokenJSON()
+	require.NoError(t, err)
+	resumed := gc.NewClient("", gc.WithTokenJSON(out))
+	assert.Equal(t, "a1", resumed.Token())
+	assert.JSONEq(t, string(out), func() string {
+		b, err := resumed.TokenJSON()
+		require.NoError(t, err)
+		return string(b)
+	}())
+}
+
+// TestTokenJSON_NoToken returns ErrUnauthorized when unauthenticated.
+func TestTokenJSON_NoToken(t *testing.T) {
+	c := gc.NewClient("")
+	_, err := c.TokenJSON()
+	require.ErrorIs(t, err, gc.ErrUnauthorized)
+}
+
+// TestWithTokenJSON_InvalidInput ignores garbage so Login can fall back to SSO.
+func TestWithTokenJSON_InvalidInput(t *testing.T) {
+	assert.Empty(t, gc.NewClient("", gc.WithTokenJSON([]byte("not json"))).Token())
+	assert.Empty(t, gc.NewClient("", gc.WithTokenJSON([]byte("{}"))).Token())
+}
+
+// TestLogin_RefreshesExpiredPresetToken exchanges an expired WithTokenJSON
+// token via the refresh endpoint instead of running a full SSO login.
+func TestLogin_RefreshesExpiredPresetToken(t *testing.T) {
+	rt := roundTripFunc(func(r *http.Request) (*http.Response, error) {
+		switch r.URL.Host + r.URL.Path {
+		case "diauth.garmin.com/di-oauth2-service/oauth/token":
+			return jsonResp(200, `{"access_token":"new","refresh_token":"r2","expires_in":3600}`), nil
+		case "connectapi.garmin.com/userprofile-service/socialProfile":
+			return jsonResp(200, `{"displayName":"resumed"}`), nil
+		}
+		return nil, fmt.Errorf("unexpected request: %s", r.URL)
+	})
+
+	expired := `{"access_token":"old","refresh_token":"r1","client_id":"cid","expires_at":"2000-01-01T00:00:00Z"}`
+	c := gc.NewClient("",
+		gc.WithHTTPClient(&http.Client{Transport: rt}),
+		gc.WithTokenJSON([]byte(expired)),
+	)
+
+	require.NoError(t, c.Login(t.Context(), "", ""))
+	assert.Equal(t, "new", c.Token())
+	assert.Equal(t, "resumed", c.DisplayName())
+}
