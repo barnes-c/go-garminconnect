@@ -31,11 +31,16 @@ jobs:
           GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: go run ./internal/smoke < /dev/null
-      # Login rotates the refresh token (old ones stay valid, new ones get a
-      # fresh 30-day expiry). Writing the rotated token back keeps the secret
-      # perpetually fresh; without GH_SECRETS_PAT the secret must be re-seeded
-      # manually every 30 days.
+      # Login rotates the refresh token, and the rotated one gets a fresh 30-day
+      # expiry. Writing it back keeps the secret perpetually fresh; without
+      # GH_SECRETS_PAT the secret must be re-seeded manually every 30 days.
+      #
+      # Runs even when the smoke test fails: rotation is gated on login, not on
+      # the endpoint checks. Otherwise one broken endpoint freezes the secret,
+      # its refresh token eventually dies, and the job can never recover on its
+      # own — which is exactly what happened between 2026-07-13 and 2026-07-27.
       - name: Rotate token secret
+        if: always()
         env:
           GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
         run: |

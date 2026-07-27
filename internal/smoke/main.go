@@ -28,6 +28,8 @@ import (
 const (
 	tokenFile = ".garmin_token.json"
 	delay     = time.Second
+
+	reseedHint = "re-seed the GARMIN_TOKEN_JSON secret (log in locally, then: gh secret set GARMIN_TOKEN_JSON < .garmin_token.json)"
 )
 
 func main() {
@@ -41,6 +43,12 @@ func run() error {
 	warnRefreshExpiry()
 	c, err := login.Client(tokenFile)
 	if err != nil {
+		// Without credentials the cached token is the only way in, and a failed
+		// SSO attempt is only a symptom — surface the real remedy, since the SSO
+		// status code in the error chain is misleading noise.
+		if os.Getenv("GARMIN_EMAIL") == "" {
+			fmt.Printf("::error::Cached token unusable and no GARMIN_EMAIL to fall back on — %s\n", reseedHint)
+		}
 		return fmt.Errorf("login: %w", err)
 	}
 	// The display name is PII and appears in API URLs (and therefore in
@@ -107,11 +115,17 @@ func warnRefreshExpiry() {
 	var tok struct {
 		RefreshExpiresAt time.Time `json:"refresh_expires_at"`
 	}
-	if json.Unmarshal(data, &tok) != nil || tok.RefreshExpiresAt.IsZero() {
+	if json.Unmarshal(data, &tok) != nil {
+		return
+	}
+	// A missing expiry is itself worth warning about: it means the deadline is
+	// unknown, so the age-based warning below can never fire.
+	if tok.RefreshExpiresAt.IsZero() {
+		fmt.Printf("::warning::Cached Garmin token has no refresh expiry, so it cannot be checked for staleness — %s\n", reseedHint)
 		return
 	}
 	if left := time.Until(tok.RefreshExpiresAt); left < 10*24*time.Hour {
-		fmt.Printf("::warning::Garmin refresh token expires in %.0f days — re-seed the GARMIN_TOKEN_JSON secret (log in locally, then: gh secret set GARMIN_TOKEN_JSON < .garmin_token.json)\n", left.Hours()/24)
+		fmt.Printf("::warning::Garmin refresh token expires in %.0f days — %s\n", left.Hours()/24, reseedHint)
 	}
 }
 
