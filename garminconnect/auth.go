@@ -324,6 +324,11 @@ func (c *Client) refreshToken(ctx context.Context, old *diToken) error {
 	tok.ClientID = old.ClientID
 	if tok.RefreshToken == "" {
 		tok.RefreshToken = old.RefreshToken
+	}
+	// Garmin does not always return refresh_token_expires_in on a refresh, even
+	// when it rotates the refresh token. Carrying the old expiry forward keeps a
+	// (conservative) deadline on disk instead of dropping the field entirely.
+	if tok.RefreshExpiresAt.IsZero() {
 		tok.RefreshExpiresAt = old.RefreshExpiresAt
 	}
 	c.setToken(tok)
