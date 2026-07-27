@@ -92,10 +92,11 @@ func (c *Client) ensureToken(ctx context.Context, username, password string) err
 	if c.currentToken().valid() {
 		return nil
 	}
+	var refreshErr error
 	// An expired preset token (WithTokenJSON/WithRefreshToken) can still be
 	// exchanged without a full SSO round trip.
 	if tok := c.currentToken(); tok != nil && tok.RefreshToken != "" {
-		if err := c.refreshToken(ctx, tok); err == nil {
+		if refreshErr = c.refreshToken(ctx, tok); refreshErr == nil {
 			return nil
 		}
 	}
@@ -105,12 +106,21 @@ func (c *Client) ensureToken(ctx context.Context, username, password string) err
 			return nil
 		}
 		if tok.RefreshToken != "" {
-			if err := c.refreshToken(ctx, tok); err == nil {
+			if refreshErr = c.refreshToken(ctx, tok); refreshErr == nil {
 				return nil
 			}
 		}
 	}
-	return c.ssoLogin(ctx, username, password)
+	// A full SSO login needs credentials (and interactive MFA); when it fails
+	// on a headless refresh, surface why the cached token could not be reused
+	// instead of only the misleading SSO error.
+	if err := c.ssoLogin(ctx, username, password); err != nil {
+		if refreshErr != nil {
+			return fmt.Errorf("%w (cached token refresh failed: %v)", err, refreshErr)
+		}
+		return err
+	}
+	return nil
 }
 
 func (c *Client) loadToken() (*diToken, error) {
