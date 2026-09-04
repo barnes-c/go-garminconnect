@@ -249,3 +249,82 @@ func TestLogin_RefreshesExpiredPresetToken(t *testing.T) {
 	assert.Equal(t, "new", c.Token())
 	assert.Equal(t, "resumed", c.DisplayName())
 }
+
+// The body here is the shape Garmin actually returns on an SSO 429 (observed
+// 2026-09-04): a structured error carrying a request-id, and no Retry-After
+// header. The request-id is the only part worth quoting back to Garmin.
+
+// The body is the shape Garmin actually returns on an SSO 429 (observed
+// 2026-09-04): a structured error carrying a request-id, no Retry-After
+// header. The request-id is the only field worth quoting back to Garmin.
+func TestLogin_RateLimitedSSO(t *testing.T) {
+	const body = `{"error":{"status-code":"429","message":"{}","request-id":"0000deadbeef0000"}}`
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusTooManyRequests,
+			Body:       io.NopCloser(strings.NewReader(body)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.ErrorIs(t, err, gc.ErrRateLimit)
+
+	var apiErr *gc.APIError
+	require.ErrorAs(t, err, &apiErr)
+	assert.Equal(t, http.StatusTooManyRequests, apiErr.StatusCode)
+	assert.JSONEq(t, body, apiErr.Body)
+	// Error() stays terse; the body is a field, not prose.
+	assert.NotContains(t, err.Error(), "request-id")
+}
+
+func TestLogin_CaptchaRequired(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(strings.NewReader(`{"responseStatus":{"type":"CAPTCHA_REQUIRED"}}`)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.ErrorIs(t, err, gc.ErrCaptchaRequired)
+}
+
+func TestLogin_UnexpectedStatusKeepsBody(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Body:       io.NopCloser(strings.NewReader(`{"error":"backend exploded"}`)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+
+	var apiErr *gc.APIError
+	require.ErrorAs(t, err, &apiErr)
+	assert.Equal(t, http.StatusInternalServerError, apiErr.StatusCode)
+	assert.Contains(t, apiErr.Body, "backend exploded")
+	// 500 maps to no sentinel.
+	require.NotErrorIs(t, err, gc.ErrRateLimit)
+	require.NotErrorIs(t, err, gc.ErrUnauthorized)
+}
+
+// A data-endpoint 401 now arrives as an APIError that unwraps to
+// ErrUnauthorized, so both matching styles work on one returned type.
+func TestAPIError_UnwrapsSentinels(t *testing.T) {
+	for _, tc := range []struct {
+		status int
+		want   error
+	}{
+		{http.StatusUnauthorized, gc.ErrUnauthorized},
+		{http.StatusTooManyRequests, gc.ErrRateLimit},
+	} {
+		err := error(&gc.APIError{StatusCode: tc.status, Path: "/x"})
+		assert.ErrorIs(t, err, tc.want)
+	}
+}

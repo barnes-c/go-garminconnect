@@ -211,7 +211,7 @@ func (c *Client) ssoLogin(ctx context.Context, username, password string) error 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("sso login: status %d", resp.StatusCode)
+		return newAPIError(resp, ssoLoginURL)
 	}
 
 	rawBody, err := io.ReadAll(resp.Body)
@@ -226,6 +226,12 @@ func (c *Client) ssoLogin(ctx context.Context, username, password string) error 
 
 	if ssoResp.ResponseStatus.Type == "MFA_REQUIRED" {
 		return c.handleMFA(ctx, ssoResp.CustomerMfaInfo.MfaLastMethodUsed)
+	}
+
+	// Garmin signals its bot challenge with HTTP 200 and this status, so it
+	// cannot be mapped from a status code like the other failures.
+	if ssoResp.ResponseStatus.Type == "CAPTCHA_REQUIRED" {
+		return ErrCaptchaRequired
 	}
 
 	if ssoResp.ServiceTicketID == "" {
@@ -272,7 +278,7 @@ func (c *Client) handleMFA(ctx context.Context, mfaMethod string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("mfa verify: status %d", resp.StatusCode)
+		return newAPIError(resp, ssoMFAVerifyURL)
 	}
 
 	rawBody, err := io.ReadAll(resp.Body)
@@ -351,7 +357,7 @@ func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("di token request: status %d", resp.StatusCode)
+		return nil, newAPIError(resp, diAuthURL)
 	}
 
 	var raw struct {

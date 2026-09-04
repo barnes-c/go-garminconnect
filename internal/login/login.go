@@ -6,6 +6,7 @@ package login
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -19,9 +20,21 @@ import (
 func Client(tokenFile string) (*gc.Client, error) {
 	c := gc.NewClient(tokenFile, gc.WithMFAPrompt(promptMFA))
 	if err := c.Login(context.Background(), os.Getenv("GARMIN_EMAIL"), os.Getenv("GARMIN_PASSWORD")); err != nil {
-		return nil, err
+		return nil, withBody(err)
 	}
 	return c, nil
+}
+
+// withBody appends the response body Garmin returned, which APIError keeps out
+// of its message to stay terse. For the command-line tools it is often the only
+// diagnostic on offer — a rate-limited login carries a request-id and nothing
+// else.
+func withBody(err error) error {
+	var apiErr *gc.APIError
+	if errors.As(err, &apiErr) && apiErr.Body != "" {
+		return fmt.Errorf("%w (body: %s)", err, apiErr.Body)
+	}
+	return err
 }
 
 func promptMFA() (string, error) {
