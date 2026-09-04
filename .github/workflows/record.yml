@@ -1,0 +1,81 @@
+---
+name: Record cassettes
+on:
+  workflow_dispatch:
+    inputs:
+      missing_only:
+        description: "Only record cassettes that do not exist yet"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# Recording refreshes the cached token, and Garmin rotates the refresh token
+# when it does. Two runs at once would race to spend it and leave the stored
+# secret holding a token that has already been consumed.
+concurrency:
+  group: garmin-token
+  cancel-in-progress: false
+
+jobs:
+  record:
+    name: Record cassettes against the live API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "1.27.1"
+
+      # The cached token is the whole point: it refreshes against
+      # diauth.garmin.com and never touches sso.garmin.com, which rate limits
+      # login attempts aggressively. Without it there is nothing to record with,
+      # so fail loudly rather than falling through to an SSO attempt.
+      - name: Write cached token
+        env:
+          TOKEN_JSON: ${{ secrets.GARMIN_TOKEN_JSON }}
+        run: |
+          if [ -z "$TOKEN_JSON" ]; then
+            echo "GARMIN_TOKEN_JSON is not set; nothing to authenticate with" >&2
+            exit 1
+          fi
+          printf '%s' "$TOKEN_JSON" > .garmin_token.json
+
+      - name: Record
+        run: |
+          if [ "${{ inputs.missing_only }}" = "true" ]; then
+            go run ./internal/record --missing
+          else
+            go run ./internal/record
+          fi
+
+      # Cassettes are sanitized inline as they are written, but these are new
+      # endpoints whose fields the sanitizer has not been vetted against, so
+      # they are published for review rather than committed. Retention is short
+      # because artifacts on a public repository are world-readable.
+      - name: Upload cassettes
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cassettes
+          path: garminconnect/tests/testdata/cassettes/
+          retention-days: 1
+          if-no-files-found: error
+
+      # Login rotates the refresh token; the stored one is spent afterwards.
+      # Writing the new one back keeps the secret usable for the next run and
+      # for the weekly smoke test, which shares it.
+      - name: Rotate token secret
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          if [ -n "$GH_TOKEN" ] && [ -f .garmin_token.json ]; then
+            gh secret set GARMIN_TOKEN_JSON --repo "$GITHUB_REPOSITORY" < .garmin_token.json
+            echo "GARMIN_TOKEN_JSON secret updated with rotated token"
+          else
+            echo "::warning::GH_SECRETS_PAT not set — the stored refresh token may now be spent"
+          fi

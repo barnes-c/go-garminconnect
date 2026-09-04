@@ -2,9 +2,11 @@ package garminconnect
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -338,6 +340,26 @@ func (c *Client) CyclingFTP(ctx context.Context) (*CyclingFTP, error) {
 	return &out, nil
 }
 
+// FunctionalThresholdPowerRange returns historic functional threshold power
+// for a sport between start and end. CyclingFTP returns only the latest
+// cycling value; this returns the series.
+//
+// sport is a Garmin sport key (e.g. "RUNNING", "CYCLING") and is upper-cased.
+// aggregation is one of "daily", "weekly", "monthly", or "yearly".
+func (c *Client) FunctionalThresholdPowerRange(ctx context.Context, start, end time.Time, sport, aggregation string) (json.RawMessage, error) {
+	params := url.Values{
+		"sport":               {strings.ToUpper(sport)},
+		"aggregation":         {aggregation},
+		"aggregationStrategy": {"LATEST"},
+	}
+	path := fmt.Sprintf("/biometric-service/stats/functionalThresholdPower/range/%s/%s", date(start), date(end))
+	var out json.RawMessage
+	if err := c.get(ctx, path, params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HeartRateZoneConfig holds the configured heart rate zones for one sport.
 type HeartRateZoneConfig struct {
 	Sport                         string `json:"sport"`
@@ -381,4 +403,15 @@ func (c *Client) PowerZones(ctx context.Context) ([]PowerZoneConfig, error) {
 		return nil, err
 	}
 	return out, nil
+}
+
+// PowerZonesForSport returns the configured power zones for a single sport.
+// sport is a Garmin sport key (e.g. "RUNNING", "CYCLING") and is upper-cased.
+func (c *Client) PowerZonesForSport(ctx context.Context, sport string) (*PowerZoneConfig, error) {
+	var out PowerZoneConfig
+	path := "/biometric-service/powerZones/sport/" + url.PathEscape(strings.ToUpper(sport))
+	if err := c.get(ctx, path, nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
 }

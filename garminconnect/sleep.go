@@ -88,6 +88,17 @@ type HRVData struct {
 	EndTimestampGMT   string       `json:"endTimestampGMT"`
 }
 
+// HRVDataRange returns HRV data for every day between start and end.
+// HRVData covers a single day; this queries the same service's range endpoint
+// so a span can be fetched in one request.
+func (c *Client) HRVDataRange(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
+	var out json.RawMessage
+	if err := c.get(ctx, fmt.Sprintf("/hrv-service/hrv/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SleepData returns detailed sleep data for the given date.
 // The date should be the morning date (day you woke up).
 func (c *Client) SleepData(ctx context.Context, d time.Time) (*SleepData, error) {

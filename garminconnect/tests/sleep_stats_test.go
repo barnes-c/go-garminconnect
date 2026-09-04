@@ -39,3 +39,14 @@ func TestSleepStats(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
+
+func TestHRVDataRange(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	start := testDate.AddDate(0, 0, -6)
+	out, err := c.HRVDataRange(t.Context(), start, testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out)
+}

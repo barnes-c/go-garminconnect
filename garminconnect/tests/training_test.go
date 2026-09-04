@@ -113,3 +113,25 @@ func TestCyclingFTP(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, out)
 }
+
+func TestFunctionalThresholdPowerRange(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	start := testDate.AddDate(0, -3, 0)
+	out, err := c.FunctionalThresholdPowerRange(t.Context(), start, testDate, "CYCLING", "daily")
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out)
+}
+
+func TestPowerZonesForSport(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.PowerZonesForSport(t.Context(), "CYCLING")
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, out)
+	assert.NotEmpty(t, out.Sport)
+}

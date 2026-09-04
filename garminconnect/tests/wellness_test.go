@@ -150,3 +150,18 @@ func TestBloodPressure(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
+
+func TestCaloriesDaily(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	start := testDate.AddDate(0, 0, -6)
+	out, err := c.CaloriesDaily(t.Context(), start, testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	for _, d := range out {
+		assert.NotEmpty(t, d.CalendarDate)
+		assert.InDelta(t, d.Active+d.Resting, d.Total, 0.001)
+	}
+}

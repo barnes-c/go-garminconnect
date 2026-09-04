@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"sort"
 	"time"
 )
 
@@ -413,4 +414,75 @@ func (c *Client) SetBloodPressure(ctx context.Context, systolic, diastolic, puls
 // DeleteBloodPressure removes a blood pressure reading by its version and date.
 func (c *Client) DeleteBloodPressure(ctx context.Context, cdate string, version int) error {
 	return c.del(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", cdate, version))
+}
+
+// DailyCalories is one day's active and resting (BMR) calorie totals.
+type DailyCalories struct {
+	CalendarDate string  `json:"calendarDate"`
+	Active       float64 `json:"active"`
+	Resting      float64 `json:"resting"`
+	Total        float64 `json:"total"`
+}
+
+// calorieEntry is one row of a wellness-stats calorie series.
+type calorieEntry struct {
+	CalendarDate string   `json:"calendarDate"`
+	Value        *float64 `json:"value"`
+}
+
+// CaloriesDaily returns daily active and resting calories between start and
+// end. Both series come from a single request; days present in only one series
+// report zero for the other.
+func (c *Client) CaloriesDaily(ctx context.Context, start, end time.Time) ([]DailyCalories, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
+	// 22 = active calories, 23 = BMR calories.
+	params := url.Values{
+		"fromDate":  {date(start)},
+		"untilDate": {date(end)},
+		"metricId":  {"22", "23"},
+	}
+	var raw struct {
+		AllMetrics struct {
+			MetricsMap struct {
+				Active  []calorieEntry `json:"WELLNESS_ACTIVE_CALORIES"`
+				Resting []calorieEntry `json:"WELLNESS_BMR_CALORIES"`
+			} `json:"metricsMap"`
+		} `json:"allMetrics"`
+	}
+	if err := c.get(ctx, "/userstats-service/wellness/daily/"+name, params, &raw); err != nil {
+		return nil, err
+	}
+
+	byDate := map[string]*DailyCalories{}
+	collect := func(entries []calorieEntry, set func(*DailyCalories, float64)) {
+		for _, e := range entries {
+			if e.Value == nil || e.CalendarDate == "" {
+				continue
+			}
+			day, ok := byDate[e.CalendarDate]
+			if !ok {
+				day = &DailyCalories{CalendarDate: e.CalendarDate}
+				byDate[e.CalendarDate] = day
+			}
+			set(day, *e.Value)
+		}
+	}
+	collect(raw.AllMetrics.MetricsMap.Active, func(d *DailyCalories, v float64) { d.Active = v })
+	collect(raw.AllMetrics.MetricsMap.Resting, func(d *DailyCalories, v float64) { d.Resting = v })
+
+	out := make([]DailyCalories, 0, len(byDate))
+	for _, d := range byDate {
+		d.Total = d.Active + d.Resting
+		out = append(out, *d)
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].CalendarDate < out[j].CalendarDate })
+	return out, nil
+}
+
+// DownloadHealthSnapshot returns the Health Snapshot ZIP for the given date.
+func (c *Client) DownloadHealthSnapshot(ctx context.Context, d time.Time) ([]byte, error) {
+	return c.getBytes(ctx, "/download-service/files/wellness/"+date(d), nil)
 }
