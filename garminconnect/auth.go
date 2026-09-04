@@ -211,7 +211,7 @@ func (c *Client) ssoLogin(ctx context.Context, username, password string) error 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return authError("sso login", resp)
+		return newAPIError(resp, ssoLoginURL)
 	}
 
 	rawBody, err := io.ReadAll(resp.Body)
@@ -228,11 +228,10 @@ func (c *Client) ssoLogin(ctx context.Context, username, password string) error 
 		return c.handleMFA(ctx, ssoResp.CustomerMfaInfo.MfaLastMethodUsed)
 	}
 
-	// Garmin returns 200 with this status when its bot protection wants a
-	// CAPTCHA solved in a browser; without this it surfaces as "no ticket".
+	// Garmin signals its bot challenge with HTTP 200 and this status, so it
+	// cannot be mapped from a status code like the other failures.
 	if ssoResp.ResponseStatus.Type == "CAPTCHA_REQUIRED" {
-		return fmt.Errorf("sso login: CAPTCHA required — sign in at " +
-			"https://connect.garmin.com in a browser to clear the challenge")
+		return ErrCaptchaRequired
 	}
 
 	if ssoResp.ServiceTicketID == "" {
@@ -279,7 +278,7 @@ func (c *Client) handleMFA(ctx context.Context, mfaMethod string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return authError("mfa verify", resp)
+		return newAPIError(resp, ssoMFAVerifyURL)
 	}
 
 	rawBody, err := io.ReadAll(resp.Body)
@@ -358,7 +357,7 @@ func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, authError("di token request", resp)
+		return nil, newAPIError(resp, diAuthURL)
 	}
 
 	var raw struct {
@@ -386,62 +385,4 @@ func (c *Client) doTokenRequest(ctx context.Context, params url.Values, clientID
 		tok.RefreshExpiresAt = time.Now().Add(time.Duration(raw.RefreshTokenExpiresIn) * time.Second)
 	}
 	return tok, nil
-}
-
-// maxAuthErrorBody caps how much of a failed auth response is kept in the
-// error message.
-const maxAuthErrorBody = 512
-
-// authError converts a non-200 response from an auth endpoint into an error
-// that says why. Garmin signals rate limiting and bot challenges only through
-// the status, the Retry-After header, and the body, so all three are preserved
-// — a 429 additionally wraps ErrRateLimit so callers can test for it.
-func authError(stage string, resp *http.Response) error {
-	snippet := bodySnippet(resp.Body)
-
-	switch {
-	case resp.StatusCode == http.StatusTooManyRequests:
-		detail := "rate limited by Garmin"
-		if ra := resp.Header.Get("Retry-After"); ra != "" {
-			detail += ", Retry-After: " + ra
-		}
-		return fmt.Errorf("%s: %w (%s)%s", stage, ErrRateLimit, detail, snippet)
-	case isBotChallenge(resp, snippet):
-		return fmt.Errorf("%s: blocked by bot protection (status %d); "+
-			"the TLS fingerprint or client identity was rejected%s", stage, resp.StatusCode, snippet)
-	default:
-		return fmt.Errorf("%s: status %d%s", stage, resp.StatusCode, snippet)
-	}
-}
-
-// bodySnippet returns a bounded, single-line rendering of an error response
-// body, or "" when there is nothing to show.
-func bodySnippet(r io.Reader) string {
-	data, err := io.ReadAll(io.LimitReader(r, maxAuthErrorBody))
-	if err != nil || len(data) == 0 {
-		return ""
-	}
-	s := strings.Join(strings.Fields(string(data)), " ")
-	if s == "" {
-		return ""
-	}
-	return " (body: " + s + ")"
-}
-
-// isBotChallenge reports whether a response looks like a Cloudflare or WAF
-// interstitial rather than a Garmin API error.
-func isBotChallenge(resp *http.Response, snippet string) bool {
-	if resp.StatusCode != http.StatusForbidden && resp.StatusCode != http.StatusServiceUnavailable {
-		return false
-	}
-	if strings.Contains(resp.Header.Get("Content-Type"), "text/html") {
-		return true
-	}
-	lower := strings.ToLower(snippet)
-	for _, marker := range []string{"cloudflare", "cf-ray", "just a moment", "attention required"} {
-		if strings.Contains(lower, marker) {
-			return true
-		}
-	}
-	return false
 }

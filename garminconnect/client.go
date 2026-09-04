@@ -254,14 +254,8 @@ func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, o
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-	case http.StatusUnauthorized:
-		return ErrUnauthorized
-	case http.StatusTooManyRequests:
-		return ErrRateLimit
-	default:
-		return &APIError{StatusCode: resp.StatusCode, Path: rawURL}
+	if resp.StatusCode != http.StatusOK {
+		return newAPIError(resp, rawURL)
 	}
 	if out == nil {
 		return nil
@@ -302,12 +296,8 @@ func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any,
 
 	switch resp.StatusCode {
 	case http.StatusOK, http.StatusCreated, http.StatusNoContent:
-	case http.StatusUnauthorized:
-		return ErrUnauthorized
-	case http.StatusTooManyRequests:
-		return ErrRateLimit
 	default:
-		return &APIError{StatusCode: resp.StatusCode, Path: rawURL}
+		return newAPIError(resp, rawURL)
 	}
 	if out == nil || resp.StatusCode == http.StatusNoContent {
 		return nil
@@ -347,14 +337,8 @@ func (c *Client) getBytes(ctx context.Context, path string, params url.Values) (
 	}
 	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-	case http.StatusUnauthorized:
-		return nil, ErrUnauthorized
-	case http.StatusTooManyRequests:
-		return nil, ErrRateLimit
-	default:
-		return nil, &APIError{StatusCode: resp.StatusCode, Path: rawURL}
+	if resp.StatusCode != http.StatusOK {
+		return nil, newAPIError(resp, rawURL)
 	}
 	return io.ReadAll(resp.Body)
 }
@@ -395,12 +379,8 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 
 	switch resp.StatusCode {
 	case http.StatusOK, http.StatusCreated, http.StatusAccepted:
-	case http.StatusUnauthorized:
-		return ErrUnauthorized
-	case http.StatusTooManyRequests:
-		return ErrRateLimit
 	default:
-		return &APIError{StatusCode: resp.StatusCode, Path: rawURL}
+		return newAPIError(resp, rawURL)
 	}
 	if out == nil {
 		return nil

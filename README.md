@@ -88,13 +88,22 @@ case errors.Is(err, garminconnect.ErrMFARequired):
     // account requires MFA — provide WithMFAPrompt on client creation
 case errors.Is(err, garminconnect.ErrRateLimit):
     // back off and retry
+case errors.Is(err, garminconnect.ErrCaptchaRequired):
+    // Garmin wants a CAPTCHA solved — sign in at connect.garmin.com once
 case errors.Is(err, garminconnect.ErrNoData):
     // no records for the query
 }
+```
 
+Failed requests return `*APIError`, which unwraps to the sentinels above for
+401 and 429 — so `errors.Is` and `errors.As` both work on a single returned
+value:
+
+```go
 var apiErr *garminconnect.APIError
 if errors.As(err, &apiErr) {
     fmt.Println(apiErr.StatusCode, apiErr.Path)
+    fmt.Println(apiErr.Body) // bounded, may be empty, not guaranteed JSON
 }
 ```
 
