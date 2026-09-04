@@ -249,3 +249,92 @@ func TestLogin_RefreshesExpiredPresetToken(t *testing.T) {
 	assert.Equal(t, "new", c.Token())
 	assert.Equal(t, "resumed", c.DisplayName())
 }
+
+// The body here is the shape Garmin actually returns on an SSO 429 (observed
+// 2026-09-04): a structured error carrying a request-id, and no Retry-After
+// header. The request-id is the only part worth quoting back to Garmin.
+func TestLogin_RateLimitedSSO(t *testing.T) {
+	const body = `{"error":{"status-code":"429","message":"{}","request-id":"0000deadbeef0000"}}`
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusTooManyRequests,
+			Body:       io.NopCloser(strings.NewReader(body)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.Error(t, err)
+	require.ErrorIs(t, err, gc.ErrRateLimit)
+	assert.Contains(t, err.Error(), "0000deadbeef0000")
+	assert.NotContains(t, err.Error(), "Retry-After")
+}
+
+// Garmin's SSO tier does not send Retry-After, but other tiers may; when the
+// header is present it is surfaced.
+func TestLogin_RateLimitedWithRetryAfter(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		h := make(http.Header)
+		h.Set("Retry-After", "600")
+		return &http.Response{
+			StatusCode: http.StatusTooManyRequests,
+			Body:       io.NopCloser(strings.NewReader(`{}`)),
+			Header:     h,
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.ErrorIs(t, err, gc.ErrRateLimit)
+	assert.Contains(t, err.Error(), "Retry-After: 600")
+}
+
+func TestLogin_BotChallenge(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		h := make(http.Header)
+		h.Set("Content-Type", "text/html; charset=UTF-8")
+		return &http.Response{
+			StatusCode: http.StatusForbidden,
+			Body:       io.NopCloser(strings.NewReader("<html>Just a moment...</html>")),
+			Header:     h,
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "bot protection")
+	assert.NotErrorIs(t, err, gc.ErrRateLimit)
+}
+
+func TestLogin_CaptchaRequired(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(strings.NewReader(`{"responseStatus":{"type":"CAPTCHA_REQUIRED"}}`)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "CAPTCHA required")
+}
+
+func TestLogin_UnexpectedStatusKeepsBody(t *testing.T) {
+	rt := roundTripFunc(func(_ *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Body:       io.NopCloser(strings.NewReader(`{"error":"backend exploded"}`)),
+			Header:     make(http.Header),
+		}, nil
+	})
+	c := gc.NewClient("", gc.WithHTTPClient(&http.Client{Transport: rt}))
+
+	err := c.Login(t.Context(), "user@example.com", "pw")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "status 500")
+	assert.Contains(t, err.Error(), "backend exploded")
+}
