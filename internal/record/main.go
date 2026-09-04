@@ -15,6 +15,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -25,6 +26,7 @@ import (
 	"strings"
 	"time"
 
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 	"github.com/barnes-c/go-garminconnect/internal/login"
 	"github.com/barnes-c/go-garminconnect/internal/sanitize"
 )
@@ -38,6 +40,33 @@ const (
 
 // Cassettes recorded specially (not via newVCRClient), preserved on full re-record.
 var keep = map[string]bool{"TestLogin_FetchesProfile": true}
+
+// authenticate returns the access token and display name to hand the test
+// subprocesses. An access token supplied in GARMIN_TOKEN is used as-is — the
+// same escape hatch newVCRClient already honours — which skips the SSO round
+// trip entirely. That matters when SSO is rate limited, since the token
+// refresh and data endpoints are not. The display name is resolved from the
+// token unless GARMIN_DISPLAY_NAME overrides it.
+func authenticate() (token, displayName string, err error) {
+	token = os.Getenv("GARMIN_TOKEN")
+	if token == "" {
+		c, err := login.Client(tokenFile)
+		if err != nil {
+			return "", "", err
+		}
+		return c.Token(), c.DisplayName(), nil
+	}
+
+	displayName = os.Getenv("GARMIN_DISPLAY_NAME")
+	if displayName != "" {
+		return token, displayName, nil
+	}
+	c := gc.NewClient("", gc.WithToken(token))
+	if err := c.Login(context.Background(), "", ""); err != nil {
+		return "", "", fmt.Errorf("resolve display name from GARMIN_TOKEN: %w", err)
+	}
+	return token, c.DisplayName(), nil
+}
 
 func main() {
 	missingOnly := flag.Bool("missing", false, "only record cassettes that don't exist yet")
@@ -73,11 +102,10 @@ func sanitizeAll() error {
 }
 
 func run(missingOnly bool) error {
-	c, err := login.Client(tokenFile)
+	token, displayName, err := authenticate()
 	if err != nil {
 		return fmt.Errorf("login: %w", err)
 	}
-	token, displayName := c.Token(), c.DisplayName()
 	fmt.Printf("==> Logged in (display_name=%s)\n", displayName)
 
 	tests, err := discoverTests()
