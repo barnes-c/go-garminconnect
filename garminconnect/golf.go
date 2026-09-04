@@ -74,3 +74,27 @@ func (c *Client) GolfShotData(ctx context.Context, scorecardID string, holeNumbe
 	}
 	return out, nil
 }
+
+// GolfClubStats returns the user's golf clubs with their distance statistics.
+// limit caps the number of clubs returned.
+func (c *Client) GolfClubStats(ctx context.Context, limit int) (json.RawMessage, error) {
+	params := url.Values{
+		"per-page":      {fmt.Sprintf("%d", limit)},
+		"include-stats": {"true"},
+	}
+	var out json.RawMessage
+	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/club/player", params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GolfUserStats returns the user's overall golf statistics, such as handicap
+// and strokes gained.
+func (c *Client) GolfUserStats(ctx context.Context) (map[string]json.RawMessage, error) {
+	var out map[string]json.RawMessage
+	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/player/stats", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}

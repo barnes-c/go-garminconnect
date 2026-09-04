@@ -87,3 +87,21 @@ func TestDownloadActivity_BearerToken(t *testing.T) {
 	_, err := c.DownloadActivity(t.Context(), 1, gc.FormatGPX)
 	require.NoError(t, err)
 }
+
+// DownloadHealthSnapshot is deliberately not cassette-backed: the response is a
+// ZIP of raw biometrics, and internal/sanitize only scrubs JSON text, so a
+// recorded body would carry real health data into the repo.
+func TestDownloadHealthSnapshot(t *testing.T) {
+	body := []byte("PK\x03\x04 zip content")
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		w.Write(body)
+	}))
+	c := newServerClient(t, srv)
+
+	got, err := c.DownloadHealthSnapshot(t.Context(), testDate)
+	require.NoError(t, err)
+	assert.Equal(t, "/download-service/files/wellness/2026-01-01", gotPath)
+	assert.Equal(t, body, got)
+}
