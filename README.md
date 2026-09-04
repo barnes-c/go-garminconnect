@@ -75,6 +75,21 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 
 Activity and workout files support FIT, GPX, TCX, KML, and CSV (see the `Format*` constants).
 
+### Unwrapped endpoints
+
+Garmin's API is undocumented and larger than this client's typed surface. For an
+endpoint that has no method yet, `Get`, `GetBytes`, `Post`, `Put`, `Delete`, and
+`Upload` issue arbitrary requests with the same authentication, token refresh,
+and error translation as the typed methods:
+
+```go
+var out map[string]any
+err := client.Get(ctx, "/some-service/not-wrapped-yet/2026-01-01", nil, &out)
+```
+
+The path is relative to the API base URL, or an absolute URL to reach another
+Garmin host.
+
 ## Error handling
 
 ```go

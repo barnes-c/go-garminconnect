@@ -330,7 +330,10 @@ func (c *Client) del(ctx context.Context, path string) error {
 // getBytes performs an authenticated GET and returns the raw response body.
 // Used for binary downloads (FIT, GPX, TCX, etc.).
 func (c *Client) getBytes(ctx context.Context, path string, params url.Values) ([]byte, error) {
-	rawURL := c.baseURL + path
+	return c.getBytesURL(ctx, c.baseURL+path, params)
+}
+
+func (c *Client) getBytesURL(ctx context.Context, rawURL string, params url.Values) ([]byte, error) {
 	if len(params) > 0 {
 		rawURL += "?" + params.Encode()
 	}
@@ -362,6 +365,10 @@ func (c *Client) getBytes(ctx context.Context, path string, params url.Values) (
 // upload sends a file as multipart/form-data to the given path and
 // JSON-decodes the response into out (may be nil).
 func (c *Client) upload(ctx context.Context, path string, data []byte, filename string, out any) error {
+	return c.uploadURL(ctx, c.baseURL+path, data, filename, out)
+}
+
+func (c *Client) uploadURL(ctx context.Context, rawURL string, data []byte, filename string, out any) error {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 	fw, err := w.CreateFormFile("file", filepath.Base(filename))
@@ -377,7 +384,6 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 
 	bodyBytes := buf.Bytes()
 	contentType := w.FormDataContentType()
-	rawURL := c.baseURL + path
 
 	resp, err := c.withRefresh(ctx, func(token string) (*http.Response, error) {
 		req, err := http.NewRequestWithContext(ctx, http.MethodPost, rawURL, bytes.NewReader(bodyBytes))
