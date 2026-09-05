@@ -1,0 +1,22 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/biometric-service/stats/functionalThresholdPower/range/2025-10-01/2026-01-01?aggregation=daily&aggregationStrategy=LATEST&sport=CYCLING
+        method: GET
+      response:
+        body: '[]'
+        headers:
+            Content-Length:
+                - "2"
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/biometric-service/powerZones/sport/CYCLING
+        method: GET
+      response:
+        body: '{"sport":"TEST","functionalThresholdPower":1.0,"zone1Floor":1.0,"zone2Floor":1.0,"zone3Floor":1.0,"zone4Floor":1.0,"zone5Floor":1.0,"zone6Floor":1.0,"zone7Floor":1.0,"userLocalTime":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
