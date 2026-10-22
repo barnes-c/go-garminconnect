@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: "1.27.2"
+          go-version: "1.27.3"
 
       # The cached token is the whole point: it refreshes against
       # diauth.garmin.com and never touches sso.garmin.com, which rate limits
