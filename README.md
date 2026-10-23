@@ -24,9 +24,9 @@ if err := client.Login(ctx, "user@example.com", "password"); err != nil {
     log.Fatal(err)
 }
 
-summary, err := client.UserSummary(ctx,time.Now())
+summary, err := client.UserSummary(ctx, time.Now())
 if err != nil {
- log.Fatal(err)
+    log.Fatal(err)
 }
 fmt.Printf("Steps today: %d\n", summary.TotalSteps)
 ```
@@ -51,7 +51,7 @@ if err := client.Login(context.Background(), "user@example.com", "password"); er
 }
 ```
 
-Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithDisplayName(name)`.
+Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithRefreshToken(refreshToken)`, `WithTokenJSON(data)`, `WithDisplayName(name)`, `WithBaseURL(url)`.
 
 ## API
 
@@ -73,7 +73,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Nutrition**        | Food log, meals, and goals                                                                                                                                   |
 | **Golf**             | Scorecards, shot data, club stats, and player stats                                                                                                                                     |
 
-Activity and workout files support FIT, GPX, TCX, KML, and CSV (see the `Format*` constants).
+Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download and upload are FIT only.
 
 ## Error handling
 

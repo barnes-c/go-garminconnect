@@ -10,9 +10,10 @@ Go client for Garmin Connect's private API (reverse-engineered — no official s
 ## Layout
 
 One file per API area in `garminconnect/` (`wellness.go`, `sleep.go`, …). All HTTP
-goes through the helpers in `client.go` (`get`, `post`, `getBytes`, `upload`);
-endpoint methods stay thin. Errors: sentinels (`ErrUnauthorized`, `ErrRateLimit`,
-`ErrNoData`, `ErrMFARequired`) plus `*APIError{StatusCode, Path}`.
+goes through the helpers in `client.go` (`get`, `post`, `put`, `del`, `getBytes`,
+`upload`); endpoint methods stay thin. Errors: sentinels (`ErrUnauthorized`,
+`ErrRateLimit`, `ErrNoData`, `ErrMFARequired`, `ErrCaptchaRequired`) plus
+`*APIError{StatusCode, Path, Body}`.
 
 ## Constraints — do not "fix" these
 
@@ -46,7 +47,7 @@ live, no credentials needed.
 3. **Inspect the new cassette** for PII the sanitizer doesn't cover yet (new ID
    fields, biometrics, location, schedule times). If anything survives, extend
    `internal/sanitize` + its tests and re-record.
-4. Add the method to the README API table.
+4. If it covers something new, mention it in its area's row of the README API table.
 
 If a test replays against `testDate` and that day has no data on the recording
 account, set `GARMIN_SUMMARY_DATE` / `GARMIN_SLEEP_DATE` to a recent day with data;
@@ -59,3 +60,5 @@ the sanitizer rewrites it back to 2026-01-01 in the cassette URL.
 | `internal/gettoken/` | Logs in and prints the OAuth token                               |
 | `internal/record/`   | Re-records cassettes against a live account (sanitizes inline)   |
 | `internal/smoke/`    | Live API smoke test, run weekly by `.github/workflows/smoke.yml` |
+| `internal/login/`    | Shared login helper for the tools (cached token, env creds, MFA) |
+| `internal/sanitize/` | Cassette sanitizer used by the recorder                          |
