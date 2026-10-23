@@ -1,0 +1,223 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: TEST
+        headers:
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - multipart/form-data; boundary=3a937f57e53b0484ee6299ff7ce74908c1830a201751c455883913598a44
+        url: https://connectapi.garmin.com/upload-service/upload
+        method: POST
+      response:
+        body: '{"detailedImportResult":{"uploadId":12345678,"uploadUuid":{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff"},"owner":1,"fileSize":1,"processingTime":1,"creationDate":"2026-01-01 00:00:00 GMT","ipAddress":"TEST","fileName":"TEST","report":null,"successes":[],"failures":[]}}'
+        headers:
+            Content-Length:
+                - "306"
+            Content-Type:
+                - application/json
+            Location:
+                - https://connectapi.garmin.com/activity-service/activity/status/1792795513861/eae9c41b7dab416bade5f587963259bf
+            Location-In-Milliseconds:
+                - "1000"
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=5,cfOrigin;dur=146
+        status: 202 Accepted
+        code: 202
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=1&start=0
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"activityName":"TEST","startTimeLocal":"2026-01-01 00:00:00","startTimeGMT":"2026-01-01 00:00:00","activityType":{"typeId":4,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventType":{"typeId":9,"typeKey":"TEST","sortOrder":10},"isFavorite":false,"isPR":false,"isAutoCalcCalories":false,"isParent":false,"distance":1.0,"duration":1.0,"elapsedDuration":1.0,"movingDuration":1.0,"elevationGain":1.0,"elevationLoss":1.0,"averageSpeed":1.0,"maxSpeed":1.0,"startLatitude":1.0,"startLongitude":1.0,"hasPolyline":true,"hasImages":false,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","ownerFullName":"TEST","ownerProfileImageUrlSmall":"TEST","ownerProfileImageUrlMedium":"TEST","ownerProfileImageUrlLarge":"TEST","userRoles":["TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST"],"privacy":{"typeId":2,"typeKey":"TEST"},"userPro":false,"hasVideo":false,"isPurposeful":false,"timeZoneId":124,"beginTimestamp":1,"sportTypeId":0,"deviceId":0,"minElevation":1.0,"maxElevation":1.0,"avgElevation":1.0,"isElevationCorrected":true,"isDecoDive":false,"summarizedDiveInfo":{"summarizedDiveGases":[]},"maxVerticalSpeed":1.0,"manufacturer":"","locationName":"TEST","lapCount":1,"endLatitude":1.0,"endLongitude":1.0,"isAtpActivity":false,"minActivityLapDuration":1.0,"splitSummaries":[],"hasSplits":false,"hasIntensityIntervals":false,"isManualActivity":false,"hasHeatMap":false,"endTimeGMT":"2026-01-01 00:00:00","qualifyingDive":false,"activityUUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","pr":false,"purposeful":false,"favorite":false,"decoDive":false,"parent":false,"manualActivity":false,"autoCalcCalories":false,"elevationCorrected":true,"atpActivity":false}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/download-service/files/activity/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename="24829768183.zip"
+            Content-Length:
+                - "692"
+            Content-Type:
+                - application/x-zip-compressed
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=128
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/download-service/export/gpx/activity/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename=activity_24829768183.gpx
+            Content-Type:
+                - application/gpx+xml
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=181
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/download-service/export/tcx/activity/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename=activity_24829768183.tcx
+            Content-Type:
+                - application/vnd.garmin.tcx+xml
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=238
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/download-service/export/kml/activity/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename=activity_24829768183.kml
+            Content-Type:
+                - application/vnd.google-earth.kml+xml
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=205
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/download-service/export/csv/activity/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename=activity_24829768183.csv
+            Content-Length:
+                - "368"
+            Content-Type:
+                - text/csv
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=185
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 7
+      request:
+        body: '{"sportType":{"sportTypeId":1,"sportTypeKey":"TEST"},"workoutName":"TEST","workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST"},"workoutSteps":[{"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST"},"endConditionValue":1,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST"},"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST"},"type":"TEST"}]}]}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/workout-service/workout
+        method: POST
+      response:
+        body: '{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":{"userProfilePk":12345678,"displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","profileImgNameLarge":null,"profileImgNameMedium":null,"profileImgNameSmall":null,"userPro":false,"vivokidUser":false},"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workout/FIT/12345678
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename=1738901431.fit
+            Content-Length:
+                - "204"
+            Content-Type:
+                - application/octet-stream
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=3,cfOrigin;dur=125
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 9
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workout/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 10
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
