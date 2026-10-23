@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/sleep-service/stats/sleep/overall/2026-01-01/2026-01-01
+        method: GET
+      response:
+        body: '{"overallStats":{"averageSpO2":1.0,"meanAvgHeartRate":1.0,"averageLocalSleepStartTime":1.0,"averageRespiration":1.0,"averageBodyBatteryChange":1.0,"averageSkinTempF":null,"averageSleepScore":1.0,"averageLocalSleepEndTime":1.0,"averageSkinTempC":null,"averageSleepSeconds":1.0,"averageSleepNeed":1.0,"averageRestingHeartRate":1.0},"individualStats":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/nutrition-service/user/nutritionCurrentStatus
+        method: GET
+      response:
+        body: '{"currentStatus":"TEST","hasUsedNutrition":false,"hasUsedMFP":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

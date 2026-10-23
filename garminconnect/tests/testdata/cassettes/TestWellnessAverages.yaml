@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/stats/averages/2026-01-01/2026-01-01
+        method: GET
+      response:
+        body: '{"averageSteps":1.0,"averageRestingHeartRate":1.0,"averageHydrationInML":1.0}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

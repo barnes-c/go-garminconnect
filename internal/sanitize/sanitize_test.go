@@ -68,11 +68,11 @@ func TestBody_EpochIDsMatchURL(t *testing.T) {
 	}
 }
 
-// TestBody_MeasuredCounts covers sleep counts that are readings, not
-// structure: they must not survive like lapCount does.
+// TestBody_MeasuredCounts covers counts that are readings and time zones that
+// locate the user: they must not survive like lapCount does.
 func TestBody_MeasuredCounts(t *testing.T) {
-	out := sanitize.Body(`{"restlessMomentsCount":42,"awakeCount":3,"lapCount":9}`, "")
-	want := `{"restlessMomentsCount":1,"awakeCount":1,"lapCount":9}`
+	out := sanitize.Body(`{"restlessMomentsCount":42,"awakeCount":3,"lapCount":9,"timezoneOffset":120,"timeZoneId":124}`, "")
+	want := `{"restlessMomentsCount":1,"awakeCount":1,"lapCount":9,"timezoneOffset":1,"timeZoneId":1}`
 	if out != want {
 		t.Errorf("got %s, want %s", out, want)
 	}
