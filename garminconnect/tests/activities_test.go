@@ -1,9 +1,12 @@
 package garminconnect_test
 
 import (
+	"encoding/json"
 	"os"
 	"testing"
 	"time"
+
+	gc "github.com/barnes-c/go-garminconnect/garminconnect"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -180,4 +183,36 @@ func TestIntensityMinutes(t *testing.T) {
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, out)
+}
+
+// TestActivityWritesLifecycle favorites a throwaway strength activity and
+// writes its exercise sets, then deletes it so recording leaves the account
+// unchanged.
+func TestActivityWritesLifecycle(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	id, err := c.CreateManualActivity(ctx, gc.ManualActivity{
+		Name:     "go-garminconnect activity test",
+		TypeKey:  "strength_training",
+		Start:    testDate.Add(8 * time.Hour),
+		TimeZone: "Europe/Zurich",
+		Duration: 30 * time.Minute,
+	})
+	require.NoError(t, err)
+	require.NotZero(t, id)
+
+	require.NoError(t, c.SetActivityFavorite(ctx, id, true))
+	// The favorites list lags behind the flag, so only check the call works.
+	_, err = c.FavoriteActivities(ctx, 5)
+	require.NoError(t, err)
+
+	sets, err := c.ActivityExerciseSets(ctx, id)
+	require.NoError(t, err)
+	sets["exerciseSets"] = json.RawMessage(`[{"exercises":[{"category":"BENCH_PRESS","name":null,"probability":100}],` +
+		`"repetitionCount":10,"weight":60000,"duration":45,"setType":"ACTIVE","startTime":"2026-01-01T07:00:00.0"}]`)
+	require.NoError(t, c.SetActivityExerciseSets(ctx, id, sets))
+
+	require.NoError(t, c.DeleteActivity(ctx, id))
 }
