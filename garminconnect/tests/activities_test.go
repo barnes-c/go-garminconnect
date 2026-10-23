@@ -2,7 +2,6 @@ package garminconnect_test
 
 import (
 	"encoding/json"
-	"os"
 	"testing"
 	"time"
 
@@ -93,13 +92,7 @@ func TestActivitiesForDailySummary(t *testing.T) {
 	// Replay queries testDate. To record a non-empty response, set
 	// GARMIN_SUMMARY_DATE to a day with a logged activity; the sanitizer rewrites
 	// that real date back to testDate in the cassette URL so it replays cleanly.
-	summaryDate := testDate
-	if d := os.Getenv("GARMIN_SUMMARY_DATE"); d != "" {
-		parsed, err := time.Parse("2006-01-02", d)
-		require.NoError(t, err)
-		summaryDate = parsed
-	}
-	out, err := c.ActivitiesForDailySummary(t.Context(), summaryDate)
+	out, err := c.ActivitiesForDailySummary(t.Context(), dataDate(t, "GARMIN_SUMMARY_DATE"))
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	require.NotEmpty(t, out)

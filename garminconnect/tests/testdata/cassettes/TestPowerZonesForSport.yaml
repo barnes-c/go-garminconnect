@@ -8,15 +8,13 @@ interactions:
                 - application/json
             Authorization:
                 - Bearer test
-        url: https://connectapi.garmin.com/metrics-service/metrics/runningtolerance/stats?aggregation=daily&endDate=2026-01-01&startDate=2025-12-01
+        url: https://connectapi.garmin.com/biometric-service/powerZones/sport/CYCLING
         method: GET
       response:
-        body: '[]'
+        body: '{"sport":"TEST","functionalThresholdPower":1.0,"zone1Floor":1.0,"zone2Floor":1.0,"zone3Floor":1.0,"zone4Floor":1.0,"zone5Floor":1.0,"zone6Floor":1.0,"zone7Floor":1.0,"userLocalTime":null}'
         headers:
-            Content-Length:
-                - "2"
             Content-Type:
-                - application/json;charset=UTF-8
+                - application/json
         status: 200 OK
         code: 200
         duration: 100ms

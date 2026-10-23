@@ -1,0 +1,114 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: TEST
+        headers:
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - multipart/form-data; boundary=aa1787a06ac1b38f671d87494fc597099c9a6f28f6e57168dc345f0b3293
+        url: https://connectapi.garmin.com/upload-service/upload
+        method: POST
+      response:
+        body: '{"detailedImportResult":{"uploadId":12345678,"uploadUuid":{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff"},"owner":1,"fileSize":1,"processingTime":1,"creationDate":"2026-01-01 00:00:00 GMT","ipAddress":"TEST","fileName":"TEST","report":null,"successes":[],"failures":[]}}'
+        headers:
+            Content-Length:
+                - "304"
+            Content-Type:
+                - application/json
+            Location:
+                - https://connectapi.garmin.com/activity-service/activity/status/1792793349071/027225a7970b4543953bf26535b45617
+            Location-In-Milliseconds:
+                - "1000"
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=5,cfOrigin;dur=146
+        status: 202 Accepted
+        code: 202
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=1&start=0
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"activityName":"TEST","startTimeLocal":"2026-01-01 00:00:00","startTimeGMT":"2026-01-01 00:00:00","activityType":{"typeId":4,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"trimmable":true,"restricted":false},"eventType":{"typeId":9,"typeKey":"TEST","sortOrder":10},"isFavorite":false,"isPR":false,"isAutoCalcCalories":false,"isParent":false,"distance":1.0,"duration":1.0,"elapsedDuration":1.0,"movingDuration":1.0,"elevationGain":1.0,"elevationLoss":1.0,"averageSpeed":1.0,"maxSpeed":1.0,"startLatitude":1.0,"startLongitude":1.0,"hasPolyline":true,"hasImages":false,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","ownerFullName":"TEST","ownerProfileImageUrlSmall":"TEST","ownerProfileImageUrlMedium":"TEST","ownerProfileImageUrlLarge":"TEST","userRoles":["TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST"],"privacy":{"typeId":2,"typeKey":"TEST"},"userPro":false,"hasVideo":false,"isPurposeful":false,"timeZoneId":124,"beginTimestamp":1,"sportTypeId":0,"deviceId":0,"minElevation":1.0,"maxElevation":1.0,"avgElevation":1.0,"isElevationCorrected":true,"isDecoDive":false,"summarizedDiveInfo":{"summarizedDiveGases":[]},"maxVerticalSpeed":1.0,"manufacturer":"","locationName":"TEST","lapCount":1,"endLatitude":1.0,"endLongitude":1.0,"isAtpActivity":false,"minActivityLapDuration":1.0,"splitSummaries":[],"hasSplits":false,"hasIntensityIntervals":false,"isManualActivity":false,"hasHeatMap":false,"endTimeGMT":"2026-01-01 00:00:00","qualifyingDive":false,"activityUUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","parent":false,"favorite":false,"decoDive":false,"pr":false,"purposeful":false,"manualActivity":false,"autoCalcCalories":false,"elevationCorrected":true,"atpActivity":false}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/course-service/course/convert/activity/12345678
+        method: GET
+      response:
+        body: '{"courseId":null,"courseName":"TEST","description":null,"openStreetMap":false,"matchedToSegments":false,"userProfilePk":12345678,"userGroupPk":null,"rulePK":2,"firstName":null,"lastName":null,"displayName":null,"geoRoutePk":null,"sourceTypeId":1,"sourcePk":12345678,"distanceMeter":1.0,"elevationGainMeter":1.0,"elevationLossMeter":1.0,"startPoint":{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},"coursePoints":null,"boundingBox":null,"hasShareableEvent":null,"hasTurnDetectionDisabled":false,"activityTypePk":4,"virtualPartnerId":null,"includeLaps":false,"elapsedSeconds":null,"speedMeterPerSecond":1.0,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00","courseLines":[{"courseId":null,"sortOrder":1,"numberOfPoints":1,"distanceInMeters":1.0,"bearing":1.0,"points":null,"coordinateSystem":null,"originalCoordinateSystem":null}],"coordinateSystem":"TEST","targetCoordinateSystem":null,"originalCoordinateSystem":null,"consumer":null,"elevationSource":1,"hasPaceBand":false,"hasPowerGuide":false,"favorite":false,"startNote":null,"finishNote":null,"cutoffDuration":null,"geoPoints":[{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1}]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        body: '{"courseName":"TEST","rulePK":2,"activityTypePk":4,"sourceTypeId":1,"sourcePk":12345678,"startPoint":{"latitude":1.0,"longitude":1.0,"elevation":1,"distance":1.0},"geoPoints":[{"latitude":1.0,"longitude":1.0,"elevation":1,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0}],"distanceMeter":1.0,"elevationGainMeter":1,"elevationLossMeter":1.0}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/course-service/course
+        method: POST
+      response:
+        body: '{"courseId":12345678,"courseName":"TEST","description":null,"openStreetMap":false,"matchedToSegments":false,"userProfilePk":12345678,"userGroupPk":null,"rulePK":2,"firstName":"TEST","lastName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","geoRoutePk":null,"sourceTypeId":1,"sourcePk":12345678,"distanceMeter":1.0,"elevationGainMeter":1.0,"elevationLossMeter":1.0,"startPoint":{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},"coursePoints":null,"boundingBox":{"center":null,"lowerLeft":{"latitude":1.0,"longitude":1.0},"upperRight":{"latitude":1.0,"longitude":1.0},"lowerLeftLatIsSet":true,"lowerLeftLongIsSet":true,"upperRightLatIsSet":true,"upperRightLongIsSet":true},"hasShareableEvent":null,"hasTurnDetectionDisabled":false,"activityTypePk":4,"virtualPartnerId":12345678,"includeLaps":false,"elapsedSeconds":null,"speedMeterPerSecond":null,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00","courseLines":null,"coordinateSystem":"TEST","targetCoordinateSystem":"TEST","originalCoordinateSystem":"TEST","consumer":null,"elevationSource":1,"hasPaceBand":false,"hasPowerGuide":false,"favorite":false,"startNote":null,"finishNote":null,"cutoffDuration":null,"geoPoints":[{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1},{"latitude":1.0,"longitude":1.0,"elevation":1.0,"distance":1.0,"timestamp":1}]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/course-service/course/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms

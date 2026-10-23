@@ -1,0 +1,32 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gcs-golfcommunity/api/v2/club/player?include-stats=true&per-page=100
+        method: GET
+      response:
+        body: '[{"id":12345678,"clubTypeId":6,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":7,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":12,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":13,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":14,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":15,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":16,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":17,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":18,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":23,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":19,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":20,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":21,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":22,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":1,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":2,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"},{"id":12345678,"clubTypeId":3,"shaftLength":1.0,"flexTypeId":"TEST","averageDistance":1,"adviceDistance":1,"retired":false,"deleted":false,"lastModifiedTime":"2026-01-01T00:00:00Z"}]'
+        headers:
+            Content-Type:
+                - application/json
+            Expires:
+                - "0"
+            Strict-Transport-Security:
+                - max-age=31536000 ; includeSubDomains
+            Vary:
+                - Accept-Encoding
+            X-Content-Type-Options:
+                - nosniff
+            X-Frame-Options:
+                - DENY
+            X-Xss-Protection:
+                - "0"
+        status: 200 OK
+        code: 200
+        duration: 100ms

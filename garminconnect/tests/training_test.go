@@ -1,6 +1,7 @@
 package garminconnect_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -97,8 +98,10 @@ func TestRunningTolerance(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	start := testDate.AddDate(0, -1, 0)
-	out, err := c.RunningTolerance(t.Context(), start, testDate)
+	// One day: the sanitizer collapses every recorded date after testDate to
+	// testDate, so a multi-day range would not replay.
+	d := dataDate(t, "GARMIN_SUMMARY_DATE")
+	out, err := c.RunningTolerance(t.Context(), d, d)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	if len(out) == 0 {
@@ -121,11 +124,15 @@ func TestFunctionalThresholdPowerRange(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	start := testDate.AddDate(0, -3, 0)
-	out, err := c.FunctionalThresholdPowerRange(t.Context(), start, testDate, "CYCLING", "daily")
+	// One day: the sanitizer collapses every recorded date after testDate to
+	// testDate, so a multi-day range would not replay.
+	d := dataDate(t, "GARMIN_SUMMARY_DATE")
+	out, err := c.FunctionalThresholdPowerRange(t.Context(), d, d, "CYCLING", "daily")
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotEmpty(t, out)
+	var entries []json.RawMessage
+	require.NoError(t, json.Unmarshal(out, &entries))
+	assert.NotEmpty(t, entries)
 }
 
 func TestPowerZonesForSport(t *testing.T) {

@@ -159,6 +159,23 @@ type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
+// dataDate returns testDate, or the day in env (GARMIN_SUMMARY_DATE or
+// GARMIN_SLEEP_DATE) when set. Recording needs a day the account has data
+// for; the sanitizer rewrites later URL dates back to testDate, so the
+// cassette still replays.
+func dataDate(t *testing.T, env string) time.Time {
+	t.Helper()
+	v := os.Getenv(env)
+	if v == "" {
+		return testDate
+	}
+	d, err := time.Parse(time.DateOnly, v)
+	if err != nil {
+		t.Fatalf("%s: %v", env, err)
+	}
+	return d
+}
+
 // pacedTransport spaces out live requests while recording; some services
 // (course-service in particular) rate-limit bursts of writes with a 429.
 type pacedTransport struct{ next http.RoundTripper }
