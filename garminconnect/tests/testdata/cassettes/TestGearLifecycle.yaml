@@ -1,0 +1,175 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"accessControlRuleDTO":{"typeId":2,"typeKey":"TEST"},"activityName":"TEST","activityTypeDTO":{"typeKey":"TEST"},"metadataDTO":{"autoCalcCalories":true},"summaryDTO":{"distance":1,"duration":1,"startTimeLocal":"2026-01-01T00:00:00"},"timeZoneUnitDTO":{"unitKey":"TEST"}}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/activity-service/activity
+        method: POST
+      response:
+        body: '{"activityId":12345678,"activityUUID":{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff"},"activityName":"TEST","userProfileId":12345678,"isMultiSportParent":false,"activityTypeDTO":{"typeId":1,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventTypeDTO":{"typeId":9,"typeKey":"TEST","sortOrder":10},"accessControlRuleDTO":{"typeId":2,"typeKey":"TEST"},"timeZoneUnitDTO":{"unitId":124,"unitKey":"TEST","factor":1.0,"timeZone":"TEST"},"metadataDTO":{"isOriginal":true,"deviceApplicationInstallationId":80,"agentApplicationInstallationId":null,"agentString":null,"fileFormat":{"formatId":7,"formatKey":"TEST"},"associatedCourseId":null,"lastUpdateDate":"2026-01-01T00:00:00","uploadedDate":"2026-01-01T00:00:00","videoUrl":null,"hasPolyline":null,"hasChartData":null,"hasHrTimeInZones":false,"hasPowerTimeInZones":false,"userInfoDto":{"userProfilePk":12345678,"displayname":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullname":"TEST","profileImageUrlLarge":"TEST","profileImageUrlMedium":"TEST","profileImageUrlSmall":"TEST","userPro":false},"childIds":[],"childActivityTypes":[],"sensors":null,"activityImages":[],"manufacturer":"TEST","diveNumber":null,"lapCount":1,"associatedWorkoutId":null,"isAtpActivity":null,"deviceMetaDataDTO":{"deviceId":"TEST","deviceTypePk":19,"deviceVersionPk":80},"hasIntensityIntervals":false,"hasSplits":false,"eBikeMaxAssistModes":null,"eBikeBatteryUsage":null,"eBikeBatteryRemaining":null,"eBikeAssistModeInfoDTOList":null,"hasRunPowerWindData":null,"calendarEventInfo":null,"groupRideUUID":null,"hasHeatMap":false,"sessionResultType":"TEST","hasMultiDayActivities":false,"personalRecord":true,"gcj02":false,"runPowerWindDataEnabled":null,"autoCalcCalories":true,"favorite":false,"trimmed":false,"elevationCorrected":false,"manualActivity":true},"summaryDTO":{"startTimeLocal":"2026-01-01T00:00:00","startTimeGMT":"2026-01-01T00:00:00","distance":1.0,"duration":1.0,"elapsedDuration":1.0,"averageSpeed":1.0,"minActivityLapDuration":1.0}}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"activityId":12345678,"description":"TEST"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/activity-service/activity/12345678
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"gearType":"TEST","brand":"TEST","model":"TEST","name":"TEST","firstUseDate":"2026-01-01","usageType":"TEST","maxUsageDistanceMeters":1,"maxUsageDurationSeconds":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/gear-service/gear/v2
+        method: POST
+      response:
+        body: '{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff","userProfilePk":12345678,"gearType":"TEST","name":"TEST","brand":"TEST","model":"TEST","usageType":"TEST","maxUsageDistanceMeters":1.0,"maxUsageDurationSeconds":1,"firstUseDate":"2026-01-01","processing":false}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/v2/ffffffff-ffff-ffff-ffff-ffffffffffff
+        method: GET
+      response:
+        body: '{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff","userProfilePk":12345678,"gearType":"TEST","status":"TEST","name":"TEST","brand":"TEST","model":"TEST","usageType":"TEST","maxUsageDurationSeconds":1,"firstUseDate":"2026-01-01","numActivitiesLinked":1,"durationUsedSeconds":1,"distanceUsedMeters":1.0,"daysUsed":1,"processing":false,"createdDate":"2026-01-01T00:00:00","images":[],"collections":[]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        body: '{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff","gearType":"TEST","brand":"TEST","model":"TEST","name":"TEST","firstUseDate":"2026-01-01","usageType":"TEST","maxUsageDistanceMeters":1,"maxUsageDurationSeconds":1,"notes":"TEST","associatedActivityTypes":[{"activityTypeKey":"TEST","defaultGear":true,"preferredGear":false}],"status":"TEST","createdDate":"2026-01-01T00:00:00"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/gear-service/gear/v2/ffffffff-ffff-ffff-ffff-ffffffffffff
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/link/ffffffff-ffff-ffff-ffff-ffffffffffff/activity/12345678
+        method: PUT
+      response:
+        body: '{"gearPk":12345678,"uuid":"ffffffffffffffffffffffffffffffff","userProfilePk":12345678,"gearMakeName":"TEST","gearModelName":"TEST","gearTypeName":"TEST","gearStatusName":"TEST","displayName":"TEST","customMakeModel":"TEST","imageNameLarge":null,"imageNameMedium":null,"imageNameSmall":null,"dateBegin":"2026-01-01T00:00:00","dateEnd":null,"maximumMeters":1.0,"notified":false,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00"}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/unlink/ffffffff-ffff-ffff-ffff-ffffffffffff/activity/12345678
+        method: PUT
+      response:
+        body: '{"gearPk":12345678,"uuid":"ffffffffffffffffffffffffffffffff","userProfilePk":12345678,"gearMakeName":"TEST","gearModelName":"TEST","gearTypeName":"TEST","gearStatusName":"TEST","displayName":"TEST","customMakeModel":"TEST","imageNameLarge":null,"imageNameMedium":null,"imageNameSmall":null,"dateBegin":"2026-01-01T00:00:00","dateEnd":null,"maximumMeters":1.0,"notified":false,"createDate":"2026-01-01T00:00:00","updateDate":"2026-01-01T00:00:00"}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 7
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/v2/ffffffff-ffff-ffff-ffff-ffffffffffff/status/RETIRED
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/gear-service/gear/v2/ffffffff-ffff-ffff-ffff-ffffffffffff
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 9
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms

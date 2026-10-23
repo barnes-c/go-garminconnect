@@ -317,6 +317,48 @@ func (c *Client) SetActivityType(ctx context.Context, id, typeID, parentTypeID i
 	}, nil)
 }
 
+// SetActivityDescription changes the description of the given activity.
+func (c *Client) SetActivityDescription(ctx context.Context, id int64, description string) error {
+	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+		"activityId":  id,
+		"description": description,
+	}, nil)
+}
+
+// ManualActivity describes an activity entered by hand rather than recorded
+// by a device.
+type ManualActivity struct {
+	Name     string
+	TypeKey  string    // e.g. "running", "resort_skiing"
+	Start    time.Time // wall-clock time in TimeZone; the location is ignored
+	TimeZone string    // IANA name, e.g. "Europe/Paris"
+	Distance float64   // meters
+	Duration time.Duration
+}
+
+// CreateManualActivity adds a private manual activity and returns its ID.
+func (c *Client) CreateManualActivity(ctx context.Context, a ManualActivity) (int64, error) {
+	body := map[string]any{
+		"activityName":         a.Name,
+		"activityTypeDTO":      map[string]any{"typeKey": a.TypeKey},
+		"accessControlRuleDTO": map[string]any{"typeId": 2, "typeKey": "private"},
+		"timeZoneUnitDTO":      map[string]any{"unitKey": a.TimeZone},
+		"metadataDTO":          map[string]any{"autoCalcCalories": true},
+		"summaryDTO": map[string]any{
+			"startTimeLocal": a.Start.Format("2006-01-02T15:04:05.000"),
+			"distance":       a.Distance,
+			"duration":       a.Duration.Seconds(),
+		},
+	}
+	var out struct {
+		ActivityID int64 `json:"activityId"`
+	}
+	if err := c.post(ctx, "/activity-service/activity", body, &out); err != nil {
+		return 0, err
+	}
+	return out.ActivityID, nil
+}
+
 // DeleteActivity permanently deletes the given activity.
 func (c *Client) DeleteActivity(ctx context.Context, id int64) error {
 	return c.del(ctx, fmt.Sprintf("/activity-service/activity/%d", id))

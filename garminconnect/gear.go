@@ -73,3 +73,87 @@ func (c *Client) GearDefaults(ctx context.Context, userProfileNumber int) (map[s
 	}
 	return out, nil
 }
+
+// GearStatus is the lifecycle state of a piece of gear.
+type GearStatus string
+
+const (
+	GearActive  GearStatus = "ACTIVE"
+	GearRetired GearStatus = "RETIRED"
+)
+
+// SetGearStatus retires or re-activates the given gear.
+func (c *Client) SetGearStatus(ctx context.Context, gearUUID string, status GearStatus) error {
+	return c.put(ctx, fmt.Sprintf("/gear-service/gear/v2/%s/status/%s", gearUUID, status), nil, nil)
+}
+
+// DeleteGear permanently deletes the given gear.
+func (c *Client) DeleteGear(ctx context.Context, gearUUID string) error {
+	return c.del(ctx, fmt.Sprintf("/gear-service/gear/v2/%s", gearUUID))
+}
+
+// AddGearToActivity links the given gear to an activity.
+func (c *Client) AddGearToActivity(ctx context.Context, gearUUID string, activityID int64) error {
+	return c.put(ctx, fmt.Sprintf("/gear-service/gear/link/%s/activity/%d", gearUUID, activityID), nil, nil)
+}
+
+// RemoveGearFromActivity unlinks the given gear from an activity.
+func (c *Client) RemoveGearFromActivity(ctx context.Context, gearUUID string, activityID int64) error {
+	return c.put(ctx, fmt.Sprintf("/gear-service/gear/unlink/%s/activity/%d", gearUUID, activityID), nil, nil)
+}
+
+// GearDetail is the full (v2) record of a piece of gear, as used by
+// CreateGear, GearDetails and UpdateGear.
+type GearDetail struct {
+	UUID                    string             `json:"uuid,omitempty"`
+	GearType                string             `json:"gearType"` // e.g. "SHOES"
+	Brand                   string             `json:"brand"`
+	Model                   string             `json:"model"`
+	Name                    string             `json:"name"`
+	FirstUseDate            string             `json:"firstUseDate"` // YYYY-MM-DD
+	UsageType               string             `json:"usageType"`    // "DISTANCE" or "TIME"
+	MaxUsageDistanceMeters  float64            `json:"maxUsageDistanceMeters"`
+	MaxUsageDurationSeconds int                `json:"maxUsageDurationSeconds"`
+	Notes                   string             `json:"notes,omitempty"` // Garmin rejects an empty note
+	AssociatedActivityTypes []GearActivityType `json:"associatedActivityTypes,omitempty"`
+
+	// Read-only usage fields, set by Garmin.
+	Status              GearStatus `json:"status,omitempty"`
+	NumActivitiesLinked int        `json:"numActivitiesLinked,omitempty"`
+	DistanceUsedMeters  float64    `json:"distanceUsedMeters,omitempty"`
+	DurationUsedSeconds int        `json:"durationUsedSeconds,omitempty"`
+	DaysUsed            int        `json:"daysUsed,omitempty"`
+	CreatedDate         string     `json:"createdDate,omitempty"`
+}
+
+// GearActivityType associates gear with an activity type, e.g. to make it the
+// default gear for "running".
+type GearActivityType struct {
+	ActivityTypeKey string `json:"activityTypeKey"`
+	DefaultGear     bool   `json:"defaultGear"`
+	PreferredGear   bool   `json:"preferredGear"`
+}
+
+// GearDetails returns the full record of the given gear.
+func (c *Client) GearDetails(ctx context.Context, gearUUID string) (*GearDetail, error) {
+	var out GearDetail
+	if err := c.get(ctx, fmt.Sprintf("/gear-service/gear/v2/%s", gearUUID), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// CreateGear adds a new piece of gear and returns the created record.
+func (c *Client) CreateGear(ctx context.Context, g GearDetail) (*GearDetail, error) {
+	var out GearDetail
+	if err := c.post(ctx, "/gear-service/gear/v2", g, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateGear saves g, identified by g.UUID. Garmin rejects partial records, so
+// start from GearDetails and change the fields you need.
+func (c *Client) UpdateGear(ctx context.Context, g *GearDetail) error {
+	return c.put(ctx, fmt.Sprintf("/gear-service/gear/v2/%s", g.UUID), g, nil)
+}
