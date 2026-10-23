@@ -157,3 +157,70 @@ func (c *Client) CreateGear(ctx context.Context, g GearDetail) (*GearDetail, err
 func (c *Client) UpdateGear(ctx context.Context, g *GearDetail) error {
 	return c.put(ctx, fmt.Sprintf("/gear-service/gear/v2/%s", g.UUID), g, nil)
 }
+
+// GearType is a kind of gear Garmin tracks (bike, shoes, ...).
+type GearType struct {
+	GearTypePK   int    `json:"gearTypePk"`
+	GearTypeName string `json:"gearTypeName"` // e.g. "Shoes"
+}
+
+// GearTypes returns every gear type.
+func (c *Client) GearTypes(ctx context.Context) ([]GearType, error) {
+	var out []GearType
+	if err := c.get(ctx, "/gear-service/gear/types", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UserGearTypes returns the gear types the user has gear for (e.g. "SHOES").
+func (c *Client) UserGearTypes(ctx context.Context) ([]string, error) {
+	var out struct {
+		ActiveGearTypes []string `json:"activeGearTypes"`
+	}
+	if err := c.get(ctx, "/gear-service/gear/v2/user-gear-types", nil, &out); err != nil {
+		return nil, err
+	}
+	return out.ActiveGearTypes, nil
+}
+
+// GearMakeModel is a product from Garmin's gear catalog.
+type GearMakeModel struct {
+	MakeModelName string `json:"makeModelName"` // e.g. "Nike Air Zoom Pegasus"
+	Make          struct {
+		GearMakePK   int    `json:"gearMakePk"`
+		GearMakeName string `json:"gearMakeName"`
+	} `json:"gearMakeDTO"`
+	Model struct {
+		GearModelPK   int    `json:"gearModelPk"`
+		GearTypePK    int    `json:"gearTypePk"`
+		GearModelName string `json:"gearModelName"`
+	} `json:"gearModelDTO"`
+}
+
+// SearchGearMakeModels searches Garmin's gear catalog.
+func (c *Client) SearchGearMakeModels(ctx context.Context, keywords string) ([]GearMakeModel, error) {
+	var out []GearMakeModel
+	if err := c.get(ctx, "/gear-service/gear/makemodels", url.Values{"keywords": {keywords}}, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GearList returns all of the user's gear as full records.
+func (c *Client) GearList(ctx context.Context) ([]GearDetail, error) {
+	var out []GearDetail
+	if err := c.get(ctx, "/gear-service/gear/v2/list", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ActivityGear returns the gear linked to an activity.
+func (c *Client) ActivityGear(ctx context.Context, activityID int64) ([]GearDetail, error) {
+	var out []GearDetail
+	if err := c.get(ctx, fmt.Sprintf("/gear-service/activity/v2/%d", activityID), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}

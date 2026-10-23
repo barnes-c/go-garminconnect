@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/device-service/sensors
+        method: GET
+      response:
+        body: '[{"deviceName":"TEST","imageUrl":null,"batteryStatus":"TEST","batteryLevel":null,"sensorType":"TEST","prioritySensor":false,"serialNumber":1,"productId":1052,"partNumber":null,"softwareVersion":"TEST","lastConnected":"2026-01-01T00:00:00","lastLowBatteryNotification":null,"manufacturer":"TEST","rechargeableSensorCapable":null},{"deviceName":null,"imageUrl":null,"batteryStatus":"TEST","batteryLevel":null,"sensorType":null,"prioritySensor":false,"serialNumber":1,"productId":65280,"partNumber":null,"softwareVersion":"TEST","lastConnected":"2026-01-01T00:00:00","lastLowBatteryNotification":null,"manufacturer":null,"rechargeableSensorCapable":null},{"deviceName":null,"imageUrl":null,"batteryStatus":"TEST","batteryLevel":null,"sensorType":"TEST","prioritySensor":false,"serialNumber":1,"productId":34,"partNumber":null,"softwareVersion":"TEST","lastConnected":"2026-01-01T00:00:00","lastLowBatteryNotification":null,"manufacturer":"","rechargeableSensorCapable":null}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

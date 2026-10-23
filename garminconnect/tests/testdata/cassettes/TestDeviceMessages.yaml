@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/device-service/devicemessage/messages
+        method: GET
+      response:
+        body: '{"serviceHost":"TEST","numOfMessages":1,"messages":[{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":true,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":null,"priority":1,"metaDataId":0,"appDetails":null}},{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":true,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":"TEST","priority":3,"metaDataId":0,"appDetails":null}},{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":false,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":null,"priority":1,"metaDataId":0,"appDetails":null}},{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":true,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":"TEST","priority":3,"metaDataId":0,"appDetails":null}},{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":true,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":"TEST","priority":3,"metaDataId":0,"appDetails":null}},{"messageId":12345678,"messageType":"TEST","messageStatus":"TEST","deviceId":12345678,"deviceName":"TEST","applicationKey":"TEST","firmwareVersion":"TEST","wifiSetup":false,"deviceXmlDataType":"TEST","hidden":false,"createdTimeStamp":1,"updatedTimeStamp":null,"metaData":{"type":"TEST","fileType":"TEST","messageUrl":"TEST","absolute":false,"messageName":"TEST","groupName":"","priority":1,"metaDataId":0,"appDetails":null}}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
