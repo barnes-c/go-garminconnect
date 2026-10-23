@@ -286,6 +286,7 @@ type FitnessAgeComponent struct {
 	PotentialAge        *float64 `json:"potentialAge"`
 	Priority            *int     `json:"priority"`
 	Stale               bool     `json:"stale"`
+	StaleInputs         []string `json:"staleInputs"` // why it is stale, e.g. "WEIGHT"
 	NumOfWeeksForIM     *int     `json:"numOfWeeksForIm"`
 	LastMeasurementDate string   `json:"lastMeasurementDate"`
 }

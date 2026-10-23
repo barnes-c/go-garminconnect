@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/biometric/current/testuser
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"height":null,"weight":null,"vo2Max":null,"vo2MaxCycling":null,"lactateThresholdSpeed":{"sampleId":12345678,"bioDate":"2026-01-01T00:00:00","value":1.0},"lactateThresholdRowSpeed":{"sampleId":null,"bioDate":null,"value":null},"lactateThresholdHeartRate":{"sampleId":12345678,"bioDate":"2026-01-01T00:00:00","value":1},"lactateThresholdHeartRateCycling":{"sampleId":12345678,"bioDate":"2026-01-01T00:00:00","value":1},"activityClass":null,"boneMass":null,"bmi":null,"metabolicAge":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"bodyFat":null,"bodyWater":null,"dailyCalorieIntake":null,"functionalThresholdPower":{"sampleId":12345678,"bioDate":"2026-01-01T00:00:00","value":1}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/trainingstatus/weekly/testuser?fromCalendarDate=2026-01-01&toCalendarDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userId":12345678,"fromCalendarDate":"2026-01-01","toCalendarDate":"2026-01-01","showSelector":false,"recordedDevices":[{"deviceId":12345678,"imageURL":"TEST","deviceName":"TEST","category":0}],"reportData":{"12345678":[{"calendarDate":"2026-01-01","sinceDate":null,"weeklyTrainingLoad":null,"trainingStatus":1,"timestamp":1,"deviceId":12345678,"loadTunnelMin":null,"loadTunnelMax":null,"loadLevelTrend":null,"sport":null,"subSport":null,"fitnessTrendSport":"TEST","fitnessTrend":1,"trainingStatusFeedbackPhrase":"TEST","trainingPaused":false,"acuteTrainingLoadDTO":{"acwrPercent":1,"acwrStatus":"TEST","acwrStatusFeedback":"TEST","dailyTrainingLoadAcute":1,"maxTrainingLoadChronic":1.0,"minTrainingLoadChronic":1.0,"dailyTrainingLoadChronic":1,"dailyAcuteChronicWorkloadRatio":1.0},"primaryTrainingDevice":true}]}}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
