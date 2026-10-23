@@ -1,0 +1,43 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"calendarDate":"2026-01-01","timestampLocal":"2026-01-01T00:00:00","valueInML":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/hydration/log
+        method: PUT
+      response:
+        body: '{"userId":12345678,"calendarDate":"2026-01-01","valueInML":1.0,"goalInML":1.0,"dailyAverageinML":null,"lastEntryTimestampLocal":"2026-01-01T00:00:00","sweatLossInML":1.0,"activityIntakeInML":1.0}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"calendarDate":"2026-01-01","timestampLocal":"2026-01-01T00:00:00","valueInML":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/hydration/log
+        method: PUT
+      response:
+        body: '{"userId":12345678,"calendarDate":"2026-01-01","valueInML":1.0,"goalInML":1.0,"dailyAverageinML":null,"lastEntryTimestampLocal":"2026-01-01T00:00:00","sweatLossInML":1.0,"activityIntakeInML":1.0}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

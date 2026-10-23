@@ -67,7 +67,7 @@ func TestDownloadActivity_Unauthorized(t *testing.T) {
 func TestDownloadWorkout(t *testing.T) {
 	body := []byte("workout FIT data")
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, fmt.Sprintf("/download-service/files/workout/%d", 99), r.URL.Path)
+		assert.Equal(t, fmt.Sprintf("/workout-service/workout/FIT/%d", 99), r.URL.Path)
 		w.Write(body)
 	}))
 	c := newServerClient(t, srv)

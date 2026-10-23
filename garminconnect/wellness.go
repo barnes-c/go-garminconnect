@@ -398,16 +398,15 @@ func (c *Client) LifestyleData(ctx context.Context, d time.Time) (map[string]jso
 	return out, nil
 }
 
-// AddHydration logs a hydration intake entry.
-// valueML is the amount in millilitres; timestamp should be an RFC3339 timestamp.
-func (c *Client) AddHydration(ctx context.Context, valueML float64, timestamp, cdate string) (map[string]json.RawMessage, error) {
+// AddHydration logs valueML millilitres of fluid intake at the given time; its
+// location supplies the local time and calendar day. A negative value
+// subtracts, which is the only way to undo an entry.
+func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
 	body := map[string]any{
-		"calendarDate":   cdate,
+		"calendarDate":   date(at),
 		"valueInML":      valueML,
-		"userProfilePK":  0, // filled server-side
-		"timestampGMT":   timestamp,
-		"timestampLocal": timestamp,
+		"timestampLocal": at.Format("2006-01-02T15:04:05.000"),
 	}
 	if err := c.put(ctx, "/usersummary-service/usersummary/hydration/log", body, &out); err != nil {
 		return nil, err

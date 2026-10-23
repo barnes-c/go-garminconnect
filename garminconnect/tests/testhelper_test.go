@@ -64,7 +64,9 @@ func newVCRClient(t *testing.T) (*gc.Client, func()) {
 		}
 	}
 
-	mode := recorder.ModeReplayWithNewEpisodes
+	// Record every request live: a replaying mode would answer a repeated
+	// method+URL from the episode just captured instead of sending it.
+	mode := recorder.ModeRecordOnly
 	if !needsRecording {
 		mode = recorder.ModeReplayOnly
 	}

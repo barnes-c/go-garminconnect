@@ -317,7 +317,7 @@ func (c *Client) SetActivityName(ctx context.Context, id int64, name string) err
 func (c *Client) SetActivityType(ctx context.Context, id, typeID, parentTypeID int64, typeKey string) error {
 	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
 		"activityId": id,
-		"activityType": map[string]any{
+		"activityTypeDTO": map[string]any{
 			"typeId":       typeID,
 			"typeKey":      typeKey,
 			"parentTypeId": parentTypeID,
@@ -423,12 +423,11 @@ func (c *Client) DownloadActivity(ctx context.Context, id int64, format Download
 // UploadActivity uploads a FIT, GPX, or TCX file and returns the server response.
 // The filename extension determines the format (.fit, .gpx, .tcx).
 func (c *Client) UploadActivity(ctx context.Context, data []byte, filename string) (map[string]json.RawMessage, error) {
-	ext := filepath.Ext(filename)
-	if ext == "" {
+	if filepath.Ext(filename) == "" {
 		return nil, fmt.Errorf("filename must include an extension (.fit, .gpx, or .tcx)")
 	}
 	var out map[string]json.RawMessage
-	if err := c.upload(ctx, "/upload-service/upload"+ext, data, filename, &out); err != nil {
+	if err := c.upload(ctx, "/upload-service/upload", data, filename, &out); err != nil {
 		return nil, err
 	}
 	return out, nil

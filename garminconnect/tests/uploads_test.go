@@ -33,7 +33,7 @@ func TestUploadActivity_FIT(t *testing.T) {
 	fitData := []byte{0x0e, 0x10, 0x00, 0x00} // minimal FIT header bytes
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method)
-		assert.Equal(t, "/upload-service/upload.fit", r.URL.Path)
+		assert.Equal(t, "/upload-service/upload", r.URL.Path)
 		fname, body := readMultipart(t, r)
 		assert.Equal(t, "activity.fit", fname)
 		assert.Equal(t, fitData, body)
@@ -51,7 +51,7 @@ func TestUploadActivity_FIT(t *testing.T) {
 func TestUploadActivity_GPX(t *testing.T) {
 	gpxData := []byte(`<?xml version="1.0"?>`)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "/upload-service/upload.gpx", r.URL.Path)
+		assert.Equal(t, "/upload-service/upload", r.URL.Path)
 		fname, _ := readMultipart(t, r)
 		assert.Equal(t, "track.gpx", fname)
 		w.Header().Set("Content-Type", "application/json")
@@ -73,25 +73,6 @@ func TestUploadActivity_NoExtension(t *testing.T) {
 	_, err := c.UploadActivity(t.Context(), []byte("data"), "noextension")
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "extension")
-}
-
-func TestUploadWorkout(t *testing.T) {
-	fitData := []byte{0x0e, 0x10}
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method)
-		assert.Equal(t, "/upload-service/upload", r.URL.Path)
-		fname, body := readMultipart(t, r)
-		assert.Equal(t, "workout.fit", fname)
-		assert.Equal(t, fitData, body)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(map[string]any{})
-	}))
-	c := newServerClient(t, srv)
-
-	out, err := c.UploadWorkout(t.Context(), fitData, "workout.fit")
-	require.NoError(t, err)
-	assert.NotNil(t, out)
 }
 
 func TestUploadActivity_ServerError(t *testing.T) {
