@@ -29,8 +29,8 @@ const connectAPI = "https://connectapi.garmin.com"
 // concurrent use by multiple goroutines.
 type Client struct {
 	http        *http.Client
-	mu          sync.Mutex // guards token
-	refreshMu   sync.Mutex // serializes 401-triggered token refreshes
+	mu          sync.Mutex // guards token and displayName
+	refreshMu   sync.Mutex // serializes token refreshes
 	token       *diToken
 	tokenFile   string
 	displayName string
@@ -149,7 +149,11 @@ func newUTLSClient() *http.Client {
 }
 
 // DisplayName returns the authenticated user's Garmin Connect display name.
-func (c *Client) DisplayName() string { return c.displayName }
+func (c *Client) DisplayName() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.displayName
+}
 
 // Token returns the current access token, or empty string if not authenticated.
 func (c *Client) Token() string {
@@ -190,14 +194,20 @@ func (c *Client) fetchProfile(ctx context.Context) error {
 	if err := c.get(ctx, "/userprofile-service/socialProfile", nil, &profile); err != nil {
 		return fmt.Errorf("fetch profile: %w", err)
 	}
-	c.displayName = profile.DisplayName
+	c.setDisplayName(profile.DisplayName)
 	return nil
+}
+
+func (c *Client) setDisplayName(name string) {
+	c.mu.Lock()
+	c.displayName = name
+	c.mu.Unlock()
 }
 
 // withRefresh calls fn with the current access token, and if the first
 // attempt returns a 401, tries to refresh the token and retries fn once.
-// Returns (nil, ErrUnauthorized) if the client has no token, the refresh
-// fails, or there is no refresh token available.
+// Returns an error matching ErrUnauthorized if the client has no token, there
+// is no refresh token available, or the refresh fails (wrapping its cause).
 func (c *Client) withRefresh(ctx context.Context, fn func(accessToken string) (*http.Response, error)) (*http.Response, error) {
 	tok := c.currentToken()
 	if tok == nil {
@@ -208,8 +218,11 @@ func (c *Client) withRefresh(ctx context.Context, fn func(accessToken string) (*
 		return resp, err
 	}
 	resp.Body.Close()
-	if c.refreshAfter401(ctx, tok.AccessToken) != nil {
-		return nil, ErrUnauthorized
+	if err := c.refreshAfter401(ctx, tok.AccessToken); err != nil {
+		if errors.Is(err, ErrUnauthorized) {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: token refresh: %w", ErrUnauthorized, err)
 	}
 	return fn(c.Token())
 }
@@ -396,8 +409,9 @@ var errNoDisplayName = errors.New("display name not set: call Login or use WithD
 // segment, or an error when the client has none (e.g. WithToken without
 // WithDisplayName and no Login).
 func (c *Client) displayNamePath() (string, error) {
-	if c.displayName == "" {
+	name := c.DisplayName()
+	if name == "" {
 		return "", errNoDisplayName
 	}
-	return url.PathEscape(c.displayName), nil
+	return url.PathEscape(name), nil
 }
