@@ -40,10 +40,12 @@ func TestScheduledWorkouts(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	sw, err := c.ScheduledWorkouts(t.Context(), testDate.Year(), int(testDate.Month()))
+	// Same endpoint as the deprecated ScheduledWorkouts.
+	month, err := c.CalendarMonth(t.Context(), testDate.Year(), testDate.Month())
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotNil(t, sw)
+	require.NotEmpty(t, month.Items)
+	assert.NotEmpty(t, month.Items[0].ItemType)
 }
 
 // TestWorkoutLifecycle exercises every workout write against throwaway

@@ -58,6 +58,8 @@ func (c *Client) DeleteWorkout(ctx context.Context, id int64) error {
 }
 
 // ScheduledWorkouts returns the calendar for the given year and month.
+//
+// Deprecated: use [Client.CalendarMonth], which returns typed items.
 func (c *Client) ScheduledWorkouts(ctx context.Context, year, month int) (json.RawMessage, error) {
 	var out json.RawMessage
 	if err := c.get(ctx, fmt.Sprintf("/calendar-service/year/%d/month/%d", year, month-1), nil, &out); err != nil {
