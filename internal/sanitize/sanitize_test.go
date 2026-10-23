@@ -1,6 +1,7 @@
 package sanitize_test
 
 import (
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -77,6 +78,17 @@ func TestBody_ArrayStrings(t *testing.T) {
 		if !strings.Contains(out, want) {
 			t.Errorf("missing %q in: %s", want, out)
 		}
+	}
+}
+
+func TestInteraction_ScrubsPlainTextBody(t *testing.T) {
+	i := &cassette.Interaction{Request: cassette.Request{
+		Body:    "Jane's tempo run",
+		Headers: http.Header{"Content-Type": {"text/plain"}},
+	}}
+	sanitize.Interaction(i, "")
+	if i.Request.Body != "TEST" {
+		t.Errorf("plain-text body not scrubbed: %q", i.Request.Body)
 	}
 }
 

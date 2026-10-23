@@ -2,7 +2,6 @@ package garminconnect_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -70,23 +69,6 @@ func TestDeleteWeighIn(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestScheduleWorkout(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method)
-		assert.Equal(t, fmt.Sprintf("/calendar-service/schedule/workout/%d", 55), r.URL.Path)
-		var body map[string]any
-		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
-		assert.Equal(t, "2026-05-15", body["date"])
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]any{"scheduledWorkoutId": 999})
-	}))
-	c := newServerClient(t, srv)
-
-	out, err := c.ScheduleWorkout(t.Context(), 55, "2026-05-15")
-	require.NoError(t, err)
-	assert.NotNil(t, out)
-}
-
 func TestDeleteWorkout(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method)
@@ -112,18 +94,6 @@ func TestSetActivityType(t *testing.T) {
 	c := newServerClient(t, srv)
 
 	err := c.SetActivityType(t.Context(), 10, 1, 0, "running")
-	require.NoError(t, err)
-}
-
-func TestUnscheduleWorkout(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodDelete, r.Method)
-		assert.Equal(t, "/calendar-service/schedule/workout/200", r.URL.Path)
-		w.WriteHeader(http.StatusNoContent)
-	}))
-	c := newServerClient(t, srv)
-
-	err := c.UnscheduleWorkout(t.Context(), 200)
 	require.NoError(t, err)
 }
 

@@ -1,0 +1,178 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"sportType":{"sportTypeId":1,"sportTypeKey":"TEST"},"workoutName":"TEST","workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST"},"workoutSteps":[{"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST"},"endConditionValue":1,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST"},"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST"},"type":"TEST"}]}]}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/workout-service/workout
+        method: POST
+      response:
+        body: '{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":{"userProfilePk":12345678,"displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","profileImgNameLarge":null,"profileImgNameMedium":null,"profileImgNameSmall":null,"userPro":false,"vivokidUser":false},"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workout/12345678
+        method: GET
+      response:
+        body: '{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":{"userProfilePk":12345678,"displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","profileImgNameLarge":null,"profileImgNameMedium":null,"profileImgNameSmall":null,"userPro":false,"vivokidUser":false},"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"atpPlanId":null,"author":{"userProfilePk":12345678,"displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","profileImgNameLarge":null,"profileImgNameMedium":null,"profileImgNameSmall":null,"userPro":false,"vivokidUser":false},"avgTrainingSpeed":1.0,"consumer":null,"consumerImageURL":null,"consumerName":null,"consumerWebsiteURL":null,"createdDate":"2026-01-01T00:00:00","description":null,"descriptionI18nKey":null,"estimateType":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"estimatedDurationInSecs":1,"isSessionTransitionEnabled":null,"locale":null,"ownerId":12345678,"poolLength":null,"poolLengthUnit":null,"shared":false,"sharedWithUsers":null,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"updatedDate":"2026-01-01T00:00:00","uploadTimestamp":null,"workoutId":12345678,"workoutName":"TEST","workoutNameI18nKey":null,"workoutProvider":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"workoutSourceId":null,"workoutThumbnailUrl":"TEST"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/workout-service/workout/12345678
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 3
+      request:
+        body: TEST
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - text/plain
+        url: https://connectapi.garmin.com/workout-service/workout/copy/12345678
+        method: POST
+      response:
+        body: '{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":{"userProfilePk":12345678,"displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","fullName":"TEST","profileImgNameLarge":null,"profileImgNameMedium":null,"profileImgNameSmall":null,"userPro":false,"vivokidUser":false},"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        body: '{"date":"2026-01-01"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/workout-service/schedule/12345678
+        method: POST
+      response:
+        body: '{"workoutScheduleId":12345678,"workout":{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":null,"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false},"calendarDate":"2026-01-01","createdDate":"2026-01-01","ownerId":12345678,"newName":null,"consumer":null,"atpPlanTypeId":null,"associatedActivityId":null,"priority":null,"associatedActivityDateTime":null,"tpType":null,"race":false,"itp":false,"nameChanged":false,"protected":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/schedule/12345678
+        method: GET
+      response:
+        body: '{"workoutScheduleId":12345678,"workout":{"workoutId":12345678,"ownerId":12345678,"workoutName":"TEST","description":null,"updatedDate":"2026-01-01T00:00:00","createdDate":"2026-01-01T00:00:00","sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"subSportType":null,"trainingPlanId":null,"author":null,"sharedWithUsers":null,"estimatedDurationInSecs":1,"estimatedDistanceInMeters":null,"workoutSegments":[{"segmentOrder":1,"sportType":{"sportTypeId":1,"sportTypeKey":"TEST","displayOrder":1},"poolLengthUnit":null,"poolLength":null,"avgTrainingSpeed":null,"estimatedDurationInSecs":null,"estimatedDistanceInMeters":null,"estimatedDistanceUnit":null,"estimateType":null,"description":null,"workoutSteps":[{"type":"TEST","stepId":12345678,"stepOrder":1,"stepType":{"stepTypeId":3,"stepTypeKey":"TEST","displayOrder":3},"childStepId":null,"description":null,"endCondition":{"conditionTypeId":2,"conditionTypeKey":"TEST","displayOrder":2,"displayable":true},"endConditionValue":1.0,"preferredEndConditionUnit":null,"endConditionCompare":null,"targetType":{"workoutTargetTypeId":1,"workoutTargetTypeKey":"TEST","displayOrder":1},"targetValueOne":null,"targetValueTwo":null,"targetValueUnit":null,"zoneNumber":null,"secondaryTargetType":null,"secondaryTargetValueOne":null,"secondaryTargetValueTwo":null,"secondaryTargetValueUnit":null,"secondaryZoneNumber":null,"endConditionZone":null,"strokeType":{"strokeTypeId":0,"strokeTypeKey":null,"displayOrder":0},"equipmentType":{"equipmentTypeId":0,"equipmentTypeKey":null,"displayOrder":0},"category":null,"exerciseName":null,"workoutProvider":null,"providerExerciseSourceId":null,"weightValue":null,"weightUnit":null}]}],"poolLength":null,"poolLengthUnit":null,"locale":null,"workoutProvider":null,"workoutSourceId":null,"uploadTimestamp":null,"atpPlanId":null,"consumer":null,"consumerName":null,"consumerImageURL":null,"consumerWebsiteURL":null,"workoutNameI18nKey":null,"descriptionI18nKey":null,"avgTrainingSpeed":1.0,"estimateType":null,"estimatedDistanceUnit":{"unitId":null,"unitKey":null,"factor":null},"workoutThumbnailUrl":"TEST","isSessionTransitionEnabled":null,"shared":false},"calendarDate":"2026-01-01","createdDate":"2026-01-01","ownerId":12345678,"newName":null,"consumer":null,"atpPlanTypeId":null,"associatedActivityId":null,"priority":null,"associatedActivityDateTime":null,"tpType":null,"nameChanged":false,"protected":false,"race":false,"itp":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        body: '{"associatedActivityDateTime":null,"associatedActivityId":null,"atpPlanTypeId":null,"calendarDate":"2026-01-01","consumer":null,"createdDate":"2026-01-01","itp":false,"nameChanged":false,"newName":null,"ownerId":12345678,"priority":null,"protected":false,"race":false,"tpType":null,"workout":{"workoutId":12345678},"workoutScheduleId":12345678}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/workout-service/schedule/12345678
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 7
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/schedule/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workout/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 9
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/workout-service/workout/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
