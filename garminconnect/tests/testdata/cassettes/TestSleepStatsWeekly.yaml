@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/sleep-service/stats/sleep/weekly/2026-01-01/2
+        method: GET
+      response:
+        body: '{"overallStats":{"averageLocalSleepStartTime":1.0,"averageLowSleepScore":1.0,"averageSleepScore":1.0,"averageLocalSleepEndTime":1.0,"averageSleepSeconds":1.0,"averageSleepNeed":1.0,"averageHighSleepScore":1.0},"individualStats":[{"weekStartDate":"2026-01-01","weekEndDate":"2026-01-01","values":{"remTime":1.0,"awakeTime":1.0,"sleepScoreQuality":"TEST","averageLocalSleepStartTime":1.0,"averageSleepScore":1.0,"sleepDataDaysCount":6,"averageLocalSleepEndTime":1.0,"averageSleepSeconds":1.0,"averageSleepNeed":1.0,"lightTime":1.0,"deepTime":1.0}},{"weekStartDate":"2026-01-01","weekEndDate":"2026-01-01","values":{"remTime":1.0,"awakeTime":1.0,"sleepScoreQuality":"TEST","averageLocalSleepStartTime":1.0,"averageSleepScore":1.0,"sleepDataDaysCount":7,"averageLocalSleepEndTime":1.0,"averageSleepSeconds":1.0,"averageSleepNeed":1.0,"lightTime":1.0,"deepTime":1.0}}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

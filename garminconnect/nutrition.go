@@ -33,3 +33,20 @@ func (c *Client) NutritionSettings(ctx context.Context, d time.Time) (map[string
 	}
 	return out, nil
 }
+
+// NutritionStatus says whether the user tracks nutrition in Garmin Connect or
+// MyFitnessPal.
+type NutritionStatus struct {
+	CurrentStatus    string `json:"currentStatus"` // e.g. "NUTRITION_NONE"
+	HasUsedNutrition bool   `json:"hasUsedNutrition"`
+	HasUsedMFP       bool   `json:"hasUsedMFP"`
+}
+
+// NutritionStatus returns the user's nutrition tracking status.
+func (c *Client) NutritionStatus(ctx context.Context) (*NutritionStatus, error) {
+	var out NutritionStatus
+	if err := c.get(ctx, "/nutrition-service/user/nutritionCurrentStatus", nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}

@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userstats-service/statistics/testuser
+        method: GET
+      response:
+        body: '{"userProfileId":12345678,"statisticsStartDate":null,"statisticsEndDate":null,"userMetrics":[{"userProfileId":null,"activityType":{"typeId":17,"typeKey":"TEST","parentTypeId":null,"isHidden":false,"restricted":false,"trimmable":null},"parentActivityType":{"typeId":17,"typeKey":"TEST","parentTypeId":null,"isHidden":false,"restricted":false,"trimmable":null},"totalActivities":1,"totalDistance":1.0,"totalDuration":1.0,"totalCalories":1.0,"totalElevationGain":1.0,"visibleCount":0}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

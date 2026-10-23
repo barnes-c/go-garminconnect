@@ -1,0 +1,73 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","flights":[{"originLocation":"TEST","originTimezone":"TEST","originTimestamp":"2026-01-01T00:00:00","destinationLocation":"TEST","destinationTimezone":"TEST","destinationTimestamp":"2026-01-01T00:00:00"}]}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/jetlag-service/jetlag/trip
+        method: POST
+      response:
+        body: '{"userId":12345678,"timeDifference":1,"startDate":"2026-01-01","endDate":"2026-01-01","flights":[{"flightId":12345678,"tripId":12345678,"originLocation":"TEST","originTimezone":"TEST","originTimestamp":"2026-01-01T00:00:00","destinationLocation":"TEST","destinationTimezone":"TEST","destinationTimestamp":"2026-01-01T00:00:00"}],"tripId":12345678}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/jetlag-service/jetlag/trip/all
+        method: GET
+      response:
+        body: '[{"userId":12345678,"timeDifference":1,"startDate":"2026-01-01","endDate":"2026-01-01","flights":[{"flightId":12345678,"tripId":12345678,"originLocation":"TEST","originTimezone":"TEST","originTimestamp":"2026-01-01T00:00:00","destinationLocation":"TEST","destinationTimezone":"TEST","destinationTimestamp":"2026-01-01T00:00:00"}],"tripId":12345678}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"tripId":12345678,"userId":12345678,"startDate":"2026-01-01","endDate":"2026-01-01","flights":[{"flightId":12345678,"tripId":12345678,"originLocation":"TEST","originTimezone":"TEST","originTimestamp":"2026-01-01T00:00:00","destinationLocation":"TEST","destinationTimezone":"TEST","destinationTimestamp":"2026-01-01T00:00:00"}]}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/jetlag-service/jetlag/trip
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/jetlag-service/jetlag/trip/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms

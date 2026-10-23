@@ -59,9 +59,9 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 
 |         Area         |                                                                       What it exposes                                                                        |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Wellness**         | Steps, calories, Body Battery, stress, floors, hydration, respiration, SpO₂, intensity minutes, blood pressure (record, annotate, delete), health snapshot download                                                         |
+| **Wellness**         | Steps, calories, Body Battery, stress, floors, hydration, respiration, SpO₂, intensity minutes, blood pressure (record, annotate, delete), health snapshot download, Jet Lag Adviser trips, daily movement, monthly steps, averages, activity totals, last sync                                                         |
 | **Heart rate**       | Intraday and resting heart rate                                                                                                                              |
-| **Sleep**            | Sleep stages, sleep statistics, and HRV (daily and range)                                                                                                                      |
+| **Sleep**            | Sleep stages, daily/weekly/overall sleep statistics, and HRV (daily and range)                                                                                                                      |
 | **Activities**       | Listing, detail, splits, laps, GPS track, progress and per-activity stats, event types, HR/power zones, exercise sets, weather, personal records, favorites, manual creation, edit/delete (incl. exercise sets), and download & upload                                        |
 | **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and FIT download                                                                                                            |
 | **Calendar**         | Month and week views, events (create, edit, move, delete, primary event), and notes                                                          |
@@ -73,7 +73,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Devices & gear**   | Registered devices, settings, solar data, and gear (create, edit, retire, delete, link to activities)                                                                                                  |
 | **Profile**          | User profile, settings, and unit system                                                                                                                      |
 | **Women's health**   | Menstrual cycle and pregnancy data                                                                                                                           |
-| **Nutrition**        | Food log, meals, and goals                                                                                                                                   |
+| **Nutrition**        | Food log, meals, goals, and tracking status                                                                                                                                   |
 | **Golf**             | Scorecards, shot data, club stats, and player stats                                                                                                                                     |
 
 Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download is FIT only.
