@@ -1,7 +1,6 @@
 package garminconnect_test
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,21 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-func TestSetActivityName(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPut, r.Method)
-		assert.Equal(t, "/activity-service/activity/7", r.URL.Path)
-		var body map[string]any
-		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
-		assert.Equal(t, "Morning Run", body["activityName"])
-		w.WriteHeader(http.StatusNoContent)
-	}))
-	c := newServerClient(t, srv)
-
-	err := c.SetActivityName(t.Context(), 7, "Morning Run")
-	require.NoError(t, err)
-}
 
 func TestDeleteActivity(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -47,22 +31,6 @@ func TestDeleteWorkout(t *testing.T) {
 	c := newServerClient(t, srv)
 
 	err := c.DeleteWorkout(t.Context(), 77)
-	require.NoError(t, err)
-}
-
-func TestSetActivityType(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPut, r.Method)
-		assert.Equal(t, "/activity-service/activity/10", r.URL.Path)
-		var body map[string]any
-		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
-		at := body["activityType"].(map[string]any)
-		assert.Equal(t, "running", at["typeKey"])
-		w.WriteHeader(http.StatusNoContent)
-	}))
-	c := newServerClient(t, srv)
-
-	err := c.SetActivityType(t.Context(), 10, 1, 0, "running")
 	require.NoError(t, err)
 }
 

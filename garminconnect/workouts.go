@@ -142,14 +142,5 @@ func (c *Client) CopyWorkout(ctx context.Context, id int64, name string) (*Worko
 
 // DownloadWorkout returns the FIT file for a saved workout.
 func (c *Client) DownloadWorkout(ctx context.Context, id int64) ([]byte, error) {
-	return c.getBytes(ctx, fmt.Sprintf("/download-service/files/workout/%d", id), nil)
-}
-
-// UploadWorkout uploads a workout FIT file and returns the server response.
-func (c *Client) UploadWorkout(ctx context.Context, data []byte, filename string) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
-	if err := c.upload(ctx, "/upload-service/upload", data, filename, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
+	return c.getBytes(ctx, fmt.Sprintf("/workout-service/workout/FIT/%d", id), nil)
 }

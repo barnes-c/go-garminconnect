@@ -2,6 +2,7 @@ package garminconnect_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -164,4 +165,22 @@ func TestCaloriesDaily(t *testing.T) {
 		assert.NotEmpty(t, d.CalendarDate)
 		assert.InDelta(t, d.Active+d.Resting, d.Total, 0.001)
 	}
+}
+
+// TestAddHydration logs an intake and then subtracts it again; hydration
+// entries can't be deleted, so this is how recording leaves the day unchanged.
+func TestAddHydration(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	zurich, err := time.LoadLocation("Europe/Zurich")
+	require.NoError(t, err)
+	at := time.Date(testDate.Year(), testDate.Month(), testDate.Day(), 8, 0, 0, 0, zurich)
+
+	out, err := c.AddHydration(ctx, 250, at)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out)
+	_, err = c.AddHydration(ctx, -250, at.Add(time.Minute))
+	require.NoError(t, err)
 }

@@ -63,7 +63,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Heart rate**       | Intraday and resting heart rate                                                                                                                              |
 | **Sleep**            | Sleep stages, sleep statistics, and HRV (daily and range)                                                                                                                      |
 | **Activities**       | Listing, detail, splits, HR/power zones, exercise sets, weather, personal records, favorites, manual creation, edit/delete (incl. exercise sets), and download & upload                                        |
-| **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and download & upload                                                                                                            |
+| **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and FIT download                                                                                                            |
 | **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
 | **Body composition** | Weigh-ins (add, delete, clear a day) and body composition history                                                                                                                       |
 | **Goals**            | Goals, badges, and challenges                                                                                                                                |
@@ -73,7 +73,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Nutrition**        | Food log, meals, and goals                                                                                                                                   |
 | **Golf**             | Scorecards, shot data, club stats, and player stats                                                                                                                                     |
 
-Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download and upload are FIT only.
+Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download is FIT only.
 
 ## Error handling
 

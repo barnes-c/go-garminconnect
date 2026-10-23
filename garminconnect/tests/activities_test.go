@@ -216,3 +216,27 @@ func TestActivityWritesLifecycle(t *testing.T) {
 
 	require.NoError(t, c.DeleteActivity(ctx, id))
 }
+
+// TestActivityEdits renames a throwaway activity and changes its type, then
+// deletes it so recording leaves the account unchanged.
+func TestActivityEdits(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	id, err := c.CreateManualActivity(ctx, gc.ManualActivity{
+		Name:     "go-garminconnect edit test",
+		TypeKey:  "running",
+		Start:    testDate.Add(8 * time.Hour),
+		TimeZone: "Europe/Zurich",
+		Distance: 5000,
+		Duration: 30 * time.Minute,
+	})
+	require.NoError(t, err)
+	require.NotZero(t, id)
+
+	require.NoError(t, c.SetActivityName(ctx, id, "go-garminconnect edit test (renamed)"))
+	require.NoError(t, c.SetActivityType(ctx, id, 3, 17, "hiking"))
+
+	require.NoError(t, c.DeleteActivity(ctx, id))
+}
