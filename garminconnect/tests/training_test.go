@@ -15,6 +15,9 @@ func TestTrainingReadiness(t *testing.T) {
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	require.NotEmpty(t, entries)
+	assert.NotEmpty(t, entries[0].ScoreQualifier)
+	assert.NotZero(t, entries[0].SleepHistoryScore)
+	require.NotEmpty(t, entries)
 	assert.NotEmpty(t, entries[0].CalendarDate)
 }
 

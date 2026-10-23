@@ -14,6 +14,7 @@ func TestUserSummary(t *testing.T) {
 
 	s, err := c.UserSummary(t.Context(), testDate)
 	require.NoError(t, err)
+	assert.NotZero(t, s.FloorsAscendedGoal)
 
 	assert.NotZero(t, s.UserProfileID)
 	assert.NotZero(t, s.DailyStepGoal)
@@ -57,6 +58,7 @@ func TestHydration(t *testing.T) {
 	h, err := c.Hydration(t.Context(), testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
+	assert.NotZero(t, h.UserProfilePK)
 	assert.NotNil(t, h)
 }
 
@@ -128,6 +130,8 @@ func TestWeeklyStress(t *testing.T) {
 
 	out, err := c.WeeklyStress(t.Context(), testDate, 4)
 	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotZero(t, out[0].AvgStressLevel)
 	assert.NotNil(t, out)
 }
 
@@ -138,6 +142,9 @@ func TestWeeklyIntensityMinutes(t *testing.T) {
 	start := testDate.AddDate(0, 0, -7)
 	out, err := c.WeeklyIntensityMinutes(t.Context(), start, testDate)
 	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotZero(t, out[0].ModerateIntensityMinutes)
+	assert.NotZero(t, out[0].VigorousIntensityMinutes)
 	assert.NotNil(t, out)
 }
 

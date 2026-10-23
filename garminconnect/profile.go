@@ -9,12 +9,12 @@ import (
 type UserProfile struct {
 	DisplayName          string `json:"displayName"`
 	FullName             string `json:"fullName"`
-	UserProfilePK        int    `json:"userProfilePK"`
-	ProfileImageURL      string `json:"profileImageUrl"`
+	UserProfilePK        int    `json:"profileId"`
+	ProfileImageURL      string `json:"profileImageUrlMedium"`
 	ProfileImageURLLarge string `json:"profileImageUrlLarge"`
 	ProfileImageURLSmall string `json:"profileImageUrlSmall"`
 	Location             string `json:"location"`
-	Biography            string `json:"biography"`
+	Biography            string `json:"bio"`
 }
 
 // UserProfileSettings holds account and display settings for the authenticated

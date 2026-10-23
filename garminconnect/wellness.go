@@ -29,7 +29,7 @@ type UserSummary struct {
 	VigorousDurationMinutes          int     `json:"vigorousIntensityMinutes"`
 	FloorsAscended                   float64 `json:"floorsAscended"`
 	FloorsDescended                  float64 `json:"floorsDescended"`
-	FloorsAscendedGoal               float64 `json:"floorsAscendedGoal"`
+	FloorsAscendedGoal               float64 `json:"userFloorsAscendedGoal"`
 	MinHeartRate                     int     `json:"minHeartRate"`
 	MaxHeartRate                     int     `json:"maxHeartRate"`
 	RestingHeartRate                 int     `json:"restingHeartRate"`
@@ -85,7 +85,7 @@ type FloorsData struct {
 
 // HydrationData holds hydration intake for a day.
 type HydrationData struct {
-	UserProfilePK      int     `json:"userProfilePK"`
+	UserProfilePK      int     `json:"userId"`
 	CalendarDate       string  `json:"calendarDate"`
 	ValueInML          float64 `json:"valueInML"`
 	GoalInML           float64 `json:"goalInML"`
@@ -301,7 +301,7 @@ type WeeklyStepStat struct {
 // WeeklyStressStat holds weekly aggregated stress statistics.
 type WeeklyStressStat struct {
 	CalendarDate     string `json:"calendarDate"`
-	AvgStressLevel   int    `json:"avgStressLevel"`
+	AvgStressLevel   int    `json:"value"`
 	MaxStressLevel   int    `json:"maxStressLevel"`
 	StressDuration   int    `json:"stressDuration"`
 	RestDuration     int    `json:"restDuration"`
@@ -322,8 +322,8 @@ type BodyBatteryEvent struct {
 type WeeklyIMStat struct {
 	CalendarDate             string `json:"calendarDate"`
 	WeeklyGoal               int    `json:"weeklyGoal"`
-	ModerateIntensityMinutes int    `json:"moderateIntensityMinutes"`
-	VigorousIntensityMinutes int    `json:"vigorousIntensityMinutes"`
+	ModerateIntensityMinutes int    `json:"moderateValue"`
+	VigorousIntensityMinutes int    `json:"vigorousValue"`
 }
 
 // StepsData returns intraday step data in 15-minute intervals.

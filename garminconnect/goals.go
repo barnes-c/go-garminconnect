@@ -28,7 +28,7 @@ type Badge struct {
 	BadgeName            string `json:"badgeName"`
 	BadgeKey             string `json:"badgeKey"`
 	BadgeCategoryTypeKey string `json:"badgeCategoryTypeKey"`
-	EarnedDate           string `json:"earnedDate"`
+	EarnedDate           string `json:"badgeEarnedDate"`
 	BadgePoints          int    `json:"badgePoints"`
 }
 

@@ -34,7 +34,7 @@ type Activity struct {
 	EndLatitude                           *float64     `json:"endLatitude"`
 	EndLongitude                          *float64     `json:"endLongitude"`
 	Steps                                 int64        `json:"steps"`
-	TrainingEffect                        float64      `json:"trainingEffect"`
+	TrainingEffect                        float64      `json:"aerobicTrainingEffect"`
 	AnaerobicTrainingEffect               float64      `json:"anaerobicTrainingEffect"`
 	AerobicTrainingEffectMessage          string       `json:"aerobicTrainingEffectMessage"`
 	AverageRunningCadenceInStepsPerMinute float64      `json:"averageRunningCadenceInStepsPerMinute"`
@@ -61,7 +61,7 @@ type PersonalRecord struct {
 	ActivityID     int64   `json:"activityId"`
 	ActivityName   string  `json:"activityName"`
 	ActivityType   string  `json:"activityType"`
-	StartTimeGMT   string  `json:"startTimeGMT"`
+	StartTimeGMT   string  `json:"prStartTimeGmtFormatted"`
 	PrStartTimeGmt int64   `json:"prStartTimeGmt"` // epoch milliseconds
 	Value          float64 `json:"value"`
 	PrTypeLabelKey string  `json:"prTypeLabelKey"`

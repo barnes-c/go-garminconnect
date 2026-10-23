@@ -276,10 +276,10 @@ func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, o
 	return json.NewDecoder(resp.Body).Decode(out)
 }
 
-// doRequest executes a non-GET HTTP request against the Garmin Connect API.
 // plainText is a request body sent as text/plain instead of JSON.
 type plainText string
 
+// doRequest executes a non-GET HTTP request against the Garmin Connect API.
 func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any, out any) error {
 	var data []byte
 	contentType := "application/json"

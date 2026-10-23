@@ -15,12 +15,12 @@ type TrainingReadiness struct {
 	UserProfilePK     int     `json:"userProfilePK"`
 	CalendarDate      string  `json:"calendarDate"`
 	Score             int     `json:"score"`
-	ScoreQualifier    string  `json:"scoreQualifier"`
+	ScoreQualifier    string  `json:"level"`
 	SleepScore        int     `json:"sleepScore"`
 	RecoveryTime      int     `json:"recoveryTime"` // minutes
 	AcuteLoad         float64 `json:"acuteLoad"`
 	TrainingLoad      float64 `json:"trainingLoad"`
-	SleepHistoryScore int     `json:"sleepHistoryScore"`
+	SleepHistoryScore int     `json:"sleepHistoryFactorPercent"`
 	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
 	FeedbackPhrase    string  `json:"feedbackPhrase"`
 }
