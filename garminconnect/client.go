@@ -288,6 +288,9 @@ func (c *Client) doRequest(ctx context.Context, method, rawURL string, body any,
 	case plainText:
 		data = []byte(b)
 		contentType = "text/plain"
+	case url.Values:
+		data = []byte(b.Encode())
+		contentType = "application/x-www-form-urlencoded"
 	default:
 		var err error
 		data, err = json.Marshal(body)
