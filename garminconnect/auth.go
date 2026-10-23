@@ -78,7 +78,7 @@ func (c *Client) Login(ctx context.Context, username, password string) error {
 // resuming the cached token.
 func (c *Client) Logout() error {
 	c.setToken(nil)
-	c.displayName = ""
+	c.setDisplayName("")
 	if c.tokenFile == "" {
 		return nil
 	}
@@ -89,6 +89,8 @@ func (c *Client) Logout() error {
 }
 
 func (c *Client) ensureToken(ctx context.Context, username, password string) error {
+	c.refreshMu.Lock()
+	defer c.refreshMu.Unlock()
 	if c.currentToken().valid() {
 		return nil
 	}
@@ -309,6 +311,9 @@ func (c *Client) exchangeTicket(ctx context.Context, ticket, serviceURL string) 
 		}, clientID)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("%s: %w", clientID, err))
+			if ctx.Err() != nil {
+				break
+			}
 			continue
 		}
 		tok.ClientID = clientID
