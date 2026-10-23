@@ -12,6 +12,7 @@
 //   - Request-URL dates after 2026-01-01 -> 2026-01-01
 //   - Emails -> test@example.com
 //   - Every free-text object value and string array element in a body -> "TEST"
+//   - A text/plain request body -> "TEST"
 //     (except dates, UUIDs and the "testuser"/"Test User" placeholders)
 //   - Every numeric body value -> 1 (1.0 for floats), except identifier/
 //     structural fields (*Id, *Pk, *Count, *Version, ...) unless the value looks
@@ -87,7 +88,13 @@ func Interaction(i *cassette.Interaction, displayName string) {
 	}
 	i.Response.Duration = 100 * time.Millisecond
 	i.Request.URL = URL(i.Request.URL, displayName)
-	i.Request.Body = Body(i.Request.Body, displayName)
+	// Plain-text bodies (e.g. a workout copy's new name) are free text that the
+	// JSON scrubbers can't see into.
+	if i.Request.Body != "" && strings.HasPrefix(i.Request.Headers.Get("Content-Type"), "text/plain") {
+		i.Request.Body = "TEST"
+	} else {
+		i.Request.Body = Body(i.Request.Body, displayName)
+	}
 	i.Response.Body = Body(i.Response.Body, displayName)
 	// Form just duplicates the URL query (and held PII like userProfilePk).
 	// It is unused for matching, so drop it (the field is omitempty).

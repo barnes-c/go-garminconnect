@@ -63,7 +63,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Heart rate**       | Intraday and resting heart rate                                                                                                                              |
 | **Sleep**            | Sleep stages, sleep statistics, and HRV (daily and range)                                                                                                                      |
 | **Activities**       | Listing, detail, splits, HR/power zones, exercise sets, weather, personal records, manual creation, edit/delete, and download & upload                                        |
-| **Workouts**         | Saved workouts, scheduling, and download & upload                                                                                                            |
+| **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and download & upload                                                                                                            |
 | **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
 | **Body composition** | Weigh-ins and body composition history                                                                                                                       |
 | **Goals**            | Goals, badges, and challenges                                                                                                                                |

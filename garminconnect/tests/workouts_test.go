@@ -1,6 +1,7 @@
 package garminconnect_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -43,4 +44,55 @@ func TestScheduledWorkouts(t *testing.T) {
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotNil(t, sw)
+}
+
+// TestWorkoutLifecycle exercises every workout write against throwaway
+// workouts, deleting them at the end so recording leaves the account unchanged.
+func TestWorkoutLifecycle(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	running := map[string]any{"sportTypeId": 1, "sportTypeKey": "running"}
+	created, err := c.CreateWorkout(ctx, map[string]any{
+		"workoutName": "go-garminconnect workout test",
+		"sportType":   running,
+		"workoutSegments": []any{map[string]any{
+			"segmentOrder": 1,
+			"sportType":    running,
+			"workoutSteps": []any{map[string]any{
+				"type":              "ExecutableStepDTO",
+				"stepOrder":         1,
+				"stepType":          map[string]any{"stepTypeId": 3, "stepTypeKey": "interval"},
+				"endCondition":      map[string]any{"conditionTypeId": 2, "conditionTypeKey": "time"},
+				"endConditionValue": 600,
+				"targetType":        map[string]any{"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target"},
+			}},
+		}},
+	})
+	require.NoError(t, err)
+	var id int64
+	require.NoError(t, json.Unmarshal(created["workoutId"], &id))
+	require.NotZero(t, id)
+
+	w, err := c.Workout(ctx, id)
+	require.NoError(t, err)
+	w["workoutName"] = json.RawMessage(`"go-garminconnect workout test (renamed)"`)
+	require.NoError(t, c.UpdateWorkout(ctx, id, w))
+
+	cp, err := c.CopyWorkout(ctx, id, "go-garminconnect workout copy")
+	require.NoError(t, err)
+	require.NotZero(t, cp.WorkoutID)
+	assert.NotEmpty(t, cp.WorkoutName)
+
+	sched, err := c.ScheduleWorkout(ctx, id, "2026-01-05")
+	require.NoError(t, err)
+	var schedID int64
+	require.NoError(t, json.Unmarshal(sched["workoutScheduleId"], &schedID))
+	require.NotZero(t, schedID)
+	require.NoError(t, c.RescheduleWorkout(ctx, schedID, "2026-01-06"))
+	require.NoError(t, c.UnscheduleWorkout(ctx, schedID))
+
+	require.NoError(t, c.DeleteWorkout(ctx, cp.WorkoutID))
+	require.NoError(t, c.DeleteWorkout(ctx, id))
 }
