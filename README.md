@@ -13,7 +13,7 @@ Go client library for the Garmin Connect API.
 go get github.com/barnes-c/go-garminconnect
 ```
 
-Requires Go 1.24+.
+Requires Go 1.26+.
 
 ## Quick start
 

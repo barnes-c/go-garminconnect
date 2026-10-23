@@ -16,9 +16,9 @@ endpoint methods stay thin. Errors: sentinels (`ErrUnauthorized`, `ErrRateLimit`
 
 ## Constraints — do not "fix" these
 
-- The Go floor is **1.24**. `golang.org/x/crypto` and `golang.org/x/sys` are pinned
-  below latest because newer versions require Go 1.25. Don't bulk-upgrade deps;
-  verify floor changes with `GOTOOLCHAIN=go1.24.4 go build ./... && go test ./...`.
+- The Go floor is **1.26** (oldest upstream-supported release). Don't bump it
+  further just because a dep wants newer; verify floor changes with
+  `GOTOOLCHAIN=go1.26.0 go build ./... && go test ./...`.
 - `newUTLSClient` uses a uTLS Android fingerprint to pass Garmin's bot detection.
   A plain `http.Transport` breaks login.
 - `testDate` (2026-01-01, in `activities_test.go`) is baked into cassette URLs.
