@@ -164,6 +164,21 @@ func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, time
 	return out, nil
 }
 
+// DeleteWeighIns removes every weigh-in on the given day and returns how many
+// were deleted.
+func (c *Client) DeleteWeighIns(ctx context.Context, d time.Time) (int, error) {
+	day, err := c.DailyWeighIns(ctx, d)
+	if err != nil {
+		return 0, err
+	}
+	for i, w := range day.DateWeightList {
+		if err := c.DeleteWeighIn(ctx, date(d), w.SamplePK); err != nil {
+			return i, err
+		}
+	}
+	return len(day.DateWeightList), nil
+}
+
 // DeleteWeighIn removes a weigh-in by its primary key and calendar date.
 func (c *Client) DeleteWeighIn(ctx context.Context, cdate string, weightPK int64) error {
 	return c.del(ctx, fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))

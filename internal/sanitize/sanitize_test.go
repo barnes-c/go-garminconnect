@@ -26,7 +26,7 @@ func TestBody_ScrubsPII(t *testing.T) {
 	}
 	for _, want := range []string{`"userProfileId":12345678`, `"deviceId":12345678`, `"fullName":"TEST"`,
 		`"email":"TEST"`, `"contacts":["TEST"]`, `"weight":1.0`, `"heartRate":1`,
-		`"calendarDate":"2026-01-01"`, `"samples":[1.0,1.0]`, `"version":1`, `"typeId":3`,
+		`"calendarDate":"2026-01-01"`, `"samples":[1.0,1.0]`, `"version":12345678`, `"typeId":3`,
 		"ffffffff-ffff-ffff-ffff-ffffffffffff"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("missing %q in: %s", want, out)
@@ -51,6 +51,20 @@ func TestBody_LeakVectors(t *testing.T) {
 		if !strings.Contains(out, want) {
 			t.Errorf("missing %q in: %s", want, out)
 		}
+	}
+}
+
+// TestBody_EpochIDsMatchURL covers record IDs that look like epoch-ms values:
+// they must scrub to the same synthetic ID as in the URL that references them,
+// or a recorded fetch-then-delete flow can't replay.
+func TestBody_EpochIDsMatchURL(t *testing.T) {
+	out := sanitize.Body(`{"version":1792789316916,"samplePk":1792789358063,"month":1792789358063}`, "")
+	want := `{"version":12345678,"samplePk":12345678,"month":1}`
+	if out != want {
+		t.Errorf("got %s, want %s", out, want)
+	}
+	if got := sanitize.URL("https://x/bloodpressure/2026-01-01/1792789316916", ""); !strings.HasSuffix(got, "/12345678") {
+		t.Errorf("URL ID not synthesized: %s", got)
 	}
 }
 

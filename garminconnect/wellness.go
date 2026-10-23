@@ -144,18 +144,38 @@ type StepEntry struct {
 
 // BloodPressureSnapshot is a single blood pressure reading.
 type BloodPressureSnapshot struct {
-	TimestampGMT   string `json:"measurementTimestampGMT"`
-	TimestampLocal string `json:"measurementTimestampLocal"`
-	Systolic       int    `json:"systolic"`
-	Diastolic      int    `json:"diastolic"`
-	Pulse          int    `json:"pulse"`
-	Notes          string `json:"notes"`
+	Version          int64  `json:"version"` // identifies the reading for delete/update
+	TimestampGMT     string `json:"measurementTimestampGMT"`
+	TimestampLocal   string `json:"measurementTimestampLocal"`
+	Systolic         int    `json:"systolic"`
+	Diastolic        int    `json:"diastolic"`
+	Pulse            int    `json:"pulse"`
+	MultiMeasurement bool   `json:"multiMeasurement"`
+	Notes            string `json:"notes"`
+	SourceType       string `json:"sourceType"`
+	Category         string `json:"category"`
+	CategoryName     string `json:"categoryName"`
 }
 
-// BloodPressureSummary wraps blood pressure readings and aggregate stats.
+// BloodPressureDay groups one day's blood pressure readings with their range.
+type BloodPressureDay struct {
+	StartDate         string                  `json:"startDate"`
+	EndDate           string                  `json:"endDate"`
+	HighSystolic      int                     `json:"highSystolic"`
+	HighDiastolic     int                     `json:"highDiastolic"`
+	LowSystolic       int                     `json:"lowSystolic"`
+	LowDiastolic      int                     `json:"lowDiastolic"`
+	NumOfMeasurements int                     `json:"numOfMeasurements"`
+	Category          string                  `json:"category"`
+	CategoryName      string                  `json:"categoryName"`
+	Measurements      []BloodPressureSnapshot `json:"measurements"`
+}
+
+// BloodPressureSummary holds blood pressure readings grouped by day.
 type BloodPressureSummary struct {
-	UserProfilePK int                     `json:"userProfilePK"`
-	Measurements  []BloodPressureSnapshot `json:"measurementSummaries"`
+	From  string             `json:"from"`
+	Until string             `json:"until"`
+	Days  []BloodPressureDay `json:"measurementSummaries"`
 }
 
 // UserSummary returns the daily wellness summary for the given date.
@@ -395,24 +415,36 @@ func (c *Client) AddHydration(ctx context.Context, valueML float64, timestamp, c
 	return out, nil
 }
 
-// SetBloodPressure records a blood pressure measurement.
-func (c *Client) SetBloodPressure(ctx context.Context, systolic, diastolic, pulse int, timestamp, notes string) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+// SetBloodPressure records a manual blood pressure reading taken at the given
+// time; its location supplies the local time Garmin displays.
+func (c *Client) SetBloodPressure(ctx context.Context, systolic, diastolic, pulse int, at time.Time, notes string) (*BloodPressureSnapshot, error) {
+	const layout = "2006-01-02T15:04:05.00"
 	body := map[string]any{
-		"systolic":                systolic,
-		"diastolic":               diastolic,
-		"pulse":                   pulse,
-		"measurementTimestampGMT": timestamp,
-		"notes":                   notes,
+		"systolic":                  systolic,
+		"diastolic":                 diastolic,
+		"pulse":                     pulse,
+		"measurementTimestampLocal": at.Format(layout),
+		"measurementTimestampGMT":   at.UTC().Format(layout),
+		"sourceType":                "MANUAL",
+		"notes":                     notes,
 	}
+	var out BloodPressureSnapshot
 	if err := c.post(ctx, "/bloodpressure-service/bloodpressure", body, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
+}
+
+// SetBloodPressureNotes changes the note of a reading from BloodPressure.
+// Garmin stores only the note; to correct the values, delete the reading and
+// record it again.
+func (c *Client) SetBloodPressureNotes(ctx context.Context, m BloodPressureSnapshot, notes string) error {
+	m.Notes = notes
+	return c.put(ctx, "/bloodpressure-service/bloodpressure", m, nil)
 }
 
 // DeleteBloodPressure removes a blood pressure reading by its version and date.
-func (c *Client) DeleteBloodPressure(ctx context.Context, cdate string, version int) error {
+func (c *Client) DeleteBloodPressure(ctx context.Context, cdate string, version int64) error {
 	return c.del(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", cdate, version))
 }
 
