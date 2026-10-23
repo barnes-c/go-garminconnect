@@ -219,6 +219,14 @@ func (c *Client) ActivityExerciseSets(ctx context.Context, id int64) (map[string
 	return out, nil
 }
 
+// SetActivityExerciseSets replaces all exercise sets of a strength activity,
+// typically with the map from ActivityExerciseSets after editing its
+// "exerciseSets" array. Garmin validates exercise categories and names and
+// rejects unknown ones with a 400.
+func (c *Client) SetActivityExerciseSets(ctx context.Context, id int64, sets map[string]json.RawMessage) error {
+	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d/exerciseSets", id), sets, nil)
+}
+
 // ActivityWeather returns the weather recorded during an activity.
 func (c *Client) ActivityWeather(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
@@ -357,6 +365,31 @@ func (c *Client) CreateManualActivity(ctx context.Context, a ManualActivity) (in
 		return 0, err
 	}
 	return out.ActivityID, nil
+}
+
+// SetActivityFavorite marks or unmarks the given activity as a favorite.
+func (c *Client) SetActivityFavorite(ctx context.Context, id int64, favorite bool) error {
+	return c.put(ctx, fmt.Sprintf("/activity-service/activity/%d", id), map[string]any{
+		"activityId":  id,
+		"metadataDTO": map[string]any{"favorite": favorite},
+	}, nil)
+}
+
+// FavoriteActivities returns up to limit activities marked as favorite. A
+// newly marked favorite can take a few seconds to show up.
+func (c *Client) FavoriteActivities(ctx context.Context, limit int) ([]Activity, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
+	var out struct {
+		ActivityList []Activity `json:"activityList"`
+	}
+	params := url.Values{"limit": {fmt.Sprintf("%d", limit)}}
+	if err := c.get(ctx, "/activitylist-service/activities/favorite/"+name, params, &out); err != nil {
+		return nil, err
+	}
+	return out.ActivityList, nil
 }
 
 // DeleteActivity permanently deletes the given activity.
