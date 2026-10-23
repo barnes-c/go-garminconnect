@@ -68,6 +68,16 @@ func TestBody_EpochIDsMatchURL(t *testing.T) {
 	}
 }
 
+// TestBody_MeasuredCounts covers sleep counts that are readings, not
+// structure: they must not survive like lapCount does.
+func TestBody_MeasuredCounts(t *testing.T) {
+	out := sanitize.Body(`{"restlessMomentsCount":42,"awakeCount":3,"lapCount":9}`, "")
+	want := `{"restlessMomentsCount":1,"awakeCount":1,"lapCount":9}`
+	if out != want {
+		t.Errorf("got %s, want %s", out, want)
+	}
+}
+
 // TestBody_ArrayStrings covers string elements inside JSON arrays, which the
 // object-value scrub (`:"..."`) does not reach. A real re-record leaked the
 // recording account's userRoles OAuth scope list through this gap.

@@ -11,7 +11,7 @@ func TestHeartRates(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	hr, err := c.HeartRates(t.Context(), testDate)
+	hr, err := c.HeartRates(t.Context(), dataDate(t, "GARMIN_SUMMARY_DATE"))
 	require.NoError(t, err)
 
 	assert.NotEmpty(t, hr.CalendarDate)

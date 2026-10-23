@@ -66,7 +66,7 @@ func TestRespiration(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	r, err := c.Respiration(t.Context(), testDate)
+	r, err := c.Respiration(t.Context(), dataDate(t, "GARMIN_SLEEP_DATE"))
 	require.NoError(t, err)
 
 	if r.TodayAvgWakingRespirationValue == 0 {
@@ -82,7 +82,7 @@ func TestSpO2(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	s, err := c.SpO2(t.Context(), testDate)
+	s, err := c.SpO2(t.Context(), dataDate(t, "GARMIN_SLEEP_DATE"))
 	require.NoError(t, err)
 
 	if s.AverageSpO2 == 0 {
@@ -163,8 +163,10 @@ func TestCaloriesDaily(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
-	start := testDate.AddDate(0, 0, -6)
-	out, err := c.CaloriesDaily(t.Context(), start, testDate)
+	// One day: the sanitizer collapses every recorded date after testDate to
+	// testDate, so a multi-day range would not replay.
+	d := dataDate(t, "GARMIN_SUMMARY_DATE")
+	out, err := c.CaloriesDaily(t.Context(), d, d)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	require.NotEmpty(t, out)

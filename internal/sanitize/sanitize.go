@@ -76,12 +76,15 @@ var (
 	// value under one (e.g. a blood pressure "version", a weigh-in "samplePk")
 	// is an ID the client sends back in a URL, so it must become the same
 	// synthetic ID the URL scrubber uses rather than the metric placeholder.
-	idKeyRE     = regexp.MustCompile(`(?i)(id|pk|version|number)$`)
-	textValueRE = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
-	arrayStrRE  = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
-	dateishRE   = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
-	uuidishRE   = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
-	hexRunRE    = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
+	idKeyRE = regexp.MustCompile(`(?i)(id|pk|version|number)$`)
+	// measuredCounts are *Count fields that are biometric readings, not
+	// structure, so they get the metric placeholder despite preserveKeyRE.
+	measuredCounts = map[string]bool{"awakeCount": true, "restlessMomentsCount": true}
+	textValueRE    = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
+	arrayStrRE     = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
+	dateishRE      = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
+	uuidishRE      = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
+	hexRunRE       = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
 )
 
 // Interaction scrubs a recorded interaction in place. displayName is the real
@@ -183,7 +186,7 @@ func neutralizeMetrics(s string) string {
 	s = keyNumRE.ReplaceAllStringFunc(s, func(m string) string {
 		sm := keyNumRE.FindStringSubmatch(m)
 		key, num := sm[1], sm[2]
-		if preserveKeyRE.MatchString(key) {
+		if preserveKeyRE.MatchString(key) && !measuredCounts[key] {
 			if !epochMsRE.MatchString(num) {
 				return m
 			}
