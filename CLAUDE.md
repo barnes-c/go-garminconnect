@@ -37,21 +37,41 @@ live, no credentials needed.
   `internal/sanitize`): every measurement becomes `1`/`1.0`, every free-text string
   `"TEST"`, IDs synthesized. So tests assert structure and non-zero/non-empty —
   never specific values. A raw cassette never touches disk; never commit one.
+  Text/plain and file bodies (multipart uploads, GPX/FIT/CSV/ZIP downloads) become
+  `"TEST"` entirely — assert downloads are non-empty, nothing more.
+- Recording uses `ModeRecordOnly` and paces live requests 1s apart; replay serves
+  each recorded interaction once, in order, so repeated identical requests are fine.
+- URL dates after 2026-01-01 are rewritten to 2026-01-01, so every date in a URL
+  must be on or before `testDate`. Use `dataDate(t, "GARMIN_SUMMARY_DATE")` (or
+  `GARMIN_SLEEP_DATE`) for data-dependent days, and query a single day for range
+  endpoints — a multi-day range collapses and won't replay.
+- `newServerClient` (httptest) tests are for client behaviour (auth, errors,
+  request encoding). Don't use them to cover an endpoint: several mocks asserted a
+  wrong path or body and passed for months. Record it instead.
 
 ## Adding an API method
 
-1. Method in `garminconnect/<area>.go`; test in `garminconnect/tests/<area>_test.go`
-   using `newVCRClient(t)` (the recorder auto-discovers it).
-2. Record: `GARMIN_EMAIL=… GARMIN_PASSWORD=… go run ./internal/record --missing`
-   (a cached token in `.garmin_token.json` also works, no credentials needed).
-3. **Inspect the new cassette** for PII the sanitizer doesn't cover yet (new ID
+1. **Probe the endpoint live first** (curl with a token from `internal/gettoken`).
+   python-garminconnect is the best reference but its paths and bodies are often
+   wrong or stale; Garmin's 400 messages usually name the missing field.
+2. Method in `garminconnect/<area>.go`; test in `garminconnect/tests/<area>_test.go`
+   using `newVCRClient(t)` (the recorder auto-discovers it). Writes get one
+   lifecycle test that creates, uses and deletes its own data, so recording leaves
+   the account unchanged.
+3. Record: `go run ./internal/record --missing` with a cached token in
+   `.garmin_token.json` (or `GARMIN_EMAIL`/`GARMIN_PASSWORD`). Without `--missing` it
+   deletes and re-records **every** cassette. To record one test:
+   `GARMIN_TOKEN=… GARMIN_DISPLAY_NAME=… go test ./garminconnect/tests/ -run '^TestX$'`.
+   Record writes against a throwaway account, never a real one.
+4. **Inspect the new cassette** for PII the sanitizer doesn't cover yet (new ID
    fields, biometrics, location, schedule times). If anything survives, extend
-   `internal/sanitize` + its tests and re-record.
-4. If it covers something new, mention it in its area's row of the README API table.
+   `internal/sanitize` + its tests, then `go run ./internal/record --sanitize`
+   re-applies it to every cassette offline.
+5. If it covers something new, mention it in its area's row of the README API table.
 
-If a test replays against `testDate` and that day has no data on the recording
-account, set `GARMIN_SUMMARY_DATE` / `GARMIN_SLEEP_DATE` to a recent day with data;
-the sanitizer rewrites it back to 2026-01-01 in the cassette URL.
+Garmin rate-limits bursts with 429s. course-service also rejects deleting a course
+right after creating it; tests that must wait sleep only while recording
+(`os.Getenv("GARMIN_TOKEN") != ""`), so replay stays fast.
 
 ## Tools
 
