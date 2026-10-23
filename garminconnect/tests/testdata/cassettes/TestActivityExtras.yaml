@@ -1,0 +1,164 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: TEST
+        headers:
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - multipart/form-data; boundary=08864fce84f92a692f702d3b93ece70af92ed066430819b3518d34e81075
+        url: https://connectapi.garmin.com/upload-service/upload
+        method: POST
+      response:
+        body: '{"detailedImportResult":{"uploadId":12345678,"uploadUuid":{"uuid":"ffffffff-ffff-ffff-ffff-ffffffffffff"},"owner":1,"fileSize":1,"processingTime":1,"creationDate":"2026-01-01 00:00:00 GMT","ipAddress":"TEST","fileName":"TEST","report":null,"successes":[],"failures":[]}}'
+        headers:
+            Content-Length:
+                - "303"
+            Content-Type:
+                - application/json
+            Location:
+                - https://connectapi.garmin.com/activity-service/activity/status/1792795969072/d161f1809a5845b3a5abbf28eec909cf
+            Location-In-Milliseconds:
+                - "1000"
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=4,cfOrigin;dur=385
+        status: 202 Accepted
+        code: 202
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activitylist-service/activities/search/activities?limit=1&start=0
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"activityName":"TEST","startTimeLocal":"2026-01-01 00:00:00","startTimeGMT":"2026-01-01 00:00:00","activityType":{"typeId":4,"typeKey":"TEST","parentTypeId":17,"isHidden":false,"restricted":false,"trimmable":true},"eventType":{"typeId":9,"typeKey":"TEST","sortOrder":10},"isFavorite":false,"isPR":false,"isAutoCalcCalories":false,"isParent":false,"distance":1.0,"duration":1.0,"elapsedDuration":1.0,"movingDuration":1.0,"elevationGain":1.0,"elevationLoss":1.0,"averageSpeed":1.0,"maxSpeed":1.0,"startLatitude":1.0,"startLongitude":1.0,"hasPolyline":true,"hasImages":false,"ownerId":12345678,"ownerDisplayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","ownerFullName":"TEST","ownerProfileImageUrlSmall":"TEST","ownerProfileImageUrlMedium":"TEST","ownerProfileImageUrlLarge":"TEST","userRoles":["TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST","TEST"],"privacy":{"typeId":2,"typeKey":"TEST"},"userPro":false,"hasVideo":false,"isPurposeful":false,"timeZoneId":124,"beginTimestamp":1,"sportTypeId":0,"deviceId":0,"minElevation":1.0,"maxElevation":1.0,"avgElevation":1.0,"isElevationCorrected":true,"isDecoDive":false,"summarizedDiveInfo":{"summarizedDiveGases":[]},"maxVerticalSpeed":1.0,"manufacturer":"","locationName":"TEST","lapCount":1,"endLatitude":1.0,"endLongitude":1.0,"isAtpActivity":false,"minActivityLapDuration":1.0,"splitSummaries":[],"hasSplits":false,"hasIntensityIntervals":false,"isManualActivity":false,"hasHeatMap":false,"endTimeGMT":"2026-01-01 00:00:00","qualifyingDive":false,"activityUUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","purposeful":false,"manualActivity":false,"parent":false,"favorite":false,"decoDive":false,"pr":false,"elevationCorrected":true,"atpActivity":false,"autoCalcCalories":false}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678/laps
+        method: GET
+      response:
+        body: '{"activityId":12345678,"lapDTOs":[{"startTimeGMT":"2026-01-01T00:00:00","startLatitude":1.0,"startLongitude":1.0,"distance":1.0,"duration":1.0,"movingDuration":1.0,"elapsedDuration":1.0,"elevationGain":1.0,"elevationLoss":1.0,"maxElevation":1.0,"minElevation":1.0,"averageSpeed":1.0,"averageMovingSpeed":1.0,"maxSpeed":1.0,"endLatitude":1.0,"endLongitude":1.0,"maxVerticalSpeed":1.0,"lapIndex":1,"lengthDTOs":[],"connectIQMeasurement":[]}],"eventDTOs":[]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/polyline/12345678
+        method: GET
+      response:
+        body: '{"gPolyline":{"numberOfPoints":1,"activityId":12345678,"encodedSamples":"TEST","encodedLevels":"TEST","maxLat":1.0,"maxLon":1.0,"minLat":1.0,"minLon":1.0,"startLat":1.0,"startLon":1.0,"endLat":1.0,"endLon":1.0}}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/eventTypes
+        method: GET
+      response:
+        body: '[{"typeId":1,"typeKey":"TEST","sortOrder":5},{"typeId":2,"typeKey":"TEST","sortOrder":4},{"typeId":3,"typeKey":"TEST","sortOrder":6},{"typeId":4,"typeKey":"TEST","sortOrder":7},{"typeId":5,"typeKey":"TEST","sortOrder":8},{"typeId":6,"typeKey":"TEST","sortOrder":9},{"typeId":7,"typeKey":"TEST","sortOrder":2},{"typeId":8,"typeKey":"TEST","sortOrder":3},{"typeId":9,"typeKey":"TEST","sortOrder":10}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessstats-service/activity/availableMetrics
+        method: GET
+      response:
+        body: '{"other":["TEST","TEST","TEST","TEST","TEST","TEST","TEST"]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessstats-service/activity?aggregation=lifetime&endDate=2026-01-01&groupByParentActivityType=false&metric=distance&metric=duration&startDate=2025-12-25
+        method: GET
+      response:
+        body: '[{"date":"2026-01-01","countOfActivities":1,"stats":{"all":{"duration":{"count":1,"min":1.0,"max":1.0,"avg":1.0,"sum":1.0},"distance":{"count":1,"min":1.0,"max":1.0,"avg":1.0,"sum":1.0}}}}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 7
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessstats-service/activity/all?endDate=2026-01-01&metric=distance&metric=duration&startDate=2025-12-25
+        method: GET
+      response:
+        body: '[{"activityId":12345678,"duration":1.0,"distance":1.0,"startLocal":"2026-01-01T00:00:00"}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/activity-service/activity/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
