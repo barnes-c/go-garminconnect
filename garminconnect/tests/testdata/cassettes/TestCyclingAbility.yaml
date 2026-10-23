@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/metrics-service/metrics/cycling-ability/latest?calendarDate=2026-01-01
+        method: GET
+      response:
+        body: '{"userProfilePk":12345678,"deviceId":12345678,"calendarDate":"2026-01-01","timestamp":"2026-01-01T00:00:00","primaryTrainingDevice":false,"aerobicEndurance":1,"aerobicCapacity":1,"anaerobicCapacity":1,"profileType":"TEST","profileTypeFeedback":"TEST","aerobicEnduranceFeedback":"TEST","aerobicCapacityFeedback":"TEST","anaerobicCapacityFeedback":"TEST"}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

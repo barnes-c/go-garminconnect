@@ -66,7 +66,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and FIT download                                                                                                            |
 | **Calendar**         | Month and week views, events (create, edit, move, delete, primary event), and notes                                                          |
 | **Courses**          | Saved and favorite courses, import from GPX/TCX/FIT, convert from an activity, edit, delete, and GPX/FIT download                            |
-| **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
+| **Training**         | Readiness & status (incl. history), heat/altitude acclimation, cycling ability, power curve, current biometrics, fitness-age history, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
 | **Training plans**   | Search the plan catalog, plan tasks, your scheduled and active plans, schedule and delete                                                    |
 | **Body composition** | Weigh-ins (add, delete, clear a day) and body composition history                                                                                                                       |
 | **Goals**            | Goals, badges, and challenges                                                                                                                                |

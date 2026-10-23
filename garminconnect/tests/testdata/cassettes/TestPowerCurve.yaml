@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/fitnessstats-service/powerCurve?endDate=2026-01-01&sport=cycling&startDate=2026-01-01
+        method: GET
+      response:
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","entries":[{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":1,"activityId":12345678,"activityDate":"2026-01-01"},{"duration":1,"power":null,"activityId":null,"activityDate":null},{"duration":1,"power":null,"activityId":null,"activityDate":null}]}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
