@@ -63,3 +63,49 @@ func TestDeviceSolarData(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, out)
 }
+
+// The tests below need registered devices and sensors, so they are recorded
+// against a real account.
+
+func TestHistoricalDevices(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.HistoricalDevices(t.Context())
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotZero(t, out[0].DeviceID)
+}
+
+func TestSensors(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.Sensors(t.Context())
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].SensorType)
+}
+
+func TestUserDevice(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	devices, err := c.Devices(ctx)
+	require.NoError(t, err)
+	require.NotEmpty(t, devices)
+	out, err := c.UserDevice(ctx, devices[0].DeviceID)
+	require.NoError(t, err)
+	assert.NotZero(t, out.LastUploadTimestamp)
+}
+
+func TestDeviceMessages(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.DeviceMessages(t.Context())
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].MessageType)
+}

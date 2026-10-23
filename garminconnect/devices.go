@@ -192,3 +192,74 @@ func (c *Client) DeviceSolarData(ctx context.Context, deviceID int64, start, end
 	}
 	return &wrapper.DeviceSolarInput, nil
 }
+
+// HistoricalDevices returns devices the user no longer uses.
+func (c *Client) HistoricalDevices(ctx context.Context) ([]Device, error) {
+	var out []Device
+	if err := c.get(ctx, "/device-service/deviceregistration/devices/historical", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Sensor is a sensor paired with the user's devices (heart rate strap, power
+// meter, ...).
+type Sensor struct {
+	DeviceName      string `json:"deviceName"`
+	SensorType      string `json:"sensorType"`
+	Manufacturer    string `json:"manufacturer"`
+	ProductID       int    `json:"productId"`
+	SoftwareVersion string `json:"softwareVersion"`
+	BatteryStatus   string `json:"batteryStatus"`
+	PrioritySensor  bool   `json:"prioritySensor"`
+	LastConnected   string `json:"lastConnected"`
+}
+
+// Sensors returns the sensors paired with the user's devices.
+func (c *Client) Sensors(ctx context.Context) ([]Sensor, error) {
+	var out []Sensor
+	if err := c.get(ctx, "/device-service/sensors", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UserDevice is when a device last exchanged data with Garmin Connect.
+type UserDevice struct {
+	DeviceID              int64 `json:"deviceId"`
+	ApplicationVersionID  int64 `json:"applicationVersionId"`
+	LastUploadTimestamp   int64 `json:"lastUploadTimestamp"`   // unix ms
+	LastDownloadTimestamp int64 `json:"lastDownloadTimestamp"` // unix ms
+}
+
+// UserDevice returns the sync times of a device.
+func (c *Client) UserDevice(ctx context.Context, deviceID int64) (*UserDevice, error) {
+	var out UserDevice
+	if err := c.get(ctx, fmt.Sprintf("/device-service/deviceservice/user-device/%d", deviceID), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// DeviceMessage is a message queued for a device, such as a firmware update
+// or a sent workout.
+type DeviceMessage struct {
+	MessageID        int64  `json:"messageId"`
+	MessageType      string `json:"messageType"`
+	MessageStatus    string `json:"messageStatus"`
+	DeviceID         int64  `json:"deviceId"`
+	DeviceName       string `json:"deviceName"`
+	FirmwareVersion  string `json:"firmwareVersion"`
+	CreatedTimeStamp int64  `json:"createdTimeStamp"` // unix ms
+}
+
+// DeviceMessages returns the messages queued for the user's devices.
+func (c *Client) DeviceMessages(ctx context.Context) ([]DeviceMessage, error) {
+	var out struct {
+		Messages []DeviceMessage `json:"messages"`
+	}
+	if err := c.get(ctx, "/device-service/devicemessage/messages", nil, &out); err != nil {
+		return nil, err
+	}
+	return out.Messages, nil
+}

@@ -78,11 +78,12 @@ var (
 	// synthetic ID the URL scrubber uses rather than the metric placeholder.
 	idKeyRE = regexp.MustCompile(`(?i)(id|pk|version|number)$`)
 	// alwaysScrub are numeric fields preserveKeyRE would keep that still carry
-	// PII, so they always get the metric placeholder: biometric *Counts, and
-	// time zones, which locate the user.
+	// PII, so they always get the metric placeholder: biometric *Counts, time
+	// zones, which locate the user, and device serial numbers.
 	alwaysScrub = map[string]bool{
 		"awakeCount": true, "restlessMomentsCount": true,
 		"timezoneOffset": true, "timeZoneId": true,
+		"serialNumber": true,
 	}
 	textValueRE = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
 	arrayStrRE  = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
