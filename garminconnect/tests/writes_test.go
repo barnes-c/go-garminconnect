@@ -38,37 +38,6 @@ func TestDeleteActivity(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestAddWeighIn(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method)
-		assert.Equal(t, "/weight-service/user-weight", r.URL.Path)
-		var body map[string]any
-		assert.NoError(t, json.NewDecoder(r.Body).Decode(&body))
-		assert.InDelta(t, 75.5, body["value"], 0.001)
-		assert.Equal(t, "kg", body["unitKey"])
-		assert.Equal(t, "2026-05-10T08:00:00Z", body["dateTimestamp"])
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]any{"detailedWeightInResult": map[string]any{}})
-	}))
-	c := newServerClient(t, srv)
-
-	out, err := c.AddWeighIn(t.Context(), 75.5, "kg", "2026-05-10T08:00:00Z")
-	require.NoError(t, err)
-	assert.NotNil(t, out)
-}
-
-func TestDeleteWeighIn(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodDelete, r.Method)
-		assert.Equal(t, "/weight-service/weight/2026-05-10/byversion/12345", r.URL.Path)
-		w.WriteHeader(http.StatusNoContent)
-	}))
-	c := newServerClient(t, srv)
-
-	err := c.DeleteWeighIn(t.Context(), "2026-05-10", 12345)
-	require.NoError(t, err)
-}
-
 func TestDeleteWorkout(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method)

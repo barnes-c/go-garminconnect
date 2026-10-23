@@ -16,7 +16,7 @@
 //     (except dates, UUIDs and the "testuser"/"Test User" placeholders)
 //   - Every numeric body value -> 1 (1.0 for floats), except identifier/
 //     structural fields (*Id, *Pk, *Count, *Version, ...) unless the value looks
-//     like an epoch-ms timestamp
+//     like an epoch-ms timestamp (then ID-like fields -> 12345678, others -> 1)
 //   - Volatile response headers stripped; duration -> 100ms
 package sanitize
 
@@ -71,11 +71,16 @@ var (
 	arrayNumRE    = regexp.MustCompile(`[\[,]-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?`)
 	preserveKeyRE = regexp.MustCompile(`(?i)(id|pk|count|index|version|number|order|sequence|priority|category|month|year|offset|zoneid|typekey)$`)
 	epochMsRE     = regexp.MustCompile(`^1[5-9]\d{11}$`)
-	textValueRE   = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
-	arrayStrRE    = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
-	dateishRE     = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
-	uuidishRE     = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
-	hexRunRE      = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
+	// idKeyRE marks the preserved keys that reference a record. An epoch-ms
+	// value under one (e.g. a blood pressure "version", a weigh-in "samplePk")
+	// is an ID the client sends back in a URL, so it must become the same
+	// synthetic ID the URL scrubber uses rather than the metric placeholder.
+	idKeyRE     = regexp.MustCompile(`(?i)(id|pk|version|number)$`)
+	textValueRE = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)
+	arrayStrRE  = regexp.MustCompile(`[\[,]"((?:[^"\\]|\\.)*)"`)
+	dateishRE   = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
+	uuidishRE   = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
+	hexRunRE    = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
 )
 
 // Interaction scrubs a recorded interaction in place. displayName is the real
@@ -166,8 +171,13 @@ func neutralizeMetrics(s string) string {
 	s = keyNumRE.ReplaceAllStringFunc(s, func(m string) string {
 		sm := keyNumRE.FindStringSubmatch(m)
 		key, num := sm[1], sm[2]
-		if preserveKeyRE.MatchString(key) && !epochMsRE.MatchString(num) {
-			return m
+		if preserveKeyRE.MatchString(key) {
+			if !epochMsRE.MatchString(num) {
+				return m
+			}
+			if idKeyRE.MatchString(key) {
+				return `"` + key + `":` + synthID
+			}
 		}
 		return `"` + key + `":` + placeholder(num)
 	})
