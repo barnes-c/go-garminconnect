@@ -183,3 +183,56 @@ func (c *Client) DeleteWeighIns(ctx context.Context, d time.Time) (int, error) {
 func (c *Client) DeleteWeighIn(ctx context.Context, cdate string, weightPK int64) error {
 	return c.del(ctx, fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))
 }
+
+// FirstWeight returns the user's earliest weigh-in.
+func (c *Client) FirstWeight(ctx context.Context) (*LatestWeightEntry, error) {
+	var out LatestWeightEntry
+	if err := c.get(ctx, "/weight-service/weight/first", nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// DailyLastWeights returns the last weigh-in of each day between start and
+// end.
+func (c *Client) DailyLastWeights(ctx context.Context, start, end time.Time) ([]LatestWeightEntry, error) {
+	params := url.Values{"startDate": {date(start)}, "endDate": {date(end)}}
+	var out []LatestWeightEntry
+	if err := c.get(ctx, "/weight-service/weight/daily/last", params, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WeightAverage is an average weight over a period.
+type WeightAverage struct {
+	From   int64   `json:"from"`  // unix ms
+	Until  int64   `json:"until"` // unix ms
+	Weight float64 `json:"weight"`
+}
+
+// WeeklyWeight is a year of weekly weight summaries.
+type WeeklyWeight struct {
+	Weeks []struct {
+		StartDate     string        `json:"startDate"`
+		EndDate       string        `json:"endDate"`
+		MinWeight     float64       `json:"minWeight"` // grams
+		MaxWeight     float64       `json:"maxWeight"`
+		AverageWeight WeightAverage `json:"averageWeight"`
+	} `json:"weeklyWeightSummaries"`
+	Average WeightAverage `json:"weightAverageDTO"`
+}
+
+// weeklyRangeStart is the start Garmin requires for a weekly range ending at
+// end: exactly 52 weeks, counting both ends.
+func weeklyRangeStart(end time.Time) time.Time { return end.AddDate(0, 0, -363) }
+
+// WeeklyWeight returns weekly weight summaries for the 52 weeks ending at end.
+func (c *Client) WeeklyWeight(ctx context.Context, end time.Time) (*WeeklyWeight, error) {
+	var out WeeklyWeight
+	path := fmt.Sprintf("/weight-service/weight/weeklyRange/%s/%s", date(weeklyRangeStart(end)), date(end))
+	if err := c.get(ctx, path, nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}

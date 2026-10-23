@@ -414,6 +414,27 @@ func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time
 	return out, nil
 }
 
+// DailyLastBloodPressure returns the last blood pressure reading of each day
+// between start and end.
+func (c *Client) DailyLastBloodPressure(ctx context.Context, start, end time.Time) ([]BloodPressureSnapshot, error) {
+	var out []BloodPressureSnapshot
+	if err := c.get(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/daily/last/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WeeklyBloodPressure returns blood pressure grouped by week (in Days, one
+// entry per week) for the 52 weeks ending at end.
+func (c *Client) WeeklyBloodPressure(ctx context.Context, end time.Time) (*BloodPressureSummary, error) {
+	var out BloodPressureSummary
+	path := fmt.Sprintf("/bloodpressure-service/bloodpressure/weeklyRange/%s/%s", date(weeklyRangeStart(end)), date(end))
+	if err := c.get(ctx, path, nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 // SetBloodPressure records a manual blood pressure reading taken at the given
 // time; its location supplies the local time Garmin displays.
 func (c *Client) SetBloodPressure(ctx context.Context, systolic, diastolic, pulse int, at time.Time, notes string) (*BloodPressureSnapshot, error) {
