@@ -20,6 +20,8 @@ func TestActivities(t *testing.T) {
 
 	acts, err := c.Activities(t.Context(), 0, 2)
 	require.NoError(t, err)
+	require.NotEmpty(t, acts)
+	assert.NotZero(t, acts[0].TrainingEffect)
 	require.Len(t, acts, 2)
 
 	run := acts[0]
@@ -172,6 +174,8 @@ func TestPersonalRecords(t *testing.T) {
 
 	prs, err := c.PersonalRecords(t.Context())
 	require.NoError(t, err)
+	require.NotEmpty(t, prs)
+	assert.NotEmpty(t, prs[0].StartTimeGMT)
 	assert.NotEmpty(t, prs)
 }
 

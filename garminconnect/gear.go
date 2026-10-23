@@ -9,16 +9,16 @@ import (
 
 // Gear represents a piece of equipment tracked in Garmin Connect.
 type Gear struct {
-	GearPK          int64  `json:"gearPk"`
-	UUID            string `json:"uuid"`
-	GearTypeName    string `json:"gearTypeName"`
-	DisplayName     string `json:"displayName"`
-	CustomMakeModel string `json:"customMakeModel"`
-	MaxMeters       int    `json:"maxMeters"`
-	NotifiedMeters  int    `json:"notifiedAtMeters"`
-	DateBegin       string `json:"dateBegin"`
-	DateEnd         string `json:"dateEnd"`
-	GearStatusName  string `json:"gearStatusName"`
+	GearPK          int64   `json:"gearPk"`
+	UUID            string  `json:"uuid"`
+	GearTypeName    string  `json:"gearTypeName"`
+	DisplayName     string  `json:"displayName"`
+	CustomMakeModel string  `json:"customMakeModel"`
+	MaxMeters       float64 `json:"maximumMeters"`
+	NotifiedMeters  int     `json:"notifiedAtMeters"`
+	DateBegin       string  `json:"dateBegin"`
+	DateEnd         string  `json:"dateEnd"`
+	GearStatusName  string  `json:"gearStatusName"`
 }
 
 // Gear returns all gear registered to the given user profile number.

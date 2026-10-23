@@ -14,6 +14,8 @@ func TestUserProfile(t *testing.T) {
 	out, err := c.UserProfile(t.Context())
 	skipAPIError(t, err)
 	require.NoError(t, err)
+	assert.NotZero(t, out.UserProfilePK)
+	assert.NotEmpty(t, out.ProfileImageURL)
 	assert.NotEmpty(t, out)
 }
 

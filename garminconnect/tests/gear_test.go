@@ -20,6 +20,8 @@ func TestGear(t *testing.T) {
 
 	gear, err := c.Gear(t.Context(), summary.UserProfileID)
 	require.NoError(t, err)
+	require.NotEmpty(t, gear)
+	assert.NotZero(t, gear[0].MaxMeters)
 	assert.NotNil(t, gear)
 }
 

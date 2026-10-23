@@ -22,6 +22,8 @@ func TestEarnedBadges(t *testing.T) {
 
 	badges, err := c.EarnedBadges(t.Context())
 	require.NoError(t, err)
+	require.NotEmpty(t, badges)
+	assert.NotEmpty(t, badges[0].EarnedDate)
 	assert.NotEmpty(t, badges)
 }
 
