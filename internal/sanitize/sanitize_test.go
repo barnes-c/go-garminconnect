@@ -106,6 +106,24 @@ func TestInteraction_ScrubsPlainTextBody(t *testing.T) {
 	}
 }
 
+func TestInteraction_ScrubsFileBodies(t *testing.T) {
+	gpx := `<gpx><trk><name>Morning Run</name><trkpt lat="47.3769" lon="8.5417"/></trk></gpx>`
+	i := &cassette.Interaction{
+		Request: cassette.Request{
+			Body:    "--b\r\nContent-Disposition: form-data; name=\"file\"\r\n\r\n" + gpx,
+			Headers: http.Header{"Content-Type": {"multipart/form-data; boundary=b"}},
+		},
+		Response: cassette.Response{
+			Body:    gpx,
+			Headers: http.Header{"Content-Type": {"application/gpx+xml"}},
+		},
+	}
+	sanitize.Interaction(i, "")
+	if i.Request.Body != "TEST" || i.Response.Body != "TEST" {
+		t.Errorf("file bodies not scrubbed: request %q, response %q", i.Request.Body, i.Response.Body)
+	}
+}
+
 func TestURL_ScrubsIDsDatesAndName(t *testing.T) {
 	name := "e15d1c9d-827d-4db9-b030-48792c1d1fa6"
 	// A real recording date (after testDate) must be rewritten back.

@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"go.yaml.in/yaml/v4"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
@@ -114,8 +115,12 @@ func newVCRClient(t *testing.T) (*gc.Client, func()) {
 		clientName = liveDisplayName
 	}
 
+	var transport http.RoundTripper = r
+	if needsRecording {
+		transport = pacedTransport{r}
+	}
 	c := gc.NewClient("",
-		gc.WithHTTPClient(&http.Client{Transport: r}),
+		gc.WithHTTPClient(&http.Client{Transport: transport}),
 		gc.WithToken(clientToken),
 		gc.WithDisplayName(clientName),
 	)
@@ -153,6 +158,15 @@ func fixedTransport(code int, body string) http.RoundTripper {
 type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
+
+// pacedTransport spaces out live requests while recording; some services
+// (course-service in particular) rate-limit bursts of writes with a 429.
+type pacedTransport struct{ next http.RoundTripper }
+
+func (p pacedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	time.Sleep(time.Second)
+	return p.next.RoundTrip(req)
+}
 
 func normaliseURL(u *url.URL) string {
 	cp := *u

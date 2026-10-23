@@ -65,6 +65,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Activities**       | Listing, detail, splits, HR/power zones, exercise sets, weather, personal records, favorites, manual creation, edit/delete (incl. exercise sets), and download & upload                                        |
 | **Workouts**         | Saved workouts (create, edit, copy, delete), scheduling & rescheduling, and FIT download                                                                                                            |
 | **Calendar**         | Month and week views, events (create, edit, move, delete, primary event), and notes                                                          |
+| **Courses**          | Saved and favorite courses, import from GPX/TCX/FIT, convert from an activity, edit, delete, and GPX/FIT download                            |
 | **Training**         | Readiness & status, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
 | **Body composition** | Weigh-ins (add, delete, clear a day) and body composition history                                                                                                                       |
 | **Goals**            | Goals, badges, and challenges                                                                                                                                |

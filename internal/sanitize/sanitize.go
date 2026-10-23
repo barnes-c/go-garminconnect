@@ -12,7 +12,7 @@
 //   - Request-URL dates after 2026-01-01 -> 2026-01-01
 //   - Emails -> test@example.com
 //   - Every free-text object value and string array element in a body -> "TEST"
-//   - A text/plain request body -> "TEST"
+//   - Plain-text and file bodies (multipart uploads, GPX/FIT/CSV/ZIP) -> "TEST"
 //     (except dates, UUIDs and the "testuser"/"Test User" placeholders)
 //   - Every numeric body value -> 1 (1.0 for floats), except identifier/
 //     structural fields (*Id, *Pk, *Count, *Version, ...) unless the value looks
@@ -27,6 +27,7 @@ import (
 	"strings"
 	"time"
 
+	"go.yaml.in/yaml/v4"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
 
@@ -93,14 +94,8 @@ func Interaction(i *cassette.Interaction, displayName string) {
 	}
 	i.Response.Duration = 100 * time.Millisecond
 	i.Request.URL = URL(i.Request.URL, displayName)
-	// Plain-text bodies (e.g. a workout copy's new name) are free text that the
-	// JSON scrubbers can't see into.
-	if i.Request.Body != "" && strings.HasPrefix(i.Request.Headers.Get("Content-Type"), "text/plain") {
-		i.Request.Body = "TEST"
-	} else {
-		i.Request.Body = Body(i.Request.Body, displayName)
-	}
-	i.Response.Body = Body(i.Response.Body, displayName)
+	i.Request.Body = scrubBody(i.Request.Body, i.Request.Headers.Get("Content-Type"), displayName)
+	i.Response.Body = scrubBody(i.Response.Body, i.Response.Headers.Get("Content-Type"), displayName)
 	// Form just duplicates the URL query (and held PII like userProfilePk).
 	// It is unused for matching, so drop it (the field is omitempty).
 	i.Request.Form = nil
@@ -150,6 +145,23 @@ func Body(s, displayName string) string {
 	s = scrubUUIDs(s)
 	s = applyStatic(s, displayName)
 	return s
+}
+
+// scrubBody scrubs a body by its content type. Plain text (e.g. a workout
+// copy's new name) and files (uploads, GPX/FIT downloads, which carry GPS
+// tracks) can't be seen into by the JSON scrubbers, so only a placeholder is
+// kept.
+func scrubBody(body, contentType, displayName string) string {
+	if body == "" {
+		return body
+	}
+	ct := strings.ToLower(contentType)
+	for _, opaque := range []string{"text/plain", "multipart/", "octet-stream", "xml", "zip", "csv"} {
+		if strings.Contains(ct, opaque) {
+			return "TEST"
+		}
+	}
+	return Body(body, displayName)
 }
 
 func zeroDatetimes(s string) string {
@@ -318,25 +330,23 @@ func StripNoise(content string) string {
 	return strings.Join(out, "\n")
 }
 
-// File re-sanitizes an existing cassette file in place: strips unused HTTP
-// metadata lines and re-applies the body and URL scrubbers. Used to normalize
+// File re-sanitizes an existing cassette file in place: re-applies Interaction
+// to every recorded interaction and strips unused HTTP metadata. Used to normalize
 // previously recorded or hand-edited cassettes to the current rules without a
 // live re-record. Idempotent.
 func File(path string) error {
-	data, err := os.ReadFile(path)
+	c, err := cassette.Load(strings.TrimSuffix(path, ".yaml"))
 	if err != nil {
 		return err
 	}
-	lines := strings.Split(StripNoise(string(data)), "\n")
-	for i, line := range lines {
-		switch {
-		case strings.HasPrefix(strings.TrimSpace(line), "body:"):
-			lines[i] = Body(line, "")
-		case strings.HasPrefix(strings.TrimSpace(line), "url:"):
-			lines[i] = URL(line, "")
-		}
+	for _, i := range c.Interactions {
+		Interaction(i, "")
 	}
-	return os.WriteFile(path, []byte(strings.Join(lines, "\n")), 0600)
+	data, err := yaml.Marshal(c)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, []byte("---\n"+StripNoise(string(data))), 0600)
 }
 
 func applyStatic(s, displayName string) string {

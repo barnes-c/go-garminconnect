@@ -1,8 +1,8 @@
 ---
 version: 2
 interactions:
-    - request:
-        body: ""
+    - id: 0
+      request:
         headers:
             Accept:
                 - application/json
