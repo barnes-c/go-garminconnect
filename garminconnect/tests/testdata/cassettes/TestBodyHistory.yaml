@@ -1,0 +1,173 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"dateTimestamp":"2026-01-01T00:00:00","gmtTimestamp":"2026-01-01T00:00:00","unitKey":"TEST","value":1.0}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/weight-service/user-weight
+        method: POST
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"diastolic":1,"measurementTimestampGMT":"2026-01-01T00:00:00","measurementTimestampLocal":"2026-01-01T00:00:00","notes":"TEST","pulse":1,"sourceType":"TEST","systolic":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure
+        method: POST
+      response:
+        body: '{"version":null,"systolic":1,"diastolic":1,"pulse":1,"multiMeasurement":false,"notes":"TEST","sourceType":"TEST","measurementTimestampLocal":"2026-01-01T00:00:00","measurementTimestampGMT":"2026-01-01T00:00:00","category":null,"categoryName":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/first
+        method: GET
+      response:
+        body: '{"date":1,"version":12345678,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"caloricIntake":null,"sourceType":"TEST","timestampGMT":1}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/daily/last?endDate=2026-01-01&startDate=2025-12-25
+        method: GET
+      response:
+        body: '[{"date":1,"version":12345678,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"caloricIntake":null,"sourceType":"TEST","timestampGMT":1}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/weeklyRange/2025-01-03/2026-01-01
+        method: GET
+      response:
+        body: '{"weeklyWeightSummaries":[{"startDate":"2026-01-01","endDate":"2026-01-01","minWeight":1.0,"maxWeight":1.0,"averageWeight":{"from":1,"until":1,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null},"weightDelta":null}],"weightAverageDTO":{"from":1,"until":1,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null},"previousWeekAverageDTO":null,"nextWeekAverageDTO":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/daily/last/2025-12-25/2026-01-01
+        method: GET
+      response:
+        body: '[{"version":12345678,"systolic":1,"diastolic":1,"pulse":1,"multiMeasurement":false,"notes":"TEST","sourceType":"TEST","measurementTimestampLocal":"2026-01-01T00:00:00","measurementTimestampGMT":"2026-01-01T00:00:00","category":"TEST","categoryName":"TEST"}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/weeklyRange/2025-01-03/2026-01-01
+        method: GET
+      response:
+        body: '{"from":"2026-01-01","until":"2026-01-01","measurementSummaries":[{"startDate":"2026-01-01","endDate":"2026-01-01","highSystolic":1,"highDiastolic":1,"lowSystolic":1,"lowDiastolic":1,"numOfMeasurements":1,"category":"TEST","categoryName":"TEST","measurements":[]}],"categoryStats":{"from":"2026-01-01","until":"2026-01-01","noOfDaysNormal":1,"noOfDaysElevated":1,"noOfDaysStage1":1,"noOfDaysStage2":1,"noOfDaysCritical":1,"categoryCounts":{"GRADE_2":1,"GRADE_1":1,"HIGH_NORMAL":1,"NORMAL":1}}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 7
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/2026-01-01/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/dayview/2026-01-01?calendarDate=2026-01-01
+        method: GET
+      response:
+        body: '{"startDate":"2026-01-01","endDate":"2026-01-01","dateWeightList":[{"samplePk":12345678,"date":1,"calendarDate":"2026-01-01","weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null,"sourceType":"TEST","timestampGMT":1,"weightDelta":null}],"totalAverage":{"from":1,"until":1,"weight":1.0,"bmi":null,"bodyFat":null,"bodyWater":null,"boneMass":null,"muscleMass":null,"physiqueRating":null,"visceralFat":null,"metabolicAge":null}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 9
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/weight-service/weight/2026-01-01/byversion/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
