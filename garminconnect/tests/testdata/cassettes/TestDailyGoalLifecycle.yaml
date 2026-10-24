@@ -1,0 +1,77 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/wellness-goals/consolidated/steps/2026-01-01
+        method: GET
+      response:
+        body: '{"deviceGoal":1,"userGoal":1,"syncedToDevice":false,"effective":"TEST","userGoalCategory":null,"goalType":"TEST"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/goal-service/goal/user/effective/2026-01-01
+        method: GET
+      response:
+        body: '[{"goalType":"TEST","goalValue":1.0},{"goalType":"TEST","goalValue":1.0},{"goalType":"TEST","goalValue":1.0}]'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"goalType":"TEST","goalValue":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/goal-service/goal/user/effective/intensity-minutes/2026-01-01
+        method: PUT
+      response:
+        body: '{"goalType":"TEST","goalValue":1.0}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        body: '{"goalType":"TEST","goalValue":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/goal-service/goal/user/effective/intensity-minutes/2026-01-01
+        method: PUT
+      response:
+        body: '{"goalType":"TEST","goalValue":1.0}'
+        headers:
+            Content-Type:
+                - application/json;charset=UTF-8
+        status: 200 OK
+        code: 200
+        duration: 100ms

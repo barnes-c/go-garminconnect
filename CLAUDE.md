@@ -45,6 +45,8 @@ live, no credentials needed.
   must be on or before `testDate`. Use `dataDate(t, "GARMIN_SUMMARY_DATE")` (or
   `GARMIN_SLEEP_DATE`) for data-dependent days, and query a single day for range
   endpoints — a multi-day range collapses and won't replay.
+- Don't build a URL from a string read out of a response: it is `"TEST"` on replay.
+  IDs are fine (they become `12345678` in bodies and URLs alike).
 - `newServerClient` (httptest) tests are for client behaviour (auth, errors,
   request encoding). Don't use them to cover an endpoint: several mocks asserted a
   wrong path or body and passed for months. Record it instead.
