@@ -1,0 +1,37 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/badge-service/badge/earned/latest/testuser?limit=5
+        method: GET
+      response:
+        body: '[{"badgeId":51,"badgeKey":"TEST","badgeName":"TEST","badgeUuid":null,"badgeCategoryId":6,"badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"badgeSeriesId":null,"badgeStartDate":"2026-01-01T00:00:00","badgeEndDate":null,"userProfileId":12345678,"fullName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","badgeEarnedDate":"2026-01-01T00:00:00","badgeEarnedNumber":1,"premium":false,"reprocessable":false,"badgeLimitCount":null,"badgeIsViewed":false,"badgeProgressValue":1.0,"badgeTargetValue":null,"badgeUnitId":null,"badgeAssocTypeId":5,"badgeAssocType":"TEST","badgeAssocDataId":null,"badgeAssocDataName":null,"earnedByMe":true,"currentPlayerType":null,"userJoined":null,"badgeChallengeStatusId":null,"badgePromotionCodeTypeList":[null],"promotionCodeStatus":null,"createDate":"2026-01-01T00:00:00","relatedBadges":null},{"badgeId":41,"badgeKey":"TEST","badgeName":"TEST","badgeUuid":null,"badgeCategoryId":6,"badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"badgeSeriesId":null,"badgeStartDate":"2026-01-01T00:00:00","badgeEndDate":null,"userProfileId":12345678,"fullName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","badgeEarnedDate":"2026-01-01T00:00:00","badgeEarnedNumber":1,"premium":false,"reprocessable":false,"badgeLimitCount":null,"badgeIsViewed":false,"badgeProgressValue":1.0,"badgeTargetValue":null,"badgeUnitId":null,"badgeAssocTypeId":5,"badgeAssocType":"TEST","badgeAssocDataId":null,"badgeAssocDataName":null,"earnedByMe":true,"currentPlayerType":null,"userJoined":null,"badgeChallengeStatusId":null,"badgePromotionCodeTypeList":[null],"promotionCodeStatus":null,"createDate":"2026-01-01T00:00:00","relatedBadges":null},{"badgeId":1548,"badgeKey":"TEST","badgeName":"TEST","badgeUuid":"ffffffffffffffffffffffffffffffff","badgeCategoryId":6,"badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"badgeSeriesId":null,"badgeStartDate":"2026-01-01T00:00:00","badgeEndDate":null,"userProfileId":12345678,"fullName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","badgeEarnedDate":"2026-01-01T00:00:00","badgeEarnedNumber":1,"premium":false,"reprocessable":false,"badgeLimitCount":null,"badgeIsViewed":false,"badgeProgressValue":1.0,"badgeTargetValue":null,"badgeUnitId":null,"badgeAssocTypeId":5,"badgeAssocType":"TEST","badgeAssocDataId":null,"badgeAssocDataName":null,"earnedByMe":true,"currentPlayerType":null,"userJoined":null,"badgeChallengeStatusId":null,"badgePromotionCodeTypeList":[null],"promotionCodeStatus":null,"createDate":"2026-01-01T00:00:00","relatedBadges":null},{"badgeId":52,"badgeKey":"TEST","badgeName":"TEST","badgeUuid":null,"badgeCategoryId":7,"badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"badgeSeriesId":null,"badgeStartDate":"2026-01-01T00:00:00","badgeEndDate":null,"userProfileId":12345678,"fullName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","badgeEarnedDate":"2026-01-01T00:00:00","badgeEarnedNumber":1,"premium":false,"reprocessable":false,"badgeLimitCount":null,"badgeIsViewed":false,"badgeProgressValue":1.0,"badgeTargetValue":null,"badgeUnitId":null,"badgeAssocTypeId":4,"badgeAssocType":"TEST","badgeAssocDataId":"2026-01-01","badgeAssocDataName":null,"earnedByMe":true,"currentPlayerType":null,"userJoined":null,"badgeChallengeStatusId":null,"badgePromotionCodeTypeList":[null],"promotionCodeStatus":null,"createDate":"2026-01-01T00:00:00","relatedBadges":null},{"badgeId":54,"badgeKey":"TEST","badgeName":"TEST","badgeUuid":null,"badgeCategoryId":6,"badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"badgeSeriesId":null,"badgeStartDate":"2026-01-01T00:00:00","badgeEndDate":null,"userProfileId":12345678,"fullName":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","badgeEarnedDate":"2026-01-01T00:00:00","badgeEarnedNumber":1,"premium":false,"reprocessable":false,"badgeLimitCount":null,"badgeIsViewed":false,"badgeProgressValue":1.0,"badgeTargetValue":null,"badgeUnitId":null,"badgeAssocTypeId":5,"badgeAssocType":"TEST","badgeAssocDataId":null,"badgeAssocDataName":null,"earnedByMe":true,"currentPlayerType":null,"userJoined":null,"badgeChallengeStatusId":null,"badgePromotionCodeTypeList":[null],"promotionCodeStatus":null,"createDate":"2026-01-01T00:00:00","relatedBadges":null}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/badge-service/badge/testuser/earned/dailysummary/2026-01-01
+        method: GET
+      response:
+        body: '[{"badgeId":41,"badgeKey":"TEST","badgeUuid":null,"badgeName":"TEST","badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"earnedByMe":true,"badgeCategoryId":6},{"badgeId":1548,"badgeKey":"TEST","badgeUuid":"ffffffffffffffffffffffffffffffff","badgeName":"TEST","badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"earnedByMe":true,"badgeCategoryId":6},{"badgeId":54,"badgeKey":"TEST","badgeUuid":null,"badgeName":"TEST","badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"earnedByMe":true,"badgeCategoryId":6},{"badgeId":45,"badgeKey":"TEST","badgeUuid":null,"badgeName":"TEST","badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"earnedByMe":true,"badgeCategoryId":6},{"badgeId":44,"badgeKey":"TEST","badgeUuid":null,"badgeName":"TEST","badgeDifficultyId":1,"badgePoints":1,"badgeTypeIds":[1],"earnedByMe":true,"badgeCategoryId":6}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
