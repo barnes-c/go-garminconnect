@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/refraction-networking/utls v1.8.2
 	github.com/stretchr/testify v1.12.1
-	go.yaml.in/yaml/v4 v4.0.0-rc.9
+	go.yaml.in/yaml/v4 v4.0.0
 	gopkg.in/dnaeon/go-vcr.v4 v4.0.7
 )
 
