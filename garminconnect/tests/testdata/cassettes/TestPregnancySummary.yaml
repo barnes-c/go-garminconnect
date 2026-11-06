@@ -1,0 +1,18 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/pregnancysnapshot
+        method: GET
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
