@@ -113,7 +113,7 @@ func reportTimestamp() string {
 }
 
 // MenstrualDayView returns the cycle position and log for a day. Without cycle
-// tracking set up, Garmin answers 204, returned as an *APIError.
+// tracking set up it returns ErrNoData.
 func (c *Client) MenstrualDayView(ctx context.Context, d time.Time) (*MenstrualDayView, error) {
 	var out MenstrualDayView
 	if err := c.get(ctx, menstrualPath+"/dayview/"+date(d), nil, &out); err != nil {
@@ -133,7 +133,7 @@ func (c *Client) MenstrualCalendar(ctx context.Context, start, end time.Time) (*
 }
 
 // MenstrualCycleDay returns where d falls in its cycle. Outside a tracked
-// cycle Garmin answers 204, returned as an *APIError.
+// cycle it returns ErrNoData.
 func (c *Client) MenstrualCycleDay(ctx context.Context, d time.Time) (*MenstrualCycleDay, error) {
 	var out MenstrualCycleDay
 	if err := c.get(ctx, menstrualPath+"/summary/"+date(d), nil, &out); err != nil {
@@ -143,7 +143,7 @@ func (c *Client) MenstrualCycleDay(ctx context.Context, d time.Time) (*Menstrual
 }
 
 // LastConfirmedMenstrualCycle returns the last confirmed cycle as of d. If
-// there is none Garmin answers 204, returned as an *APIError.
+// there is none it returns ErrNoData.
 func (c *Client) LastConfirmedMenstrualCycle(ctx context.Context, d time.Time) (*MenstrualCycle, error) {
 	var out MenstrualCycle
 	if err := c.get(ctx, menstrualPath+"/lastconfirmed/"+date(d), nil, &out); err != nil {
@@ -165,7 +165,7 @@ func (c *Client) MenstrualReport(ctx context.Context, end time.Time, cycles int)
 }
 
 // PregnancySummary returns the current pregnancy snapshot. If the user isn't
-// tracking a pregnancy Garmin answers 204, returned as an *APIError.
+// tracking a pregnancy it returns ErrNoData.
 func (c *Client) PregnancySummary(ctx context.Context) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
 	if err := c.get(ctx, menstrualPath+"/pregnancysnapshot", nil, &out); err != nil {
