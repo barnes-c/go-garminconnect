@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/web-gateway/snapshot/usageIndicators
+        method: GET
+      response:
+        body: '{"deviceBasedIndicators":{"golfDeviceCount":0,"outdoorDeviceCount":0,"hasAllDayHeartRateCapableDevice":false,"isTacxOnlyUser":false,"dedicatedBikeComputerDeviceCount":0,"wellnessDeviceCount":0,"weightScaleDeviceCount":0,"fitnessDeviceCount":0},"performanceBasedIndicators":{"wellnessIndicators":{"floorsAscended":null,"lastDailySummaryDate":null,"totalSteps":null,"floorsDescended":null},"activityIndicators":{"motorcycling":{"lastActivityId":null,"lastActivityDate":null},"other":{"lastActivityId":null,"lastActivityDate":null},"multi_sport":{"lastActivityId":null,"lastActivityDate":null},"para_sports":{"lastActivityId":null,"lastActivityDate":null},"racket_sports":{"lastActivityId":null,"lastActivityDate":null},"yoga":{"lastActivityId":null,"lastActivityDate":null},"fitness_equipment":{"lastActivityId":null,"lastActivityDate":null},"hiking":{"lastActivityId":null,"lastActivityDate":null},"cycling":{"lastActivityId":null,"lastActivityDate":null},"lap_swimming":{"lastActivityId":null,"lastActivityDate":null},"running":{"lastActivityId":null,"lastActivityDate":null},"swimming":{"lastActivityId":null,"lastActivityDate":null},"diving":{"lastActivityId":null,"lastActivityDate":null},"water_sports":{"lastActivityId":null,"lastActivityDate":null},"open_water_swimming":{"lastActivityId":null,"lastActivityDate":null},"team_sports":{"lastActivityId":null,"lastActivityDate":null},"safety":{"lastActivityId":null,"lastActivityDate":null},"walking":{"lastActivityId":null,"lastActivityDate":null},"winter_sports":{"lastActivityId":null,"lastActivityDate":null}}},"FitnessReportAvailability":{"userProfilePK":12345678,"availableFitnessMetrics":[]},"historicalDeviceBasedIndicators":{"golfDeviceCount":0,"outdoorDeviceCount":0,"hasAllDayHeartRateCapableDevice":false,"dedicatedBikeComputerDeviceCount":0,"wellnessDeviceCount":0,"weightScaleDeviceCount":0,"fitnessDeviceCount":0},"profileBasedIndicators":{"isPulseOxAllowed":true},"ReportAvailability":{"userProfilePK":12345678,"hasConsumedCalories":null,"hasRemainingCalories":null,"hasTotalSteps":null,"hasTotalCalories":null,"hasActiveCalories":null,"hasBmrCalories":null,"hasTotalStepGoal":null,"hasTotalDistance":null,"hasWellnessTotalKilocalories":null,"hasWellnessActiveKilocalories":null,"hasWellnessDistance":null,"hasModerateIntensityMinutes":null,"hasVigorousIntensityMinutes":null,"hasFloorsAscended":null,"hasFloorsDescended":null,"hasMinHeartRate":null,"hasMaxHeartRate":null,"hasRestingHeartRate":null,"hasAverageStressLevel":null,"hasMaxStressLevel":null,"hasMinAvgHeartRate":null,"hasMaxAvgHeartRate":null,"hasAbnormalHeartRateAlertsCount":null,"hasWheelchairPushes":null,"hasWheelchairPushesGoal":null,"hasRespirationV2":null}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

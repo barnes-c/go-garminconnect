@@ -50,3 +50,67 @@ func TestUnitSystem(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, out)
 }
+
+func TestUpdateUserSettings(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+	ctx := t.Context()
+
+	s, err := c.UserSettings(ctx)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	orig := s.UserData.TimeFormat
+	next := "time_twenty_four_hr"
+	if orig == next {
+		next = "time_twelve_hr"
+	}
+	set := func(v string) error {
+		return c.UpdateUserSettings(ctx, map[string]any{"userData": map[string]any{"timeFormat": v}})
+	}
+	require.NoError(t, set(next))
+	require.NoError(t, set(orig))
+}
+
+func TestPersonalInformation(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.PersonalInformation(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.UserInfo.Email)
+	assert.NotZero(t, out.BiometricProfile.UserID)
+}
+
+func TestUserProfileBase(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.UserProfileBase(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotZero(t, out.UserProfilePK)
+	assert.NotEmpty(t, out.DisplayName)
+}
+
+func TestPrivacySettings(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.PrivacySettings(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.Activity.CategoryDetails.CategoryAccessRule)
+	require.NotEmpty(t, out.Activity.Subcategories)
+	assert.NotEmpty(t, out.Activity.Subcategories[0].Details.AccessRule)
+}
+
+func TestUsageIndicators(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.UsageIndicators(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.PerformanceBasedIndicators.ActivityIndicators)
+}
