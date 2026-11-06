@@ -33,6 +33,15 @@ func TestActivities_RateLimit(t *testing.T) {
 	assert.ErrorIs(t, err, gc.ErrRateLimit)
 }
 
+func TestNoContent_ErrNoData(t *testing.T) {
+	c := clientWith(t, http.StatusNoContent)
+	_, err := c.UserSummary(t.Context(), testDate)
+	require.ErrorIs(t, err, gc.ErrNoData)
+	_, err = c.DownloadWorkout(t.Context(), 1)
+	require.ErrorIs(t, err, gc.ErrNoData)
+	require.NoError(t, c.DeleteWorkout(t.Context(), 1))
+}
+
 func TestActivities_APIError(t *testing.T) {
 	c := clientWith(t, http.StatusInternalServerError)
 	_, err := c.Activities(t.Context(), 0, 1)

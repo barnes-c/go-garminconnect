@@ -267,6 +267,9 @@ func (c *Client) getURL(ctx context.Context, rawURL string, params url.Values, o
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode == http.StatusNoContent {
+		return ErrNoData
+	}
 	if resp.StatusCode != http.StatusOK {
 		return newAPIError(resp, rawURL)
 	}
@@ -362,6 +365,9 @@ func (c *Client) getBytes(ctx context.Context, path string, params url.Values) (
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode == http.StatusNoContent {
+		return nil, ErrNoData
+	}
 	if resp.StatusCode != http.StatusOK {
 		return nil, newAPIError(resp, rawURL)
 	}

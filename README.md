@@ -95,7 +95,7 @@ case errors.Is(err, garminconnect.ErrRateLimit):
 case errors.Is(err, garminconnect.ErrCaptchaRequired):
     // Garmin wants a CAPTCHA solved — sign in at connect.garmin.com once
 case errors.Is(err, garminconnect.ErrNoData):
-    // no records for the query
+    // Garmin has nothing for the query (e.g. it answered 204 No Content)
 }
 ```
 

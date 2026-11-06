@@ -13,7 +13,9 @@ var (
 	ErrRateLimit       = errors.New("rate limit exceeded")
 	ErrMFARequired     = errors.New("MFA required but no prompt configured")
 	ErrCaptchaRequired = errors.New("CAPTCHA required")
-	ErrNoData          = errors.New("no data")
+	// ErrNoData is returned when Garmin has nothing for the request: a read
+	// answered 204 No Content, or a lookup like LastActivity found nothing.
+	ErrNoData = errors.New("no data")
 )
 
 // maxErrorBody caps how much of a failed response body is retained.

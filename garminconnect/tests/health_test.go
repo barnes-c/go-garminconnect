@@ -224,7 +224,7 @@ func TestPregnancySummary(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
+	// The recording account isn't tracking a pregnancy: Garmin answers 204.
 	_, err := c.PregnancySummary(t.Context())
-	skipAPIError(t, err)
-	require.NoError(t, err)
+	require.ErrorIs(t, err, gc.ErrNoData)
 }
