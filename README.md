@@ -75,6 +75,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Women's health**   | Menstrual cycle day view, calendar, cycle summary, last confirmed cycle and reports; cycle setup, period confirmation, daily logs and period edits; pregnancy snapshot |
 | **Nutrition**        | Food log, meals, goals, and tracking status                                                                                                                                   |
 | **Golf**             | Scorecards, shot data, club stats, and player stats                                                                                                                                     |
+| **Reports**          | PDF report export (request, status, download), e.g. blood pressure                                                                                                                      |
 
 Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download is FIT only.
 

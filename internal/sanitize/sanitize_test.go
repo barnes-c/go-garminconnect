@@ -156,6 +156,14 @@ func TestURL_ScrubsIDsDatesAndName(t *testing.T) {
 	}
 }
 
+func TestURL_ScrubsReportID(t *testing.T) {
+	in := "https://connectapi.garmin.com/reportexport-service/export/reportContent/eHBvcnRSZXBvcnQ%2Fabc%3D"
+	want := "https://connectapi.garmin.com/reportexport-service/export/reportContent/TEST"
+	if got := sanitize.URL(in, ""); got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
 func TestURL_KeepsPastDates(t *testing.T) {
 	// Synthetic test dates only ever look back from 2026-01-01 and must survive.
 	in := "https://connectapi.garmin.com/x/2025-12-01/2026-01-01"

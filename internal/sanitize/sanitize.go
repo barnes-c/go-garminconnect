@@ -90,6 +90,9 @@ var (
 	dateishRE   = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}`)
 	uuidishRE   = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f-]+$|^[0-9a-f]{32}$`)
 	hexRunRE    = regexp.MustCompile(`(?i)[0-9a-f]{32}`)
+	// reportIDRE matches the opaque report-export token in a URL. Bodies scrub
+	// it to "TEST" like any string, so the URL must match on replay.
+	reportIDRE = regexp.MustCompile(`(/export/report(?:Status|Content)/)[^?]+`)
 )
 
 // Interaction scrubs a recorded interaction in place. displayName is the real
@@ -128,6 +131,7 @@ func URL(s, displayName string) string {
 		s = strings.ReplaceAll(s, url.PathEscape(displayName), "testuser")
 		s = strings.ReplaceAll(s, displayName, "testuser")
 	}
+	s = reportIDRE.ReplaceAllString(s, "${1}TEST")
 	s = scrubUUIDs(s)
 	s = bareDateRE.ReplaceAllStringFunc(s, func(d string) string {
 		if d > synthDate {
