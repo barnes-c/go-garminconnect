@@ -87,14 +87,57 @@ func TestWorkoutLifecycle(t *testing.T) {
 	require.NotZero(t, cp.WorkoutID)
 	assert.NotEmpty(t, cp.WorkoutName)
 
-	sched, err := c.ScheduleWorkout(ctx, id, "2026-01-05")
+	sports, err := c.WorkoutSportTypes(ctx)
 	require.NoError(t, err)
-	var schedID int64
-	require.NoError(t, json.Unmarshal(sched["workoutScheduleId"], &schedID))
+	require.NotEmpty(t, sports)
+	assert.NotEmpty(t, sports[0].SportTypeKey)
+	count, err := c.WorkoutCount(ctx)
+	require.NoError(t, err)
+	assert.NotZero(t, count.TotalCount)
+
+	// Scheduled on or before testDate so the period query below covers it.
+	sched, err := c.ScheduleWorkout(ctx, id, "2025-12-29")
+	require.NoError(t, err)
+	schedID := sched.WorkoutScheduleID
 	require.NotZero(t, schedID)
-	require.NoError(t, c.RescheduleWorkout(ctx, schedID, "2026-01-06"))
+	require.NoError(t, c.RescheduleWorkout(ctx, schedID, "2025-12-30"))
+
+	got, err := c.ScheduledWorkout(ctx, schedID)
+	require.NoError(t, err)
+	assert.NotZero(t, got.Workout.WorkoutID)
+	assert.NotEmpty(t, got.CalendarDate)
+	period, err := c.WorkoutSchedule(ctx, testDate.AddDate(0, 0, -7), testDate)
+	require.NoError(t, err)
+	require.NotEmpty(t, period)
+	assert.NotZero(t, period[0].WorkoutScheduleID)
+
 	require.NoError(t, c.UnscheduleWorkout(ctx, schedID))
 
 	require.NoError(t, c.DeleteWorkout(ctx, cp.WorkoutID))
 	require.NoError(t, c.DeleteWorkout(ctx, id))
+}
+
+func TestWorkoutTypes(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.WorkoutTypes(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out.StepTypes)
+	assert.NotEmpty(t, out.StepTypes[0].StepTypeKey)
+	assert.NotEmpty(t, out.SportTypes)
+	assert.NotEmpty(t, out.ConditionTypes)
+	assert.NotEmpty(t, out.TargetTypes)
+}
+
+func TestStrengthBenchmarks(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.StrengthBenchmarks(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].BenchmarkKey)
 }
