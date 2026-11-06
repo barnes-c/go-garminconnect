@@ -257,3 +257,13 @@ func (c *Client) DeviceMessages(ctx context.Context) ([]DeviceMessage, error) {
 	}
 	return out.Messages, nil
 }
+
+// LastSyncTimestamp returns when the user's device last synced, as Garmin
+// reports it (e.g. "2026-01-01T07:30:00.000", no time zone).
+func (c *Client) LastSyncTimestamp(ctx context.Context) (string, error) {
+	var out string
+	if err := c.get(ctx, "/wellness-service/wellness/syncTimestamp", nil, &out); err != nil {
+		return "", err
+	}
+	return out, nil
+}

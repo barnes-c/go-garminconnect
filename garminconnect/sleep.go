@@ -181,3 +181,63 @@ func (c *Client) HRVData(ctx context.Context, d time.Time) (*HRVData, error) {
 	}
 	return &out, nil
 }
+
+// SleepAverages are average sleep figures over a period. Some fields are only
+// set by SleepStatsOverall (SpO2, respiration, heart rate, Body Battery) or
+// SleepStatsWeekly (low/high score).
+type SleepAverages struct {
+	AverageSleepSeconds        float64 `json:"averageSleepSeconds"`
+	AverageSleepNeed           float64 `json:"averageSleepNeed"`
+	AverageSleepScore          float64 `json:"averageSleepScore"`
+	AverageLowSleepScore       float64 `json:"averageLowSleepScore"`
+	AverageHighSleepScore      float64 `json:"averageHighSleepScore"`
+	AverageLocalSleepStartTime float64 `json:"averageLocalSleepStartTime"`
+	AverageLocalSleepEndTime   float64 `json:"averageLocalSleepEndTime"`
+	AverageSpO2                float64 `json:"averageSpO2"`
+	AverageRespiration         float64 `json:"averageRespiration"`
+	AverageRestingHeartRate    float64 `json:"averageRestingHeartRate"`
+	MeanAvgHeartRate           float64 `json:"meanAvgHeartRate"`
+	AverageBodyBatteryChange   float64 `json:"averageBodyBatteryChange"`
+}
+
+// SleepWeek is one week's sleep averages.
+type SleepWeek struct {
+	WeekStartDate string `json:"weekStartDate"`
+	WeekEndDate   string `json:"weekEndDate"`
+	Values        struct {
+		AverageSleepSeconds float64 `json:"averageSleepSeconds"`
+		AverageSleepScore   float64 `json:"averageSleepScore"`
+		AverageSleepNeed    float64 `json:"averageSleepNeed"`
+		DeepTime            float64 `json:"deepTime"`
+		LightTime           float64 `json:"lightTime"`
+		RemTime             float64 `json:"remTime"`
+		AwakeTime           float64 `json:"awakeTime"`
+		SleepScoreQuality   string  `json:"sleepScoreQuality"`
+		SleepDataDaysCount  int     `json:"sleepDataDaysCount"`
+	} `json:"values"`
+}
+
+// SleepPeriodStats are sleep averages over a period, with a per-week
+// breakdown for SleepStatsWeekly.
+type SleepPeriodStats struct {
+	Overall SleepAverages `json:"overallStats"`
+	Weeks   []SleepWeek   `json:"individualStats"`
+}
+
+// SleepStatsWeekly returns sleep averages for the weeks weeks ending at end.
+func (c *Client) SleepStatsWeekly(ctx context.Context, end time.Time, weeks int) (*SleepPeriodStats, error) {
+	var out SleepPeriodStats
+	if err := c.get(ctx, fmt.Sprintf("/sleep-service/stats/sleep/weekly/%s/%d", date(end), weeks), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// SleepStatsOverall returns sleep averages between start and end.
+func (c *Client) SleepStatsOverall(ctx context.Context, start, end time.Time) (*SleepPeriodStats, error) {
+	var out SleepPeriodStats
+	if err := c.get(ctx, fmt.Sprintf("/sleep-service/stats/sleep/overall/%s/%s", date(start), date(end)), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}

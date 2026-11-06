@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"sort"
 	"time"
 )
 
@@ -284,29 +283,6 @@ func (c *Client) BloodPressure(ctx context.Context, start, end time.Time) (*Bloo
 	return &out, nil
 }
 
-// DailyStepStat holds aggregated step statistics for a single calendar date.
-type DailyStepStat struct {
-	CalendarDate  string `json:"calendarDate"`
-	TotalSteps    int    `json:"totalSteps"`
-	TotalDistance int    `json:"totalDistance"`
-	StepGoal      int    `json:"stepGoal"`
-}
-
-// WeeklyStepStat holds weekly aggregated step statistics.
-type WeeklyStepStat struct {
-	CalendarDate  string `json:"calendarDate"`
-	TotalSteps    int    `json:"totalSteps"`
-	TotalDistance int    `json:"totalDistance"`
-}
-
-// WeeklyStressStat holds weekly aggregated stress statistics.
-type WeeklyStressStat struct {
-	CalendarDate   string `json:"calendarDate"`
-	AvgStressLevel int    `json:"value"`
-	MaxStressLevel int    `json:"maxStressLevel"`
-	StressDuration int    `json:"stressDuration"`
-}
-
 // BodyBatteryEvent is a single body battery charge or drain event.
 type BodyBatteryEvent struct {
 	EventTimestamp    string `json:"eventTimestamp"`
@@ -317,54 +293,10 @@ type BodyBatteryEvent struct {
 	FeedbackShortType string `json:"feedbackShortType"`
 }
 
-// WeeklyIMStat holds weekly intensity minutes statistics.
-type WeeklyIMStat struct {
-	CalendarDate             string `json:"calendarDate"`
-	WeeklyGoal               int    `json:"weeklyGoal"`
-	ModerateIntensityMinutes int    `json:"moderateValue"`
-	VigorousIntensityMinutes int    `json:"vigorousValue"`
-}
-
-// DailySteps returns daily step totals between start and end dates.
-func (c *Client) DailySteps(ctx context.Context, start, end time.Time) ([]DailyStepStat, error) {
-	var out []DailyStepStat
-	if err := c.get(ctx, fmt.Sprintf("/usersummary-service/stats/steps/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// WeeklySteps returns weekly step totals ending on end for the given number of weeks.
-func (c *Client) WeeklySteps(ctx context.Context, end time.Time, weeks int) ([]WeeklyStepStat, error) {
-	var out []WeeklyStepStat
-	if err := c.get(ctx, fmt.Sprintf("/usersummary-service/stats/steps/weekly/%s/%d", date(end), weeks), nil, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// WeeklyStress returns weekly stress aggregates ending on end for the given number of weeks.
-func (c *Client) WeeklyStress(ctx context.Context, end time.Time, weeks int) ([]WeeklyStressStat, error) {
-	var out []WeeklyStressStat
-	if err := c.get(ctx, fmt.Sprintf("/usersummary-service/stats/stress/weekly/%s/%d", date(end), weeks), nil, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // BodyBatteryEvents returns body battery charge/drain events for the given date.
 func (c *Client) BodyBatteryEvents(ctx context.Context, d time.Time) ([]BodyBatteryEvent, error) {
 	var out []BodyBatteryEvent
 	if err := c.get(ctx, fmt.Sprintf("/wellness-service/wellness/bodyBattery/events/%s", date(d)), nil, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// WeeklyIntensityMinutes returns weekly intensity minutes between start and end dates.
-func (c *Client) WeeklyIntensityMinutes(ctx context.Context, start, end time.Time) ([]WeeklyIMStat, error) {
-	var out []WeeklyIMStat
-	if err := c.get(ctx, fmt.Sprintf("/usersummary-service/stats/im/weekly/%s/%s", date(start), date(end)), nil, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -398,7 +330,7 @@ func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time
 	body := map[string]any{
 		"calendarDate":   date(at),
 		"valueInML":      valueML,
-		"timestampLocal": at.Format("2006-01-02T15:04:05.000"),
+		"timestampLocal": timestamp(at),
 	}
 	if err := c.put(ctx, "/usersummary-service/usersummary/hydration/log", body, &out); err != nil {
 		return nil, err
@@ -430,6 +362,7 @@ func (c *Client) WeeklyBloodPressure(ctx context.Context, end time.Time) (*Blood
 // SetBloodPressure records a manual blood pressure reading taken at the given
 // time; its location supplies the local time Garmin displays.
 func (c *Client) SetBloodPressure(ctx context.Context, systolic, diastolic, pulse int, at time.Time, notes string) (*BloodPressureSnapshot, error) {
+	// Centiseconds, unlike timestamp(): the format this endpoint was verified with.
 	const layout = "2006-01-02T15:04:05.00"
 	body := map[string]any{
 		"systolic":                  systolic,
@@ -458,72 +391,6 @@ func (c *Client) SetBloodPressureNotes(ctx context.Context, m BloodPressureSnaps
 // DeleteBloodPressure removes a blood pressure reading by its version and day.
 func (c *Client) DeleteBloodPressure(ctx context.Context, d time.Time, version int64) error {
 	return c.del(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", date(d), version))
-}
-
-// DailyCalories is one day's active and resting (BMR) calorie totals.
-type DailyCalories struct {
-	CalendarDate string  `json:"calendarDate"`
-	Active       float64 `json:"active"`
-	Resting      float64 `json:"resting"`
-	Total        float64 `json:"total"`
-}
-
-// calorieEntry is one row of a wellness-stats calorie series.
-type calorieEntry struct {
-	CalendarDate string   `json:"calendarDate"`
-	Value        *float64 `json:"value"`
-}
-
-// CaloriesDaily returns daily active and resting calories between start and
-// end. Both series come from a single request; days present in only one series
-// report zero for the other.
-func (c *Client) CaloriesDaily(ctx context.Context, start, end time.Time) ([]DailyCalories, error) {
-	name, err := c.displayNamePath()
-	if err != nil {
-		return nil, err
-	}
-	// 22 = active calories, 23 = BMR calories.
-	params := url.Values{
-		"fromDate":  {date(start)},
-		"untilDate": {date(end)},
-		"metricId":  {"22", "23"},
-	}
-	var raw struct {
-		AllMetrics struct {
-			MetricsMap struct {
-				Active  []calorieEntry `json:"WELLNESS_ACTIVE_CALORIES"`
-				Resting []calorieEntry `json:"WELLNESS_BMR_CALORIES"`
-			} `json:"metricsMap"`
-		} `json:"allMetrics"`
-	}
-	if err := c.get(ctx, "/userstats-service/wellness/daily/"+name, params, &raw); err != nil {
-		return nil, err
-	}
-
-	byDate := map[string]*DailyCalories{}
-	collect := func(entries []calorieEntry, set func(*DailyCalories, float64)) {
-		for _, e := range entries {
-			if e.Value == nil || e.CalendarDate == "" {
-				continue
-			}
-			day, ok := byDate[e.CalendarDate]
-			if !ok {
-				day = &DailyCalories{CalendarDate: e.CalendarDate}
-				byDate[e.CalendarDate] = day
-			}
-			set(day, *e.Value)
-		}
-	}
-	collect(raw.AllMetrics.MetricsMap.Active, func(d *DailyCalories, v float64) { d.Active = v })
-	collect(raw.AllMetrics.MetricsMap.Resting, func(d *DailyCalories, v float64) { d.Resting = v })
-
-	out := make([]DailyCalories, 0, len(byDate))
-	for _, d := range byDate {
-		d.Total = d.Active + d.Resting
-		out = append(out, *d)
-	}
-	sort.Slice(out, func(i, j int) bool { return out[i].CalendarDate < out[j].CalendarDate })
-	return out, nil
 }
 
 // DownloadHealthSnapshot returns the Health Snapshot ZIP for the given date.

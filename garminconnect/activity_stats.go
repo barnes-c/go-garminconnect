@@ -148,3 +148,30 @@ func (c *Client) ActivityMetrics(ctx context.Context, start, end time.Time, metr
 	}
 	return out, nil
 }
+
+// ActivityTotals are the user's totals for one activity type.
+type ActivityTotals struct {
+	ActivityType struct {
+		TypeKey string `json:"typeKey"` // "all" for the grand total
+	} `json:"activityType"`
+	TotalActivities    int     `json:"totalActivities"`
+	TotalDistance      float64 `json:"totalDistance"` // meters
+	TotalDuration      float64 `json:"totalDuration"` // seconds
+	TotalCalories      float64 `json:"totalCalories"`
+	TotalElevationGain float64 `json:"totalElevationGain"`
+}
+
+// ActivityStatistics returns the user's activity totals per activity type.
+func (c *Client) ActivityStatistics(ctx context.Context) ([]ActivityTotals, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return nil, err
+	}
+	var out struct {
+		UserMetrics []ActivityTotals `json:"userMetrics"`
+	}
+	if err := c.get(ctx, "/userstats-service/statistics/"+name, nil, &out); err != nil {
+		return nil, err
+	}
+	return out.UserMetrics, nil
+}

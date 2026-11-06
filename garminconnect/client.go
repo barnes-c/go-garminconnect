@@ -421,6 +421,10 @@ func (c *Client) upload(ctx context.Context, path string, data []byte, filename 
 
 func date(t time.Time) string { return t.Format("2006-01-02") }
 
+// timestamp formats t as Garmin's zoneless timestamp with milliseconds, in
+// t's own location; pass t.UTC() for a GMT field.
+func timestamp(t time.Time) string { return t.Format("2006-01-02T15:04:05.000") }
+
 var errNoDisplayName = errors.New("display name not set: call Login or use WithDisplayName")
 
 // displayNamePath returns the display name escaped for use as a URL path
