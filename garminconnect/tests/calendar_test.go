@@ -67,3 +67,14 @@ func TestCalendarLifecycle(t *testing.T) {
 	require.NoError(t, c.DeleteCalendarEvent(ctx, ev.ID))
 	require.NoError(t, c.DeleteCalendarNote(ctx, note.ID))
 }
+
+func TestCalendarMonth(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	month, err := c.CalendarMonth(t.Context(), testDate.Year(), testDate.Month())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, month.Items)
+	assert.NotEmpty(t, month.Items[0].ItemType)
+}

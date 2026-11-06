@@ -48,7 +48,7 @@ func TestLastActivity(t *testing.T) {
 	assert.NotZero(t, acts[0].ActivityID)
 }
 
-func TestActivityDetail(t *testing.T) {
+func TestActivity(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 
@@ -57,7 +57,7 @@ func TestActivityDetail(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, acts)
 
-	detail, err := c.ActivityDetail(t.Context(), acts[0].ActivityID)
+	detail, err := c.Activity(t.Context(), acts[0].ActivityID)
 	require.NoError(t, err)
 	assert.NotEmpty(t, detail)
 }

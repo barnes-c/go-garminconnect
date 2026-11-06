@@ -164,9 +164,10 @@ func (c *Client) LastActivity(ctx context.Context) (*Activity, error) {
 	return &acts[0], nil
 }
 
-// ActivityDetail returns the full detail for a single activity. The response
-// structure varies by activity type, so the raw JSON is returned as a map.
-func (c *Client) ActivityDetail(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
+// Activity returns the full summary record for a single activity. The response
+// structure varies by activity type, so the raw JSON is returned as a map. For
+// per-sample metrics use ActivityDetails.
+func (c *Client) Activity(ctx context.Context, id int64) (map[string]json.RawMessage, error) {
 	var out map[string]json.RawMessage
 	if err := c.get(ctx, fmt.Sprintf("/activity-service/activity/%d", id), nil, &out); err != nil {
 		return nil, err
