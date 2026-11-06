@@ -84,11 +84,11 @@ func TestWorkoutLifecycle(t *testing.T) {
 	assert.NotZero(t, count.TotalCount)
 
 	// Scheduled on or before testDate so the period query below covers it.
-	sched, err := c.ScheduleWorkout(ctx, id, "2025-12-29")
+	sched, err := c.ScheduleWorkout(ctx, id, testDate.AddDate(0, 0, -3))
 	require.NoError(t, err)
 	schedID := sched.WorkoutScheduleID
 	require.NotZero(t, schedID)
-	require.NoError(t, c.RescheduleWorkout(ctx, schedID, "2025-12-30"))
+	require.NoError(t, c.RescheduleWorkout(ctx, schedID, testDate.AddDate(0, 0, -2)))
 
 	got, err := c.ScheduledWorkout(ctx, schedID)
 	require.NoError(t, err)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 // Device holds registration information for a Garmin device.
@@ -182,12 +183,12 @@ type DeviceSolarData struct {
 
 // DeviceSolarData returns solar charging data for the given device between start
 // and end dates. The endpoint wraps the data in {"deviceSolarInput": ...}.
-func (c *Client) DeviceSolarData(ctx context.Context, deviceID int64, start, end string) (*DeviceSolarData, error) {
-	params := url.Values{"singleDayView": {strconv.FormatBool(start == end)}}
+func (c *Client) DeviceSolarData(ctx context.Context, deviceID int64, start, end time.Time) (*DeviceSolarData, error) {
+	params := url.Values{"singleDayView": {strconv.FormatBool(date(start) == date(end))}}
 	var wrapper struct {
 		DeviceSolarInput DeviceSolarData `json:"deviceSolarInput"`
 	}
-	if err := c.get(ctx, fmt.Sprintf("/web-gateway/solar/%d/%s/%s", deviceID, start, end), params, &wrapper); err != nil {
+	if err := c.get(ctx, fmt.Sprintf("/web-gateway/solar/%d/%s/%s", deviceID, date(start), date(end)), params, &wrapper); err != nil {
 		return nil, err
 	}
 	return &wrapper.DeviceSolarInput, nil

@@ -3,7 +3,7 @@ version: 2
 interactions:
     - id: 0
       request:
-        body: '{"dateTimestamp":"2026-01-01T00:00:00","gmtTimestamp":"2026-01-01T00:00:00","unitKey":"TEST","value":1.0}'
+        body: '{"date":"2026-01-01","dateTimestamp":"2026-01-01T00:00:00","gmtTimestamp":"2026-01-01T00:00:00","sourceType":"TEST","unitKey":"TEST","value":1.0}'
         headers:
             Accept:
                 - application/json

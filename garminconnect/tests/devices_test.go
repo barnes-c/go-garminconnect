@@ -58,7 +58,7 @@ func TestDeviceSolarData(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, devices)
 
-	out, err := c.DeviceSolarData(t.Context(), devices[0].DeviceID, "2026-01-01", "2026-01-01")
+	out, err := c.DeviceSolarData(t.Context(), devices[0].DeviceID, testDate, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	require.NotNil(t, out)

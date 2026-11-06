@@ -58,13 +58,12 @@ func TestBodyWritesLifecycle(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 	ctx := t.Context()
-	day := testDate.Format(time.DateOnly)
-
-	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00"))
-
 	zurich, err := time.LoadLocation("Europe/Zurich")
 	require.NoError(t, err)
 	at := time.Date(testDate.Year(), testDate.Month(), testDate.Day(), 8, 0, 0, 0, zurich)
+
+	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", at))
+
 	_, err = c.SetBloodPressure(ctx, 120, 80, 60, at, "created by TestBodyWritesLifecycle")
 	require.NoError(t, err)
 
@@ -76,7 +75,7 @@ func TestBodyWritesLifecycle(t *testing.T) {
 	assert.NotZero(t, m.Systolic)
 	require.NotZero(t, m.Version)
 	require.NoError(t, c.SetBloodPressureNotes(ctx, m, "edited"))
-	require.NoError(t, c.DeleteBloodPressure(ctx, day, m.Version))
+	require.NoError(t, c.DeleteBloodPressure(ctx, testDate, m.Version))
 
 	n, err := c.DeleteWeighIns(ctx, testDate)
 	require.NoError(t, err)
@@ -89,11 +88,9 @@ func TestBodyHistory(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
 	ctx := t.Context()
-	day := testDate.Format(time.DateOnly)
-
-	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00"))
 	zurich, err := time.LoadLocation("Europe/Zurich")
 	require.NoError(t, err)
+	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", time.Date(testDate.Year(), testDate.Month(), testDate.Day(), 8, 0, 0, 0, zurich)))
 	at := time.Date(testDate.Year(), testDate.Month(), testDate.Day(), 8, 5, 0, 0, zurich)
 	bp, err := c.SetBloodPressure(ctx, 120, 80, 60, at, "created by TestBodyHistory")
 	require.NoError(t, err)
@@ -124,7 +121,7 @@ func TestBodyHistory(t *testing.T) {
 	require.NotEmpty(t, weeklyBP.Days)
 	assert.NotZero(t, weeklyBP.Days[0].HighSystolic)
 
-	require.NoError(t, c.DeleteBloodPressure(ctx, day, lastBP[0].Version))
+	require.NoError(t, c.DeleteBloodPressure(ctx, testDate, lastBP[0].Version))
 	n, err := c.DeleteWeighIns(ctx, testDate)
 	require.NoError(t, err)
 	assert.Equal(t, 1, n)
