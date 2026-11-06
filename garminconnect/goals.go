@@ -328,3 +328,12 @@ func (c *Client) StepsGoal(ctx context.Context, d time.Time) (*StepsGoal, error)
 	}
 	return &out, nil
 }
+
+// PushesGoal returns the wheelchair push goal in effect on day d.
+func (c *Client) PushesGoal(ctx context.Context, d time.Time) (*StepsGoal, error) {
+	var out StepsGoal
+	if err := c.get(ctx, "/wellness-service/wellness/wellness-goals/consolidated/pushes/"+date(d), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}

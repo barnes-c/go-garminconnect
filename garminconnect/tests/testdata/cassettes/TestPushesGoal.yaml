@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/wellness-service/wellness/wellness-goals/consolidated/pushes/2026-01-01
+        method: GET
+      response:
+        body: '{"deviceGoal":1,"userGoal":1,"syncedToDevice":false,"effective":"TEST","userGoalCategory":null,"goalType":"TEST"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

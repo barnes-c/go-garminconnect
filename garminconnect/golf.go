@@ -112,3 +112,24 @@ func (c *Client) GolfUserStats(ctx context.Context) (map[string]json.RawMessage,
 	}
 	return out, nil
 }
+
+// GolfClubType is one of Garmin's golf club types with its default specs.
+// Lengths are in inches, angles in degrees.
+type GolfClubType struct {
+	Value        int     `json:"value"`
+	Name         string  `json:"name"`
+	ShaftLength  float64 `json:"shaftLength"`
+	LoftAngle    float64 `json:"loftAngle"`
+	LieAngle     float64 `json:"lieAngle"`
+	DisplayRange string  `json:"displayRange"`
+	Valid        bool    `json:"valid"`
+}
+
+// GolfClubTypes returns Garmin's catalog of golf club types.
+func (c *Client) GolfClubTypes(ctx context.Context) ([]GolfClubType, error) {
+	var out []GolfClubType
+	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/club/types", nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}

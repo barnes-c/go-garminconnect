@@ -114,3 +114,33 @@ func TestUsageIndicators(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, out.PerformanceBasedIndicators.ActivityIndicators)
 }
+
+func TestUserFocus(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.UserFocus(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.UserFocus)
+}
+
+func TestUserLocation(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.UserLocation(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.CountryCode)
+	assert.NotZero(t, out.UserProfileID)
+}
+
+func TestFollowingsCount(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	_, err := c.FollowingsCount(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+}

@@ -1,0 +1,22 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/follower-service/follow/followings/count
+        method: GET
+      response:
+        body: "0"
+        headers:
+            Content-Length:
+                - "1"
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

@@ -358,3 +358,44 @@ func (c *Client) UsageIndicators(ctx context.Context) (*UsageIndicators, error) 
 	}
 	return &out, nil
 }
+
+// UserFocus is the training focus the user picked in Garmin Connect.
+type UserFocus struct {
+	UserFocus       string  `json:"userFocus"`
+	CreateTimestamp *string `json:"createTimestamp"`
+}
+
+// UserFocus returns the authenticated user's training focus.
+func (c *Client) UserFocus(ctx context.Context) (*UserFocus, error) {
+	var out UserFocus
+	if err := c.get(ctx, "/userfocus-service/focus", nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UserLocation is the authenticated user's account country.
+type UserLocation struct {
+	UserProfileID                int64  `json:"userProfileId"`
+	CountryCode                  string `json:"countryCode"`
+	CountryCodeVerified          bool   `json:"countryCodeVerified"`
+	CountryCodeVerifiedTimestamp string `json:"countryCodeVerifiedTimestamp"`
+}
+
+// UserLocation returns the authenticated user's account country.
+func (c *Client) UserLocation(ctx context.Context) (*UserLocation, error) {
+	var out UserLocation
+	if err := c.get(ctx, "/userprofile-service/userprofile/location", nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// FollowingsCount returns how many users the authenticated user follows.
+func (c *Client) FollowingsCount(ctx context.Context) (int, error) {
+	var out int
+	if err := c.get(ctx, "/follower-service/follow/followings/count", nil, &out); err != nil {
+		return 0, err
+	}
+	return out, nil
+}
