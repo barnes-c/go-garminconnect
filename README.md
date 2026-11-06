@@ -72,7 +72,7 @@ The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.co
 | **Goals**            | Goals (incl. daily goals and the step goal), badges (detail, latest, per day/activity, attributes), personal-record types and records per activity, and challenges                                                                                                                                |
 | **Devices & gear**   | Registered and past devices, sync times, sensors, device messages, settings, solar data, and gear (catalog search, types, list, per activity, create, edit, retire, delete, link to activities)                                                                                                  |
 | **Profile**          | User profile and profile base, personal information, settings (read and update), privacy settings, usage indicators, and unit system                         |
-| **Women's health**   | Menstrual cycle and pregnancy data                                                                                                                           |
+| **Women's health**   | Menstrual cycle day view, calendar, cycle summary, last confirmed cycle and reports; cycle setup, period confirmation, daily logs and period edits; pregnancy snapshot |
 | **Nutrition**        | Food log, meals, goals, and tracking status                                                                                                                                   |
 | **Golf**             | Scorecards, shot data, club stats, and player stats                                                                                                                                     |
 

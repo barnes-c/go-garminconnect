@@ -1,0 +1,223 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"userMenstrualCycleSettings":{"menstrualCycleType":"TEST"}}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/user-settings
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"cycleLength":1,"periodLength":1,"periodStartDate":"2026-01-01","reportTimestamp":"2026-01-01T00:00:00"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/initCycleSetup
+        method: POST
+      response:
+        body: '{"userProfilePk":12345678,"periodStartDate":"2026-01-01","periodLength":1,"cycleLength":1,"reportTimestamp":"2026-01-01T00:00:00","educationContentMod":null,"hasSpecifiedCycleLength":null,"hasSpecifiedPeriodLength":null,"cycleType":null,"cycleStatus":null,"predictedCycle":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"cycleLength":1,"hasSpecifiedCycleLength":true,"hasSpecifiedPeriodLength":true,"periodLength":1,"periodStartDate":"2026-01-01","predictedCycle":false,"reportTimestamp":"2026-01-01T00:00:00"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/2025-12-20
+        method: POST
+      response:
+        body: '{"userProfilePk":12345678,"periodStartDate":"2026-01-01","periodLength":1,"cycleLength":1,"reportTimestamp":"2026-01-01T00:00:00","educationContentMod":null,"hasSpecifiedCycleLength":true,"hasSpecifiedPeriodLength":true,"cycleType":null,"cycleStatus":null,"predictedCycle":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        body: '{"calendarDate":"2026-01-01","symptoms":["TEST"],"moods":["TEST"],"flow":"TEST","notes":"TEST","reportTimestamp":"2026-01-01T00:00:00","ovulationDay":false}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/dailylog/2025-12-22
+        method: POST
+      response:
+        body: '{"userProfilePk":12345678,"calendarDate":"2026-01-01","symptoms":["TEST"],"moods":["TEST"],"discharge":null,"flow":"TEST","sexDrive":null,"sexualActivity":null,"notes":"TEST","reportTimestamp":"2026-01-01T00:00:00","ovulationDay":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/dayview/2025-12-22
+        method: GET
+      response:
+        body: '{"daySummary":{"startDate":"2026-01-01","dayInCycle":1,"periodLength":1,"currentPhase":1,"lengthOfCurrentPhase":1,"daysUntilNextPhase":1,"fertileWindowStart":1,"lengthOfFertileWindow":1,"predictedCycleLength":1,"educationContentMod":1,"cycleType":"TEST","feedbackPhrase":"TEST","predictedCycle":false},"dayLog":{"userProfilePk":12345678,"calendarDate":"2026-01-01","symptoms":["TEST"],"moods":["TEST"],"discharge":null,"flow":"TEST","sexDrive":null,"sexualActivity":null,"notes":"TEST","reportTimestamp":"2026-01-01T00:00:00","hasBabyMovement":false,"ovulationDay":false}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/calendar/2025-12-01/2026-01-01
+        method: GET
+      response:
+        body: '{"cycleSummaries":[{"startDate":"2026-01-01","periodLength":1,"fertileWindowStart":1,"lengthOfFertileWindow":1,"educationContentMod":1,"predictedCycle":false}],"loggedSymptomDays":["2026-01-01"],"loggedOvulationDays":[],"loggedNoteDays":["2026-01-01"]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 6
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/summary/2026-01-01
+        method: GET
+      response:
+        body: '{"startDate":"2026-01-01","dayInCycle":1,"periodLength":1,"currentPhase":1,"lengthOfCurrentPhase":1,"daysUntilNextPhase":1,"fertileWindowStart":1,"lengthOfFertileWindow":1,"predictedCycleLength":1,"educationContentMod":1,"cycleType":"TEST","feedbackPhrase":"TEST","predictedCycle":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 7
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/lastconfirmed/2026-01-01
+        method: GET
+      response:
+        body: '{"userProfilePk":12345678,"periodStartDate":"2026-01-01","periodLength":1,"cycleLength":1,"reportTimestamp":"2026-01-01T00:00:00","educationContentMod":1,"hasSpecifiedCycleLength":null,"hasSpecifiedPeriodLength":null,"cycleType":"TEST","cycleStatus":null,"predictedCycle":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 8
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/reports/menstrualcycle/1/2026-01-01?next=false&reportType=CYCLE
+        method: GET
+      response:
+        body: '{"avgCycleLength":1,"avgPeriodLength":1,"cycleSummaries":[{"startDate":"2026-01-01","periodLength":1,"fertileWindowStart":1,"lengthOfFertileWindow":1,"cycleLength":1,"cycleType":"TEST","gapCycle":false}],"dailyLogs":[{"userProfilePk":12345678,"calendarDate":"2026-01-01","symptoms":["TEST"],"moods":["TEST"],"discharge":null,"flow":"TEST","sexDrive":null,"sexualActivity":null,"notes":"TEST","reportTimestamp":"2026-01-01T00:00:00","hasBabyMovement":false,"ovulationDay":false},{"userProfilePk":12345678,"calendarDate":"2026-01-01","symptoms":null,"moods":null,"discharge":null,"flow":null,"sexDrive":null,"sexualActivity":null,"notes":null,"reportTimestamp":"2026-01-01T00:00:00","hasBabyMovement":false,"ovulationDay":false}]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 9
+      request:
+        body: '{"calendarDate":"2026-01-01","notes":"","reportTimestamp":"2026-01-01T00:00:00","ovulationDay":false}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/dailylog/2025-12-22
+        method: POST
+      response:
+        body: '{"userProfilePk":12345678,"calendarDate":"2026-01-01","symptoms":null,"moods":null,"discharge":null,"flow":null,"sexDrive":null,"sexualActivity":null,"notes":"","reportTimestamp":"2026-01-01T00:00:00","ovulationDay":false}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 10
+      request:
+        body: '{"cycleDatesLists":[],"endDate":"2026-01-01","futureEditsByFE":true,"reportTimestamp":"2026-01-01T00:00:00","startDate":"2026-01-01","todayCalendarDate":"2026-01-01"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/calendarupdates
+        method: POST
+      response:
+        body: '{"userProfilePk":12345678,"todayCalendarDate":"2026-01-01","startDate":"2026-01-01","endDate":"2026-01-01","cycleDatesLists":[],"futureEditsByFE":true,"reportTimestamp":"2026-01-01T00:00:00"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 11
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/periodichealth-service/menstrualcycle/calendar/2025-12-01/2026-01-01
+        method: GET
+      response:
+        body: '{"cycleSummaries":[],"loggedSymptomDays":[],"loggedOvulationDays":[],"loggedNoteDays":[]}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
