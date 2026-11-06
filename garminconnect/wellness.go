@@ -326,14 +326,6 @@ type WeeklyIMStat struct {
 	VigorousIntensityMinutes int    `json:"vigorousValue"`
 }
 
-// StepsData returns intraday step data in 15-minute intervals.
-//
-// Deprecated: StepsData hits the same endpoint as [Client.Steps] and now
-// delegates to it; use Steps directly.
-func (c *Client) StepsData(ctx context.Context, d time.Time) ([]StepEntry, error) {
-	return c.Steps(ctx, d)
-}
-
 // DailySteps returns daily step totals between start and end dates.
 func (c *Client) DailySteps(ctx context.Context, start, end time.Time) ([]DailyStepStat, error) {
 	var out []DailyStepStat

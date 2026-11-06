@@ -128,17 +128,6 @@ func (c *Client) DeleteWorkout(ctx context.Context, id int64) error {
 	return c.del(ctx, fmt.Sprintf("/workout-service/workout/%d", id))
 }
 
-// ScheduledWorkouts returns the calendar for the given year and month.
-//
-// Deprecated: use [Client.CalendarMonth], which returns typed items.
-func (c *Client) ScheduledWorkouts(ctx context.Context, year, month int) (json.RawMessage, error) {
-	var out json.RawMessage
-	if err := c.get(ctx, fmt.Sprintf("/calendar-service/year/%d/month/%d", year, month-1), nil, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ScheduleWorkout assigns a saved workout to a calendar date (YYYY-MM-DD).
 func (c *Client) ScheduleWorkout(ctx context.Context, workoutID int64, date string) (*ScheduledWorkout, error) {
 	var out ScheduledWorkout
