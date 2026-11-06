@@ -18,20 +18,10 @@ type TrainingReadiness struct {
 	SleepScore        int     `json:"sleepScore"`
 	RecoveryTime      int     `json:"recoveryTime"` // minutes
 	AcuteLoad         float64 `json:"acuteLoad"`
-	TrainingLoad      float64 `json:"trainingLoad"`
 	SleepHistoryScore int     `json:"sleepHistoryFactorPercent"`
 	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
-	FeedbackPhrase    string  `json:"feedbackPhrase"`
-}
-
-// TrainingStatusEntry is a single day of training status data.
-type TrainingStatusEntry struct {
-	CalendarDate       string  `json:"calendarDate"`
-	TrainingStatusType string  `json:"trainingStatusType"`
-	TrainingLoadType   string  `json:"trainingLoadType"`
-	WorkoutGoal        float64 `json:"workoutGoal"`
-	AtpPlanLowLoad     float64 `json:"atpPlanLowLoad"`
-	AtpPlanHighLoad    float64 `json:"atpPlanHighLoad"`
+	FeedbackLong      string  `json:"feedbackLong"`
+	FeedbackShort     string  `json:"feedbackShort"`
 }
 
 // MaxMetricsEntry holds a VO2 Max data point.

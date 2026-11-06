@@ -38,7 +38,6 @@ type DailySleepDTO struct {
 	HighestRespirationValue  float64 `json:"highestRespirationValue"`
 	AvgSleepStress           float64 `json:"avgSleepStress"`
 	SpO2AvgReadingPercent    float64 `json:"averageSpO2Value"`
-	SpO2LowReadingPercent    float64 `json:"spO2LowReadingPercent"`
 	SleepScoreFeedback       string  `json:"sleepScoreFeedback"`
 	SleepScoreInsight        string  `json:"sleepScoreInsight"`
 }
@@ -53,8 +52,9 @@ type SleepData struct {
 
 // HRVReading is a single HRV measurement.
 type HRVReading struct {
-	HRVValue int    `json:"hrvValue"`
-	StartGMT string `json:"startGMT"`
+	HRVValue         int    `json:"hrvValue"`
+	ReadingTimeGMT   string `json:"readingTimeGMT"`
+	ReadingTimeLocal string `json:"readingTimeLocal"`
 }
 
 // HRVBaseline holds the HRV baseline range used to classify nightly status.
@@ -67,7 +67,6 @@ type HRVBaseline struct {
 
 // HRVSummary holds nightly HRV statistics.
 type HRVSummary struct {
-	UserProfilePK     int         `json:"userProfilePK"`
 	WeeklyAvg         int         `json:"weeklyAvg"`
 	LastNight         int         `json:"lastNightAvg"`
 	LastNight5MinHigh int         `json:"lastNight5MinHigh"`
@@ -76,14 +75,13 @@ type HRVSummary struct {
 	FeedbackPhrase    string      `json:"feedbackPhrase"`
 	CalendarDate      string      `json:"calendarDate"`
 	CreateTimestamp   string      `json:"createTimeStamp"`
-	StartTimestampGMT string      `json:"startTimestampGMT"`
-	EndTimestampGMT   string      `json:"endTimestampGMT"`
 }
 
 // HRVData is the full HRV response.
 type HRVData struct {
 	HRVSummary        HRVSummary   `json:"hrvSummary"`
 	HRVReadings       []HRVReading `json:"hrvReadings"`
+	UserProfilePK     int64        `json:"userProfilePk"`
 	StartTimestampGMT string       `json:"startTimestampGMT"`
 	EndTimestampGMT   string       `json:"endTimestampGMT"`
 }

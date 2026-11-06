@@ -24,11 +24,8 @@ type HeartRates struct {
 
 // RestingHeartRateEntry is a single resting heart rate data point.
 type RestingHeartRateEntry struct {
-	UserProfilePK       int     `json:"userProfilePK"`
-	StatisticsStartDate string  `json:"statisticsStartDate"`
-	CalendarDate        string  `json:"calendarDate"`
-	Value               float64 `json:"value"`
-	WeeklyAvg           int     `json:"weeklyAvg"`
+	CalendarDate string  `json:"calendarDate"`
+	Value        float64 `json:"value"`
 }
 
 // RestingHeartRateResponse wraps the resting heart rate API response.

@@ -15,7 +15,7 @@ type Gear struct {
 	DisplayName     string  `json:"displayName"`
 	CustomMakeModel string  `json:"customMakeModel"`
 	MaxMeters       float64 `json:"maximumMeters"`
-	NotifiedMeters  int     `json:"notifiedAtMeters"`
+	Notified        bool    `json:"notified"`
 	DateBegin       string  `json:"dateBegin"`
 	DateEnd         string  `json:"dateEnd"`
 	GearStatusName  string  `json:"gearStatusName"`

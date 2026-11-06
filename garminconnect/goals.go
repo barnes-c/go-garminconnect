@@ -26,15 +26,14 @@ type GoalType struct {
 
 // Badge represents an earned or available achievement badge.
 type Badge struct {
-	BadgeID              int64  `json:"badgeId"`
-	BadgeName            string `json:"badgeName"`
-	BadgeKey             string `json:"badgeKey"`
-	BadgeCategoryTypeKey string `json:"badgeCategoryTypeKey"`
-	EarnedDate           string `json:"badgeEarnedDate"`
-	BadgePoints          int    `json:"badgePoints"`
-	BadgeCategoryID      int    `json:"badgeCategoryId"`   // see BadgeAttributes
-	BadgeDifficultyID    int    `json:"badgeDifficultyId"` // see BadgeAttributes
-	BadgeTypeIDs         []int  `json:"badgeTypeIds"`      // see BadgeAttributes
+	BadgeID           int64  `json:"badgeId"`
+	BadgeName         string `json:"badgeName"`
+	BadgeKey          string `json:"badgeKey"`
+	EarnedDate        string `json:"badgeEarnedDate"`
+	BadgePoints       int    `json:"badgePoints"`
+	BadgeCategoryID   int    `json:"badgeCategoryId"`   // see BadgeAttributes
+	BadgeDifficultyID int    `json:"badgeDifficultyId"` // see BadgeAttributes
+	BadgeTypeIDs      []int  `json:"badgeTypeIds"`      // see BadgeAttributes
 }
 
 // Goals returns goals filtered by status (e.g. "active", "completed").
