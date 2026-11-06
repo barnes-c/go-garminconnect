@@ -108,10 +108,6 @@ type MenstrualPeriod struct {
 	Length int
 }
 
-func reportTimestamp() string {
-	return time.Now().UTC().Format("2006-01-02T15:04:05.000")
-}
-
 // MenstrualDayView returns the cycle position and log for a day. Without cycle
 // tracking set up it returns ErrNoData.
 func (c *Client) MenstrualDayView(ctx context.Context, d time.Time) (*MenstrualDayView, error) {
@@ -183,7 +179,7 @@ func (c *Client) InitMenstrualCycle(ctx context.Context, periodStart time.Time, 
 		"periodStartDate": date(periodStart),
 		"periodLength":    periodLength,
 		"cycleLength":     cycleLength,
-		"reportTimestamp": reportTimestamp(),
+		"reportTimestamp": timestamp(time.Now().UTC()),
 	}
 	var out MenstrualCycle
 	if err := c.post(ctx, menstrualPath+"/initCycleSetup", body, &out); err != nil {
@@ -202,7 +198,7 @@ func (c *Client) ConfirmMenstrualPeriod(ctx context.Context, periodStart time.Ti
 		"predictedCycle":           predicted,
 		"hasSpecifiedCycleLength":  true,
 		"hasSpecifiedPeriodLength": true,
-		"reportTimestamp":          reportTimestamp(),
+		"reportTimestamp":          timestamp(time.Now().UTC()),
 	}
 	var out MenstrualCycle
 	if err := c.post(ctx, menstrualPath+"/"+date(periodStart), body, &out); err != nil {
@@ -215,7 +211,7 @@ func (c *Client) ConfirmMenstrualPeriod(ctx context.Context, periodStart time.Ti
 // is a full snapshot: nil fields are cleared, except a nil Notes keeps the
 // stored note; set Notes to "" to clear it.
 func (c *Client) SetMenstrualDayLog(ctx context.Context, log MenstrualDayLog) (*MenstrualDayLog, error) {
-	log.ReportTimestamp = reportTimestamp()
+	log.ReportTimestamp = timestamp(time.Now().UTC())
 	var out MenstrualDayLog
 	if err := c.post(ctx, menstrualPath+"/dailylog/"+url.PathEscape(log.CalendarDate), log, &out); err != nil {
 		return nil, err
@@ -241,7 +237,7 @@ func (c *Client) SetMenstrualPeriods(ctx context.Context, start, end time.Time, 
 		"endDate":           date(end),
 		"cycleDatesLists":   lists,
 		"futureEditsByFE":   true,
-		"reportTimestamp":   reportTimestamp(),
+		"reportTimestamp":   timestamp(time.Now().UTC()),
 	}
 	return c.post(ctx, menstrualPath+"/calendarupdates", body, nil)
 }

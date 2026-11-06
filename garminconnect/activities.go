@@ -354,7 +354,7 @@ func (c *Client) CreateManualActivity(ctx context.Context, a ManualActivity) (in
 		"timeZoneUnitDTO":      map[string]any{"unitKey": a.TimeZone},
 		"metadataDTO":          map[string]any{"autoCalcCalories": true},
 		"summaryDTO": map[string]any{
-			"startTimeLocal": a.Start.Format("2006-01-02T15:04:05.000"),
+			"startTimeLocal": timestamp(a.Start),
 			"distance":       a.Distance,
 			"duration":       a.Duration.Seconds(),
 		},

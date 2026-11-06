@@ -27,3 +27,12 @@ func TestHeartRates(t *testing.T) {
 		assert.NotZero(t, hr.HeartRateValues[0][1])
 	}
 }
+
+func TestWeekAverageRestingHR(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.WeekAverageRestingHR(t.Context(), dataDate(t, "GARMIN_SUMMARY_DATE"))
+	require.NoError(t, err)
+	assert.NotZero(t, out)
+}

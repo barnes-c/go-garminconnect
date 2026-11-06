@@ -80,3 +80,20 @@ func (c *Client) RestingHeartRate(ctx context.Context, start, end time.Time) (*R
 	}
 	return &out, nil
 }
+
+// WeekAverageRestingHR returns the average resting heart rate of the week
+// ending at d.
+func (c *Client) WeekAverageRestingHR(ctx context.Context, d time.Time) (int, error) {
+	name, err := c.displayNamePath()
+	if err != nil {
+		return 0, err
+	}
+	var out struct {
+		WeekAvgRestingHR int `json:"weekAvgRestingHR"`
+	}
+	params := url.Values{"calendarDate": {date(d)}}
+	if err := c.get(ctx, "/usersummary-service/usersummary/weekAverageRestingHR/"+name, params, &out); err != nil {
+		return 0, err
+	}
+	return out.WeekAvgRestingHR, nil
+}

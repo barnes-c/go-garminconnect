@@ -109,3 +109,12 @@ func TestDeviceMessages(t *testing.T) {
 	require.NotEmpty(t, out)
 	assert.NotEmpty(t, out[0].MessageType)
 }
+
+func TestLastSyncTimestamp(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.LastSyncTimestamp(t.Context())
+	require.NoError(t, err)
+	assert.NotEmpty(t, out)
+}

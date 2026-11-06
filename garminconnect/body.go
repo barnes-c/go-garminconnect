@@ -149,11 +149,10 @@ func (c *Client) LatestWeight(ctx context.Context, d time.Time) (*LatestWeightEn
 // AddWeighIn records a manual weigh-in of weight in unitKey ("kg" or "lbs")
 // at the given time; its location supplies the local time and calendar day.
 func (c *Client) AddWeighIn(ctx context.Context, weight float64, unitKey string, at time.Time) error {
-	const layout = "2006-01-02T15:04:05.000"
 	body := map[string]any{
 		"date":          date(at),
-		"dateTimestamp": at.Format(layout),
-		"gmtTimestamp":  at.UTC().Format(layout),
+		"dateTimestamp": timestamp(at),
+		"gmtTimestamp":  timestamp(at.UTC()),
 		"unitKey":       unitKey,
 		"sourceType":    "MANUAL",
 		"value":         weight,

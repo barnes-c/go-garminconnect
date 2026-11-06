@@ -64,3 +64,14 @@ func TestActivityExtras(t *testing.T) {
 
 	require.NoError(t, c.DeleteActivity(ctx, id))
 }
+
+func TestActivityStatistics(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.ActivityStatistics(t.Context())
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].ActivityType.TypeKey)
+	assert.NotZero(t, out[0].TotalActivities)
+}
