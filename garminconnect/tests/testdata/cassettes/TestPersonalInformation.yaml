@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/personal-information/testuser
+        method: GET
+      response:
+        body: '{"userInfo":{"birthDate":"2026-01-01","genderType":null,"email":"TEST","locale":"TEST","timeZone":"TEST","age":1,"countryCode":"TEST"},"biometricProfile":{"userId":12345678,"height":null,"weight":null,"vo2Max":null,"vo2MaxCycling":null,"vo2MaxRowing":null,"lactateThresholdHeartRate":null,"activityClass":null,"functionalThresholdPower":null,"criticalSwimSpeed":null},"timeZone":"TEST","locale":"TEST","gender":null,"birthDate":"2026-01-01"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

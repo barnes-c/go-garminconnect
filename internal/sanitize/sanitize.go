@@ -82,7 +82,7 @@ var (
 	// zones, which locate the user, and device serial numbers.
 	alwaysScrub = map[string]bool{
 		"awakeCount": true, "restlessMomentsCount": true,
-		"timezoneOffset": true, "timeZoneId": true,
+		"timezoneOffset": true, "timeZoneId": true, "timeZonePk": true,
 		"serialNumber": true,
 	}
 	textValueRE = regexp.MustCompile(`:"((?:[^"\\]|\\.)*)"`)

@@ -1,0 +1,56 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/user-settings
+        method: GET
+      response:
+        body: '{"id":12345678,"userData":{"gender":null,"weight":null,"height":null,"timeFormat":"TEST","birthDate":"2026-01-01","measurementSystem":"TEST","activityLevel":null,"handedness":"TEST","powerFormat":{"formatId":30,"formatKey":"TEST","minFraction":1,"maxFraction":1,"groupingUsed":true,"displayFormat":null},"heartRateFormat":{"formatId":21,"formatKey":"TEST","minFraction":1,"maxFraction":1,"groupingUsed":false,"displayFormat":null},"firstDayOfWeek":{"dayId":3,"dayName":"TEST","sortOrder":3,"isPossibleFirstDay":true},"vo2MaxRunning":null,"vo2MaxCycling":null,"lactateThresholdSpeed":null,"lactateThresholdHeartRate":null,"diveNumber":null,"intensityMinutesCalcMethod":"TEST","moderateIntensityMinutesHrZone":1,"vigorousIntensityMinutesHrZone":1,"hydrationMeasurementUnit":"TEST","hydrationContainers":[],"hydrationAutoGoalEnabled":true,"firstbeatMaxStressScore":null,"firstbeatCyclingLtTimestamp":null,"firstbeatRunningLtTimestamp":null,"thresholdHeartRateAutoDetected":null,"ftpAutoDetected":null,"trainingStatusPausedDate":null,"weatherLocation":{"useFixedLocation":null,"latitude":null,"longitude":null,"locationName":null,"isoCountryCode":null,"postalCode":null},"golfDistanceUnit":"TEST","golfElevationUnit":null,"golfSpeedUnit":null,"externalBottomTime":null,"availableTrainingDays":["TEST","TEST","TEST","TEST","TEST","TEST","TEST"],"preferredLongTrainingDays":["TEST","TEST"],"virtualCaddieDataSource":null,"numberDivesAutomatically":null,"firstbeatRowingLtTimestamp":null,"lactateThresholdRowingPace":null,"lactateThresholdHeartRateRowing":null,"lactateThresholdHeartRateCycling":null,"weeklyTrainingReportEnabled":true,"wtrPrimaryActivityType":1},"userSleep":{"sleepTime":1,"defaultSleepTime":true,"wakeTime":1,"defaultWakeTime":true},"connectDate":null,"sourceType":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"userData":{"timeFormat":"TEST"}}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/user-settings
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
+    - id: 2
+      request:
+        body: '{"userData":{"timeFormat":"TEST"}}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/user-settings
+        method: PUT
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms

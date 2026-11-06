@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/userProfileBase
+        method: GET
+      response:
+        body: '{"userProfilePk":12345678,"userName":"TEST","firstName":"TEST","lastName":"TEST","birthDate":"2026-01-01","gender":null,"emailAddress":"TEST","createDate":"2026-01-01T00:00:00+0000","measurementSystemPk":1,"glucoseMeasurementUnitId":516,"hydrationMeasurementUnitId":494,"timeZonePk":1,"decimalFormat":1,"timeFormat":1,"formatLocalePk":1,"dayOfWeekPk":3,"garminGlobalId":"TEST","displayName":"ffffffff-ffff-ffff-ffff-ffffffffffff","tocAcceptedDate":"2026-01-01T00:00:00+0000","accessDeletedDate":null,"garminGUID":"ffffffff-ffff-ffff-ffff-ffffffffffff","countryCode":"TEST","countryCodeVerified":true,"countryCodeVerifiedTimestamp":"2026-01-01","golfDistanceUnitId":1,"golfElevationUnitId":null,"golfSpeedUnitId":null,"phoneNumber":"","managedStatus":null,"createdConsumerPk":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
