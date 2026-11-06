@@ -142,3 +142,15 @@ func TestAddHydration(t *testing.T) {
 	_, err = c.AddHydration(ctx, -250, at.Add(time.Minute))
 	require.NoError(t, err)
 }
+
+func TestHydrationDetails(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.HydrationDetails(t.Context(), testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.CalendarDate)
+	assert.NotEmpty(t, out.HydrationMeasurementUnit)
+	assert.NotZero(t, out.GoalInML)
+}

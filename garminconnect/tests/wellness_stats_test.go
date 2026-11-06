@@ -97,3 +97,14 @@ func TestCaloriesDaily(t *testing.T) {
 		assert.InDelta(t, d.Active+d.Resting, d.Total, 0.001)
 	}
 }
+
+// TestWeeklySteps only checks that the call succeeds: the recording account
+// has no step data, so the list is empty.
+func TestWeeklySteps(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	_, err := c.WeeklySteps(t.Context(), testDate, 2)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+}

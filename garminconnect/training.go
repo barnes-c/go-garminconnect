@@ -20,8 +20,11 @@ type TrainingReadiness struct {
 	AcuteLoad         float64 `json:"acuteLoad"`
 	SleepHistoryScore int     `json:"sleepHistoryFactorPercent"`
 	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
-	FeedbackLong      string  `json:"feedbackLong"`
-	FeedbackShort     string  `json:"feedbackShort"`
+	// InputContext is "AFTER_WAKEUP_RESET" for the morning reading; not every
+	// device sets it.
+	InputContext  string `json:"inputContext"`
+	FeedbackLong  string `json:"feedbackLong"`
+	FeedbackShort string `json:"feedbackShort"`
 }
 
 // MaxMetricsEntry holds a VO2 Max data point.

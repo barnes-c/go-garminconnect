@@ -131,3 +131,13 @@ func TestDailyGoalLifecycle(t *testing.T) {
 	require.NoError(t, c.SetDailyGoal(ctx, testDate, gc.DailyGoal{GoalType: orig.GoalType, GoalValue: orig.GoalValue + 10}))
 	require.NoError(t, c.SetDailyGoal(ctx, testDate, orig))
 }
+
+func TestPushesGoal(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.PushesGoal(t.Context(), testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, out.GoalType)
+}

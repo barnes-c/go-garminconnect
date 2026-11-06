@@ -18,6 +18,7 @@ func TestTrainingReadiness(t *testing.T) {
 	assert.NotEmpty(t, entries[0].ScoreQualifier)
 	assert.NotZero(t, entries[0].SleepHistoryScore)
 	assert.NotEmpty(t, entries[0].FeedbackLong)
+	assert.NotEmpty(t, entries[0].InputContext)
 	assert.NotEmpty(t, entries[0].CalendarDate)
 }
 

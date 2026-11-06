@@ -232,6 +232,25 @@ func (c *Client) Hydration(ctx context.Context, d time.Time) (*HydrationData, er
 	return &out, nil
 }
 
+// HydrationDetails is a day's hydration with the goal settings behind it.
+type HydrationDetails struct {
+	HydrationData
+	BaseGoalInML             float64           `json:"baseGoalInML"`
+	HydrationMeasurementUnit string            `json:"hydrationMeasurementUnit"`
+	HydrationContainers      []json.RawMessage `json:"hydrationContainers"`
+	HydrationAutoGoalEnabled bool              `json:"hydrationAutoGoalEnabled"`
+}
+
+// HydrationDetails returns a day's hydration together with its base goal,
+// unit and containers.
+func (c *Client) HydrationDetails(ctx context.Context, d time.Time) (*HydrationDetails, error) {
+	var out HydrationDetails
+	if err := c.get(ctx, "/usersummary-service/usersummary/hydration/allData/"+date(d), nil, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 // Respiration returns breathing rate data for the given date.
 func (c *Client) Respiration(ctx context.Context, d time.Time) (*RespirationData, error) {
 	var out RespirationData

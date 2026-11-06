@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/usersummary-service/usersummary/hydration/allData/2026-01-01
+        method: GET
+      response:
+        body: '{"userId":12345678,"calendarDate":"2026-01-01","lastEntryTimestampLocal":"2026-01-01T00:00:00","valueInML":1.0,"goalInML":1.0,"baseGoalInML":1.0,"sweatLossInML":1.0,"activityIntakeInML":1.0,"hydrationMeasurementUnit":"TEST","hydrationContainers":[],"hydrationAutoGoalEnabled":true}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

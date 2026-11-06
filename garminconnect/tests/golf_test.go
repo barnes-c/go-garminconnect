@@ -27,3 +27,15 @@ func TestGolfUserStats(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotNil(t, out)
 }
+
+func TestGolfClubTypes(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.GolfClubTypes(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].Name)
+	assert.NotZero(t, out[0].LoftAngle)
+}

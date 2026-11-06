@@ -1,0 +1,22 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userfocus-service/focus
+        method: GET
+      response:
+        body: '{"userFocus":"TEST","createTimestamp":null}'
+        headers:
+            Content-Length:
+                - "44"
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

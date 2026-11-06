@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/userprofile-service/userprofile/location
+        method: GET
+      response:
+        body: '{"countryCode":"TEST","countryCodeVerified":true,"countryCodeVerifiedTimestamp":"2026-01-01T00:00:00","userProfileId":12345678}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
