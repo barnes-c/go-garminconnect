@@ -1,0 +1,20 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/biometric-service/heartRateZones
+        method: GET
+      response:
+        body: '[{"trainingMethod":"TEST","restingHeartRateUsed":null,"lactateThresholdHeartRateUsed":null,"zone1Floor":1,"zone2Floor":1,"zone3Floor":1,"zone4Floor":1,"zone5Floor":1,"maxHeartRateUsed":1,"restingHrAutoUpdateUsed":false,"sport":"TEST","changeState":"TEST"}]'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms

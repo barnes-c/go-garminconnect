@@ -17,7 +17,7 @@ func TestTrainingReadiness(t *testing.T) {
 	require.NotEmpty(t, entries)
 	assert.NotEmpty(t, entries[0].ScoreQualifier)
 	assert.NotZero(t, entries[0].SleepHistoryScore)
-	require.NotEmpty(t, entries)
+	assert.NotEmpty(t, entries[0].FeedbackLong)
 	assert.NotEmpty(t, entries[0].CalendarDate)
 }
 
@@ -131,6 +131,19 @@ func TestFunctionalThresholdPowerRange(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, out)
 	assert.NotEmpty(t, out[0].From)
+}
+
+func TestHeartRateZones(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	out, err := c.HeartRateZones(t.Context())
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].Sport)
+	assert.NotEmpty(t, out[0].TrainingMethod)
+	assert.NotZero(t, out[0].Zone1Floor)
 }
 
 func TestPowerZonesForSport(t *testing.T) {

@@ -38,4 +38,5 @@ func TestHRVData(t *testing.T) {
 		t.Skip("no HRV readings for test date")
 	}
 	assert.NotZero(t, h.HRVReadings[0].HRVValue)
+	assert.NotEmpty(t, h.HRVReadings[0].ReadingTimeGMT)
 }

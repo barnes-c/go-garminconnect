@@ -17,18 +17,17 @@ type BodyComposition struct {
 
 // BodyCompositionAverage is the averaged body composition over the date range.
 type BodyCompositionAverage struct {
-	From            int64   `json:"from"`  // unix ms
-	Until           int64   `json:"until"` // unix ms
-	WeightTimestamp string  `json:"weightTimestamp"`
-	Weight          float64 `json:"weight"`
-	Bmi             float64 `json:"bmi"`
-	BodyFat         float64 `json:"bodyFat"`
-	BodyWater       float64 `json:"bodyWater"`
-	BoneMass        float64 `json:"boneMass"`
-	MuscleMass      float64 `json:"muscleMass"`
-	VisceralFat     float64 `json:"visceralFat"`
-	MetabolicAge    float64 `json:"metabolicAge"`
-	PhysiqueRating  float64 `json:"physiqueRating"`
+	From           int64   `json:"from"`  // unix ms
+	Until          int64   `json:"until"` // unix ms
+	Weight         float64 `json:"weight"`
+	Bmi            float64 `json:"bmi"`
+	BodyFat        float64 `json:"bodyFat"`
+	BodyWater      float64 `json:"bodyWater"`
+	BoneMass       float64 `json:"boneMass"`
+	MuscleMass     float64 `json:"muscleMass"`
+	VisceralFat    float64 `json:"visceralFat"`
+	MetabolicAge   float64 `json:"metabolicAge"`
+	PhysiqueRating float64 `json:"physiqueRating"`
 }
 
 // BodyCompositionSample is a single day's body composition measurement.

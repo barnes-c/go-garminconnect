@@ -39,7 +39,6 @@ type UserSummary struct {
 	HighestRespirationValue          float64 `json:"highestRespirationValue"`
 	LowestRespirationValue           float64 `json:"lowestRespirationValue"`
 	LatestRespirationValue           float64 `json:"latestRespirationValue"`
-	AvgStressDuration                int     `json:"avgStressDuration"`
 	HighStressDuration               int     `json:"highStressDuration"`
 	LowStressDuration                int     `json:"lowStressDuration"`
 	RestStressDuration               int     `json:"restStressDuration"`
@@ -302,12 +301,10 @@ type WeeklyStepStat struct {
 
 // WeeklyStressStat holds weekly aggregated stress statistics.
 type WeeklyStressStat struct {
-	CalendarDate     string `json:"calendarDate"`
-	AvgStressLevel   int    `json:"value"`
-	MaxStressLevel   int    `json:"maxStressLevel"`
-	StressDuration   int    `json:"stressDuration"`
-	RestDuration     int    `json:"restDuration"`
-	ActivityDuration int    `json:"activityDuration"`
+	CalendarDate   string `json:"calendarDate"`
+	AvgStressLevel int    `json:"value"`
+	MaxStressLevel int    `json:"maxStressLevel"`
+	StressDuration int    `json:"stressDuration"`
 }
 
 // BodyBatteryEvent is a single body battery charge or drain event.
