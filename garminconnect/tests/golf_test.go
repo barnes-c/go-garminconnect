@@ -14,7 +14,8 @@ func TestGolfClubStats(t *testing.T) {
 	out, err := c.GolfClubStats(t.Context(), 100)
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotEmpty(t, out)
+	require.NotEmpty(t, out)
+	assert.NotZero(t, out[0].ClubTypeID)
 }
 
 func TestGolfUserStats(t *testing.T) {

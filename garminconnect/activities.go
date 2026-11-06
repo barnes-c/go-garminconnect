@@ -421,15 +421,33 @@ func (c *Client) DownloadActivity(ctx context.Context, id int64, format Download
 	return c.getBytes(ctx, path, nil)
 }
 
-// UploadActivity uploads a FIT, GPX, or TCX file and returns the server response.
+// UploadResult is Garmin's import report for an uploaded file. Processing is
+// asynchronous: Successes and Failures are usually empty in this response.
+type UploadResult struct {
+	DetailedImportResult struct {
+		UploadID   int64 `json:"uploadId"`
+		UploadUUID struct {
+			UUID string `json:"uuid"`
+		} `json:"uploadUuid"`
+		Owner          int64             `json:"owner"`
+		FileSize       int64             `json:"fileSize"`
+		ProcessingTime int64             `json:"processingTime"`
+		CreationDate   string            `json:"creationDate"`
+		FileName       string            `json:"fileName"`
+		Successes      []json.RawMessage `json:"successes"`
+		Failures       []json.RawMessage `json:"failures"`
+	} `json:"detailedImportResult"`
+}
+
+// UploadActivity uploads a FIT, GPX, or TCX file and returns the import report.
 // The filename extension determines the format (.fit, .gpx, .tcx).
-func (c *Client) UploadActivity(ctx context.Context, data []byte, filename string) (map[string]json.RawMessage, error) {
+func (c *Client) UploadActivity(ctx context.Context, data []byte, filename string) (*UploadResult, error) {
 	if filepath.Ext(filename) == "" {
 		return nil, fmt.Errorf("filename must include an extension (.fit, .gpx, or .tcx)")
 	}
-	var out map[string]json.RawMessage
+	var out UploadResult
 	if err := c.upload(ctx, "/upload-service/upload", data, filename, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }

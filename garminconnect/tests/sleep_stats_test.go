@@ -29,7 +29,9 @@ func TestSleepStats(t *testing.T) {
 	out, err := c.SleepStats(t.Context(), start, testDate)
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotNil(t, out)
+	assert.NotZero(t, out.Overall.AverageSleepSeconds)
+	require.NotEmpty(t, out.Days)
+	assert.NotZero(t, out.Days[0].Values.TotalSleepTimeInSeconds)
 }
 
 func TestHRVDataRange(t *testing.T) {
@@ -42,5 +44,6 @@ func TestHRVDataRange(t *testing.T) {
 	out, err := c.HRVDataRange(t.Context(), d, d)
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	assert.NotEmpty(t, out)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].CalendarDate)
 }

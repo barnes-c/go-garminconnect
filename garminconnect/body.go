@@ -2,7 +2,6 @@ package garminconnect
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -150,18 +149,14 @@ func (c *Client) LatestWeight(ctx context.Context, d time.Time) (*LatestWeightEn
 
 // AddWeighIn records a new weigh-in. weightKg is in kilograms; timestamp is RFC3339.
 // The server stores weight in grams, so weightKg is converted automatically.
-func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, timestamp string) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, timestamp string) error {
 	body := map[string]any{
 		"unitKey":       unitKey, // e.g. "kg"
 		"value":         weightKg,
 		"dateTimestamp": timestamp,
 		"gmtTimestamp":  timestamp,
 	}
-	if err := c.post(ctx, "/weight-service/user-weight", body, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
+	return c.post(ctx, "/weight-service/user-weight", body, nil)
 }
 
 // DeleteWeighIns removes every weigh-in on the given day and returns how many

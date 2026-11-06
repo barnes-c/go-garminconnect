@@ -2,7 +2,6 @@ package garminconnect
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -76,6 +75,7 @@ type HRVSummary struct {
 	Status            string      `json:"status"`
 	FeedbackPhrase    string      `json:"feedbackPhrase"`
 	CalendarDate      string      `json:"calendarDate"`
+	CreateTimestamp   string      `json:"createTimeStamp"`
 	StartTimestampGMT string      `json:"startTimestampGMT"`
 	EndTimestampGMT   string      `json:"endTimestampGMT"`
 }
@@ -91,12 +91,14 @@ type HRVData struct {
 // HRVDataRange returns HRV data for every day between start and end.
 // HRVData covers a single day; this queries the same service's range endpoint
 // so a span can be fetched in one request.
-func (c *Client) HRVDataRange(ctx context.Context, start, end time.Time) (json.RawMessage, error) {
-	var out json.RawMessage
+func (c *Client) HRVDataRange(ctx context.Context, start, end time.Time) ([]HRVSummary, error) {
+	var out struct {
+		HRVSummaries []HRVSummary `json:"hrvSummaries"`
+	}
 	if err := c.get(ctx, fmt.Sprintf("/hrv-service/hrv/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out.HRVSummaries, nil
 }
 
 // SleepData returns detailed sleep data for the given date.
@@ -127,15 +129,50 @@ func (c *Client) DailySleepData(ctx context.Context, d time.Time) (*SleepData, e
 	return &out, nil
 }
 
-// SleepStats returns daily sleep statistics between start and end dates.
-// The response wraps overall stats and a per-day series; the range must not
-// exceed 28 days.
-func (c *Client) SleepStats(ctx context.Context, start, end time.Time) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+// SleepDailyStats are sleep averages over a period with a per-night series.
+type SleepDailyStats struct {
+	Overall SleepAverages `json:"overallStats"`
+	Days    []SleepDay    `json:"individualStats"`
+}
+
+// SleepDay is one night's sleep summary. Durations are in seconds; the
+// *InMillis fields are epoch milliseconds.
+type SleepDay struct {
+	CalendarDate string `json:"calendarDate"`
+	Values       struct {
+		TotalSleepTimeInSeconds     int      `json:"totalSleepTimeInSeconds"`
+		DeepTime                    int      `json:"deepTime"`
+		LightTime                   int      `json:"lightTime"`
+		RemTime                     int      `json:"remTime"`
+		AwakeTime                   int      `json:"awakeTime"`
+		SleepNeed                   int      `json:"sleepNeed"`
+		SleepScore                  int      `json:"sleepScore"`
+		SleepScoreQuality           string   `json:"sleepScoreQuality"`
+		RestingHeartRate            int      `json:"restingHeartRate"`
+		AvgHeartRate                float64  `json:"avgHeartRate"`
+		Respiration                 float64  `json:"respiration"`
+		SpO2                        float64  `json:"spO2"`
+		BodyBatteryChange           int      `json:"bodyBatteryChange"`
+		AvgOvernightHRV             float64  `json:"avgOvernightHrv"`
+		HRV7dAverage                float64  `json:"hrv7dAverage"`
+		HRVStatus                   string   `json:"hrvStatus"`
+		SkinTempC                   *float64 `json:"skinTempC"`
+		SkinTempF                   *float64 `json:"skinTempF"`
+		LocalSleepStartTimeInMillis int64    `json:"localSleepStartTimeInMillis"`
+		LocalSleepEndTimeInMillis   int64    `json:"localSleepEndTimeInMillis"`
+		GMTSleepStartTimeInMillis   int64    `json:"gmtSleepStartTimeInMillis"`
+		GMTSleepEndTimeInMillis     int64    `json:"gmtSleepEndTimeInMillis"`
+	} `json:"values"`
+}
+
+// SleepStats returns sleep averages and a per-night series between start and
+// end dates. The range must not exceed 28 days.
+func (c *Client) SleepStats(ctx context.Context, start, end time.Time) (*SleepDailyStats, error) {
+	var out SleepDailyStats
 	if err := c.get(ctx, fmt.Sprintf("/sleep-service/stats/sleep/daily/%s/%s", date(start), date(end)), nil, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
 
 // HRVData returns heart rate variability data for the given date.

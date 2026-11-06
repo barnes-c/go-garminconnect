@@ -1,7 +1,6 @@
 package garminconnect_test
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -130,9 +129,8 @@ func TestFunctionalThresholdPowerRange(t *testing.T) {
 	out, err := c.FunctionalThresholdPowerRange(t.Context(), d, d, "CYCLING", "daily")
 	skipAPIError(t, err)
 	require.NoError(t, err)
-	var entries []json.RawMessage
-	require.NoError(t, json.Unmarshal(out, &entries))
-	assert.NotEmpty(t, entries)
+	require.NotEmpty(t, out)
+	assert.NotEmpty(t, out[0].From)
 }
 
 func TestPowerZonesForSport(t *testing.T) {

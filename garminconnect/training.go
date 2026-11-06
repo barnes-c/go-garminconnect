@@ -2,7 +2,6 @@ package garminconnect
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"sort"
@@ -341,20 +340,30 @@ func (c *Client) CyclingFTP(ctx context.Context) (*CyclingFTP, error) {
 	return &out, nil
 }
 
+// FTPEntry is the functional threshold power, in watts, for one aggregation
+// period.
+type FTPEntry struct {
+	From        string  `json:"from"`
+	Until       string  `json:"until"`
+	Series      string  `json:"series"`
+	Value       float64 `json:"value"`
+	UpdatedDate string  `json:"updatedDate"`
+}
+
 // FunctionalThresholdPowerRange returns historic functional threshold power
 // for a sport between start and end. CyclingFTP returns only the latest
 // cycling value; this returns the series.
 //
 // sport is a Garmin sport key (e.g. "RUNNING", "CYCLING") and is upper-cased.
 // aggregation is one of "daily", "weekly", "monthly", or "yearly".
-func (c *Client) FunctionalThresholdPowerRange(ctx context.Context, start, end time.Time, sport, aggregation string) (json.RawMessage, error) {
+func (c *Client) FunctionalThresholdPowerRange(ctx context.Context, start, end time.Time, sport, aggregation string) ([]FTPEntry, error) {
 	params := url.Values{
 		"sport":               {strings.ToUpper(sport)},
 		"aggregation":         {aggregation},
 		"aggregationStrategy": {"LATEST"},
 	}
 	path := fmt.Sprintf("/biometric-service/stats/functionalThresholdPower/range/%s/%s", date(start), date(end))
-	var out json.RawMessage
+	var out []FTPEntry
 	if err := c.get(ctx, path, params, &out); err != nil {
 		return nil, err
 	}

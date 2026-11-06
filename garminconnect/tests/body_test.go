@@ -60,8 +60,7 @@ func TestBodyWritesLifecycle(t *testing.T) {
 	ctx := t.Context()
 	day := testDate.Format(time.DateOnly)
 
-	_, err := c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00")
-	require.NoError(t, err)
+	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00"))
 
 	zurich, err := time.LoadLocation("Europe/Zurich")
 	require.NoError(t, err)
@@ -92,8 +91,7 @@ func TestBodyHistory(t *testing.T) {
 	ctx := t.Context()
 	day := testDate.Format(time.DateOnly)
 
-	_, err := c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00")
-	require.NoError(t, err)
+	require.NoError(t, c.AddWeighIn(ctx, 75.5, "kg", day+"T08:00:00.00"))
 	zurich, err := time.LoadLocation("Europe/Zurich")
 	require.NoError(t, err)
 	at := time.Date(testDate.Year(), testDate.Month(), testDate.Day(), 8, 5, 0, 0, zurich)
