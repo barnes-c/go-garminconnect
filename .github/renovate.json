@@ -7,6 +7,8 @@
   ],
   "labels": ["dependencies"],
   "pinDigests": true,
+  "osvVulnerabilityAlerts": true,
+  "postUpdateOptions": ["gomodTidy"],
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
