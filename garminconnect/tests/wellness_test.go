@@ -189,7 +189,7 @@ func TestAddHydration(t *testing.T) {
 
 	out, err := c.AddHydration(ctx, 250, at)
 	require.NoError(t, err)
-	assert.NotEmpty(t, out)
+	assert.NotEmpty(t, out.CalendarDate)
 	_, err = c.AddHydration(ctx, -250, at.Add(time.Minute))
 	require.NoError(t, err)
 }

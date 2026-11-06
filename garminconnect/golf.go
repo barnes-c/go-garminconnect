@@ -75,14 +75,28 @@ func (c *Client) GolfShotData(ctx context.Context, scorecardID string, holeNumbe
 	return out, nil
 }
 
+// GolfClub is one of the user's golf clubs with its distance statistics.
+// Distances use the user's golf distance unit.
+type GolfClub struct {
+	ID               int64   `json:"id"`
+	ClubTypeID       int     `json:"clubTypeId"`
+	ShaftLength      float64 `json:"shaftLength"`
+	FlexTypeID       string  `json:"flexTypeId"`
+	AverageDistance  float64 `json:"averageDistance"`
+	AdviceDistance   float64 `json:"adviceDistance"`
+	Retired          bool    `json:"retired"`
+	Deleted          bool    `json:"deleted"`
+	LastModifiedTime string  `json:"lastModifiedTime"`
+}
+
 // GolfClubStats returns the user's golf clubs with their distance statistics.
 // limit caps the number of clubs returned.
-func (c *Client) GolfClubStats(ctx context.Context, limit int) (json.RawMessage, error) {
+func (c *Client) GolfClubStats(ctx context.Context, limit int) ([]GolfClub, error) {
 	params := url.Values{
 		"per-page":      {fmt.Sprintf("%d", limit)},
 		"include-stats": {"true"},
 	}
-	var out json.RawMessage
+	var out []GolfClub
 	if err := c.get(ctx, "/gcs-golfcommunity/api/v2/club/player", params, &out); err != nil {
 		return nil, err
 	}

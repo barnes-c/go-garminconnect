@@ -92,6 +92,8 @@ type HydrationData struct {
 	DailyAverageinML   float64 `json:"dailyAverageinML"`
 	SweatLossInML      float64 `json:"sweatLossInML"`
 	ActivityIntakeInML float64 `json:"activityIntakeInML"`
+	// LastEntryTimestampLocal is only set by AddHydration.
+	LastEntryTimestampLocal string `json:"lastEntryTimestampLocal"`
 }
 
 // RespirationData holds breathing rate data for a day.
@@ -393,8 +395,9 @@ func (c *Client) LifestyleData(ctx context.Context, d time.Time) (map[string]jso
 // AddHydration logs valueML millilitres of fluid intake at the given time; its
 // location supplies the local time and calendar day. A negative value
 // subtracts, which is the only way to undo an entry.
-func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time) (map[string]json.RawMessage, error) {
-	var out map[string]json.RawMessage
+// It returns the day's updated hydration.
+func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time) (*HydrationData, error) {
+	var out HydrationData
 	body := map[string]any{
 		"calendarDate":   date(at),
 		"valueInML":      valueML,
@@ -403,7 +406,7 @@ func (c *Client) AddHydration(ctx context.Context, valueML float64, at time.Time
 	if err := c.put(ctx, "/usersummary-service/usersummary/hydration/log", body, &out); err != nil {
 		return nil, err
 	}
-	return out, nil
+	return &out, nil
 }
 
 // DailyLastBloodPressure returns the last blood pressure reading of each day
