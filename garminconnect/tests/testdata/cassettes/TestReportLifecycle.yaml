@@ -1,0 +1,112 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        body: '{"diastolic":1,"measurementTimestampGMT":"2026-01-01T00:00:00","measurementTimestampLocal":"2026-01-01T00:00:00","notes":"TEST","pulse":1,"sourceType":"TEST","systolic":1}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure
+        method: POST
+      response:
+        body: '{"version":null,"systolic":1,"diastolic":1,"pulse":1,"multiMeasurement":false,"notes":"TEST","sourceType":"TEST","measurementTimestampLocal":"2026-01-01T00:00:00","measurementTimestampGMT":"2026-01-01T00:00:00","category":null,"categoryName":null}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 1
+      request:
+        body: '{"reportFormat":"TEST","reportSubCategory":"TEST"}'
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+            Content-Type:
+                - application/json
+        url: https://connectapi.garmin.com/reportexport-service/export/init/bloodPressure/2025-12-05/2026-01-01
+        method: POST
+      response:
+        body: '{"reportId":"TEST","estimatedTimeForStatusCheck":1}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 2
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/reportexport-service/export/reportStatus/TEST
+        method: GET
+      response:
+        body: '{"reportId":"TEST","progress":{"status":"TEST","responseMessage":null},"fileSize":1,"creationTimestampGMT":"2026-01-01T00:00:00"}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 3
+      request:
+        headers:
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/reportexport-service/export/reportContent/TEST
+        method: GET
+      response:
+        body: TEST
+        headers:
+            Content-Disposition:
+                - attachment; filename = exportReport.pdf
+            Content-Type:
+                - application/octet-stream
+            Server-Timing:
+                - cfCacheStatus;desc="DYNAMIC"
+                - cfEdge;dur=7,cfOrigin;dur=196
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 4
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/range/2026-01-01/2026-01-01?includeAll=true
+        method: GET
+      response:
+        body: '{"from":"2026-01-01","until":"2026-01-01","measurementSummaries":[{"startDate":"2026-01-01","endDate":"2026-01-01","highSystolic":1,"highDiastolic":1,"lowSystolic":1,"lowDiastolic":1,"numOfMeasurements":1,"category":"TEST","categoryName":"TEST","measurements":[{"version":12345678,"systolic":1,"diastolic":1,"pulse":1,"multiMeasurement":false,"notes":"TEST","sourceType":"TEST","measurementTimestampLocal":"2026-01-01T00:00:00","measurementTimestampGMT":"2026-01-01T00:00:00","category":"TEST","categoryName":"TEST"}]}],"categoryStats":{"from":"2026-01-01","until":"2026-01-01","noOfDaysNormal":1,"noOfDaysElevated":1,"noOfDaysStage1":1,"noOfDaysStage2":1,"noOfDaysCritical":1,"categoryCounts":{"GRADE_2":1,"GRADE_1":1,"HIGH_NORMAL":1,"NORMAL":1}}}'
+        headers:
+            Content-Type:
+                - application/json
+        status: 200 OK
+        code: 200
+        duration: 100ms
+    - id: 5
+      request:
+        headers:
+            Accept:
+                - application/json
+            Authorization:
+                - Bearer test
+        url: https://connectapi.garmin.com/bloodpressure-service/bloodpressure/2026-01-01/12345678
+        method: DELETE
+      response:
+        body: ""
+        headers: {}
+        status: 204 No Content
+        code: 204
+        duration: 100ms
