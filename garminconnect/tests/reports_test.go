@@ -48,5 +48,5 @@ func TestReportLifecycle(t *testing.T) {
 	require.NotEmpty(t, bp.Days)
 	require.NotEmpty(t, bp.Days[0].Measurements)
 	m := bp.Days[0].Measurements[0]
-	require.NoError(t, c.DeleteBloodPressure(ctx, testDate.Format(time.DateOnly), m.Version))
+	require.NoError(t, c.DeleteBloodPressure(ctx, testDate, m.Version))
 }

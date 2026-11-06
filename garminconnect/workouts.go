@@ -128,10 +128,10 @@ func (c *Client) DeleteWorkout(ctx context.Context, id int64) error {
 	return c.del(ctx, fmt.Sprintf("/workout-service/workout/%d", id))
 }
 
-// ScheduleWorkout assigns a saved workout to a calendar date (YYYY-MM-DD).
-func (c *Client) ScheduleWorkout(ctx context.Context, workoutID int64, date string) (*ScheduledWorkout, error) {
+// ScheduleWorkout assigns a saved workout to a calendar day.
+func (c *Client) ScheduleWorkout(ctx context.Context, workoutID int64, d time.Time) (*ScheduledWorkout, error) {
 	var out ScheduledWorkout
-	body := map[string]any{"date": date}
+	body := map[string]any{"date": date(d)}
 	if err := c.post(ctx, fmt.Sprintf("/workout-service/schedule/%d", workoutID), body, &out); err != nil {
 		return nil, err
 	}
@@ -163,8 +163,8 @@ func (c *Client) UnscheduleWorkout(ctx context.Context, scheduledWorkoutID int64
 	return c.del(ctx, fmt.Sprintf("/workout-service/schedule/%d", scheduledWorkoutID))
 }
 
-// RescheduleWorkout moves a scheduled workout to another date (YYYY-MM-DD).
-func (c *Client) RescheduleWorkout(ctx context.Context, scheduledWorkoutID int64, date string) error {
+// RescheduleWorkout moves a scheduled workout to another calendar day.
+func (c *Client) RescheduleWorkout(ctx context.Context, scheduledWorkoutID int64, d time.Time) error {
 	path := fmt.Sprintf("/workout-service/schedule/%d", scheduledWorkoutID)
 	// Garmin wants the whole schedule record back (a bare date is a 500), with
 	// the embedded workout reduced to its ID.
@@ -183,7 +183,7 @@ func (c *Client) RescheduleWorkout(ctx context.Context, scheduledWorkoutID int64
 		return err
 	}
 	sched["workout"] = ref
-	sched["calendarDate"], err = json.Marshal(date)
+	sched["calendarDate"], err = json.Marshal(date(d))
 	if err != nil {
 		return err
 	}

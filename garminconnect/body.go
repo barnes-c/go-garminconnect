@@ -147,14 +147,17 @@ func (c *Client) LatestWeight(ctx context.Context, d time.Time) (*LatestWeightEn
 	return &out, nil
 }
 
-// AddWeighIn records a new weigh-in. weightKg is in kilograms; timestamp is RFC3339.
-// The server stores weight in grams, so weightKg is converted automatically.
-func (c *Client) AddWeighIn(ctx context.Context, weightKg float64, unitKey, timestamp string) error {
+// AddWeighIn records a manual weigh-in of weight in unitKey ("kg" or "lbs")
+// at the given time; its location supplies the local time and calendar day.
+func (c *Client) AddWeighIn(ctx context.Context, weight float64, unitKey string, at time.Time) error {
+	const layout = "2006-01-02T15:04:05.000"
 	body := map[string]any{
-		"unitKey":       unitKey, // e.g. "kg"
-		"value":         weightKg,
-		"dateTimestamp": timestamp,
-		"gmtTimestamp":  timestamp,
+		"date":          date(at),
+		"dateTimestamp": at.Format(layout),
+		"gmtTimestamp":  at.UTC().Format(layout),
+		"unitKey":       unitKey,
+		"sourceType":    "MANUAL",
+		"value":         weight,
 	}
 	return c.post(ctx, "/weight-service/user-weight", body, nil)
 }
@@ -167,16 +170,16 @@ func (c *Client) DeleteWeighIns(ctx context.Context, d time.Time) (int, error) {
 		return 0, err
 	}
 	for i, w := range day.DateWeightList {
-		if err := c.DeleteWeighIn(ctx, date(d), w.SamplePK); err != nil {
+		if err := c.DeleteWeighIn(ctx, d, w.SamplePK); err != nil {
 			return i, err
 		}
 	}
 	return len(day.DateWeightList), nil
 }
 
-// DeleteWeighIn removes a weigh-in by its primary key and calendar date.
-func (c *Client) DeleteWeighIn(ctx context.Context, cdate string, weightPK int64) error {
-	return c.del(ctx, fmt.Sprintf("/weight-service/weight/%s/byversion/%d", cdate, weightPK))
+// DeleteWeighIn removes a weigh-in by its primary key and calendar day.
+func (c *Client) DeleteWeighIn(ctx context.Context, d time.Time, weightPK int64) error {
+	return c.del(ctx, fmt.Sprintf("/weight-service/weight/%s/byversion/%d", date(d), weightPK))
 }
 
 // FirstWeight returns the user's earliest weigh-in.

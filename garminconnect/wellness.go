@@ -458,9 +458,9 @@ func (c *Client) SetBloodPressureNotes(ctx context.Context, m BloodPressureSnaps
 	return c.put(ctx, "/bloodpressure-service/bloodpressure", m, nil)
 }
 
-// DeleteBloodPressure removes a blood pressure reading by its version and date.
-func (c *Client) DeleteBloodPressure(ctx context.Context, cdate string, version int64) error {
-	return c.del(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", cdate, version))
+// DeleteBloodPressure removes a blood pressure reading by its version and day.
+func (c *Client) DeleteBloodPressure(ctx context.Context, d time.Time, version int64) error {
+	return c.del(ctx, fmt.Sprintf("/bloodpressure-service/bloodpressure/%s/%d", date(d), version))
 }
 
 // DailyCalories is one day's active and resting (BMR) calorie totals.
