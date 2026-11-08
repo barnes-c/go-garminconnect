@@ -134,6 +134,25 @@ func TestInteraction_ScrubsFileBodies(t *testing.T) {
 	}
 }
 
+func TestInteraction_ScrubsNonJSONBodies(t *testing.T) {
+	for _, tc := range []struct{ ct, body, want string }{
+		{"application/pdf", "%PDF-1.7 Jane Doe", "TEST"},
+		{"image/png", "\x89PNG", "TEST"},
+		{"", "FIT binary", "TEST"},
+		{"", `{"weight":72.5}`, `{"weight":1.0}`},
+		{"application/json;charset=UTF-8", `{"weight":72.5}`, `{"weight":1.0}`},
+	} {
+		i := &cassette.Interaction{Response: cassette.Response{
+			Body:    tc.body,
+			Headers: http.Header{"Content-Type": {tc.ct}},
+		}}
+		sanitize.Interaction(i, "")
+		if i.Response.Body != tc.want {
+			t.Errorf("%q: got %q, want %q", tc.ct, i.Response.Body, tc.want)
+		}
+	}
+}
+
 func TestURL_ScrubsIDsDatesAndName(t *testing.T) {
 	name := "e15d1c9d-827d-4db9-b030-48792c1d1fa6"
 	// A real recording date (after testDate) must be rewritten back.

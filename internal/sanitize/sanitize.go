@@ -159,19 +159,23 @@ func Body(s, displayName string) string {
 	return s
 }
 
-// scrubBody scrubs a body by its content type. Plain text (e.g. a workout
-// copy's new name) and files (uploads, GPX/FIT downloads, which carry GPS
-// tracks) can't be seen into by the JSON scrubbers, so only a placeholder is
-// kept.
+// scrubBody scrubs a body by its content type. Only JSON can be seen into by
+// the JSON scrubbers; everything else (plain text such as a workout copy's new
+// name, uploads, GPX/FIT/PDF downloads carrying GPS tracks) keeps only a
+// placeholder. A body without a Content-Type is treated as JSON only if it
+// looks like JSON.
 func scrubBody(body, contentType, displayName string) string {
 	if body == "" {
 		return body
 	}
 	ct := strings.ToLower(contentType)
-	for _, opaque := range []string{"text/plain", "multipart/", "octet-stream", "xml", "zip", "csv"} {
-		if strings.Contains(ct, opaque) {
-			return "TEST"
-		}
+	isJSON := strings.Contains(ct, "json")
+	if ct == "" {
+		t := strings.TrimSpace(body)
+		isJSON = strings.HasPrefix(t, "{") || strings.HasPrefix(t, "[") || strings.HasPrefix(t, "\"")
+	}
+	if !isJSON {
+		return "TEST"
 	}
 	return Body(body, displayName)
 }

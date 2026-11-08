@@ -205,6 +205,9 @@ func (c *Client) CreateWorkout(ctx context.Context, workout any) (map[string]jso
 // map from Workout with some fields changed.
 func (c *Client) UpdateWorkout(ctx context.Context, id int64, workout map[string]json.RawMessage) error {
 	body := maps.Clone(workout)
+	if body == nil {
+		body = map[string]json.RawMessage{}
+	}
 	idJSON, err := json.Marshal(id)
 	if err != nil {
 		return err

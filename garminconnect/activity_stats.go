@@ -126,8 +126,9 @@ func (a *ActivityMetricValues) UnmarshalJSON(data []byte) error {
 		case "startLocal":
 			err = json.Unmarshal(v, &a.StartLocal)
 		default:
+			// Non-numeric fields aren't metrics; skip them.
 			var f *float64
-			if err = json.Unmarshal(v, &f); err == nil && f != nil {
+			if json.Unmarshal(v, &f) == nil && f != nil {
 				a.Values[k] = *f
 			}
 		}
