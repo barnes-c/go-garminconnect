@@ -15,6 +15,22 @@ If a model produced the text and no human read it before posting, it does not be
 
 Issues and PRs that look automated will be closed without discussion.
 
+## Development
+
+```bash
+make check   # lint, build, test, govulncheck
+```
+
+Tests replay recorded HTTP cassettes, so no credentials are needed. To
+re-record against a live account (PII is stripped as each cassette is written):
+
+```bash
+GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/record --missing
+```
+
+A weekly [smoke test](.github/workflows/smoke.yml) runs `internal/smoke` against
+the live API to catch drift the cassettes can't see.
+
 ## License
 
 By submitting a contribution you agree that it will be licensed under the

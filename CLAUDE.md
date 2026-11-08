@@ -70,7 +70,7 @@ live, no credentials needed.
    fields, biometrics, location, schedule times). If anything survives, extend
    `internal/sanitize` + its tests, then `go run ./internal/record --sanitize`
    re-applies it to every cassette offline.
-5. If it covers something new, mention it in its area's row of the README API table.
+5. If it adds a new API area, add it to the coverage list in the README.
 
 Garmin rate-limits bursts with 429s. course-service also rejects deleting a course
 right after creating it; tests that must wait sleep only while recording
