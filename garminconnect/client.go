@@ -1,7 +1,7 @@
 // Package garminconnect is a Go client for the Garmin Connect API.
 //
 // Create a [Client] with [NewClient], authenticate with [Client.Login], then
-// call any of the data methods. See the README for a capability overview.
+// call any of the data methods.
 package garminconnect
 
 import (

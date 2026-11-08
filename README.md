@@ -1,21 +1,17 @@
 # go-garminconnect
 
+[![Garmin Connect](https://img.shields.io/badge/Garmin%20Connect-007CC3?logo=garmin&logoColor=white)](https://connect.garmin.com)
 [![GitHub Release](https://img.shields.io/github/v/release/barnes-c/go-garminconnect)](https://github.com/barnes-c/go-garminconnect/releases/latest)
-[![Build Status](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml)
-[![golangci-lint](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/barnes-c/go-garminconnect/actions/workflows/golangci-lint.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/barnes-c/go-garminconnect.svg)](https://pkg.go.dev/github.com/barnes-c/go-garminconnect/garminconnect)
+[![CI](https://img.shields.io/github/actions/workflow/status/barnes-c/go-garminconnect/ci.yml?branch=main&label=CI&logo=github)](https://github.com/barnes-c/go-garminconnect/actions/workflows/ci.yml)
 
-Go client library for the Garmin Connect API.
-
-## Installation
+Go client for the Garmin Connect API.
 
 ```bash
 go get github.com/barnes-c/go-garminconnect
 ```
 
-Requires Go 1.26+.
-
-## Quick start
+## Usage
 
 ```go
 ctx := context.Background()
@@ -28,116 +24,20 @@ summary, err := client.UserSummary(ctx, time.Now())
 if err != nil {
     log.Fatal(err)
 }
-fmt.Printf("Steps today: %d\n", summary.TotalSteps)
+fmt.Println("Steps today:", summary.TotalSteps)
 ```
 
-## Authentication
+`Login` reuses the cached token, refreshes it when expired, and only falls back
+to a full SSO login when needed. For accounts with MFA, pass
+`garminconnect.WithMFAPrompt(func() (string, error) { ... })` to `NewClient`.
 
-`Login` loads a cached token from disk, refreshes it if expired, or performs a full SSO login.
-
-If the account has MFA enabled, provide a callback via `WithMFAPrompt` that returns the verification code. Without it, `Login` returns `ErrMFARequired`.
-
-```go
-client := garminconnect.NewClient(os.Getenv("HOME")+"/.garminconnect/tokens.json",
-    garminconnect.WithMFAPrompt(func() (string, error) {
-        fmt.Print("MFA code: ")
-        var code string
-        _, err := fmt.Scan(&code)
-        return code, err
-    }),
-)
-if err := client.Login(context.Background(), "user@example.com", "password"); err != nil {
-    log.Fatal(err)
-}
-```
-
-Other options: `WithHTTPClient(hc)`, `WithToken(accessToken)`, `WithRefreshToken(refreshToken)`, `WithTokenJSON(data)`, `WithDisplayName(name)`, `WithBaseURL(url)`.
-
-## API
-
-The full method reference lives on [**pkg.go.dev**](https://pkg.go.dev/github.com/barnes-c/go-garminconnect/garminconnect), generated from the source. The client covers:
-
-|         Area         |                                                                       What it exposes                                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Wellness**         | Steps, calories, Body Battery, stress, floors, hydration (incl. goal settings), respiration, SpO₂, intensity minutes, blood pressure (record, annotate, delete, daily last, weekly), health snapshot download, Jet Lag Adviser trips, daily movement, monthly steps, averages, activity totals, last sync                                                         |
-| **Heart rate**       | Intraday and resting heart rate                                                                                                                              |
-| **Sleep**            | Sleep stages, daily/weekly/overall sleep statistics, and HRV (daily and range)                                                                                                                      |
-| **Activities**       | Listing, detail, splits, laps, GPS track, progress and per-activity stats, event types, HR/power zones, exercise sets, weather, personal records, favorites, manual creation, edit/delete (incl. exercise sets), and download & upload                                        |
-| **Workouts**         | Saved workouts (create, edit, copy, delete, count, sports), scheduling & rescheduling, schedule by ID or period, workout types, strength benchmarks, and FIT download                              |
-| **Calendar**         | Month and week views, events (create, edit, move, delete, primary event), and notes                                                          |
-| **Courses**          | Saved and favorite courses, import from GPX/TCX/FIT, convert from an activity, edit, delete, and GPX/FIT download                            |
-| **Training**         | Readiness & status (incl. history), heat/altitude acclimation, cycling ability, power curve, current biometrics, fitness-age history, VO₂ Max, endurance/hill scores, race predictions, running tolerance, lactate threshold, fitness age, cycling FTP & FTP history, HR/power zone settings |
-| **Training plans**   | Search the plan catalog, plan tasks, your scheduled and active plans, schedule and delete                                                    |
-| **Body composition** | Weigh-ins (add, delete, clear a day, first, daily last, weekly), body composition history                                                                                                                       |
-| **Goals**            | Goals (incl. daily goals and the step and wheelchair push goals), badges (detail, latest, per day/activity, attributes), personal-record types and records per activity, and challenges                                                                                                                                |
-| **Devices & gear**   | Registered and past devices, sync times, sensors, device messages, settings, solar data, and gear (catalog search, types, list, per activity, create, edit, retire, delete, link to activities)                                                                                                  |
-| **Profile**          | User profile and profile base, personal information, settings (read and update), privacy settings, usage indicators, training focus, account country, followings count, and unit system                         |
-| **Women's health**   | Menstrual cycle day view, calendar, cycle summary, last confirmed cycle and reports; cycle setup, period confirmation, daily logs and period edits; pregnancy snapshot |
-| **Nutrition**        | Food log, meals, goals, and tracking status                                                                                                                                   |
-| **Golf**             | Scorecards, shot data, club stats and club types, and player stats                                                                                                                                     |
-| **Reports**          | PDF report export (request, status, download), e.g. blood pressure                                                                                                                      |
-
-Activity downloads support FIT (`FormatOriginal`), GPX, TCX, KML, and CSV (see the `Format*` constants). Workout download is FIT only.
-
-## Error handling
-
-```go
-import "errors"
-
-acts, err := client.Activities(context.Background(), 0, 10)
-switch {
-case errors.Is(err, garminconnect.ErrUnauthorized):
-    // automatic token refresh failed — call Login again to re-authenticate
-case errors.Is(err, garminconnect.ErrMFARequired):
-    // account requires MFA — provide WithMFAPrompt on client creation
-case errors.Is(err, garminconnect.ErrRateLimit):
-    // back off and retry
-case errors.Is(err, garminconnect.ErrCaptchaRequired):
-    // Garmin wants a CAPTCHA solved — sign in at connect.garmin.com once
-case errors.Is(err, garminconnect.ErrNoData):
-    // Garmin has nothing for the query (e.g. it answered 204 No Content)
-}
-```
-
-Failed requests return `*APIError`, which unwraps to the sentinels above for
-401 and 429 — so `errors.Is` and `errors.As` both work on a single returned
-value:
-
-```go
-var apiErr *garminconnect.APIError
-if errors.As(err, &apiErr) {
-    fmt.Println(apiErr.StatusCode, apiErr.Path)
-    fmt.Println(apiErr.Body) // bounded, may be empty, not guaranteed JSON
-}
-```
-
-## Testing
-
-Tests replay recorded HTTP interactions — no credentials needed.
-
-```bash
-make test
-```
-
-To re-record cassettes against a live account:
-
-```bash
-GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/record
-# Only record missing cassettes:
-go run ./internal/record --missing
-```
-
-The tool logs in once and records one cassette per test. PII is stripped **inline** as each cassette is written (the recorder's `BeforeSaveHook` calls `internal/sanitize`), so cassettes are never persisted unsanitized.
-
-A scheduled [smoke-test workflow](.github/workflows/smoke.yml) runs `internal/smoke` weekly against the live API to catch drift the cassettes can't see. It can also be run locally:
-
-```bash
-GARMIN_EMAIL=you@example.com GARMIN_PASSWORD=secret go run ./internal/smoke
-```
+It covers wellness, sleep, heart rate, activities, workouts, courses, training
+metrics and plans, body composition, goals and badges, devices and gear,
+profile, women's health, nutrition, golf and reports. See
+[pkg.go.dev](https://pkg.go.dev/github.com/barnes-c/go-garminconnect/garminconnect)
+for the full API.
 
 ## Used by
 
-- [garmin_exporter](https://github.com/barnes-c/garmin_exporter) — OTel-native Prometheus exporter for Garmin Connect
-- [garmin-datasource](https://github.com/barnes-c/garmin-datasource) — Grafana data source for Garmin Connect
-
-Using this client in your own project? Open a PR to add it here.
+- [garmin_exporter](https://github.com/barnes-c/garmin_exporter): OTel-native Prometheus exporter for Garmin Connect
+- [garmin-datasource](https://github.com/barnes-c/garmin-datasource): Grafana data source for Garmin Connect
