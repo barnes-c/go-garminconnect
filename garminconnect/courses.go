@@ -37,7 +37,7 @@ type GeoPoint struct {
 type Course struct {
 	CourseID           int64      `json:"courseId,omitempty"`
 	CourseName         string     `json:"courseName"`
-	Description        string     `json:"description,omitempty"`
+	Description        string     `json:"description"`
 	RulePK             int        `json:"rulePK"` // privacy: 1 public, 2 private, 4 group
 	ActivityTypePK     int        `json:"activityTypePk"`
 	SourceTypeID       int        `json:"sourceTypeId"`
@@ -136,6 +136,11 @@ func (c *Client) UpdateCourse(ctx context.Context, course *Course) error {
 	var fields map[string]json.RawMessage
 	if err := json.Unmarshal(data, &fields); err != nil {
 		return err
+	}
+	// Unset pointers and slices (null) keep the stored value.
+	maps.DeleteFunc(fields, func(_ string, v json.RawMessage) bool { return string(v) == "null" })
+	if current == nil {
+		current = map[string]json.RawMessage{}
 	}
 	maps.Copy(current, fields)
 	return c.put(ctx, path, current, nil)

@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# Shares the token lock with record.yml: both refresh and write back the same
+# rotating refresh token.
+concurrency:
+  group: garmin-token
+  cancel-in-progress: false
+
 jobs:
   smoke:
     name: Live API smoke test

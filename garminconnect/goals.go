@@ -200,6 +200,9 @@ func (c *Client) BadgeAttributes(ctx context.Context) (*BadgeAttributes, error) 
 	table := func(name, prefix string) ([]BadgeAttribute, error) {
 		var out []BadgeAttribute
 		for _, row := range raw[name] {
+			if row[prefix+"Id"] == nil || row[prefix+"Key"] == nil {
+				continue
+			}
 			var a BadgeAttribute
 			if err := json.Unmarshal(row[prefix+"Id"], &a.ID); err != nil {
 				return nil, fmt.Errorf("%s: %w", name, err)

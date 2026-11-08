@@ -106,7 +106,12 @@ func run(missingOnly bool) error {
 	if err != nil {
 		return fmt.Errorf("login: %w", err)
 	}
-	fmt.Printf("==> Logged in (display_name=%s)\n", displayName)
+	// The display name is PII and appears in API URLs; redact it from public
+	// GitHub Actions logs.
+	if os.Getenv("GITHUB_ACTIONS") == "true" {
+		fmt.Printf("::add-mask::%s\n", displayName)
+	}
+	fmt.Println("==> Logged in")
 
 	tests, err := discoverTests()
 	if err != nil {

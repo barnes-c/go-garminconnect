@@ -130,9 +130,12 @@ func warnRefreshExpiry() {
 }
 
 func skippable(err error) bool {
-	// 401 and 429 are mapped to sentinels before *APIError is built; a real
-	// auth breakage still fails the run at the login step above.
-	if errors.Is(err, gc.ErrNoData) || errors.Is(err, gc.ErrUnauthorized) || errors.Is(err, gc.ErrRateLimit) {
+	// A 401 (or a failed token refresh, which also wraps ErrUnauthorized) is an
+	// auth breakage the smoke test exists to catch, so it must fail the run.
+	if errors.Is(err, gc.ErrUnauthorized) {
+		return false
+	}
+	if errors.Is(err, gc.ErrNoData) || errors.Is(err, gc.ErrRateLimit) {
 		return true
 	}
 	var apiErr *gc.APIError
