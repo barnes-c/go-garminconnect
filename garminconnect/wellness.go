@@ -51,37 +51,39 @@ type UserSummary struct {
 	BodyBatteryHighestValue          int     `json:"bodyBatteryHighestValue"`
 	BodyBatteryLowestValue           int     `json:"bodyBatteryLowestValue"`
 	BodyBatteryMostRecentValue       int     `json:"bodyBatteryMostRecentValue"`
-	BodyBatteryAtWakeTime            int     `json:"bodyBatteryAtWakeTime"`
-	BodyBatteryDuringSleep           int     `json:"bodyBatteryDuringSleep"`
-	CalendarDate                     string  `json:"calendarDate"`
-	AverageStressLevel               int     `json:"averageStressLevel"`
-	MaxStressLevel                   int     `json:"maxStressLevel"`
-	StressQualifier                  string  `json:"stressQualifier"` // e.g. "CALM", "BALANCED"
-	StressPercentage                 float64 `json:"stressPercentage"`
-	RestStressPercentage             float64 `json:"restStressPercentage"`
-	LowStressPercentage              float64 `json:"lowStressPercentage"`
-	MediumStressPercentage           float64 `json:"mediumStressPercentage"`
-	HighStressPercentage             float64 `json:"highStressPercentage"`
-	ActivityStressPercentage         float64 `json:"activityStressPercentage"`
-	UncategorizedStressPercentage    float64 `json:"uncategorizedStressPercentage"`
-	AverageSpO2                      int     `json:"averageSpo2"`
-	LowestSpO2                       int     `json:"lowestSpo2"`
-	LatestSpO2                       int     `json:"latestSpo2"`
-	MinAvgHeartRate                  int     `json:"minAvgHeartRate"`
-	MaxAvgHeartRate                  int     `json:"maxAvgHeartRate"`
-	WellnessKilocalories             float64 `json:"wellnessKilocalories"`
-	WellnessActiveKilocalories       float64 `json:"wellnessActiveKilocalories"`
-	BurnedKilocalories               float64 `json:"burnedKilocalories"`
-	ConsumedKilocalories             float64 `json:"consumedKilocalories"`
-	RemainingKilocalories            float64 `json:"remainingKilocalories"`
-	NetRemainingKilocalories         float64 `json:"netRemainingKilocalories"`
-	NetCalorieGoal                   float64 `json:"netCalorieGoal"`
-	IntensityMinutesGoal             int     `json:"intensityMinutesGoal"`
-	FloorsAscendedInMeters           float64 `json:"floorsAscendedInMeters"`
-	FloorsDescendedInMeters          float64 `json:"floorsDescendedInMeters"`
-	MeasurableAsleepDuration         int     `json:"measurableAsleepDuration"` // seconds
-	MeasurableAwakeDuration          int     `json:"measurableAwakeDuration"`
-	AverageMonitoringAltitude        float64 `json:"averageMonitoringEnvironmentAltitude"` // meters
+	// The Body Battery, max stress, SpO2 and average heart rate fields below
+	// are float64 because Garmin may send decimals (averageSpo2 is e.g. 95.0).
+	BodyBatteryAtWakeTime         float64 `json:"bodyBatteryAtWakeTime"`
+	BodyBatteryDuringSleep        float64 `json:"bodyBatteryDuringSleep"`
+	CalendarDate                  string  `json:"calendarDate"`
+	AverageStressLevel            int     `json:"averageStressLevel"`
+	MaxStressLevel                float64 `json:"maxStressLevel"`
+	StressQualifier               string  `json:"stressQualifier"` // e.g. "CALM", "BALANCED"
+	StressPercentage              float64 `json:"stressPercentage"`
+	RestStressPercentage          float64 `json:"restStressPercentage"`
+	LowStressPercentage           float64 `json:"lowStressPercentage"`
+	MediumStressPercentage        float64 `json:"mediumStressPercentage"`
+	HighStressPercentage          float64 `json:"highStressPercentage"`
+	ActivityStressPercentage      float64 `json:"activityStressPercentage"`
+	UncategorizedStressPercentage float64 `json:"uncategorizedStressPercentage"`
+	AverageSpO2                   float64 `json:"averageSpo2"`
+	LowestSpO2                    float64 `json:"lowestSpo2"`
+	LatestSpO2                    float64 `json:"latestSpo2"`
+	MinAvgHeartRate               float64 `json:"minAvgHeartRate"`
+	MaxAvgHeartRate               float64 `json:"maxAvgHeartRate"`
+	WellnessKilocalories          float64 `json:"wellnessKilocalories"`
+	WellnessActiveKilocalories    float64 `json:"wellnessActiveKilocalories"`
+	BurnedKilocalories            float64 `json:"burnedKilocalories"`
+	ConsumedKilocalories          float64 `json:"consumedKilocalories"`
+	RemainingKilocalories         float64 `json:"remainingKilocalories"`
+	NetRemainingKilocalories      float64 `json:"netRemainingKilocalories"`
+	NetCalorieGoal                float64 `json:"netCalorieGoal"`
+	IntensityMinutesGoal          int     `json:"intensityMinutesGoal"`
+	FloorsAscendedInMeters        float64 `json:"floorsAscendedInMeters"`
+	FloorsDescendedInMeters       float64 `json:"floorsDescendedInMeters"`
+	MeasurableAsleepDuration      int     `json:"measurableAsleepDuration"` // seconds
+	MeasurableAwakeDuration       int     `json:"measurableAwakeDuration"`
+	AverageMonitoringAltitude     float64 `json:"averageMonitoringEnvironmentAltitude"` // meters
 }
 
 // BodyBatteryEntry is a single body battery reading.

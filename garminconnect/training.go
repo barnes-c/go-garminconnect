@@ -286,7 +286,7 @@ func (c *Client) HillScore(ctx context.Context, start, end time.Time) ([]HillSco
 type LactateThresholdEntry struct {
 	UserProfilePK    int64    `json:"userProfilePK"`
 	CalendarDate     string   `json:"calendarDate"`
-	Speed            *float64 `json:"speed"`            // running LT speed m/s
+	Speed            *float64 `json:"speed"`            // running LT speed in units of 10 m/s (0.33 = 3.3 m/s)
 	HearRate         *int     `json:"hearRate"`         // running LT HR bpm
 	HeartRateCycling *int     `json:"heartRateCycling"` // cycling LT HR bpm
 	RowSpeed         *float64 `json:"rowSpeed"`
