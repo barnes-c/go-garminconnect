@@ -38,16 +38,81 @@ type DailySleepDTO struct {
 	HighestRespirationValue  float64 `json:"highestRespirationValue"`
 	AvgSleepStress           float64 `json:"avgSleepStress"`
 	SpO2AvgReadingPercent    float64 `json:"averageSpO2Value"`
+	LowestSpO2Value          float64 `json:"lowestSpO2Value"`
+	HighestSpO2Value         float64 `json:"highestSpO2Value"`
 	SleepScoreFeedback       string  `json:"sleepScoreFeedback"`
 	SleepScoreInsight        string  `json:"sleepScoreInsight"`
+	SleepStartTimestampGMT   int64   `json:"sleepStartTimestampGMT"` // epoch ms
+	SleepEndTimestampGMT     int64   `json:"sleepEndTimestampGMT"`
+	SleepStartTimestampLocal int64   `json:"sleepStartTimestampLocal"`
+	SleepEndTimestampLocal   int64   `json:"sleepEndTimestampLocal"`
+	AvgHeartRate             float64 `json:"avgHeartRate"`
+	AverageSpO2HRSleep       float64 `json:"averageSpO2HRSleep"`
+	AwakeCount               int     `json:"awakeCount"`
+	// BreathingDisruptionSeverity is e.g. "NONE", "LOW"; empty on devices
+	// without breathing variation tracking.
+	BreathingDisruptionSeverity string `json:"breathingDisruptionSeverity"`
+	// SleepScores is keyed by component: "overall", "totalDuration", "stress",
+	// "awakeCount", "remPercentage", "lightPercentage", "deepPercentage",
+	// "restlessness".
+	SleepScores   map[string]SleepScore `json:"sleepScores"`
+	SleepNeed     *SleepNeed            `json:"sleepNeed"`
+	NextSleepNeed *SleepNeed            `json:"nextSleepNeed"`
+}
+
+// SleepScore rates one sleep component. Value is only set for "overall" and
+// the stage percentages.
+type SleepScore struct {
+	Value               int     `json:"value"`
+	QualifierKey        string  `json:"qualifierKey"` // e.g. "GOOD", "FAIR"
+	OptimalStart        float64 `json:"optimalStart"`
+	OptimalEnd          float64 `json:"optimalEnd"`
+	IdealStartInSeconds float64 `json:"idealStartInSeconds"`
+	IdealEndInSeconds   float64 `json:"idealEndInSeconds"`
+}
+
+// SleepNeed is Garmin's recommended sleep for a night, in minutes.
+type SleepNeed struct {
+	CalendarDate           string `json:"calendarDate"`
+	Baseline               int    `json:"baseline"`
+	Actual                 int    `json:"actual"`
+	Feedback               string `json:"feedback"`
+	TrainingFeedback       string `json:"trainingFeedback"`
+	SleepHistoryAdjustment string `json:"sleepHistoryAdjustment"`
+	HRVAdjustment          string `json:"hrvAdjustment"`
+	NapAdjustment          string `json:"napAdjustment"`
 }
 
 // SleepData is the full sleep response including stages and movement.
 type SleepData struct {
-	DailySleepDTO        DailySleepDTO   `json:"dailySleepDTO"`
-	SleepMovement        []SleepMovement `json:"sleepMovement"`
-	SleepLevels          []SleepLevel    `json:"sleepLevels"`
-	RestlessMomentsCount int             `json:"restlessMomentsCount"`
+	DailySleepDTO        DailySleepDTO     `json:"dailySleepDTO"`
+	SleepMovement        []SleepMovement   `json:"sleepMovement"`
+	SleepLevels          []SleepLevel      `json:"sleepLevels"`
+	RestlessMomentsCount int               `json:"restlessMomentsCount"`
+	RestingHeartRate     int               `json:"restingHeartRate"`
+	AvgOvernightHRV      float64           `json:"avgOvernightHrv"`
+	HRVStatus            string            `json:"hrvStatus"` // e.g. "BALANCED"
+	BodyBatteryChange    int               `json:"bodyBatteryChange"`
+	SleepHeartRate       []SleepSample     `json:"sleepHeartRate"`
+	SleepStress          []SleepSample     `json:"sleepStress"`
+	SleepBodyBattery     []SleepSample     `json:"sleepBodyBattery"`
+	SleepRestlessMoments []SleepSample     `json:"sleepRestlessMoments"`
+	SpO2Summary          *SleepSpO2Summary `json:"wellnessSpO2SleepSummaryDTO"`
+}
+
+// SleepSample is one reading in a sleep time series.
+type SleepSample struct {
+	Value    int   `json:"value"`
+	StartGMT int64 `json:"startGMT"` // epoch ms
+}
+
+// SleepSpO2Summary summarizes blood oxygen during sleep.
+type SleepSpO2Summary struct {
+	SleepMeasurementStartGMT string  `json:"sleepMeasurementStartGMT"`
+	SleepMeasurementEndGMT   string  `json:"sleepMeasurementEndGMT"`
+	AverageSpO2              float64 `json:"averageSPO2"`
+	AverageSpO2HR            float64 `json:"averageSpO2HR"`
+	LowestSpO2               int     `json:"lowestSPO2"`
 }
 
 // HRVReading is a single HRV measurement.

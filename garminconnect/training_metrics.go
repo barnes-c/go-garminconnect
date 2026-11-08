@@ -36,13 +36,18 @@ func (c *Client) TrainingStatusHistory(ctx context.Context, start, end time.Time
 
 // HeatAltitudeAcclimation is how acclimated the user is to heat and altitude.
 type HeatAltitudeAcclimation struct {
-	CalendarDate              string `json:"calendarDate"`
-	HeatAcclimationPercentage int    `json:"heatAcclimationPercentage"`
-	HeatAcclimationDate       string `json:"heatAcclimationDate"`
-	AltitudeAcclimation       int    `json:"altitudeAcclimation"` // meters
-	AltitudeAcclimationDate   string `json:"altitudeAcclimationDate"`
-	CurrentAltitude           int    `json:"currentAltitude"` // meters
-	AcclimationPercentage     int    `json:"acclimationPercentage"`
+	CalendarDate                      string `json:"calendarDate"`
+	HeatAcclimationPercentage         int    `json:"heatAcclimationPercentage"`
+	HeatAcclimationDate               string `json:"heatAcclimationDate"`
+	AltitudeAcclimation               int    `json:"altitudeAcclimation"` // meters
+	AltitudeAcclimationDate           string `json:"altitudeAcclimationDate"`
+	CurrentAltitude                   int    `json:"currentAltitude"` // meters
+	AcclimationPercentage             int    `json:"acclimationPercentage"`
+	PreviousHeatAcclimationPercentage int    `json:"previousHeatAcclimationPercentage"`
+	PreviousHeatAcclimationDate       string `json:"previousHeatAcclimationDate"`
+	PreviousAltitudeAcclimation       int    `json:"previousAltitudeAcclimation"` // meters
+	PreviousAltitudeAcclimationDate   string `json:"previousAltitudeAcclimationDate"`
+	PreviousAltitude                  int    `json:"previousAltitude"` // meters
 }
 
 // HeatAltitudeAcclimation returns the latest heat and altitude acclimation as
@@ -131,12 +136,15 @@ func (c *Client) PowerCurve(ctx context.Context, start, end time.Time, sport str
 // CyclingAbility rates the user's cycling energy systems (each 0-100) and
 // derives a rider profile from them.
 type CyclingAbility struct {
-	CalendarDate        string `json:"calendarDate"`
-	AerobicEndurance    int    `json:"aerobicEndurance"`
-	AerobicCapacity     int    `json:"aerobicCapacity"`
-	AnaerobicCapacity   int    `json:"anaerobicCapacity"`
-	ProfileType         string `json:"profileType"`
-	ProfileTypeFeedback string `json:"profileTypeFeedback"`
+	CalendarDate              string `json:"calendarDate"`
+	AerobicEndurance          int    `json:"aerobicEndurance"`
+	AerobicCapacity           int    `json:"aerobicCapacity"`
+	AnaerobicCapacity         int    `json:"anaerobicCapacity"`
+	ProfileType               string `json:"profileType"`
+	ProfileTypeFeedback       string `json:"profileTypeFeedback"`
+	AerobicEnduranceFeedback  string `json:"aerobicEnduranceFeedback"`
+	AerobicCapacityFeedback   string `json:"aerobicCapacityFeedback"`
+	AnaerobicCapacityFeedback string `json:"anaerobicCapacityFeedback"`
 }
 
 // CyclingAbility returns the latest cycling ability as of d.

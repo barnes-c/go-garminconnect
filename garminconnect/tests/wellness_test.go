@@ -18,6 +18,9 @@ func TestUserSummary(t *testing.T) {
 
 	assert.NotZero(t, s.UserProfileID)
 	assert.NotZero(t, s.DailyStepGoal)
+	assert.NotZero(t, s.TotalStressDuration)
+	assert.NotZero(t, s.AverageStressLevel)
+	assert.NotEmpty(t, s.StressQualifier)
 }
 
 func TestAllDayStress(t *testing.T) {

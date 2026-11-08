@@ -22,6 +22,15 @@ func TestSleepData(t *testing.T) {
 	assert.NotZero(t, s.DailySleepDTO.DeepSleepSeconds)
 	assert.NotZero(t, s.DailySleepDTO.REMSleepSeconds)
 	assert.NotZero(t, s.DailySleepDTO.SpO2AvgReadingPercent)
+	assert.NotZero(t, s.DailySleepDTO.LowestSpO2Value)
+	assert.NotZero(t, s.DailySleepDTO.HighestSpO2Value)
+	assert.NotZero(t, s.DailySleepDTO.SleepScores["overall"].Value)
+	require.NotNil(t, s.DailySleepDTO.SleepNeed)
+	assert.NotZero(t, s.DailySleepDTO.SleepNeed.Actual)
+	assert.NotZero(t, s.RestingHeartRate)
+	assert.NotEmpty(t, s.SleepHeartRate)
+	require.NotNil(t, s.SpO2Summary)
+	assert.NotZero(t, s.SpO2Summary.LowestSpO2)
 	assert.NotEmpty(t, s.DailySleepDTO.SleepScoreFeedback)
 }
 
