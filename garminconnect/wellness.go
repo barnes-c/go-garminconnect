@@ -302,14 +302,35 @@ func (c *Client) BloodPressure(ctx context.Context, start, end time.Time) (*Bloo
 	return &out, nil
 }
 
-// BodyBatteryEvent is a single body battery charge or drain event.
+// BodyBatteryEvent is a body battery charge or drain event (sleep, nap,
+// activity, ...) with the stress and body battery readings during it.
 type BodyBatteryEvent struct {
-	EventTimestamp    string `json:"eventTimestamp"`
-	Event             string `json:"event"` // "CHARGE" or "DRAIN"
-	DurationInMS      int64  `json:"durationInMS"`
-	BodyBatteryImpact int    `json:"bodyBatteryImpact"`
-	FeedbackType      string `json:"feedbackType"`
-	FeedbackShortType string `json:"feedbackShortType"`
+	Event                              BodyBatteryEventDetail       `json:"event"`
+	ActivityName                       string                       `json:"activityName"`
+	ActivityType                       string                       `json:"activityType"`
+	ActivityID                         int64                        `json:"activityId"`
+	AverageStress                      float64                      `json:"averageStress"`
+	StressValueDescriptorsDTOList      []ValueDescriptor            `json:"stressValueDescriptorsDTOList"`
+	StressValuesArray                  [][]int64                    `json:"stressValuesArray"` // [timestamp_ms, stress_level]
+	BodyBatteryValueDescriptorsDTOList []BodyBatteryValueDescriptor `json:"bodyBatteryValueDescriptorsDTOList"`
+	BodyBatteryValuesArray             json.RawMessage              `json:"bodyBatteryValuesArray"` // mixed-type rows: [ts, status, level, version]
+}
+
+// BodyBatteryEventDetail describes when a body battery event happened and its impact.
+type BodyBatteryEventDetail struct {
+	EventType              string `json:"eventType"`
+	EventStartTimeGMT      string `json:"eventStartTimeGmt"`
+	TimezoneOffset         int64  `json:"timezoneOffset"`
+	DurationInMilliseconds int64  `json:"durationInMilliseconds"`
+	BodyBatteryImpact      int    `json:"bodyBatteryImpact"`
+	FeedbackType           string `json:"feedbackType"`
+	ShortFeedback          string `json:"shortFeedback"`
+}
+
+// BodyBatteryValueDescriptor labels a column in BodyBatteryValuesArray.
+type BodyBatteryValueDescriptor struct {
+	Index int    `json:"bodyBatteryValueDescriptorIndex"`
+	Key   string `json:"bodyBatteryValueDescriptorKey"`
 }
 
 // BodyBatteryEvents returns body battery charge/drain events for the given date.

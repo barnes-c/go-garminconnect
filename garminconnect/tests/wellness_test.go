@@ -41,6 +41,21 @@ func TestBodyBattery(t *testing.T) {
 	assert.NotNil(t, entries)
 }
 
+func TestBodyBatteryEvents(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	events, err := c.BodyBatteryEvents(t.Context(), dataDate(t, "GARMIN_SUMMARY_DATE"))
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	require.NotEmpty(t, events)
+	assert.NotEmpty(t, events[0].Event.EventType)
+	assert.NotEmpty(t, events[0].Event.EventStartTimeGMT)
+	assert.NotZero(t, events[0].Event.DurationInMilliseconds)
+	assert.NotEmpty(t, events[0].BodyBatteryValueDescriptorsDTOList)
+	assert.NotEmpty(t, events[0].BodyBatteryValuesArray)
+}
+
 func TestFloors(t *testing.T) {
 	c, stop := newVCRClient(t)
 	defer stop()
