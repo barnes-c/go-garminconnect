@@ -19,6 +19,8 @@ func TestTrainingReadiness(t *testing.T) {
 	assert.NotZero(t, entries[0].SleepHistoryScore)
 	assert.NotEmpty(t, entries[0].FeedbackLong)
 	assert.NotEmpty(t, entries[0].InputContext)
+	assert.NotZero(t, entries[0].SleepScoreFactorPercent)
+	assert.NotEmpty(t, entries[0].HRVFactorFeedback)
 	assert.NotEmpty(t, entries[0].CalendarDate)
 }
 
@@ -52,6 +54,20 @@ func TestEnduranceScore(t *testing.T) {
 	skipAPIError(t, err)
 	require.NoError(t, err)
 	assert.NotEmpty(t, entries)
+}
+
+func TestEnduranceScoreDay(t *testing.T) {
+	c, stop := newVCRClient(t)
+	defer stop()
+
+	e, err := c.EnduranceScoreDay(t.Context(), testDate)
+	skipAPIError(t, err)
+	require.NoError(t, err)
+	assert.NotEmpty(t, e.CalendarDate)
+	assert.NotZero(t, e.Score)
+	assert.NotZero(t, e.Classification)
+	assert.NotZero(t, e.ClassificationLowerLimitElite)
+	assert.NotEmpty(t, e.Contributors)
 }
 
 func TestRacePredictions(t *testing.T) {

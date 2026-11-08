@@ -38,7 +38,12 @@ type UserSummary struct {
 	HighestRespirationValue          float64 `json:"highestRespirationValue"`
 	LowestRespirationValue           float64 `json:"lowestRespirationValue"`
 	LatestRespirationValue           float64 `json:"latestRespirationValue"`
+	StressDuration                   int     `json:"stressDuration"`
+	TotalStressDuration              int     `json:"totalStressDuration"`
+	ActivityStressDuration           int     `json:"activityStressDuration"`
+	UncategorizedStressDuration      int     `json:"uncategorizedStressDuration"`
 	HighStressDuration               int     `json:"highStressDuration"`
+	MediumStressDuration             int     `json:"mediumStressDuration"`
 	LowStressDuration                int     `json:"lowStressDuration"`
 	RestStressDuration               int     `json:"restStressDuration"`
 	BodyBatteryChargedValue          int     `json:"bodyBatteryChargedValue"`
@@ -46,6 +51,37 @@ type UserSummary struct {
 	BodyBatteryHighestValue          int     `json:"bodyBatteryHighestValue"`
 	BodyBatteryLowestValue           int     `json:"bodyBatteryLowestValue"`
 	BodyBatteryMostRecentValue       int     `json:"bodyBatteryMostRecentValue"`
+	BodyBatteryAtWakeTime            int     `json:"bodyBatteryAtWakeTime"`
+	BodyBatteryDuringSleep           int     `json:"bodyBatteryDuringSleep"`
+	CalendarDate                     string  `json:"calendarDate"`
+	AverageStressLevel               int     `json:"averageStressLevel"`
+	MaxStressLevel                   int     `json:"maxStressLevel"`
+	StressQualifier                  string  `json:"stressQualifier"` // e.g. "CALM", "BALANCED"
+	StressPercentage                 float64 `json:"stressPercentage"`
+	RestStressPercentage             float64 `json:"restStressPercentage"`
+	LowStressPercentage              float64 `json:"lowStressPercentage"`
+	MediumStressPercentage           float64 `json:"mediumStressPercentage"`
+	HighStressPercentage             float64 `json:"highStressPercentage"`
+	ActivityStressPercentage         float64 `json:"activityStressPercentage"`
+	UncategorizedStressPercentage    float64 `json:"uncategorizedStressPercentage"`
+	AverageSpO2                      int     `json:"averageSpo2"`
+	LowestSpO2                       int     `json:"lowestSpo2"`
+	LatestSpO2                       int     `json:"latestSpo2"`
+	MinAvgHeartRate                  int     `json:"minAvgHeartRate"`
+	MaxAvgHeartRate                  int     `json:"maxAvgHeartRate"`
+	WellnessKilocalories             float64 `json:"wellnessKilocalories"`
+	WellnessActiveKilocalories       float64 `json:"wellnessActiveKilocalories"`
+	BurnedKilocalories               float64 `json:"burnedKilocalories"`
+	ConsumedKilocalories             float64 `json:"consumedKilocalories"`
+	RemainingKilocalories            float64 `json:"remainingKilocalories"`
+	NetRemainingKilocalories         float64 `json:"netRemainingKilocalories"`
+	NetCalorieGoal                   float64 `json:"netCalorieGoal"`
+	IntensityMinutesGoal             int     `json:"intensityMinutesGoal"`
+	FloorsAscendedInMeters           float64 `json:"floorsAscendedInMeters"`
+	FloorsDescendedInMeters          float64 `json:"floorsDescendedInMeters"`
+	MeasurableAsleepDuration         int     `json:"measurableAsleepDuration"` // seconds
+	MeasurableAwakeDuration          int     `json:"measurableAwakeDuration"`
+	AverageMonitoringAltitude        float64 `json:"averageMonitoringEnvironmentAltitude"` // meters
 }
 
 // BodyBatteryEntry is a single body battery reading.
@@ -103,6 +139,7 @@ type RespirationData struct {
 	TodayAvgWakingRespirationValue     float64           `json:"avgWakingRespirationValue"`
 	HighestRespirationValue            float64           `json:"highestRespirationValue"`
 	LowestRespirationValue             float64           `json:"lowestRespirationValue"`
+	AvgSleepRespirationValue           float64           `json:"avgSleepRespirationValue"`
 	RespirationValueDescriptorsDTOList []ValueDescriptor `json:"respirationValueDescriptorsDTOList"`
 	RespirationValuesArray             [][]float64       `json:"respirationValuesArray"` // [timestamp_ms, value]
 }
@@ -117,6 +154,10 @@ type SpO2Data struct {
 	LowestSpO2           float64     `json:"lowestSpO2"`
 	LastSevenDaysAvgSpO2 float64     `json:"lastSevenDaysAvgSpO2"`
 	SpO2HourlyAverages   [][]float64 `json:"spO2HourlyAverages"` // [timestamp_ms, value]
+	AvgSleepSpO2         float64     `json:"avgSleepSpO2"`
+	LatestSpO2           int         `json:"latestSpO2"`
+	LatestSpO2TimeGMT    string      `json:"latestSpO2TimestampGMT"`
+	LatestSpO2TimeLocal  string      `json:"latestSpO2TimestampLocal"`
 }
 
 // IntensityMinutesData holds intensity minutes for one day, plus the

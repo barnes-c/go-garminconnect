@@ -22,9 +22,26 @@ type TrainingReadiness struct {
 	HrvWeeklyAverage  int     `json:"hrvWeeklyAverage"`
 	// InputContext is "AFTER_WAKEUP_RESET" for the morning reading; not every
 	// device sets it.
-	InputContext  string `json:"inputContext"`
-	FeedbackLong  string `json:"feedbackLong"`
-	FeedbackShort string `json:"feedbackShort"`
+	InputContext   string `json:"inputContext"`
+	FeedbackLong   string `json:"feedbackLong"`
+	FeedbackShort  string `json:"feedbackShort"`
+	Timestamp      string `json:"timestamp"`
+	TimestampLocal string `json:"timestampLocal"`
+	ValidSleep     bool   `json:"validSleep"`
+	// Each factor's contribution in percent, and its feedback key
+	// (e.g. "GOOD", "MODERATE").
+	SleepScoreFactorPercent     int    `json:"sleepScoreFactorPercent"`
+	SleepScoreFactorFeedback    string `json:"sleepScoreFactorFeedback"`
+	SleepHistoryFactorFeedback  string `json:"sleepHistoryFactorFeedback"`
+	RecoveryTimeFactorPercent   int    `json:"recoveryTimeFactorPercent"`
+	RecoveryTimeFactorFeedback  string `json:"recoveryTimeFactorFeedback"`
+	RecoveryTimeChangePhrase    string `json:"recoveryTimeChangePhrase"`
+	ACWRFactorPercent           int    `json:"acwrFactorPercent"`
+	ACWRFactorFeedback          string `json:"acwrFactorFeedback"`
+	HRVFactorPercent            int    `json:"hrvFactorPercent"`
+	HRVFactorFeedback           string `json:"hrvFactorFeedback"`
+	StressHistoryFactorPercent  int    `json:"stressHistoryFactorPercent"`
+	StressHistoryFactorFeedback string `json:"stressHistoryFactorFeedback"`
 }
 
 // MaxMetricsEntry holds a VO2 Max data point.
@@ -53,11 +70,35 @@ type EnduranceScoreEntry struct {
 	CalendarDate string                      `json:"calendarDate"`
 	Score        float64                     `json:"overallScore"`
 	Contributors []EnduranceScoreContributor `json:"contributors"`
+	// Set by EnduranceScoreDay only. Classification is the band Score falls
+	// in; the lower limits are the band thresholds.
+	Classification                       int `json:"classification"`
+	FeedbackPhrase                       int `json:"feedbackPhrase"`
+	ClassificationLowerLimitIntermediate int `json:"classificationLowerLimitIntermediate"`
+	ClassificationLowerLimitTrained      int `json:"classificationLowerLimitTrained"`
+	ClassificationLowerLimitWellTrained  int `json:"classificationLowerLimitWellTrained"`
+	ClassificationLowerLimitExpert       int `json:"classificationLowerLimitExpert"`
+	ClassificationLowerLimitSuperior     int `json:"classificationLowerLimitSuperior"`
+	ClassificationLowerLimitElite        int `json:"classificationLowerLimitElite"`
+	GaugeLowerLimit                      int `json:"gaugeLowerLimit"`
+	GaugeUpperLimit                      int `json:"gaugeUpperLimit"`
+}
+
+// EnduranceScoreDay returns the endurance score for a single day, including
+// its classification band and thresholds.
+func (c *Client) EnduranceScoreDay(ctx context.Context, d time.Time) (*EnduranceScoreEntry, error) {
+	var out EnduranceScoreEntry
+	params := url.Values{"calendarDate": {date(d)}}
+	if err := c.get(ctx, "/metrics-service/metrics/endurancescore", params, &out); err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // EnduranceScoreContributor is a single activity type's contribution to an endurance score.
 type EnduranceScoreContributor struct {
 	ActivityTypeID *int    `json:"activityTypeId"`
+	Group          int     `json:"group"`
 	Contribution   float64 `json:"contribution"`
 }
 
@@ -144,6 +185,10 @@ type PerDeviceTrainingStatus struct {
 	FitnessTrend          int                `json:"fitnessTrend"`
 	PrimaryTrainingDevice bool               `json:"primaryTrainingDevice"`
 	AcuteTrainingLoad     *AcuteTrainingLoad `json:"acuteTrainingLoadDTO"`
+	TrainingPaused        bool               `json:"trainingPaused"`
+	FitnessTrendSport     string             `json:"fitnessTrendSport"`
+	SinceDate             string             `json:"sinceDate"`
+	FeedbackPhrase        string             `json:"trainingStatusFeedbackPhrase"`
 }
 
 // AcuteTrainingLoad holds acute:chronic workload ratio data.
