@@ -1,11 +1,14 @@
 package garminconnect_test
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/barnes-c/go-garminconnect/garminconnect"
 )
 
 func TestUserSummary(t *testing.T) {
@@ -171,4 +174,17 @@ func TestHydrationDetails(t *testing.T) {
 	assert.NotEmpty(t, out.CalendarDate)
 	assert.NotEmpty(t, out.HydrationMeasurementUnit)
 	assert.NotZero(t, out.GoalInML)
+}
+
+// TestUserSummaryDecodesDecimals guards the fields that were only ever null in
+// the recordings: a real account sends averageSpo2 as a decimal, which failed
+// the whole UserSummary call when the field was an int.
+func TestUserSummaryDecodesDecimals(t *testing.T) {
+	var s garminconnect.UserSummary
+	err := json.Unmarshal([]byte(`{"averageSpo2":95.0,"lowestSpo2":88.0,"latestSpo2":96.0,
+		"maxStressLevel":93.0,"minAvgHeartRate":49.0,"maxAvgHeartRate":141.0,
+		"bodyBatteryAtWakeTime":78.0,"bodyBatteryDuringSleep":52.0}`), &s)
+	require.NoError(t, err)
+	assert.InDelta(t, 95.0, s.AverageSpO2, 0.001)
+	assert.InDelta(t, 78.0, s.BodyBatteryAtWakeTime, 0.001)
 }
