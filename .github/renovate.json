@@ -1,55 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":semanticCommits",
-    "helpers:pinGitHubActionDigests"
-  ],
-  "labels": ["dependencies"],
-  "pinDigests": true,
-  "osvVulnerabilityAlerts": true,
-  "postUpdateOptions": ["gomodTidy"],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    },
-    {
-      "description": "Workflow input fields (e.g. golangci-lint-action `version:`, setup-go `go-version:`) cannot carry a digest comment, so pinDigests fails the branch.",
-      "matchDepTypes": ["uses-with"],
-      "pinDigests": false
-    },
-    {
-      "matchManagers": ["gomod"],
-      "groupName": "Go dependencies"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "groupName": "GitHub Actions"
-    },
-    {
-      "matchManagers": ["dockerfile"],
-      "groupName": "Docker base images"
-    },
-    {
-      "description": "Renovate skips `// indirect` Go requirements by default.",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["indirect"],
-      "enabled": true
-    },
-    {
-      "description": "Indirect deps are not part of this module's own API and CI gates them, so let minor and patch land unattended.",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["indirect"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "description": "A Go major bump changes the module path, so on an indirect dep it appends a second copy (e.g. backoff/v7) alongside the original rather than replacing it. The old path stays until the direct dep that imports it moves, so Renovate re-proposes the same update every run. Let these arrive via their parent instead.",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["indirect"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    }
+    "github>barnes-c/renovate-config",
+    "github>barnes-c/renovate-config:go"
   ]
 }
